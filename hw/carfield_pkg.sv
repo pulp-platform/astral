@@ -41,6 +41,7 @@ typedef struct packed {
   islands_properties_t pulp;
   islands_properties_t secured;
   islands_properties_t mbox;
+  islands_properties_t secured_idma;
 } islands_cfg_t;
 
 // Types are obtained from Cheshire package
@@ -72,6 +73,7 @@ typedef struct packed {
   byte_bt secured;
   byte_bt secured_idma;
   byte_bt pulp;
+  byte_bt secured_idma;
 } carfield_master_idx_t;
 
 // Generate the number of AXI slave devices to be connected to the
