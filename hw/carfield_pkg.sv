@@ -74,6 +74,7 @@ typedef struct packed {
   byte_bt secured_idma;
   byte_bt pulp;
   byte_bt secured_idma;
+  byte_bt pulp;
 } carfield_master_idx_t;
 
 // Generate the number of AXI slave devices to be connected to the
@@ -143,6 +144,8 @@ function automatic carfield_master_idx_t carfield_gen_axi_master_idx(islands_cfg
   end else begin ret.secured = MaxExtAxiMst + j; ret.secured_idma = MaxExtAxiMst + j + 1; j+=2; end
   if (island_cfg.spatz.enable) begin ret.spatz = i; i++;
   end else begin ret.spatz = MaxExtAxiMst + j; j++; end
+  if (island_cfg.secured.enable) begin ret.secured_idma = i; i++;
+  end else begin ret.secured_idma = MaxExtAxiMst + j; j++; end
   if (island_cfg.pulp.enable) begin ret.pulp = i; i++;
   end else begin ret.pulp = MaxExtAxiMst + j; j++; end
   return ret;
