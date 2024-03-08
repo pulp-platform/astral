@@ -71,8 +71,8 @@ typedef struct packed {
   byte_bt safed;
   byte_bt spatz;
   byte_bt secured;
-  byte_bt pulp;
   byte_bt secured_idma;
+  byte_bt pulp;
 } carfield_master_idx_t;
 
 // Generate the number of AXI slave devices to be connected to the
@@ -123,10 +123,11 @@ endfunction
 // crossbar starting from the islands enable structure.
 function automatic int unsigned gen_num_axi_master(islands_cfg_t island_cfg);
   int unsigned ret = 0; // Number of masters starts from 0
-  if (island_cfg.safed.enable  ) begin ret++; end
-  if (island_cfg.spatz.enable  ) begin ret++; end
-  if (island_cfg.pulp.enable   ) begin ret++; end
-  if (island_cfg.secured.enable) begin ret++; end
+  if (island_cfg.safed.enable  )      begin ret++; end
+  if (island_cfg.spatz.enable  )      begin ret++; end
+  if (island_cfg.pulp.enable   )      begin ret++; end
+  if (island_cfg.secured.enable)      begin ret++; end
+  if (island_cfg.secured.enable)      begin ret++; end
   return ret;
 endfunction
 
@@ -142,6 +143,8 @@ function automatic carfield_master_idx_t carfield_gen_axi_master_idx(islands_cfg
   end else begin ret.secured = MaxExtAxiMst + j; j++; end
   if (island_cfg.spatz.enable) begin ret.spatz = i; i++;
   end else begin ret.spatz = MaxExtAxiMst + j; j++; end
+  if (island_cfg.secured.enable) begin ret.secured_idma = i; i++;
+  end else begin ret.secured_idma = MaxExtAxiMst + j; j++; end
   if (island_cfg.pulp.enable) begin ret.pulp = i; i++;
   end else begin ret.pulp = MaxExtAxiMst + j; j++; end
   return ret;
@@ -422,8 +425,8 @@ typedef enum byte_bt {
   SafetyIslandMstIdx       = CarfieldMstIdx.safed,
   SecurityIslandTlulMstIdx = CarfieldMstIdx.secured,
   FPClusterMstIdx          = CarfieldMstIdx.spatz,
-  IntClusterMstIdx         = CarfieldMstIdx.pulp,
-  SecurityIslandiDMAMstIdx = CarfieldMstIdx.secured_idma
+  SecurityIslandiDMAMstIdx = CarfieldMstIdx.secured_idma,
+  IntClusterMstIdx         = CarfieldMstIdx.pulp
 } axi_mst_idx_t;
 
 // APB peripherals

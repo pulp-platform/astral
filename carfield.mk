@@ -23,6 +23,7 @@ CAR_SW_DIR  := $(CAR_ROOT)/sw
 CAR_TGT_DIR := $(CAR_ROOT)/target/
 CAR_XIL_DIR := $(CAR_TGT_DIR)/xilinx
 CAR_SIM_DIR := $(CAR_TGT_DIR)/sim
+SECD_ROOT    ?= $(shell $(BENDER) path opentitan)
 # Questasim
 CAR_VSIM_DIR := $(CAR_TGT_DIR)/sim/vsim
 
@@ -213,7 +214,11 @@ pulpd-sw-build: pulpd-sw-init
 ## Initialize Carfield HW. This step takes care of the generation of the missing hardware or the
 ## update of default HW configurations in some of the domains. See the two prerequisite's comment
 ## for more information.
-car-hw-init: spatzd-hw-init chs-hw-init
+car-hw-init: spatzd-hw-init chs-hw-init secd-hw-init
+
+#Build OpenTitan's debug rom with support for coreid=0x4
+secd-hw-init:
+	$(MAKE) -C $(SECD_ROOT)/hw/vendor/pulp_riscv_dbg/debug_rom clean all FLAGS=-DCARFIELD=1
 
 ## @section Carfield platform PCRs generation
 .PHONY: regenerate_soc_regs
