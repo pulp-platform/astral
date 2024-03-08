@@ -1748,38 +1748,46 @@ if (CarfieldIslandsCfg.secured.enable) begin : gen_secure_subsystem
          master_isolated_rsp[SecurityIslandTlulMstIdx];
   assign car_regs_hw2reg.security_island_isolate_status.de = 1'b1;
 
+  typedef logic [Cfg.AddrWidth-1:0]        narrow_axi_addr_t;
+  typedef logic [AxiNarrowDataWidth-1:0]   narrow_axi_data_t;
+  typedef logic [AxiNarrowDataWidth/8-1:0] narrow_axi_strb_t;
+  typedef logic [Cfg.AxiUserWidth-1:0]     narrow_axi_user_t;
+  typedef logic [Cfg.AxiMstIdWidth-1:0]    narrow_axi_out_id_t;
+
+  `AXI_TYPEDEF_ALL(carfield_axi_mst_narrow, narrow_axi_addr_t, narrow_axi_out_id_t, narrow_axi_data_t, narrow_axi_strb_t, narrow_axi_user_t)
+
   `ifndef SECD_NETLIST
   secure_subsystem_synth_wrap_astral #(
-    .HartIdOffs            ( OpnTitHartIdOffs           ),
-    .AxiAddrWidth          ( Cfg.AddrWidth              ),
-    .AxiDataWidth          ( Cfg.AxiDataWidth           ),
-    .AxiUserWidth          ( Cfg.AxiUserWidth           ),
-    .AxiOutIdWidth         ( Cfg.AxiMstIdWidth          ),
-    .AxiOtAddrWidth        ( Cfg.AddrWidth              ),
-    .AxiOtDataWidth        ( AxiNarrowDataWidth         ), // TODO: why is this exposed?
-    .AxiOtUserWidth        ( Cfg.AxiUserWidth           ),
-    .AxiOtOutIdWidth       ( Cfg.AxiMstIdWidth          ),
-    .AsyncAxiOutAwWidth    ( CarfieldAxiMstAwWidth      ),
-    .AsyncAxiOutWWidth     ( CarfieldAxiMstWWidth       ),
-    .AsyncAxiOutBWidth     ( CarfieldAxiMstBWidth       ),
-    .AsyncAxiOutArWidth    ( CarfieldAxiMstArWidth      ),
-    .AsyncAxiOutRWidth     ( CarfieldAxiMstRWidth       ),
-    .axi_out_aw_chan_t     ( carfield_axi_mst_aw_chan_t ),
-    .axi_out_w_chan_t      ( carfield_axi_mst_w_chan_t  ),
-    .axi_out_b_chan_t      ( carfield_axi_mst_b_chan_t  ),
-    .axi_out_ar_chan_t     ( carfield_axi_mst_ar_chan_t ),
-    .axi_out_r_chan_t      ( carfield_axi_mst_r_chan_t  ),
-    .axi_out_req_t         ( carfield_axi_mst_req_t     ),
-    .axi_out_resp_t        ( carfield_axi_mst_rsp_t     ),
-    .axi_ot_out_aw_chan_t  ( carfield_axi_mst_aw_chan_t ),
-    .axi_ot_out_w_chan_t   ( carfield_axi_mst_w_chan_t  ),
-    .axi_ot_out_b_chan_t   ( carfield_axi_mst_b_chan_t  ),
-    .axi_ot_out_ar_chan_t  ( carfield_axi_mst_ar_chan_t ),
-    .axi_ot_out_r_chan_t   ( carfield_axi_mst_r_chan_t  ),
-    .axi_ot_out_req_t      ( carfield_axi_mst_req_t     ),
-    .axi_ot_out_resp_t     ( carfield_axi_mst_rsp_t     ),
-    .CdcSyncStages         ( SyncStages                 ),
-    .SyncStages            ( SyncStages                 )
+    .HartIdOffs            ( 4           ),
+    .AxiAddrWidth          ( Cfg.AddrWidth                     ),
+    .AxiDataWidth          ( Cfg.AxiDataWidth                  ),
+    .AxiUserWidth          ( Cfg.AxiUserWidth                  ),
+    .AxiOutIdWidth         ( Cfg.AxiMstIdWidth                 ),
+    .AxiOtAddrWidth        ( Cfg.AddrWidth                     ),
+    .AxiOtDataWidth        ( AxiNarrowDataWidth                ), // TODO: why is this exposed?
+    .AxiOtUserWidth        ( Cfg.AxiUserWidth                  ),
+    .AxiOtOutIdWidth       ( Cfg.AxiMstIdWidth                 ),
+    .AsyncAxiOutAwWidth    ( CarfieldAxiMstAwWidth             ),
+    .AsyncAxiOutWWidth     ( CarfieldAxiMstWWidth              ),
+    .AsyncAxiOutBWidth     ( CarfieldAxiMstBWidth              ),
+    .AsyncAxiOutArWidth    ( CarfieldAxiMstArWidth             ),
+    .AsyncAxiOutRWidth     ( CarfieldAxiMstRWidth              ),
+    .axi_out_aw_chan_t     ( carfield_axi_mst_aw_chan_t        ),
+    .axi_out_w_chan_t      ( carfield_axi_mst_w_chan_t         ),
+    .axi_out_b_chan_t      ( carfield_axi_mst_b_chan_t         ),
+    .axi_out_ar_chan_t     ( carfield_axi_mst_ar_chan_t        ),
+    .axi_out_r_chan_t      ( carfield_axi_mst_r_chan_t         ),
+    .axi_out_req_t         ( carfield_axi_mst_req_t            ),
+    .axi_out_resp_t        ( carfield_axi_mst_rsp_t            ),
+    .axi_ot_out_aw_chan_t  ( carfield_axi_mst_narrow_aw_chan_t ),
+    .axi_ot_out_w_chan_t   ( carfield_axi_mst_narrow_w_chan_t  ),
+    .axi_ot_out_b_chan_t   ( carfield_axi_mst_narrow_b_chan_t  ),
+    .axi_ot_out_ar_chan_t  ( carfield_axi_mst_narrow_ar_chan_t ),
+    .axi_ot_out_r_chan_t   ( carfield_axi_mst_narrow_r_chan_t  ),
+    .axi_ot_out_req_t      ( carfield_axi_mst_narrow_req_t     ),
+    .axi_ot_out_resp_t     ( carfield_axi_mst_narrow_resp_t    ),
+    .CdcSyncStages         ( SyncStages                        ),
+    .SyncStages            ( SyncStages                        )
   ) i_security_island (
   `else
   security_island i_security_island (
