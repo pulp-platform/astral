@@ -756,14 +756,20 @@ for (genvar i=0; i<NumSyncRegSlv; i++ ) begin : gen_chs_ext_reg_cut
   );
 end
 
+// Passsing the `ext_reg_req_cut[CarfieldRegBusSlvIdx.pcrs]` value to the
+// reg_req_i/rsp_o buses results in Questa's `Fatal: Unexpected signal: 11.`
+// at compile time. Direct casting 'int(CarfieldRegBusSlvIdx.pcrs) also does
+// not work resulting in the ext_reg_rsp_cut bus being all X. The localparam
+// seems to solve the issue.
+localparam int unsigned PcrsIdx = CarfieldRegBusSlvIdx.pcrs;
 carfield_reg_top #(
   .reg_req_t(carfield_reg_req_t),
   .reg_rsp_t(carfield_reg_rsp_t)
 ) i_carfield_reg_top (
   .clk_i (host_clk_i),
   .rst_ni (host_pwr_on_rst_n),
-  .reg_req_i(ext_reg_req_cut[int'(CarfieldRegBusSlvIdx.pcrs)]),
-  .reg_rsp_o(ext_reg_rsp_cut[int'(CarfieldRegBusSlvIdx.pcrs)]),
+  .reg_req_i(ext_reg_req_cut[PcrsIdx]),
+  .reg_rsp_o(ext_reg_rsp_cut[PcrsIdx]),
   .reg2hw (car_regs_reg2hw),
   .hw2reg (car_regs_hw2reg),
   .devmode_i (1'b1)
@@ -1410,9 +1416,7 @@ end
 // PULP integer cluster
 
 logic pulpcl_mbox_intr;
-assign car_regs_hw2reg.pulp_cluster_eoc.de  = 1'b1;
-assign car_regs_hw2reg.pulp_cluster_busy.de = 1'b1;
-assign car_regs_hw2reg.pulp_cluster_eoc.d = pulpcl_eoc;
+assign pulpcl_eoc = car_regs_hw2reg.pulp_cluster_eoc.d;
 
 if (CarfieldIslandsCfg.pulp.enable) begin : gen_pulp_cluster
   assign pulp_rst_n = rsts_n[CarfieldDomainIdx.pulp];
@@ -1453,7 +1457,7 @@ if (CarfieldIslandsCfg.pulp.enable) begin : gen_pulp_cluster
     .cluster_id_i                ( IntClusterIndex                           ),
     .en_sa_boot_i                ( car_regs_reg2hw.pulp_cluster_boot_enable  ),
     .fetch_en_i                  ( car_regs_reg2hw.pulp_cluster_fetch_enable ),
-    .eoc_o                       ( pulpcl_eoc                                ),
+    .eoc_o                       ( car_regs_hw2reg.pulp_cluster_eoc.d        ),
     .busy_o                      ( car_regs_hw2reg.pulp_cluster_busy.d       ),
     .axi_isolate_i               ( slave_isolate_req [IntClusterSlvIdx]      ),
     .axi_isolated_o              ( master_isolated_rsp [IntClusterMstIdx]    ),
@@ -1530,8 +1534,10 @@ end else begin : gen_no_pulp_cluster
 
   assign safed_pulpcl_mbox_intr = '0;
 
-  assign pulpcl_eoc = '0;
+  assign car_regs_hw2reg.pulp_cluster_eoc.d = '0;
+  assign car_regs_hw2reg.pulp_cluster_eoc.de  = 1'b0;
   assign car_regs_hw2reg.pulp_cluster_busy.d = '0;
+  assign car_regs_hw2reg.pulp_cluster_busy.de = 1'b0;
 
   assign car_regs_hw2reg.pulp_cluster_isolate_status.d = '0;
   assign car_regs_hw2reg.pulp_cluster_isolate_status.de = '0;
@@ -1578,6 +1584,7 @@ if (CarfieldIslandsCfg.spatz.enable) begin : gen_spatz_cluster
   assign slave_isolate_req[FPClusterSlvIdx] = car_regs_reg2hw.spatz_cluster_isolate.q;
   assign car_regs_hw2reg.spatz_cluster_isolate_status.d = slave_isolated[FPClusterSlvIdx];
   assign car_regs_hw2reg.spatz_cluster_isolate_status.de = 1'b1;
+  assign car_regs_hw2reg.spatz_cluster_busy.de = 1'b1;
 
   assign slave_isolated[FPClusterSlvIdx] = slave_isolated_rsp[FPClusterSlvIdx] &
                                            master_isolated_rsp[FPClusterMstIdx];
@@ -1696,7 +1703,10 @@ if (CarfieldIslandsCfg.spatz.enable) begin : gen_spatz_cluster
 end else begin : gen_no_spatz_cluster
   assign spatzcl_mbox_intr = '0;
   assign spatzcl_timer_intr = '0;
+  assign car_regs_hw2reg.spatz_cluster_isolate_status.d = 1'b0;
+  assign car_regs_hw2reg.spatz_cluster_isolate_status.de = 1'b0;
   assign car_regs_hw2reg.spatz_cluster_busy.d = '0;
+  assign car_regs_hw2reg.spatz_cluster_busy.de = 1'b0;
   assign safed_spatzcl_mbox_intr = '0;
   assign hostd_spatzcl_mbox_intr = '0;
   assign spatzcl_hostd_mbox_intr = '0;
