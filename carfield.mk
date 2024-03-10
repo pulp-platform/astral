@@ -45,7 +45,7 @@ include $(CAR_ROOT)/bender-safed.mk
 # Nonfree components #
 ######################
 
-CAR_NONFREE_REMOTE ?= git@iis-git.ee.ethz.ch:Astral/astral-nonfree.git
+CAR_NONFREE_REMOTE ?= git@iis-git.ee.ethz.ch:astral/astral-nonfree.git
 CAR_NONFREE_COMMIT ?= d68da8ed
 
 ## @section Carfield platform nonfree components
@@ -54,11 +54,11 @@ CAR_NONFREE_COMMIT ?= d68da8ed
 ## folder cloned from a remote location, whose access is restricted. If you do not have access, this
 ## step will be skipped and the usage of the repository will **not** be compromised.
 car-nonfree-init:
-	git clone $(CAR_NONFREE_REMOTE) $(CAR_ROOT)/nonfree
-	cd nonfree && git checkout $(CAR_NONFREE_COMMIT)
-	cd nonfree/intel16 && icdesign intel16 -update all -nogui
+	git clone $(CAR_NONFREE_REMOTE) nonfree
+	cd $(CAR_ROOT)/nonfree && git checkout $(CAR_NONFREE_COMMIT)
+	#cd nonfree/intel16 && icdesign intel16 -update all -nogui
 
--include nonfree/nonfree.mk
+-include $(CAR_ROOT)/nonfree/nonfree.mk
 
 #####################################
 # Islands' variables initialization #
