@@ -1130,6 +1130,11 @@ localparam int unsigned SafedMboxOffset = SecdMboxOffset +
 // Host Clock Domain
 
 if (CarfieldIslandsCfg.l2_port0.enable) begin: gen_l2
+  // Similar to the issue with the regs above. Using a localparam resolves the
+  // `Warning (downgraded): (vsim-3053) Illegal output or inout port connection for port`
+  // associated with the `l2_ecc_reg_async_mst_ack_o`, `l2_ecc_reg_async_mst_req_o`, and
+  // `l2_ecc_reg_async_mst_data_o` ports.
+  localparam int unsigned EccAsyncIdx = CarfieldRegBusSlvIdx.l2ecc-NumSyncRegSlv;
   assign l2_rst_n = rsts_n[CarfieldDomainIdx.l2];
   assign l2_pwr_on_rst_n = pwr_on_rsts_n[CarfieldDomainIdx.l2];
   assign l2_clk = domain_clk_gated[CarfieldDomainIdx.l2];
@@ -1191,14 +1196,12 @@ if (CarfieldIslandsCfg.l2_port0.enable) begin: gen_l2
     .slvport_w_data_i    ( axi_slv_ext_w_data  [NumL2Ports-1:0] ),
     .slvport_w_wptr_i    ( axi_slv_ext_w_wptr  [NumL2Ports-1:0] ),
     .slvport_w_rptr_o    ( axi_slv_ext_w_rptr  [NumL2Ports-1:0] ),
-    // verilog_lint: waive-start line-length
-    .l2_ecc_reg_async_mst_req_i  ( ext_reg_async_slv_req_out [CarfieldRegBusSlvIdx.l2ecc-NumSyncRegSlv] ),
-    .l2_ecc_reg_async_mst_ack_o  ( ext_reg_async_slv_ack_in  [CarfieldRegBusSlvIdx.l2ecc-NumSyncRegSlv] ),
-    .l2_ecc_reg_async_mst_data_i ( ext_reg_async_slv_data_out[CarfieldRegBusSlvIdx.l2ecc-NumSyncRegSlv] ),
-    .l2_ecc_reg_async_mst_req_o  ( ext_reg_async_slv_req_in  [CarfieldRegBusSlvIdx.l2ecc-NumSyncRegSlv] ),
-    .l2_ecc_reg_async_mst_ack_i  ( ext_reg_async_slv_ack_out [CarfieldRegBusSlvIdx.l2ecc-NumSyncRegSlv] ),
-    .l2_ecc_reg_async_mst_data_o ( ext_reg_async_slv_data_in [CarfieldRegBusSlvIdx.l2ecc-NumSyncRegSlv] ),
-    // verilog_lint: waive-stop line-length
+    .l2_ecc_reg_async_mst_req_i  ( ext_reg_async_slv_req_out [EccAsyncIdx] ),
+    .l2_ecc_reg_async_mst_ack_o  ( ext_reg_async_slv_ack_in  [EccAsyncIdx] ),
+    .l2_ecc_reg_async_mst_data_i ( ext_reg_async_slv_data_out[EccAsyncIdx] ),
+    .l2_ecc_reg_async_mst_req_o  ( ext_reg_async_slv_req_in  [EccAsyncIdx] ),
+    .l2_ecc_reg_async_mst_ack_i  ( ext_reg_async_slv_ack_out [EccAsyncIdx] ),
+    .l2_ecc_reg_async_mst_data_o ( ext_reg_async_slv_data_in [EccAsyncIdx] ),
     .ecc_error_o         ( l2_ecc_err                           )
   );
 end else begin: gen_no_l2
