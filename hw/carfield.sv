@@ -1437,6 +1437,8 @@ if (CarfieldIslandsCfg.pulp.enable) begin : gen_pulp_cluster
          car_regs_reg2hw.pulp_cluster_clk_en.q;
 
   assign slave_isolate_req[IntClusterSlvIdx] = car_regs_reg2hw.pulp_cluster_isolate.q;
+  assign car_regs_hw2reg.pulp_cluster_eoc.de  = 1'b1;
+  assign car_regs_hw2reg.pulp_cluster_busy.de = 1'b1;
   assign car_regs_hw2reg.pulp_cluster_isolate_status.d = slave_isolated[IntClusterSlvIdx];
   assign car_regs_hw2reg.pulp_cluster_isolate_status.de = 1'b1;
 
