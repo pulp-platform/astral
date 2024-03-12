@@ -54,7 +54,7 @@ CAR_NONFREE_COMMIT ?= 711d0097
 ## folder cloned from a remote location, whose access is restricted. If you do not have access, this
 ## step will be skipped and the usage of the repository will **not** be compromised.
 car-nonfree-init:
-	git clone $(CAR_NONFREE_REMOTE) nonfree
+	git clone $(CAR_NONFREE_REMOTE) $(CAR_ROOT)/nonfree
 	cd $(CAR_ROOT)/nonfree && git checkout $(CAR_NONFREE_COMMIT)
 	#cd nonfree/intel16 && icdesign intel16 -update all -nogui
 

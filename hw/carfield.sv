@@ -756,7 +756,7 @@ for (genvar i=0; i<NumSyncRegSlv; i++ ) begin : gen_chs_ext_reg_cut
   );
 end
 
-// Passsing the `ext_reg_req_cut[CarfieldRegBusSlvIdx.pcrs]` value to the
+// Passing the `ext_reg_req_cut[CarfieldRegBusSlvIdx.pcrs]` value to the
 // reg_req_i/rsp_o buses results in Questa's `Fatal: Unexpected signal: 11.`
 // at compile time. Direct casting 'int(CarfieldRegBusSlvIdx.pcrs) also does
 // not work resulting in the ext_reg_rsp_cut bus being all X. The localparam
