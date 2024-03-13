@@ -1678,7 +1678,8 @@ if (CarfieldIslandsCfg.secured.enable) begin : gen_secure_subsystem
   typedef logic [Cfg.AxiUserWidth-1:0]     narrow_axi_user_t;
   typedef logic [Cfg.AxiMstIdWidth-1:0]    narrow_axi_out_id_t;
 
-  `AXI_TYPEDEF_ALL(carfield_axi_mst_narrow, narrow_axi_addr_t, narrow_axi_out_id_t, narrow_axi_data_t, narrow_axi_strb_t, narrow_axi_user_t)
+  `AXI_TYPEDEF_ALL(carfield_axi_mst_narrow, narrow_axi_addr_t, narrow_axi_out_id_t, \
+                   narrow_axi_data_t, narrow_axi_strb_t, narrow_axi_user_t)
 
   `ifndef SECD_NETLIST
   secure_subsystem_synth_wrap_astral #(
