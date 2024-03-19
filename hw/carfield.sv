@@ -1669,7 +1669,7 @@ if (CarfieldIslandsCfg.secured.enable) begin : gen_secure_subsystem
   assign security_island_isolate_req  = car_regs_reg2hw.security_island_isolate.q &&
                                         !secure_boot_i;
   assign car_regs_hw2reg.security_island_isolate_status.d =
-         master_isolated_rsp[SecurityIslandTlulMstIdx];
+         master_isolated_rsp[SecurityIslandTlulMstIdx] & master_isolated_rsp[SecurityIslandiDMAMstIdx];
   assign car_regs_hw2reg.security_island_isolate_status.de = 1'b1;
 
   typedef logic [Cfg.AddrWidth-1:0]        narrow_axi_addr_t;
@@ -1683,7 +1683,7 @@ if (CarfieldIslandsCfg.secured.enable) begin : gen_secure_subsystem
 
   `ifndef SECD_NETLIST
   secure_subsystem_synth_wrap_astral #(
-    .HartIdOffs            ( 4           ),
+    .HartIdOffs            ( OpnTitHartIdOffs                  ),
     .AxiAddrWidth          ( Cfg.AddrWidth                     ),
     .AxiDataWidth          ( Cfg.AxiDataWidth                  ),
     .AxiUserWidth          ( Cfg.AxiUserWidth                  ),
@@ -1764,8 +1764,8 @@ if (CarfieldIslandsCfg.secured.enable) begin : gen_secure_subsystem
     .async_idma_axi_out_r_data_i  ( axi_mst_ext_r_data  [SecurityIslandiDMAMstIdx] ),
     .async_idma_axi_out_r_wptr_i  ( axi_mst_ext_r_wptr  [SecurityIslandiDMAMstIdx] ),
     .async_idma_axi_out_r_rptr_o  ( axi_mst_ext_r_rptr  [SecurityIslandiDMAMstIdx] ),
-    .axi_isolate_i    ( {'0, security_island_isolate_req                    }         ),
-    .axi_isolated_o   ( { unused, master_isolated_rsp[SecurityIslandTlulMstIdx] } ),
+    .axi_isolate_i    ( security_island_isolate_req                                ),
+    .axi_isolated_o   ( { master_isolated_rsp[SecurityIslandiDMAMstIdx] master_isolated_rsp[SecurityIslandTlulMstIdx] } ),
      // Uart
     .ibex_uart_rx_i   ( uart_ot_rx_i  ),
     .ibex_uart_tx_o   ( uart_ot_tx_o  ),

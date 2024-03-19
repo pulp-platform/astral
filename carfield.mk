@@ -23,7 +23,7 @@ CAR_SW_DIR  := $(CAR_ROOT)/sw
 CAR_TGT_DIR := $(CAR_ROOT)/target/
 CAR_XIL_DIR := $(CAR_TGT_DIR)/xilinx
 CAR_SIM_DIR := $(CAR_TGT_DIR)/sim
-SECD_ROOT    ?= $(shell $(BENDER) path opentitan)
+SECD_ROOT ?= $(shell $(BENDER) path opentitan)
 # Questasim
 CAR_VSIM_DIR := $(CAR_TGT_DIR)/sim/vsim
 
@@ -216,7 +216,7 @@ pulpd-sw-build: pulpd-sw-init
 ## for more information.
 car-hw-init: spatzd-hw-init chs-hw-init secd-hw-init
 
-#Build OpenTitan's debug rom with support for coreid=0x4
+#Build OpenTitan's debug rom with support for coreid != 0x0
 secd-hw-init:
 	$(MAKE) -C $(SECD_ROOT)/hw/vendor/pulp_riscv_dbg/debug_rom clean all FLAGS=-DCARFIELD=1
 
