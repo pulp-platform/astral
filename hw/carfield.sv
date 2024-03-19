@@ -428,7 +428,6 @@ logic [    LogDepth:0] llc_w_rptr;
 
 logic hyper_isolate_req, hyper_isolated_rsp;
 logic security_island_isolate_req;
-logic unused;
 
 logic [iomsb(Cfg.AxiExtNumSlv):0] slave_isolate_req, slave_isolated_rsp, slave_isolated;
 logic [iomsb(Cfg.AxiExtNumMst):0] master_isolated_rsp;
