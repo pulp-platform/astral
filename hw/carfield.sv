@@ -1668,7 +1668,7 @@ if (CarfieldIslandsCfg.secured.enable) begin : gen_secure_subsystem
   assign security_island_isolate_req  = car_regs_reg2hw.security_island_isolate.q &&
                                         !secure_boot_i;
   assign car_regs_hw2reg.security_island_isolate_status.d =
-         master_isolated_rsp[SecurityIslandTlulMstIdx] 
+         master_isolated_rsp[SecurityIslandTlulMstIdx]
          & master_isolated_rsp[SecurityIslandiDMAMstIdx];
   assign car_regs_hw2reg.security_island_isolate_status.de = 1'b1;
 
