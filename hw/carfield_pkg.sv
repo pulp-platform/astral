@@ -41,7 +41,6 @@ typedef struct packed {
   islands_properties_t pulp;
   islands_properties_t secured;
   islands_properties_t mbox;
-  islands_properties_t secured_idma;
 } islands_cfg_t;
 
 // Types are obtained from Cheshire package
@@ -144,8 +143,6 @@ function automatic carfield_master_idx_t carfield_gen_axi_master_idx(islands_cfg
   end else begin ret.secured = MaxExtAxiMst + j; ret.secured_idma = MaxExtAxiMst + j + 1; j+=2; end
   if (island_cfg.spatz.enable) begin ret.spatz = i; i++;
   end else begin ret.spatz = MaxExtAxiMst + j; j++; end
-  if (island_cfg.secured.enable) begin ret.secured_idma = i; i++;
-  end else begin ret.secured_idma = MaxExtAxiMst + j; j++; end
   if (island_cfg.pulp.enable) begin ret.pulp = i; i++;
   end else begin ret.pulp = MaxExtAxiMst + j; j++; end
   return ret;
