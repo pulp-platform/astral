@@ -428,7 +428,6 @@ logic [    LogDepth:0] llc_w_rptr;
 
 logic hyper_isolate_req, hyper_isolated_rsp;
 logic security_island_isolate_req;
-logic unused;
 
 logic [iomsb(Cfg.AxiExtNumSlv):0] slave_isolate_req, slave_isolated_rsp, slave_isolated;
 logic [iomsb(Cfg.AxiExtNumMst):0] master_isolated_rsp;
@@ -1682,7 +1681,7 @@ if (CarfieldIslandsCfg.secured.enable) begin : gen_secure_subsystem
                    narrow_axi_data_t, narrow_axi_strb_t, narrow_axi_user_t)
 
   `ifndef SECD_NETLIST
-  secure_subsystem_synth_wrap_astral #(
+  security_island #(
     .HartIdOffs            ( OpnTitHartIdOffs                  ),
     .AxiAddrWidth          ( Cfg.AddrWidth                     ),
     .AxiDataWidth          ( Cfg.AxiDataWidth                  ),
@@ -1765,7 +1764,7 @@ if (CarfieldIslandsCfg.secured.enable) begin : gen_secure_subsystem
     .async_idma_axi_out_r_wptr_i  ( axi_mst_ext_r_wptr  [SecurityIslandiDMAMstIdx] ),
     .async_idma_axi_out_r_rptr_o  ( axi_mst_ext_r_rptr  [SecurityIslandiDMAMstIdx] ),
     .axi_isolate_i    ( security_island_isolate_req                                ),
-    .axi_isolated_o   ( { master_isolated_rsp[SecurityIslandiDMAMstIdx] master_isolated_rsp[SecurityIslandTlulMstIdx] } ),
+    .axi_isolated_o   ( { master_isolated_rsp[SecurityIslandiDMAMstIdx], master_isolated_rsp[SecurityIslandTlulMstIdx] } ),
      // Uart
     .ibex_uart_rx_i   ( uart_ot_rx_i  ),
     .ibex_uart_tx_o   ( uart_ot_tx_o  ),

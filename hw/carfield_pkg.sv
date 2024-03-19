@@ -40,6 +40,7 @@ typedef struct packed {
   islands_properties_t spatz;
   islands_properties_t pulp;
   islands_properties_t secured;
+  islands_properties_t secured_idma;
   islands_properties_t mbox;
 } islands_cfg_t;
 
@@ -122,10 +123,10 @@ endfunction
 // crossbar starting from the islands enable structure.
 function automatic int unsigned gen_num_axi_master(islands_cfg_t island_cfg);
   int unsigned ret = 0; // Number of masters starts from 0
-  if (island_cfg.safed.enable  )      begin ret++; end
-  if (island_cfg.spatz.enable  )      begin ret++; end
-  if (island_cfg.pulp.enable   )      begin ret++; end
-  if (island_cfg.secured.enable)      begin ret+=2; end
+  if (island_cfg.safed.enable  ) begin ret++; end
+  if (island_cfg.spatz.enable  ) begin ret++; end
+  if (island_cfg.pulp.enable   ) begin ret++; end
+  if (island_cfg.secured.enable) begin ret+=2; end
   return ret;
 endfunction
 
