@@ -40,7 +40,6 @@ typedef struct packed {
   islands_properties_t spatz;
   islands_properties_t pulp;
   islands_properties_t secured;
-  islands_properties_t secured_idma;
   islands_properties_t mbox;
 } islands_cfg_t;
 
