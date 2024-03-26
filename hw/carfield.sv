@@ -20,6 +20,7 @@ module carfield
   import safety_island_pkg::*;
   import tlul_ot_pkg::*;
   import spatz_cluster_pkg::*;
+  import pulp_cluster_package::*;
 #(
   parameter cheshire_cfg_t Cfg = carfield_pkg::CarfieldCfgDefault,
   parameter int unsigned HypNumPhys  = 2,
@@ -1317,9 +1318,17 @@ if (CarfieldIslandsCfg.pulp.enable) begin : gen_pulp_cluster
   assign slave_isolated[IntClusterSlvIdx] = slave_isolated_rsp[IntClusterSlvIdx] &
                                             master_isolated_rsp[IntClusterMstIdx];
 
+localparam pulp_cluster_package::hwpe_subsystem_cfg_t PulpClusterHwpeCfg = '{
+  NumHwpes: 2,
+  HwpeList: {
+              NEUREKA, // idx 1
+              REDMULE  // idx 0
+            }
+};
+
 localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
   CoreType: pulp_cluster_package::RISCY,
-  NumCores: 12,
+  NumCores: IntClusterNumCores,
   DmaNumPlugs: 4,
   DmaNumOutstandingBursts: 8,
   DmaBurstLength: 256,
@@ -1332,6 +1341,7 @@ localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
   TcdmSize: 256*1024,
   TcdmNumBank: 16,
   HwpePresent: 1,
+  HwpeCfg: PulpClusterHwpeCfg,
   HwpeNumPorts: 9,
   iCacheNumBanks: 2,
   iCacheNumLines: 1,

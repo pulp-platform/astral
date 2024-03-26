@@ -155,7 +155,7 @@ packages:
     dependencies:
     - common_cells
   cluster_peripherals:
-    revision: c9defcfb4f4e8733383b28a451c430783c2febbd
+    revision: 8a9f62dafb5ec23c6cd361847ff0047e12befca4
     version: null
     source:
       Git: https://github.com/pulp-platform/cluster_peripherals.git
@@ -231,7 +231,7 @@ packages:
     dependencies:
     - common_cells
   hci:
-    revision: 4823e503851eb7e8cc765a58621d767a01d6a77b
+    revision: e47627c20b33bcaf4842c1add81fb888b4f12a9d
     version: null
     source:
       Git: https://github.com/pulp-platform/hci.git
@@ -252,7 +252,7 @@ packages:
     - scm
     - tech_cells_generic
   hwpe-ctrl:
-    revision: b7857919ea14b586901ff4282ad7749a3d50501e
+    revision: a5966201aeeb988d607accdc55da933a53c6a56e
     version: null
     source:
       Git: https://github.com/pulp-platform/hwpe-ctrl.git
@@ -329,6 +329,15 @@ packages:
       Git: https://github.com/pulp-platform/mchan.git
     dependencies:
     - common_cells
+  neureka:
+    revision: 3131e87c40118f75e11a1ff9bae60fe764336a19
+    version: null
+    source:
+      Git: https://github.com/pulp-platform/neureka.git
+    dependencies:
+    - hci
+    - hwpe-ctrl
+    - hwpe-stream
   obi:
     revision: 1aa411df145c4ebdd61f8fed4d003c33f7b20636
     version: 0.1.2
@@ -372,7 +381,7 @@ packages:
     - axi
     - common_verification
   pulp_cluster:
-    revision: 3cd3e83fdd7a791e8ae54aef39423004581c8a48
+    revision: f8f8903a81fd785f9fa86a9442bfdaf058009452
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp_cluster.git
@@ -390,6 +399,7 @@ packages:
     - ibex
     - idma
     - mchan
+    - neureka
     - per2axi
     - redmule
     - redundancy_cells
@@ -399,7 +409,7 @@ packages:
     - tech_cells_generic
     - timer_unit
   redmule:
-    revision: 1b30b0b9a31afa702eb2d166d672ceda2f5d463a
+    revision: 68999ccc922b10a5043bb98f67aaf3d8d8d59f3f
     version: null
     source:
       Git: https://github.com/pulp-platform/redmule.git

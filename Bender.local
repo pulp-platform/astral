@@ -7,7 +7,7 @@ overrides:
   axi_riscv_atomics:    { git: https://github.com/pulp-platform/axi_riscv_atomics.git     , version: 0.8.2 }
   apb:                  { git: "https://github.com/pulp-platform/apb.git"                 , version: 0.2.3 }
   redundancy_cells:     { git: "https://github.com/pulp-platform/redundancy_cells.git"    , rev: "c37bdb47339bf70e8323de8df14ea8bbeafb6583" } # branch: astral-rebase
-  hci:                  { git: "https://github.com/pulp-platform/hci.git"                 , rev: v1.1 }
+  #hci:                  { git: "https://github.com/pulp-platform/hci.git"                 , rev: v1.1 }
   tech_cells_generic:   { git: "https://github.com/pulp-platform/tech_cells_generic.git"  , version: =0.2.13                                }
   riscv-dbg:            { git: "https://github.com/pulp-platform/riscv-dbg.git"           , version: =0.8.0                                 }
   idma:                 { git: "https://github.com/pulp-platform/idma.git"                , version: 0.5.1                                  }
@@ -18,3 +18,7 @@ overrides:
   fpnew:                { git: "https://github.com/pulp-platform/cvfpu.git"               , rev: pulp-v0.1.3 }
   cv32e40p:             { git: "https://github.com/pulp-platform/cv32e40p.git"            , rev: e863f576699815b38cc9d80dbdede8ed5efd5991   }
   axi_rt:               { git: "https://github.com/pulp-platform/axi_rt.git"              , version: =0.0.0-alpha.4                         }
+
+  # WIP
+  hci                 : { git: "https://github.com/pulp-platform/hci.git"                 , rev: e47627c20b33bcaf4842c1add81fb888b4f12a9d } # branch: master
+  hwpe-stream         : { git: "https://github.com/pulp-platform/hwpe-stream.git"         , rev: bcb4435f802add732f557dc7fa1c6b5dd8854458 } # branch: master
