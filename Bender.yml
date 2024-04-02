@@ -39,6 +39,11 @@ workspace:
 
 sources:
   # Configurations
+    # "Small" Astral configuration
+  - target: carfield_secure_pulp_periph_can
+    files:
+      - hw/configs/carfield_secure_pulp_periph_can.sv
+
   - target: carfield_l2dual_safe_secure_pulp_spatz_periph_can
     files:
       - hw/configs/carfield_l2dual_safe_secure_pulp_spatz_periph_can.sv
