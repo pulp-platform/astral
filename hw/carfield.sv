@@ -432,7 +432,7 @@ logic security_island_isolate_req;
 logic [iomsb(Cfg.AxiExtNumSlv):0] slave_isolate_req, slave_isolated_rsp, slave_isolated;
 logic [iomsb(Cfg.AxiExtNumMst):0] master_isolated_rsp;
 
-// All AXI Slaves (except the Integer Cluster and the Mailbox)
+// All AXI Slaves (except the Mailbox)
 logic [iomsb(NumSlaveCDCs):0][CarfieldAxiSlvAwWidth-1:0] axi_slv_ext_aw_data;
 logic [iomsb(NumSlaveCDCs):0][               LogDepth:0] axi_slv_ext_aw_wptr;
 logic [iomsb(NumSlaveCDCs):0][               LogDepth:0] axi_slv_ext_aw_rptr;
@@ -449,7 +449,7 @@ logic [iomsb(NumSlaveCDCs):0][ CarfieldAxiSlvRWidth-1:0] axi_slv_ext_r_data ;
 logic [iomsb(NumSlaveCDCs):0][               LogDepth:0] axi_slv_ext_r_wptr ;
 logic [iomsb(NumSlaveCDCs):0][               LogDepth:0] axi_slv_ext_r_rptr ;
 
-// All AXI Masters (except the Integer Cluster)
+// All AXI Masters
 logic [iomsb(Cfg.AxiExtNumMst):0][CarfieldAxiMstAwWidth-1:0] axi_mst_ext_aw_data;
 logic [iomsb(Cfg.AxiExtNumMst):0][               LogDepth:0] axi_mst_ext_aw_wptr;
 logic [iomsb(Cfg.AxiExtNumMst):0][               LogDepth:0] axi_mst_ext_aw_rptr;
@@ -767,6 +767,7 @@ cheshire_wrap #(
   .cheshire_reg_ext_rsp_t         ( carfield_reg_rsp_t           ),
   .LogDepth                       ( LogDepth                     ),
   .CdcSyncStages                  ( SyncStages                   ),
+  .NumSlaveCDCs                   ( NumSlaveCDCs                 ),
   .AxiIn                          ( AxiIn                        ),
   .AxiOut                         ( AxiOut                       )
 ) i_cheshire_wrap                 (
@@ -796,7 +797,7 @@ cheshire i_cheshire_wrap                 (
   .llc_mst_w_data_o   ( llc_w_data         ),
   .llc_mst_w_wptr_o   ( llc_w_wptr         ),
   .llc_mst_w_rptr_i   ( llc_w_rptr         ),
-  // External AXI slave devices (except the Integer Cluster)
+  // External AXI slave devices
   .axi_ext_slv_isolate_i  ( slave_isolate_req   ),
   .axi_ext_slv_isolated_o ( slave_isolated_rsp  ),
   .axi_ext_slv_ar_data_o  ( axi_slv_ext_ar_data ),
@@ -814,7 +815,7 @@ cheshire i_cheshire_wrap                 (
   .axi_ext_slv_w_data_o   ( axi_slv_ext_w_data  ),
   .axi_ext_slv_w_wptr_o   ( axi_slv_ext_w_wptr  ),
   .axi_ext_slv_w_rptr_i   ( axi_slv_ext_w_rptr  ),
-  // External AXI master devices (except the Integer Cluster)
+  // External AXI master devices
   .axi_ext_mst_ar_data_i ( axi_mst_ext_ar_data ),
   .axi_ext_mst_ar_wptr_i ( axi_mst_ext_ar_wptr ),
   .axi_ext_mst_ar_rptr_o ( axi_mst_ext_ar_rptr ),
