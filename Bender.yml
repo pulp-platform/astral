@@ -100,9 +100,9 @@ sources:
 
   - target: all(synthesis, not(fpga))
     files:
-      - tech/sourcecode/tc_clk.sv
-      - tech/sourcecode/tc_sram.sv
-      - target/synth/carfield_synth_wrap.sv
+      - gf12/sourcecode/tc_clk.sv
+      - gf12/sourcecode/tc_sram.sv
+      - target/synth/src/carfield_synth_wrap.sv
 
   - target: tech_sim
     files:
