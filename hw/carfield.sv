@@ -45,6 +45,10 @@ module carfield
   input   logic                                       alt_clk_i,
   // external reference clock for timers (CLINT, islands)
   input   logic                                       rt_clk_i,
+  // ethernet clock 125 MHz
+  input   logic                                       eth_clk_125_i,
+  // ethernet clock 125 MHz wtih 90 degree phase shift
+  input   logic                                       eth_clk_90_i,
 
   input   logic                                       pwr_on_rst_ni,
 
@@ -109,16 +113,16 @@ module carfield
   input  logic [ 3:0]                                 spih_ot_sd_i,
   // ETHERNET interface
   input  logic                                        eth_rxck_i,
+  input  logic [3:0]                                  eth_rxd_i,
   input  logic                                        eth_rxctl_i,
-  input  logic  [ 3:0]                                eth_rxd_i,
-  input  logic                                        eth_md_i,
   output logic                                        eth_txck_o,
+  output logic [3:0]                                  eth_txd_o,
   output logic                                        eth_txctl_o,
-  output logic  [ 3:0]                                eth_txd_o,
-  output logic                                        eth_md_o,
-  output logic                                        eth_md_oe,
+  output logic                                        eth_rstn_o,
+  input  logic                                        eth_mdio_i,
+  output logic                                        eth_mdio_o,
+  output logic                                        eth_mdio_oe,
   output logic                                        eth_mdc_o,
-  output logic                                        eth_rst_n_o,
   // CAN interface
   input  logic                                        can_rx_i,
   output logic                                        can_tx_o,
@@ -777,7 +781,14 @@ cheshire i_cheshire_wrap                 (
   .rst_ni             ( host_pwr_on_rst_n  ),
   .test_mode_i                    ,
   .boot_mode_i                    ,
-  .rtc_i              ( rt_clk_i          ),
+  .rtc_i              ( rt_clk_i           ),
+  /* Ethernet Clock */
+  // Quadrature (90deg) clk to `phy_tx_clk_i` -> disabled when
+  // `USE_CLK90 == FALSE` in ethernet IP. See `eth_mac_1g_rgmii_fifo`.
+  // In carfieldv1, USE_CLK90 == 0, hence changing the clock phase
+  // is left to PHY chips on the PCB.
+  .eth_clk_90_i       ( eth_clk_90_i       ), // to-do
+  .eth_clk_125_i      ( eth_clk_125_i      ),
   // External AXI LLC (DRAM) port
   .axi_llc_isolate_i  ( hyper_isolate_req  ),
   .axi_llc_isolated_o ( hyper_isolated_rsp ),
@@ -878,6 +889,18 @@ cheshire i_cheshire_wrap                 (
   .i2c_scl_o                      ,
   .i2c_scl_i                      ,
   .i2c_scl_en_o                   ,
+   // ETHERNET interface
+  .eth_rxck_i                     ,
+  .eth_rxd_i                      ,
+  .eth_rxctl_i                    ,
+  .eth_txck_o                     ,
+  .eth_txd_o                      ,
+  .eth_txctl_o                    ,
+  .eth_rstn_o                     ,
+  .eth_mdio_i                     ,
+  .eth_mdio_o                     ,
+  .eth_mdio_oe                    ,
+  .eth_mdc_o                      ,
   // SPI host interface
   .spih_sck_o                     ,
   .spih_sck_en_o                  ,
@@ -2045,62 +2068,6 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
       .clk_o          ( eth_mdio_clk ),
       .cycl_count_o   (              )
   );
-
-  // Ethernet IP
-  eth_rgmii #(
-    .AXI_ADDR_WIDTH ( Cfg.AddrWidth    ),
-    .AXI_DATA_WIDTH ( Cfg.AxiDataWidth ),
-    .AXI_ID_WIDTH   ( AxiSlvIdWidth    ),
-    .AXI_USER_WIDTH ( Cfg.AxiUserWidth )
-  ) i_eth_rgmii (
-    .clk_i        ( eth_mdio_clk ),
-    /* Clock 200MHz */
-    // Only used with FPGA mapping for genesysII
-    // in IDELAYCTRL cell's ref clk (see IP)
-    .clk_200MHz_i ( '0 ),
-    .rst_ni       ( periph_rst_n ),
-    /* Ethernet Clock */
-    // Quadrature (90deg) clk to `phy_tx_clk_i` -> disabled when
-    // `USE_CLK90 == FALSE` in ethernet IP. See `eth_mac_1g_rgmii_fifo`.
-    // In carfieldv1, USE_CLK90 == 0, hence changing the clock phase
-    // is left to PHY chips on the PCB.
-    .eth_clk_i    ( '0 ),
-
-    .ethernet     ( axi_ethernet ),
-
-    .eth_rxck     ( eth_rxck_i  ),
-    .eth_rxctl    ( eth_rxctl_i ),
-    .eth_rxd      ( eth_rxd_i   ),
-
-    .eth_txck     ( eth_txck_o  ),
-    .eth_txctl    ( eth_txctl_o ),
-    .eth_txd      ( eth_txd_o   ),
-
-    .eth_rst_n    ( eth_rst_n_o  ),
-    .phy_tx_clk_i ( eth_rgmii_phy_clk0 ),  // in phase (0deg) clk
-
-    // MDIO
-    .eth_mdio_i    ( eth_md_i   ),
-    .eth_mdio_o    ( eth_md_o   ),
-    .eth_mdio_oe_o ( eth_md_oe  ),
-    .eth_mdc_o     ( eth_mdc_o  ),
-
-    .eth_irq       ( car_eth_intr )
-  );
-
-end else begin : gen_no_ethernet
-
-  assign ethernet_slave_isolated = '0;
-  assign car_eth_intr            = '0;
-  assign eth_md_o                = '0;
-  assign eth_md_oe               = '0;
-  assign eth_mdc_o               = '0;
-  assign eth_rst_n_o             = '0;
-  assign eth_txck_o              = '0;
-  assign eth_txctl_o             = '0;
-  assign eth_txd_o               = '0;
-
-end
 
 // APB peripherals
 // Periph Clock Domain

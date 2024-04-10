@@ -88,6 +88,20 @@ module carfield_soc_fixture;
   logic i2c_scl_i;
   logic i2c_scl_en;
 
+  logic       eth_clk_125;
+  logic       eth_clk_90;
+  logic       eth_rxck;
+  logic [3:0] eth_rxd;
+  logic       eth_rxctl;
+  logic       eth_txck;
+  logic [3:0] eth_txd;
+  logic       eth_txctl;
+  logic       eth_rstn;  
+  logic       eth_mdio_i;
+  logic       eth_mdio_o;
+  logic       eth_mdio_en;
+  logic       eth_mdc;
+
   logic                 spih_sck_o;
   logic                 spih_sck_en;
   logic [SpihNumCs-1:0] spih_csb_o;
@@ -140,6 +154,8 @@ module carfield_soc_fixture;
     .periph_clk_i               ( clk                       ),
     .alt_clk_i                  ( clk                       ),
     .rt_clk_i                   ( rtc                       ),
+    .eth_clk_125_i              ( eth_clk_125               ),
+    .eth_clk_90_i               ( eth_clk_90                ),
     .pwr_on_rst_ni              ( rst_n                     ),
     .test_mode_i                ( test_mode                 ),
     .boot_mode_i                ( boot_mode                 ),
@@ -187,17 +203,18 @@ module carfield_soc_fixture;
     .spih_ot_sd_o               ( spi_secd_sd_o             ),
     .spih_ot_sd_en_o            ( spi_secd_sd_en            ),
     .spih_ot_sd_i               ( spi_secd_sd_i             ),
-    .eth_rxck_i                 ( '0                        ),
-    .eth_rxctl_i                ( '0                        ),
-    .eth_rxd_i                  ( '0                        ),
-    .eth_md_i                   ( '0                        ),
-    .eth_txck_o                 ( /* Currently unconnected, tie to 0 */ ),
-    .eth_txctl_o                ( /* Currently unconnected, tie to 0 */ ),
-    .eth_txd_o                  ( /* Currently unconnected, tie to 0 */ ),
-    .eth_md_o                   ( /* Currently unconnected, tie to 0 */ ),
-    .eth_md_oe                  ( /* Currently unconnected, tie to 0 */ ),
-    .eth_mdc_o                  ( /* Currently unconnected, tie to 0 */ ),
-    .eth_rst_n_o                ( /* Currently unconnected, tie to 0 */ ),
+    .eth_clk_90_i
+    .eth_rxck_i                 ( eth_rxck                  ),
+    .eth_rxctl_i                ( eth_rxctl                 ),
+    .eth_rxd_i                  ( eth_rxd                   ),
+    .eth_txck_o                 ( eth_txck                  ),
+    .eth_txctl_o                ( eth_txctl                 ),
+    .eth_txd_o                  ( eth_txd                   ),
+    .eth_mdio_i                 ( eth_mdio_i                ),
+    .eth_mdio_o                 ( eth_mdio_o                ),
+    .eth_mdio_oe                ( eth_mdio_en               ),
+    .eth_mdc_o                  ( eth_mdc                   ),
+    .eth_rstn_o                 ( eth_rstn                  ),
     .can_rx_i                   ( '0                        ),
     .can_tx_o                   (                           ),
     .gpio_i                     ( '0                        ),
