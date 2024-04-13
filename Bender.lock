@@ -155,15 +155,15 @@ packages:
     dependencies:
     - common_cells
   cluster_peripherals:
-    revision: c9defcfb4f4e8733383b28a451c430783c2febbd
+    revision: 8a9f62dafb5ec23c6cd361847ff0047e12befca4
     version: null
     source:
       Git: https://github.com/pulp-platform/cluster_peripherals.git
     dependencies:
     - hci
   common_cells:
-    revision: ad22699793d98ef714f120c6268fe92d096a61e1
-    version: 1.33.1
+    revision: 7773d971b9d7bef7f5f6a2ef36ee1e4d02cefcd3
+    version: 1.34.0
     source:
       Git: https://github.com/pulp-platform/common_cells.git
     dependencies:
@@ -252,15 +252,15 @@ packages:
     - scm
     - tech_cells_generic
   hwpe-ctrl:
-    revision: b7857919ea14b586901ff4282ad7749a3d50501e
+    revision: a5966201aeeb988d607accdc55da933a53c6a56e
     version: null
     source:
       Git: https://github.com/pulp-platform/hwpe-ctrl.git
     dependencies:
     - tech_cells_generic
   hwpe-stream:
-    revision: bcb4435f802add732f557dc7fa1c6b5dd8854458
-    version: 1.7.1
+    revision: 65c99a4a2f37a79acee800ab0151f67dfb1edef1
+    version: 1.8.0
     source:
       Git: https://github.com/pulp-platform/hwpe-stream.git
     dependencies:
@@ -329,6 +329,16 @@ packages:
       Git: https://github.com/pulp-platform/mchan.git
     dependencies:
     - common_cells
+  neureka:
+    revision: 3131e87c40118f75e11a1ff9bae60fe764336a19
+    version: null
+    source:
+      Git: https://github.com/pulp-platform/neureka.git
+    dependencies:
+    - hci
+    - hwpe-ctrl
+    - hwpe-stream
+    - zeroriscy
   obi:
     revision: 1aa411df145c4ebdd61f8fed4d003c33f7b20636
     version: 0.1.2
@@ -372,7 +382,7 @@ packages:
     - axi
     - common_verification
   pulp_cluster:
-    revision: 7a3141a804cd0df60cb039764547daa7c075852b
+    revision: 9be39b5b300f48015c931993273f9a288abc1318
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp_cluster.git
@@ -390,6 +400,7 @@ packages:
     - ibex
     - idma
     - mchan
+    - neureka
     - per2axi
     - redmule
     - redundancy_cells
@@ -399,7 +410,7 @@ packages:
     - tech_cells_generic
     - timer_unit
   redmule:
-    revision: 1b30b0b9a31afa702eb2d166d672ceda2f5d463a
+    revision: 68999ccc922b10a5043bb98f67aaf3d8d8d59f3f
     version: null
     source:
       Git: https://github.com/pulp-platform/redmule.git
@@ -531,3 +542,9 @@ packages:
     - axi
     - common_cells
     - register_interface
+  zeroriscy:
+    revision: 8a6c00e899cb6c715dcd5a3a1a92263994fb634b
+    version: null
+    source:
+      Git: git@github.com:yvantor/ibex.git
+    dependencies: []
