@@ -1320,7 +1320,7 @@ if (CarfieldIslandsCfg.pulp.enable) begin : gen_pulp_cluster
 
 localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
   CoreType: pulp_cluster_package::RISCY,
-  NumCores: 12,
+  NumCores: IntClusterNumCores,
   DmaNumPlugs: 4,
   DmaNumOutstandingBursts: 8,
   DmaBurstLength: 256,
@@ -1330,9 +1330,13 @@ localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
   ClusterAliasBase: 'h0,
   NumSyncStages: 3,
   UseHci: 1,
-  TcdmSize: 256*1024,
+  TcdmSize: 128*1024,
   TcdmNumBank: 16,
   HwpePresent: 1,
+  HwpeCfg: '{NumHwpes: 2,
+             HwpeList: {pulp_cluster_package::NEUREKA,
+                        pulp_cluster_package::REDMULE}
+            },
   HwpeNumPorts: 9,
   iCacheNumBanks: 2,
   iCacheNumLines: 1,
@@ -1347,7 +1351,7 @@ localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
               safety_island_pkg::DebugAddrOffset,
   BootRomBaseAddr: carfield_pkg::CarfieldIslandsCfg.l2_port0.base + 'h8080,
   BootAddr: carfield_pkg::CarfieldIslandsCfg.l2_port0.base + 'h8080,
-  EnablePrivateFpu: 0,
+  EnablePrivateFpu: 1,
   EnablePrivateFpDivSqrt: 0,
   EnableSharedFpu: 0,
   EnableSharedFpDivSqrt: 0,
