@@ -111,7 +111,7 @@ sources:
     files:
       - tech/sourcecode/tc_clk.sv
       - tech/sourcecode/tc_sram.sv
-      - target/synth/carfield_synth_wrap.sv
+      - target/synth/src/carfield_synth_wrap.sv
 
   - target: tech_sim
     files:
