@@ -543,7 +543,7 @@ packages:
     - common_cells
     - register_interface
   zeroriscy:
-    revision: 8a6c00e899cb6c715dcd5a3a1a92263994fb634b
+    revision: cc4068a0ccb7691cd062b809c34b2304e7fbfa36
     version: null
     source:
       Git: git@github.com:yvantor/ibex.git
