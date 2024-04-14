@@ -100,6 +100,9 @@ SPATZD_MAKEDIR  := $(SPATZD_ROOT)/hw/system/spatz_cluster
 SPATZD_BINARY   ?=
 SPATZD_BOOTMODE ?= 0 # default jtag bootmode
 
+# Streamer, implementing telecommand and telemetry protocols
+STREAMER_ROOT ?= $(shell $(BENDER) path streamer)
+
 ###########################
 # System HW configuration #
 ###########################
