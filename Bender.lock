@@ -162,8 +162,8 @@ packages:
     dependencies:
     - hci
   common_cells:
-    revision: ad22699793d98ef714f120c6268fe92d096a61e1
-    version: 1.33.1
+    revision: 7773d971b9d7bef7f5f6a2ef36ee1e4d02cefcd3
+    version: 1.34.0
     source:
       Git: https://github.com/pulp-platform/common_cells.git
     dependencies:
@@ -259,8 +259,8 @@ packages:
     dependencies:
     - tech_cells_generic
   hwpe-stream:
-    revision: bcb4435f802add732f557dc7fa1c6b5dd8854458
-    version: 1.7.1
+    revision: 65c99a4a2f37a79acee800ab0151f67dfb1edef1
+    version: 1.8.0
     source:
       Git: https://github.com/pulp-platform/hwpe-stream.git
     dependencies:
@@ -498,6 +498,12 @@ packages:
     - register_interface
     - riscv-dbg
     - tech_cells_generic
+  streamer:
+    revision: 83db53a8017c630f1c8bdc358d88b27067c01e56
+    version: null
+    source:
+      Git: git@gitlab.thalesdigital.io:musa/streamer.git
+    dependencies: []
   tagger:
     revision: b288376b65b6bbd5feea196bb3c220f783d96e29
     version: null
