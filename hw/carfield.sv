@@ -2470,6 +2470,147 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
     assign can_tx_o = '0;
     assign apb_mst_rsp[CanIdx] = '0;
   end
+
+  // Telemetry and Telecomand IP (Streamer)
+  if (carfield_configuration::StreamerEnable) begin: gen_streamer
+    localparam int unsigned StreamerAsyncIdx = CarfieldRegBusSlvIdx.streamer-NumSyncRegSlv;
+
+    carfield_reg_req_t streamer_reg_req;
+    carfield_reg_rsp_t streamer_reg_rsp;
+
+    reg_cdc_dst #(
+      .CDC_KIND ( "cdc_4phase" ),
+      .req_t    ( carfield_reg_req_t ),
+      .rsp_t    ( carfield_reg_rsp_t )
+    ) i_streamer_reg_cdc_dst (
+      .dst_clk_i   ( periph_clk   ),
+      .dst_rst_ni  ( periph_rst_n ),
+
+      .async_req_i ( ext_reg_async_slv_req_out  [StreamerAsyncIdx] ),
+      .async_ack_o ( ext_reg_async_slv_ack_in   [StreamerAsyncIdx] ),
+      .async_data_i( ext_reg_async_slv_data_out [StreamerAsyncIdx] ),
+
+      .async_req_o ( ext_reg_async_slv_req_in   [StreamerAsyncIdx] ),
+      .async_ack_i ( ext_reg_async_slv_ack_out  [StreamerAsyncIdx] ),
+      .async_data_o( ext_reg_async_slv_data_in  [StreamerAsyncIdx] ),
+
+      .dst_req_o   ( streamer_reg_req ),
+      .dst_rsp_i   ( streamer_reg_rsp )
+    );
+
+    assign streamer_reg_rsp.error = '0;
+
+    TASI_top i_tctm_streamer (
+      .SYS_CLK                            (periph_clk),
+      .ASYNC_RST_N                        (periph_rst_n), // FIXME: connect to dedicated one
+      .APB_PADD                           (apb_mst_req[StreamerIdx].paddr),   // : in -- APB
+      .APB_PENABLE                        (apb_mst_req[StreamerIdx].penable), // : in -- APB
+      .APB_PPROT                          (3'b0),                            // : in -- APB
+      .APB_PSEL                           (apb_mst_req[StreamerIdx].psel),   // : in -- APB
+      .APB_PSTROBE                        (4'b1),                            // : in -- APB
+      .APB_PWDATA                         (apb_mst_req[StreamerIdx].pwdata), // : in -- APB
+      .APB_PWRITE                         (apb_mst_req[StreamerIdx].pwrite), // : in -- APB
+      .APB_PRDATA                         (apb_mst_rsp[StreamerIdx].prdata), // : out -- APB
+      .APB_PREADY                         (apb_mst_rsp[StreamerIdx].pready), // : out -- APB
+      .APB_PSLVERR                        (apb_mst_rsp[StreamerIdx].pslverr), // : out -- APB
+      .REG_ADDR                           (streamer_reg_req.addr[31:0]), // : in -- REG IF
+      .REG_M_ID                           (3'b001), // : in     std_logic_vector (2 downto 0);   -- REG IF
+      .REG_VALID                          (streamer_reg_req.valid), // : in  -- REG IF
+      .REG_WDATA                          (streamer_reg_req.wdata), // : in  -- REG IF
+      .REG_WRITE                          (streamer_reg_req.write), // : in  -- REG IF
+      .REG_RDATA                          (streamer_reg_rsp.rdata), // : out -- REG IF
+      .REG_READY                          (streamer_reg_rsp.ready), // : out -- REG IF
+      .AUEND_SDU                          (1'b0), // : in  -- Connetti a '0'
+      .AUR_SDU                            (1'b0), // : in  -- Connetti a '0'
+      .BIT_LOCKn                          (3'b0), // : in  -- Connetti a '0'
+      .BUFFER_BUSY_SET                    (1'b0), // : in  -- Da pilotare per mandare HPC/LLC dopo averli scritti in APB
+      .CLCW_C_B                           (1'b0), // : in  -- Connetti a '0'
+      .CLCW_S_B                           (1'b0), // : in  -- Connetti a '0'
+      .CONF_REG_ACC_ACK                   (1'b1), // : in  -- Era un'interfaccia interna che ora va semplificata, connetti a '1'
+      .CPDU_INPROGRESS                    (1'b0), // : in  -- Connetti a '0'
+      .EXT_OBT_CLK                        (1'b0), // : in  -- Pin previsto per l'ASIC finale, ora lascia pure a '0'
+      .HPC_LLC_CTRL_REG                   (32'b0), // : in  -- Da pilotare, valore costante
+      .INT_PPS_IN                         (1'b0), // : in  -- Pin previsto per l'ASIC finale, ora lascia pure a '0'
+      .RFAVN                              (1'b0), // : in  -- Connetti a '0'
+      .SDU_WRONG_LENGTH                   (1'b0), // : in  -- Connetti a '0'
+      .SYNC_RST_N                         (1'b1), // : in  -- Reset sincrono col sys_clk
+      .TC_ACTIVE                          (1'b0), // : in  -- TC interface, pin dell'ASIC
+      .TC_CLOCK                           (1'b0), // : in  -- TC interface, pin dell'ASIC
+      .TC_DATA                            (1'b0), // : in  -- TC interface, pin dell'ASIC
+      .TME_CLCW_FSR_DAT_FROM_REM_PDEC_SEC (1'b0), // : in  -- Connetti a '0'
+      .TME_ENCR_UNENC_CLK                 (1'b0), // : in  -- Connetti a '0'
+      .TME_ENCR_UNENC_OUT                 (1'b0), // : in  -- Connetti a '0'
+      .TME_ENCR_UNENC_SYNC                (1'b0), // : in  -- Connetti a '0'
+      .TME_FSR_DAT_FROM_LOC_SEC           (1'b0), // : in  -- Connetti a '0'
+      .ANACOND_LLC_RESET                  (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .AUTH_SEL                           (/* Not Connected */), // : out -- Lascia open
+      .BUSY                               (/* Not Connected */), // : out -- Da usare come info per mandare HPC/LLC dopo
+                                                                          // averli scritti in APB, al momento lascia pure open
+      .CADUFrameMark                      (/* Not Connected */), // : out -- Lascia open
+      .CLCWD_B                            (/* Not Connected */), // : out -- Lascia open
+      .CONF_REG_ACC_REQ                   (/* Not Connected */), // : out -- Era un'interfaccia interna che ora va semplificata,
+                                                                             // lascia open
+      .CONF_REG_ADDR_OFFSET               (/* Not Connected */), // : out -- Era un'interfaccia interna che ora va semplificata,
+                                                                             // lascia open
+      .CONF_REG_GROUP_ADDR                (/* Not Connected */), // : out -- Era un'interfaccia interna che ora va semplificata,
+                                                                             // lascia open
+      .CONF_REG_WDATA                     (/* Not Connected */), // : out -- Era un'interfaccia interna che ora va semplificata,
+                                                                             // lascia open
+      .CROSSED_LCL_RESET                  (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .CROSSED_POWER_REARM_OUT            (/* Not Connected */), // : out -- Lascia open
+      .CROSSED_RESET_OUT                  (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .FPEMO                              (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .FPRELM                             (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .HPC_ADDR                           (/* Not Connected */), // : out -- ASIC out pin, lascia pure open
+      .HPC_CMD_EN                         (/* Not Connected */), // : out -- ASIC out pin, lascia pure open
+      .HPC_INTERRUPT_SOURCES              (/* Not Connected */), // : out -- Collezione di interrupt, lascia open
+      .HPC_PROTECTIONn                    (/* Not Connected */), // : out -- ASIC out pin, lascia pure open
+      .HPC_SMP                            (/* Not Connected */), // : out -- ASIC out pin, lascia pure open
+      .INH_MMA                            (/* Not Connected */), // : out -- Lascia open
+      .LLC_INTERRUPT_SOURCES              (/* Not Connected */), // : out -- Collezione di interrupt, lascia open
+      .LLC_IRQ_FORCE_REGISTER             (/* Not Connected */), // : out -- Lascia open
+      .LOC_AOCS_LCL_PRI_BUS_ON_OFFn       (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .LOC_AOCS_ON_OFFn                   (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .LOC_HK_ON_OFFn                     (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .LOC_IO_ON_OFFn                     (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .LOC_MCPM_ON_OFFn                   (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .LOC_MCPM_RESET                     (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .LVDS_IF_TME_ENC_IOUT               (/* Not Connected */), // : out -- Lascia open
+      .LVDS_IF_TME_ENC_IQCLK              (/* Not Connected */), // : out -- Lascia open
+      .LVDS_IF_TME_ENC_QOUT               (/* Not Connected */), // : out -- Lascia open
+      .PP0Busy_N                          (/* Not Connected */), // : out -- Lascia open
+      .PP1Busy_N                          (/* Not Connected */), // : out -- Lascia open
+      .PP2Busy_N                          (/* Not Connected */), // : out -- Lascia open
+      .PP3Busy_N                          (/* Not Connected */), // : out -- Lascia open
+      .PP4Busy_N                          (/* Not Connected */), // : out -- Lascia open
+      .PP5Busy_N                          (/* Not Connected */), // : out -- Lascia open
+      .PP6Busy_N                          (/* Not Connected */), // : out -- Lascia open
+      .PPS_OUT                            (/* Not Connected */), // : out -- Pin previsto per l'ASIC finale, ora lascia pure open
+      .REM_AOCS_LCL_PRI_BUS_ON_OFFn       (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .REM_AOCS_ON_OFFn                   (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .REM_HK_ON_OFFn                     (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .REM_IO_ON_OFFn                     (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .REM_MCPM_ON_OFFn                   (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .RM_RECOVERY_RESET                  (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .RM_RESET                           (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .RS422_IF_TME_ENC_CLK               (/* Not Connected */), // : out -- Connetti a ASIC pin
+      .RS422_IF_TME_ENC_OUT               (/* Not Connected */), // : out -- Connetti a ASIC pin
+      .RS422_IF_TME_ENC_SYNC              (/* Not Connected */), // : out -- Connetti a ASIC pin
+      .SYNC_TO_EXT_IF                     (/* Not Connected */), // : out -- Pin previsto per l'ASIC finale, ora lascia pure open
+      .TC_ONDOING                         (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .TC_STANDARD                        (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .TME_CLR_UNENC_CLK                  (/* Not Connected */), // : out -- Lascia open
+      .TME_CLR_UNENC_EODF_TO_ADAM         (/* Not Connected */), // : out -- Lascia open
+      .TME_CLR_UNENC_EODF_TO_EXT          (/* Not Connected */), // : out -- Lascia open
+      .TME_CLR_UNENC_OUT                  (/* Not Connected */), // : out -- Lascia open
+      .TME_CLR_UNENC_SYNC                 (/* Not Connected */), // : out -- Lascia open
+      .TME_Cn_S                           (/* Not Connected */), // : out -- Lascia open
+      .TME_REM_CLCWn_FSR_SEL              (/* Not Connected */), // : out -- Lascia open
+      .TME_TIME_STROBE_TO_REM_OBT         (/* Not Connected */), // : out -- Lascia open
+      .TME_UNENC_SYNC                     (/* Not Connected */)  // : out -- Lascia open
+    );
+  end else begin: gen_no_streamer
+  end
 end else begin: gen_no_periph
   assign car_regs_hw2reg.periph_isolate_status.d = '0;
   assign car_regs_hw2reg.periph_isolate_status.de = '0;

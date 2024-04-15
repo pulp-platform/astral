@@ -72,6 +72,7 @@ endif
 $(CAR_VSIM_DIR)/compile.carfield_soc.tcl:
 	$(BENDER) script vsim $(common_targs) $(sim_targs) $(sim_defs) $(common_defs) $(safed_defs) --vlog-arg="$(RUNTIME_DEFINES)" --compilation-mode separate > $@
 	sed -i '2a\
+	set VsimDir "$(CAR_VSIM_DIR)"\
 	set TCTMPATH "$(STREAMER_ROOT)"\
 	source $(STREAMER_ROOT)/astral.compile.tcl' $@
 	echo 'vlog "$(CHS_ROOT)/target/sim/src/elfloader.cpp" -ccflags "-std=c++11"' >> $@
