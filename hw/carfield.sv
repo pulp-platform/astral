@@ -782,11 +782,6 @@ cheshire i_cheshire_wrap                 (
   .test_mode_i                    ,
   .boot_mode_i                    ,
   .rtc_i              ( rt_clk_i          ),
-
-
-
-
-
   .eth_clk_90_i       ( eth_clk_90_i       ), // to-do
   .eth_clk_125_i      ( eth_clk_125_i      ),
   // External AXI LLC (DRAM) port
@@ -1927,9 +1922,9 @@ mailbox_unit #(
 // Carfield peripherals
 // Ethernet
 // Peripheral Clock Domain
-logic ethernet_slave_isolated;
-carfield_axi_slv_req_t axi_ethernet_req;
-carfield_axi_slv_rsp_t axi_ethernet_rsp;
+// logic ethernet_slave_isolated;
+// carfield_axi_slv_req_t axi_ethernet_req;
+// carfield_axi_slv_rsp_t axi_ethernet_rsp;
 
 // if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
 //   assign ethernet_slave_isolated = slave_isolated[EthernetSlvIdx];
@@ -2134,8 +2129,7 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
   assign slave_isolate_req[PeriphsSlvIdx] = car_regs_reg2hw.periph_isolate.q;
   assign slave_isolated[PeriphsSlvIdx] = slave_isolated_rsp[PeriphsSlvIdx];
   assign car_regs_hw2reg.periph_isolate_status.d = slave_isolated[PeriphsSlvIdx] |
-                                                   hyper_isolated_rsp            |
-                                                   ethernet_slave_isolated;
+                                                   hyper_isolated_rsp;
   assign car_regs_hw2reg.periph_isolate_status.de = 1'b1;
 
   carfield_axi_slv_req_t axi_d64_a48_peripherals_req;
