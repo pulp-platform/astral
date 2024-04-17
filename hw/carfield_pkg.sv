@@ -317,14 +317,14 @@ function automatic int unsigned gen_carfield_domains(islands_cfg_t island_cfg);
 endfunction
 
 localparam islands_cfg_t CarfieldIslandsCfg = '{
-  l2_port0:      '{L2Port0Enable, L2Port0Base, L2Port0Size},
-  l2_port1:      '{L2Port1Enable, L2Port1Base, L2Port1Size},
-  safed:         '{SafetyIslandEnable, SafetyIslandBase, SafetyIslandSize},
+  l2_port0:      '{0, L2Port0Base, L2Port0Size},
+  l2_port1:      '{0, L2Port1Base, L2Port1Size},
+  safed:         '{0, SafetyIslandBase, SafetyIslandSize},
   ethernet:      '{EthernetEnable, EthernetBase, EthernetSize},
   periph:        '{PeriphEnable, PeriphBase, PeriphSize},
-  spatz:         '{SpatzClusterEnable, SpatzClusterBase, SpatzClusterSize},
+  spatz:         '{0, SpatzClusterBase, SpatzClusterSize},
   pulp:          '{PulpClusterEnable, PulpClusterBase, PulpClusterSize},
-  secured:       '{SecurityIslandEnable, SecurityIslandBase, SecurityIslandSize},
+  secured:       '{0, SecurityIslandBase, SecurityIslandSize},
   mbox:          '{MailboxEnable, MailboxBase, MailboxSize}
 };
 
@@ -578,8 +578,8 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   I2c               : 1,
   SpiHost           : 1,
   Gpio              : 1,
-  Dma               : 1,
-  Ethernet          : 1
+  Dma               : 0, // to do
+  Ethernet          : 1,
   SerialLink        : 1,
   Vga               : 0,
   AxiRt             : 1,

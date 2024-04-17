@@ -16,7 +16,8 @@ common_targs += -t integer_cluster
 common_targs += -t cv32e40p_use_ff_regfile
 common_targs += -t scm_use_fpga_scm
 common_targs += -t cv64a6_imafdcsclic_sv39
-common_targs += -t rtl
+common_targs += -t rtl 
+common_targs += -t snitch_cluster
 # Carfield config target.
 common_targs += -t $(CARFIELD_CONFIG)
 

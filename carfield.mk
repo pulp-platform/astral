@@ -166,7 +166,7 @@ chs-sw-build: chs-sw-all
 
 .PHONY: car-sw-build
 ## Builds carfield application SW and specific libraries. It links against `libcheshire.a`.
-car-sw-build: chs-sw-build safed-sw-build pulpd-sw-build car-sw-all
+car-sw-build: chs-sw-build pulpd-sw-build car-sw-all #safed-sw-build
 
 .PHONY: safed-sw-init pulpd-sw-init
 ## Clone safe domain's SW stack in the dedicated repository.
@@ -214,7 +214,7 @@ pulpd-sw-build: pulpd-sw-init
 ## Initialize Carfield HW. This step takes care of the generation of the missing hardware or the
 ## update of default HW configurations in some of the domains. See the two prerequisite's comment
 ## for more information.
-car-hw-init: spatzd-hw-init chs-hw-init secd-hw-init
+car-hw-init: spatzd-hw-init chs-hw-init 
 
 #Build OpenTitan's debug rom with support for coreid != 0x0
 secd-hw-init:
@@ -289,7 +289,7 @@ include $(CAR_SIM_DIR)/sim.mk
 
 .PHONY: car-init-all
 ## Shortcut to initialize carfield with all the targets described above.
-car-init-all: car-checkout car-hw-init car-sim-init safed-sw-init pulpd-sw-init mibench
+car-init-all: car-checkout car-hw-init car-sim-init  pulpd-sw-init mibench #safed-sw-init
 
 ## Initialize Carfield and build SW
 .PHONY: car-all

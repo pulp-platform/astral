@@ -203,7 +203,6 @@ module carfield_soc_fixture;
     .spih_ot_sd_o               ( spi_secd_sd_o             ),
     .spih_ot_sd_en_o            ( spi_secd_sd_en            ),
     .spih_ot_sd_i               ( spi_secd_sd_i             ),
-    .eth_clk_90_i
     .eth_rxck_i                 ( eth_rxck                  ),
     .eth_rxctl_i                ( eth_rxctl                 ),
     .eth_rxd_i                  ( eth_rxd                   ),
@@ -303,6 +302,8 @@ module carfield_soc_fixture;
   wire                 spih_sck;
   wire [SpihNumCs-1:0] spih_csb;
   wire [ 3:0]          spih_sd;
+
+  wire eth_mdio;
 
   // I/O to INOUT behavioral conversion for cheshire's peripherals that require it
   vip_cheshire_soc_tristate chs_vip_tristate (.*);
