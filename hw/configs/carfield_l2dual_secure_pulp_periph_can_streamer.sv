@@ -91,5 +91,10 @@ localparam doub_bt L2EccCfgSize = 'h00001000;
 localparam bit     StreamerCfgEnable = StreamerEnable;
 localparam doub_bt StreamerCfgBase = 'h20021000;
 localparam doub_bt StreamerCfgSize = 'h00008000;
+/**************************
+ * HyperBus Configuration *
+ **************************/
+localparam doub_bt NumHypPhys = 1;
+localparam doub_bt NumHypChips = 2;
 
 endpackage
