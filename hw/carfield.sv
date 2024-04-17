@@ -2473,53 +2473,64 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
 
   // Telemetry and Telecomand IP (Streamer)
   if (carfield_configuration::StreamerEnable) begin: gen_streamer
-    localparam int unsigned StreamerAsyncIdx = CarfieldRegBusSlvIdx.streamer-NumSyncRegSlv;
+    localparam int unsigned ZeroBits = Cfg.AddrWidth - AxiNarrowAddrWidth;
+    logic [Cfg.AddrWidth-1:0] mask_address;
 
-    carfield_reg_req_t streamer_reg_req;
-    carfield_reg_rsp_t streamer_reg_rsp;
+    carfield_a32_d32_reg_req_t reg_streamer_req;
+    carfield_a32_d32_reg_rsp_t reg_streamer_rsp;
 
-    reg_cdc_dst #(
-      .CDC_KIND ( "cdc_4phase" ),
-      .req_t    ( carfield_reg_req_t ),
-      .rsp_t    ( carfield_reg_rsp_t )
-    ) i_streamer_reg_cdc_dst (
-      .dst_clk_i   ( periph_clk   ),
-      .dst_rst_ni  ( periph_rst_n ),
+    REG_BUS #(
+      .ADDR_WIDTH ( AxiNarrowAddrWidth ),
+      .DATA_WIDTH ( AxiNarrowDataWidth )
+    ) reg_bus_streamer (periph_clk);
 
-      .async_req_i ( ext_reg_async_slv_req_out  [StreamerAsyncIdx] ),
-      .async_ack_o ( ext_reg_async_slv_ack_in   [StreamerAsyncIdx] ),
-      .async_data_i( ext_reg_async_slv_data_out [StreamerAsyncIdx] ),
-
-      .async_req_o ( ext_reg_async_slv_req_in   [StreamerAsyncIdx] ),
-      .async_ack_i ( ext_reg_async_slv_ack_out  [StreamerAsyncIdx] ),
-      .async_data_o( ext_reg_async_slv_data_in  [StreamerAsyncIdx] ),
-
-      .dst_req_o   ( streamer_reg_req ),
-      .dst_rsp_i   ( streamer_reg_rsp )
+    apb_to_reg i_apb_to_reg_streamer (
+      .clk_i     ( periph_clk                          ),
+      .rst_ni    ( periph_pwr_on_rst_n                 ),
+      .penable_i ( apb_mst_req[StreamerCfgIdx].penable ),
+      .pwrite_i  ( apb_mst_req[StreamerCfgIdx].pwrite  ),
+      .paddr_i   ( apb_mst_req[StreamerCfgIdx].paddr   ),
+      .psel_i    ( apb_mst_req[StreamerCfgIdx].psel    ),
+      .pwdata_i  ( apb_mst_req[StreamerCfgIdx].pwdata  ),
+      .prdata_o  ( apb_mst_rsp[StreamerCfgIdx].prdata  ),
+      .pready_o  ( apb_mst_rsp[StreamerCfgIdx].pready  ),
+      .pslverr_o ( apb_mst_rsp[StreamerCfgIdx].pslverr ),
+      .reg_o     ( reg_bus_streamer                    )
     );
 
-    assign streamer_reg_rsp.error = '0;
+    // crop the address to 32-bit
+    assign reg_streamer_req.addr  = reg_bus_streamer.addr;
+    assign reg_streamer_req.write = reg_bus_streamer.write;
+    assign reg_streamer_req.wdata = reg_bus_streamer.wdata;
+    assign reg_streamer_req.wstrb = reg_bus_streamer.wstrb;
+    assign reg_streamer_req.valid = reg_bus_streamer.valid;
+
+    assign reg_bus_streamer.rdata = reg_streamer_rsp.rdata;
+    assign reg_bus_streamer.error = '0;
+    assign reg_bus_streamer.ready = reg_streamer_rsp.ready;
+
+    assign mask_address = {{ZeroBits{1'b0}}, reg_streamer_req.addr};
 
     TASI_top i_tctm_streamer (
       .SYS_CLK                            (periph_clk),
       .ASYNC_RST_N                        (periph_rst_n), // FIXME: connect to dedicated one
-      .APB_PADD                           (apb_mst_req[StreamerIdx].paddr),   // : in -- APB
-      .APB_PENABLE                        (apb_mst_req[StreamerIdx].penable), // : in -- APB
+      .APB_PADD                           (apb_mst_req[StreamerDataIdx].paddr),   // : in -- APB
+      .APB_PENABLE                        (apb_mst_req[StreamerDataIdx].penable), // : in -- APB
       .APB_PPROT                          (3'b0),                            // : in -- APB
-      .APB_PSEL                           (apb_mst_req[StreamerIdx].psel),   // : in -- APB
-      .APB_PSTROBE                        (4'b1),                            // : in -- APB
-      .APB_PWDATA                         (apb_mst_req[StreamerIdx].pwdata), // : in -- APB
-      .APB_PWRITE                         (apb_mst_req[StreamerIdx].pwrite), // : in -- APB
-      .APB_PRDATA                         (apb_mst_rsp[StreamerIdx].prdata), // : out -- APB
-      .APB_PREADY                         (apb_mst_rsp[StreamerIdx].pready), // : out -- APB
-      .APB_PSLVERR                        (apb_mst_rsp[StreamerIdx].pslverr), // : out -- APB
-      .REG_ADDR                           (streamer_reg_req.addr[31:0]), // : in -- REG IF
+      .APB_PSEL                           (apb_mst_req[StreamerDataIdx].psel),   // : in -- APB
+      .APB_PSTROBE                        (4'b1111),                            // : in -- APB
+      .APB_PWDATA                         (apb_mst_req[StreamerDataIdx].pwdata), // : in -- APB
+      .APB_PWRITE                         (apb_mst_req[StreamerDataIdx].pwrite), // : in -- APB
+      .APB_PRDATA                         (apb_mst_rsp[StreamerDataIdx].prdata), // : out -- APB
+      .APB_PREADY                         (apb_mst_rsp[StreamerDataIdx].pready), // : out -- APB
+      .APB_PSLVERR                        (apb_mst_rsp[StreamerDataIdx].pslverr), // : out -- APB
+      .REG_ADDR                           (mask_address), // : in -- REG IF
       .REG_M_ID                           (3'b001), // : in     std_logic_vector (2 downto 0);   -- REG IF
-      .REG_VALID                          (streamer_reg_req.valid), // : in  -- REG IF
-      .REG_WDATA                          (streamer_reg_req.wdata), // : in  -- REG IF
-      .REG_WRITE                          (streamer_reg_req.write), // : in  -- REG IF
-      .REG_RDATA                          (streamer_reg_rsp.rdata), // : out -- REG IF
-      .REG_READY                          (streamer_reg_rsp.ready), // : out -- REG IF
+      .REG_VALID                          (reg_streamer_req.valid), // : in  -- REG IF
+      .REG_WDATA                          (reg_streamer_req.wdata), // : in  -- REG IF
+      .REG_WRITE                          (reg_streamer_req.write), // : in  -- REG IF
+      .REG_RDATA                          (reg_streamer_rsp.rdata), // : out -- REG IF
+      .REG_READY                          (reg_streamer_rsp.ready), // : out -- REG IF
       .AUEND_SDU                          (1'b0), // : in  -- Connetti a '0'
       .AUR_SDU                            (1'b0), // : in  -- Connetti a '0'
       .BIT_LOCKn                          (3'b0), // : in  -- Connetti a '0'
@@ -2561,6 +2572,7 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .CROSSED_RESET_OUT                  (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
       .FPEMO                              (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
       .FPRELM                             (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
+      .GENERAL_INTERRUPT                  (/* Not Connected */), // : out -- Interrupt interface
       .HPC_ADDR                           (/* Not Connected */), // : out -- ASIC out pin, lascia pure open
       .HPC_CMD_EN                         (/* Not Connected */), // : out -- ASIC out pin, lascia pure open
       .HPC_INTERRUPT_SOURCES              (/* Not Connected */), // : out -- Collezione di interrupt, lascia open

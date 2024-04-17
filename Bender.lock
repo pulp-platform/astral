@@ -569,7 +569,7 @@ packages:
     - riscv-dbg
     - tech_cells_generic
   streamer:
-    revision: 41c90f7c525f45539afaa3387e3975c6e785a243
+    revision: d51670534a2c03cb017fea58a6a45df01d2fd762
     version: null
     source:
       Git: git@gitlab.thalesdigital.io:musa/streamer.git
