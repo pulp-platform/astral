@@ -2514,112 +2514,112 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
     TASI_top i_tctm_streamer (
       .SYS_CLK                            (periph_clk),
       .ASYNC_RST_N                        (periph_rst_n), // FIXME: connect to dedicated one
-      .APB_PADD                           (apb_mst_req[StreamerDataIdx].paddr),   // : in -- APB
-      .APB_PENABLE                        (apb_mst_req[StreamerDataIdx].penable), // : in -- APB
-      .APB_PPROT                          (3'b0),                            // : in -- APB
-      .APB_PSEL                           (apb_mst_req[StreamerDataIdx].psel),   // : in -- APB
-      .APB_PSTROBE                        (4'b1111),                            // : in -- APB
-      .APB_PWDATA                         (apb_mst_req[StreamerDataIdx].pwdata), // : in -- APB
-      .APB_PWRITE                         (apb_mst_req[StreamerDataIdx].pwrite), // : in -- APB
-      .APB_PRDATA                         (apb_mst_rsp[StreamerDataIdx].prdata), // : out -- APB
-      .APB_PREADY                         (apb_mst_rsp[StreamerDataIdx].pready), // : out -- APB
-      .APB_PSLVERR                        (apb_mst_rsp[StreamerDataIdx].pslverr), // : out -- APB
-      .REG_ADDR                           (mask_address), // : in -- REG IF
-      .REG_M_ID                           (3'b001), // : in     std_logic_vector (2 downto 0);   -- REG IF
-      .REG_VALID                          (reg_streamer_req.valid), // : in  -- REG IF
-      .REG_WDATA                          (reg_streamer_req.wdata), // : in  -- REG IF
-      .REG_WRITE                          (reg_streamer_req.write), // : in  -- REG IF
-      .REG_RDATA                          (reg_streamer_rsp.rdata), // : out -- REG IF
-      .REG_READY                          (reg_streamer_rsp.ready), // : out -- REG IF
-      .AUEND_SDU                          (1'b0), // : in  -- Connetti a '0'
-      .AUR_SDU                            (1'b0), // : in  -- Connetti a '0'
-      .BIT_LOCKn                          (3'b0), // : in  -- Connetti a '0'
-      .BUFFER_BUSY_SET                    (1'b0), // : in  -- Da pilotare per mandare HPC/LLC dopo averli scritti in APB
-      .CLCW_C_B                           (1'b0), // : in  -- Connetti a '0'
-      .CLCW_S_B                           (1'b0), // : in  -- Connetti a '0'
-      .CONF_REG_ACC_ACK                   (1'b1), // : in  -- Era un'interfaccia interna che ora va semplificata, connetti a '1'
-      .CPDU_INPROGRESS                    (1'b0), // : in  -- Connetti a '0'
-      .EXT_OBT_CLK                        (1'b0), // : in  -- Pin previsto per l'ASIC finale, ora lascia pure a '0'
-      .HPC_LLC_CTRL_REG                   (32'b0), // : in  -- Da pilotare, valore costante
-      .INT_PPS_IN                         (1'b0), // : in  -- Pin previsto per l'ASIC finale, ora lascia pure a '0'
-      .RFAVN                              (1'b0), // : in  -- Connetti a '0'
-      .SDU_WRONG_LENGTH                   (1'b0), // : in  -- Connetti a '0'
-      .SYNC_RST_N                         (1'b1), // : in  -- Reset sincrono col sys_clk
-      .TC_ACTIVE                          (1'b0), // : in  -- TC interface, pin dell'ASIC
-      .TC_CLOCK                           (1'b0), // : in  -- TC interface, pin dell'ASIC
-      .TC_DATA                            (1'b0), // : in  -- TC interface, pin dell'ASIC
-      .TME_CLCW_FSR_DAT_FROM_REM_PDEC_SEC (1'b0), // : in  -- Connetti a '0'
-      .TME_ENCR_UNENC_CLK                 (1'b0), // : in  -- Connetti a '0'
-      .TME_ENCR_UNENC_OUT                 (1'b0), // : in  -- Connetti a '0'
-      .TME_ENCR_UNENC_SYNC                (1'b0), // : in  -- Connetti a '0'
-      .TME_FSR_DAT_FROM_LOC_SEC           (1'b0), // : in  -- Connetti a '0'
-      .ANACOND_LLC_RESET                  (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .AUTH_SEL                           (/* Not Connected */), // : out -- Lascia open
-      .BUSY                               (/* Not Connected */), // : out -- Da usare come info per mandare HPC/LLC dopo
-                                                                          // averli scritti in APB, al momento lascia pure open
-      .CADUFrameMark                      (/* Not Connected */), // : out -- Lascia open
-      .CLCWD_B                            (/* Not Connected */), // : out -- Lascia open
-      .CONF_REG_ACC_REQ                   (/* Not Connected */), // : out -- Era un'interfaccia interna che ora va semplificata,
-                                                                             // lascia open
-      .CONF_REG_ADDR_OFFSET               (/* Not Connected */), // : out -- Era un'interfaccia interna che ora va semplificata,
-                                                                             // lascia open
-      .CONF_REG_GROUP_ADDR                (/* Not Connected */), // : out -- Era un'interfaccia interna che ora va semplificata,
-                                                                             // lascia open
-      .CONF_REG_WDATA                     (/* Not Connected */), // : out -- Era un'interfaccia interna che ora va semplificata,
-                                                                             // lascia open
-      .CROSSED_LCL_RESET                  (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .CROSSED_POWER_REARM_OUT            (/* Not Connected */), // : out -- Lascia open
-      .CROSSED_RESET_OUT                  (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .FPEMO                              (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .FPRELM                             (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .GENERAL_INTERRUPT                  (/* Not Connected */), // : out -- Interrupt interface
-      .HPC_ADDR                           (/* Not Connected */), // : out -- ASIC out pin, lascia pure open
-      .HPC_CMD_EN                         (/* Not Connected */), // : out -- ASIC out pin, lascia pure open
-      .HPC_INTERRUPT_SOURCES              (/* Not Connected */), // : out -- Collezione di interrupt, lascia open
-      .HPC_PROTECTIONn                    (/* Not Connected */), // : out -- ASIC out pin, lascia pure open
-      .HPC_SMP                            (/* Not Connected */), // : out -- ASIC out pin, lascia pure open
-      .INH_MMA                            (/* Not Connected */), // : out -- Lascia open
-      .LLC_INTERRUPT_SOURCES              (/* Not Connected */), // : out -- Collezione di interrupt, lascia open
-      .LLC_IRQ_FORCE_REGISTER             (/* Not Connected */), // : out -- Lascia open
-      .LOC_AOCS_LCL_PRI_BUS_ON_OFFn       (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .LOC_AOCS_ON_OFFn                   (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .LOC_HK_ON_OFFn                     (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .LOC_IO_ON_OFFn                     (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .LOC_MCPM_ON_OFFn                   (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .LOC_MCPM_RESET                     (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .LVDS_IF_TME_ENC_IOUT               (/* Not Connected */), // : out -- Lascia open
-      .LVDS_IF_TME_ENC_IQCLK              (/* Not Connected */), // : out -- Lascia open
-      .LVDS_IF_TME_ENC_QOUT               (/* Not Connected */), // : out -- Lascia open
-      .PP0Busy_N                          (/* Not Connected */), // : out -- Lascia open
-      .PP1Busy_N                          (/* Not Connected */), // : out -- Lascia open
-      .PP2Busy_N                          (/* Not Connected */), // : out -- Lascia open
-      .PP3Busy_N                          (/* Not Connected */), // : out -- Lascia open
-      .PP4Busy_N                          (/* Not Connected */), // : out -- Lascia open
-      .PP5Busy_N                          (/* Not Connected */), // : out -- Lascia open
-      .PP6Busy_N                          (/* Not Connected */), // : out -- Lascia open
-      .PPS_OUT                            (/* Not Connected */), // : out -- Pin previsto per l'ASIC finale, ora lascia pure open
-      .REM_AOCS_LCL_PRI_BUS_ON_OFFn       (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .REM_AOCS_ON_OFFn                   (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .REM_HK_ON_OFFn                     (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .REM_IO_ON_OFFn                     (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .REM_MCPM_ON_OFFn                   (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .RM_RECOVERY_RESET                  (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .RM_RESET                           (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .RS422_IF_TME_ENC_CLK               (/* Not Connected */), // : out -- Connetti a ASIC pin
-      .RS422_IF_TME_ENC_OUT               (/* Not Connected */), // : out -- Connetti a ASIC pin
-      .RS422_IF_TME_ENC_SYNC              (/* Not Connected */), // : out -- Connetti a ASIC pin
-      .SYNC_TO_EXT_IF                     (/* Not Connected */), // : out -- Pin previsto per l'ASIC finale, ora lascia pure open
-      .TC_ONDOING                         (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .TC_STANDARD                        (/* Not Connected */), // : out -- IF da semplificare, lascia pure open
-      .TME_CLR_UNENC_CLK                  (/* Not Connected */), // : out -- Lascia open
-      .TME_CLR_UNENC_EODF_TO_ADAM         (/* Not Connected */), // : out -- Lascia open
-      .TME_CLR_UNENC_EODF_TO_EXT          (/* Not Connected */), // : out -- Lascia open
-      .TME_CLR_UNENC_OUT                  (/* Not Connected */), // : out -- Lascia open
-      .TME_CLR_UNENC_SYNC                 (/* Not Connected */), // : out -- Lascia open
-      .TME_Cn_S                           (/* Not Connected */), // : out -- Lascia open
-      .TME_REM_CLCWn_FSR_SEL              (/* Not Connected */), // : out -- Lascia open
-      .TME_TIME_STROBE_TO_REM_OBT         (/* Not Connected */), // : out -- Lascia open
-      .TME_UNENC_SYNC                     (/* Not Connected */)  // : out -- Lascia open
+      .APB_PADD                           (apb_mst_req[StreamerDataIdx].paddr),   // : in
+      .APB_PENABLE                        (apb_mst_req[StreamerDataIdx].penable), // : in
+      .APB_PPROT                          (3'b0),                            // : in
+      .APB_PSEL                           (apb_mst_req[StreamerDataIdx].psel),  // : in
+      .APB_PSTROBE                        (4'b1111),                            // : in
+      .APB_PWDATA                         (apb_mst_req[StreamerDataIdx].pwdata), // : in
+      .APB_PWRITE                         (apb_mst_req[StreamerDataIdx].pwrite), // : in
+      .APB_PRDATA                         (apb_mst_rsp[StreamerDataIdx].prdata), // : out
+      .APB_PREADY                         (apb_mst_rsp[StreamerDataIdx].pready), // : out
+      .APB_PSLVERR                        (apb_mst_rsp[StreamerDataIdx].pslverr), // : out
+      .REG_ADDR                           (mask_address), // : in
+      .REG_M_ID                           (3'b001), // : in
+      .REG_VALID                          (reg_streamer_req.valid), // : in
+      .REG_WDATA                          (reg_streamer_req.wdata), // : in
+      .REG_WRITE                          (reg_streamer_req.write), // : in
+      .REG_RDATA                          (reg_streamer_rsp.rdata), // : out
+      .REG_READY                          (reg_streamer_rsp.ready), // : out
+      .AUEND_SDU                          (1'b0), // : in
+      .AUR_SDU                            (1'b0), // : in
+      .BIT_LOCKn                          (3'b0), // : in
+      .BUFFER_BUSY_SET                    (1'b0), // : in
+      .CLCW_C_B                           (1'b0), // : in
+      .CLCW_S_B                           (1'b0), // : in
+      .CONF_REG_ACC_ACK                   (1'b1), // : in
+      .CPDU_INPROGRESS                    (1'b0), // : in
+      .EXT_OBT_CLK                        (1'b0), // : in
+      .HPC_LLC_CTRL_REG                   (32'b0), // : in
+      .INT_PPS_IN                         (1'b0), // : in
+      .RFAVN                              (1'b0), // : in
+      .SDU_WRONG_LENGTH                   (1'b0), // : in
+      .SYNC_RST_N                         (1'b1), // : in
+      .TC_ACTIVE                          (1'b0), // : in
+      .TC_CLOCK                           (1'b0), // : in
+      .TC_DATA                            (1'b0), // : in
+      .TME_CLCW_FSR_DAT_FROM_REM_PDEC_SEC (1'b0), // : in
+      .TME_ENCR_UNENC_CLK                 (1'b0), // : in
+      .TME_ENCR_UNENC_OUT                 (1'b0), // : in
+      .TME_ENCR_UNENC_SYNC                (1'b0), // : in
+      .TME_FSR_DAT_FROM_LOC_SEC           (1'b0), // : in
+      .ANACOND_LLC_RESET                  (/* Not Connected */), // : out
+      .AUTH_SEL                           (/* Not Connected */), // : out
+      .BUSY                               (/* Not Connected */), // : out
+
+      .CADUFrameMark                      (/* Not Connected */), // : out
+      .CLCWD_B                            (/* Not Connected */), // : out
+      .CONF_REG_ACC_REQ                   (/* Not Connected */), // : out
+
+      .CONF_REG_ADDR_OFFSET               (/* Not Connected */), // : out
+
+      .CONF_REG_GROUP_ADDR                (/* Not Connected */), // : out
+
+      .CONF_REG_WDATA                     (/* Not Connected */), // : out
+
+      .CROSSED_LCL_RESET                  (/* Not Connected */), // : out
+      .CROSSED_POWER_REARM_OUT            (/* Not Connected */), // : out
+      .CROSSED_RESET_OUT                  (/* Not Connected */), // : out
+      .FPEMO                              (/* Not Connected */), // : out
+      .FPRELM                             (/* Not Connected */), // : out
+      .GENERAL_INTERRUPT                  (/* Not Connected */), // : out
+      .HPC_ADDR                           (/* Not Connected */), // : out
+      .HPC_CMD_EN                         (/* Not Connected */), // : out
+      .HPC_INTERRUPT_SOURCES              (/* Not Connected */), // : out
+      .HPC_PROTECTIONn                    (/* Not Connected */), // : out
+      .HPC_SMP                            (/* Not Connected */), // : out
+      .INH_MMA                            (/* Not Connected */), // : out
+      .LLC_INTERRUPT_SOURCES              (/* Not Connected */), // : out
+      .LLC_IRQ_FORCE_REGISTER             (/* Not Connected */), // : out
+      .LOC_AOCS_LCL_PRI_BUS_ON_OFFn       (/* Not Connected */), // : out
+      .LOC_AOCS_ON_OFFn                   (/* Not Connected */), // : out
+      .LOC_HK_ON_OFFn                     (/* Not Connected */), // : out
+      .LOC_IO_ON_OFFn                     (/* Not Connected */), // : out
+      .LOC_MCPM_ON_OFFn                   (/* Not Connected */), // : out
+      .LOC_MCPM_RESET                     (/* Not Connected */), // : out
+      .LVDS_IF_TME_ENC_IOUT               (/* Not Connected */), // : out
+      .LVDS_IF_TME_ENC_IQCLK              (/* Not Connected */), // : out
+      .LVDS_IF_TME_ENC_QOUT               (/* Not Connected */), // : out
+      .PP0Busy_N                          (/* Not Connected */), // : out
+      .PP1Busy_N                          (/* Not Connected */), // : out
+      .PP2Busy_N                          (/* Not Connected */), // : out
+      .PP3Busy_N                          (/* Not Connected */), // : out
+      .PP4Busy_N                          (/* Not Connected */), // : out
+      .PP5Busy_N                          (/* Not Connected */), // : out
+      .PP6Busy_N                          (/* Not Connected */), // : out
+      .PPS_OUT                            (/* Not Connected */), // : out
+      .REM_AOCS_LCL_PRI_BUS_ON_OFFn       (/* Not Connected */), // : out
+      .REM_AOCS_ON_OFFn                   (/* Not Connected */), // : out
+      .REM_HK_ON_OFFn                     (/* Not Connected */), // : out
+      .REM_IO_ON_OFFn                     (/* Not Connected */), // : out
+      .REM_MCPM_ON_OFFn                   (/* Not Connected */), // : out
+      .RM_RECOVERY_RESET                  (/* Not Connected */), // : out
+      .RM_RESET                           (/* Not Connected */), // : out
+      .RS422_IF_TME_ENC_CLK               (/* Not Connected */), // : out
+      .RS422_IF_TME_ENC_OUT               (/* Not Connected */), // : out
+      .RS422_IF_TME_ENC_SYNC              (/* Not Connected */), // : out
+      .SYNC_TO_EXT_IF                     (/* Not Connected */), // : out
+      .TC_ONDOING                         (/* Not Connected */), // : out
+      .TC_STANDARD                        (/* Not Connected */), // : out
+      .TME_CLR_UNENC_CLK                  (/* Not Connected */), // : out
+      .TME_CLR_UNENC_EODF_TO_ADAM         (/* Not Connected */), // : out
+      .TME_CLR_UNENC_EODF_TO_EXT          (/* Not Connected */), // : out
+      .TME_CLR_UNENC_OUT                  (/* Not Connected */), // : out
+      .TME_CLR_UNENC_SYNC                 (/* Not Connected */), // : out
+      .TME_Cn_S                           (/* Not Connected */), // : out
+      .TME_REM_CLCWn_FSR_SEL              (/* Not Connected */), // : out
+      .TME_TIME_STROBE_TO_REM_OBT         (/* Not Connected */), // : out
+      .TME_UNENC_SYNC                     (/* Not Connected */)  // : out
     );
   end else begin: gen_no_streamer
   end
