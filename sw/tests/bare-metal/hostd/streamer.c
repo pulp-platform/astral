@@ -23,6 +23,8 @@
 #define PTME_ACTIVATE_VALUE 0x00000008
 #define PTME_DEACTIVATE_VALUE 0x00000000
 
+#define PTME_ENABLE_RETURN_VALUE 0x00010001
+
 int main(void) {
 
   if (hart_id() != 0) wfi();
@@ -52,7 +54,7 @@ int main(void) {
   writew(TME_INIT_VALUE, TME_INIT_ADDR);
 
   // Check the written registers for errors
-  error += (readw(PTME_ENABLE_ADDR) != PTME_ENABLE_VALUE);
+  error += (readw(PTME_ENABLE_ADDR) != PTME_ENABLE_RETURN_VALUE);
   error += (readw(TM_FRAME_ADDR) != TM_FRAME_CFG_VALUE);
   error += (readw(PTME_CLK_PRESCALER_ADDR) != PTME_CLK_PRESCALE_VALUE);
   error += (readw(BIT_CLK_DIVISOR_ADDR) != BIT_CLK_DIVISOR_VALUE);
