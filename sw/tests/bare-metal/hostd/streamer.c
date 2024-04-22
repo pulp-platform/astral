@@ -16,7 +16,7 @@
 #define TME_INIT_ADDR (TCTM_STREAMER_CFG_PTME_BASE + 0x00)
 
 #define PTME_ENABLE_VALUE 0x00010000
-#define TM_FRAM_CFG_VALUE 0xFFFA0020
+#define TM_FRAME_CFG_VALUE 0xFFFA0020
 #define PTME_CLK_PRESCALE_VALUE 0x00000000
 #define BIT_CLK_DIVISOR_VALUE 0x00000000
 #define TME_INIT_VALUE 0x0000AAAA
@@ -42,18 +42,20 @@ int main(void) {
 
   // Enable PTME
   writew(PTME_ENABLE_VALUE, PTME_ENABLE_ADDR);
-  error += (readw(PTME_ENABLE_ADDR) != PTME_ENABLE_VALUE);
   // Configure telemetry frame
-  writew(TM_FRAM_CFG_VALUE, TM_FRAME_ADDR);
-  error += (readw(PTME_ENABLE_ADDR) != TM_FRAM_CFG_VALUE);
+  writew(TM_FRAME_CFG_VALUE, TM_FRAME_ADDR);
   // Set PTME clock pre-scaler
   writew(PTME_CLK_PRESCALE_VALUE, PTME_CLK_PRESCALER_ADDR);
-  error += (readw(PTME_CLK_PRESCALER_ADDR) != PTME_CLK_PRESCALE_VALUE);
   // Set bit clock divisor
   writew(BIT_CLK_DIVISOR_VALUE, BIT_CLK_DIVISOR_ADDR);
-  error += (readw(BIT_CLK_DIVISOR_ADDR) != BIT_CLK_DIVISOR_VALUE);
   // TME_INIT (?)
   writew(TME_INIT_VALUE, TME_INIT_ADDR);
+
+  // Check the written registers for errors
+  error += (readw(PTME_ENABLE_ADDR) != PTME_ENABLE_VALUE);
+  error += (readw(TM_FRAME_ADDR) != TM_FRAME_CFG_VALUE);
+  error += (readw(PTME_CLK_PRESCALER_ADDR) != PTME_CLK_PRESCALE_VALUE);
+  error += (readw(BIT_CLK_DIVISOR_ADDR) != BIT_CLK_DIVISOR_VALUE);
   error += (readw(TME_INIT_ADDR) != TME_INIT_VALUE);
 
   // Manifest interest in sending data (specifying only LSB is meaningful)
