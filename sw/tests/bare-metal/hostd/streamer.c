@@ -42,6 +42,14 @@ int main(void) {
                           0x00, 0x06, 0xAF, 0x08,
                           0x00, 0x07 };
 
+  // Start reading TC buffer
+  for (int i = 0; i < 4; i++)
+    readb(TCTM_STREAMER_APB_TC_BUFFER_BASE + i);
+
+  // Write HPC LLC
+  for (int i = 0; i < 4; i++)
+    writeb(i, TCTM_STREAMER_APB_TX_BUFFER_BASE + i);
+
   // Enable PTME
   writew(PTME_ENABLE_VALUE, PTME_ENABLE_ADDR);
   // Configure telemetry frame
