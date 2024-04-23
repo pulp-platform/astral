@@ -158,19 +158,19 @@ int main(void) {
     // (wrwr)
 
     // L2 shared memory
-    // errors += probe_range_lfsr_wrwr((uint64_t *)CAR_L2_SPM_PORT1_INTERLEAVED_BASE_ADDR(car_l2_intl_1),
-    //                                 (uint64_t *)CAR_L2_SPM_PORT1_INTERLEAVED_END_ADDR(car_l2_intl_1), N_SAMPLES);
-    // if (errors) {
-    //     char str[] = "1\n";
-    //     diyprintf(str, sizeof(str));
-    // }
+    errors += probe_range_lfsr_wrwr((uint64_t *)CAR_L2_SPM_PORT1_INTERLEAVED_BASE_ADDR(car_l2_intl_1),
+                                    (uint64_t *)CAR_L2_SPM_PORT1_INTERLEAVED_END_ADDR(car_l2_intl_1), N_SAMPLES);
+    if (errors) {
+        char str[] = "1\n";
+        diyprintf(str, sizeof(str));
+    }
 
-    // errors += probe_range_lfsr_wrwr((uint64_t *)CAR_L2_SPM_PORT1_CONTIGUOUS_BASE_ADDR(car_l2_cont_1),
-    //                                 (uint64_t *)CAR_L2_SPM_PORT1_CONTIGUOUS_END_ADDR(car_l2_cont_1), N_SAMPLES);
-    // if (errors) {
-    //     char str[] = "2\n";
-    //     diyprintf(str, sizeof(str));
-    // }
+    errors += probe_range_lfsr_wrwr((uint64_t *)CAR_L2_SPM_PORT1_CONTIGUOUS_BASE_ADDR(car_l2_cont_1),
+                                    (uint64_t *)CAR_L2_SPM_PORT1_CONTIGUOUS_END_ADDR(car_l2_cont_1), N_SAMPLES);
+    if (errors) {
+        char str[] = "2\n";
+        diyprintf(str, sizeof(str));
+    }
 
     // Safety Island
     // errors += probe_range_lfsr_wrwr((uint64_t *)CAR_SAFETY_ISLAND_SPM_BASE_ADDR(car_safety_island),
@@ -205,18 +205,18 @@ int main(void) {
     // writing (wwrr)
 
     // L2 shared memory
-    // errors += probe_range_lfsr_wwrr((uint64_t *)CAR_L2_SPM_PORT1_INTERLEAVED_BASE_ADDR(car_l2_intl_1),
-    //                                 (uint64_t *)CAR_L2_SPM_PORT1_INTERLEAVED_END_ADDR(car_l2_intl_1), N_SAMPLES);
-    // if (errors) {
-    //     char str[] = "7\n";
-    //     diyprintf(str, sizeof(str));
-    // }
-    // errors += probe_range_lfsr_wwrr((uint64_t *)CAR_L2_SPM_PORT1_CONTIGUOUS_BASE_ADDR(car_l2_cont_1),
-    //                                 (uint64_t *)CAR_L2_SPM_PORT1_CONTIGUOUS_END_ADDR(car_l2_cont_1), N_SAMPLES);
-    // if (errors) {
-    //     char str[] = "8\n";
-    //     diyprintf(str, sizeof(str));
-    // }
+    errors += probe_range_lfsr_wwrr((uint64_t *)CAR_L2_SPM_PORT1_INTERLEAVED_BASE_ADDR(car_l2_intl_1),
+                                    (uint64_t *)CAR_L2_SPM_PORT1_INTERLEAVED_END_ADDR(car_l2_intl_1), N_SAMPLES);
+    if (errors) {
+        char str[] = "7\n";
+        diyprintf(str, sizeof(str));
+    }
+    errors += probe_range_lfsr_wwrr((uint64_t *)CAR_L2_SPM_PORT1_CONTIGUOUS_BASE_ADDR(car_l2_cont_1),
+                                    (uint64_t *)CAR_L2_SPM_PORT1_CONTIGUOUS_END_ADDR(car_l2_cont_1), N_SAMPLES);
+    if (errors) {
+        char str[] = "8\n";
+        diyprintf(str, sizeof(str));
+    }
 
     // Safety Island
     // errors += probe_range_lfsr_wwrr((uint64_t *)CAR_SAFETY_ISLAND_SPM_BASE_ADDR(car_safety_island),
