@@ -8,7 +8,9 @@
 # bender targets
 sim_targs += -t sim
 sim_targs += -t test
+sim_targs += -t snitch_cluster
 sim_targs += -t simulation
+sim_targs += -t carfield_l2dual_secure_periph
 ifeq ($(TECH_SIM), 1)
 	sim_targs += -t tech_sim
 	sim_defs  += -D INITIALIZE_MEMORY

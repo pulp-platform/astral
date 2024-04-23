@@ -10,6 +10,7 @@ synth_targs += -t asic
 synth_targs += -t synthesis
 synth_targs += -t top_level
 synth_targs += -t intel16
+synth_targs += -t snitch_cluster
 synth_targs += -t cluster_standalone
 
 # bender defines

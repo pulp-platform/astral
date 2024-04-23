@@ -21,6 +21,13 @@ packages:
     dependencies:
     - apb
     - register_interface
+  axi_stream:
+    revision: 54891ff40455ca94a37641b9da4604647878cc07
+    version: 0.1.1
+    source:
+      Git: https://github.com/pulp-platform/axi_stream.git
+    dependencies:
+    - common_cells
   axi:
     revision: ac5deb3ff086aa34b168f392c051e92603d6c0e2
     version: 0.39.2
@@ -289,8 +296,8 @@ packages:
       Git: https://github.com/pulp-platform/icache-intc.git
     dependencies: []
   idma:
-    revision: ca1b28816a3706be0bf9ce01378246d5346384f0
-    version: 0.5.1
+    revision: deaaf3d16b1079db0a45afa096f3d9cd6dfaf411
+    version: 0.6.0
     source:
       Git: https://github.com/pulp-platform/idma.git
     dependencies:
@@ -298,6 +305,7 @@ packages:
     - common_cells
     - common_verification
     - register_interface
+    - axi_stream
   irq_router:
     revision: d1d31350b24f3965b3a51e1bc96c71eb34e94db3
     version: 0.0.1-beta.1
@@ -338,7 +346,7 @@ packages:
     - common_cells
     - common_verification
   opentitan:
-    revision: 3fc11c14f29a161054766fabd95f90ab2a9e473a
+    revision: 724754b4e6c1151385718228eda6e8d9371153e8
     version: null
     source:
       Git: https://github.com/pulp-platform/opentitan.git

@@ -24,6 +24,7 @@ CAR_TGT_DIR := $(CAR_ROOT)/target/
 CAR_XIL_DIR := $(CAR_TGT_DIR)/xilinx
 CAR_SIM_DIR := $(CAR_TGT_DIR)/sim
 SECD_ROOT ?= $(shell $(BENDER) path opentitan)
+IDMA_ROOT ?= $(shell $(BENDER) path idma)
 # Questasim
 CAR_VSIM_DIR := $(CAR_TGT_DIR)/sim/vsim
 
@@ -209,12 +210,16 @@ pulpd-sw-build: pulpd-sw-init
 # Generate HW #
 ###############
 
+include $(IDMA_ROOT)/idma.mk
+
 ## @section Carfield platform HW generation
 .PHONY: car-hw-init
 ## Initialize Carfield HW. This step takes care of the generation of the missing hardware or the
 ## update of default HW configurations in some of the domains. See the two prerequisite's comment
 ## for more information.
-car-hw-init: spatzd-hw-init chs-hw-init secd-hw-init
+
+car-hw-init: idma_hw_all spatzd-hw-init chs-hw-init secd-hw-init
+
 
 #Build OpenTitan's debug rom with support for coreid != 0x0
 secd-hw-init:
