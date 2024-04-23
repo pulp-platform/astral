@@ -641,6 +641,7 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   DmaRAWCouplingAvail : 1,
   DmaConfAmoPostCut   : 1,
   DmaConfEnableTwoD   : 1,
+  TFLenWidth          : 32,
   // GPIOs
   GpioInputSyncs      : 1,
   // AXI RT
