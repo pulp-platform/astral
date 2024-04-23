@@ -72,8 +72,6 @@ typedef struct packed {
   byte_bt secured;
   byte_bt secured_idma;
   byte_bt pulp;
-  byte_bt secured_idma;
-  byte_bt pulp;
 } carfield_master_idx_t;
 
 // Generate the number of AXI slave devices to be connected to the
@@ -456,7 +454,7 @@ typedef enum hartid_t {
 
 
 localparam int unsigned MaxHartId = 63;
-localparam int unsigned IntClusterNumCores = 12;
+localparam int unsigned IntClusterNumCores = 8;
 localparam bit [MaxHartId:0] SafetyIslandExtHarts =
   {MaxHartId+1{1'b0}} | (((1<<IntClusterNumCores) - 1) << PulpHartIdOffs);
 

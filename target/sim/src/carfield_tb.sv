@@ -285,7 +285,7 @@ module tb_carfield_soc;
   // pulp cluster standalone
   if (CarfieldIslandsCfg.pulp.enable) begin: gen_pulp_tb
     // Useful register addresses
-    localparam int unsigned CarL2StartAddr                      = 32'h1000_0000;
+    localparam int unsigned CarL2StartAddr                      = 32'h7800_0000;
     localparam int unsigned CarDramStartAddr                    = 32'h8000_0000;
     localparam int unsigned PulpdNumCores                       = 12;
     localparam int unsigned PulpdBootAddrL2                     = CarL2StartAddr + 32'h8080;
