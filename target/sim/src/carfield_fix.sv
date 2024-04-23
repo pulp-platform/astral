@@ -135,6 +135,8 @@ module carfield_soc_fixture;
   logic [NumPhys-1:0]               hyper_dq_oe_o;
   logic [NumPhys-1:0]               hyper_reset_no;
 
+  logic ptme_clk, ptme_enc;
+
   wire [NumPhys-1:0][NumChips-1:0]  pad_hyper_csn;
   wire [NumPhys-1:0]                pad_hyper_ck;
   wire [NumPhys-1:0]                pad_hyper_ckn;
@@ -238,6 +240,8 @@ module carfield_soc_fixture;
     .hyper_dq_o                 ( hyper_dq_o                ),
     .hyper_dq_oe_o              ( hyper_dq_oe_o             ),
     .hyper_reset_no             ( hyper_reset_no            ),
+    .ptme_clk_o                 ( ptme_clk                  ),
+    .ptme_enc_o                 ( ptme_enc                  ),
     .ext_reg_async_slv_req_i    ( '0                        ),
     .ext_reg_async_slv_ack_o    (                           ),
     .ext_reg_async_slv_data_i   ( '0                        ),
@@ -298,6 +302,8 @@ module carfield_soc_fixture;
     .axi_slvs_rsp ( ext_to_vip_rsp ),
     .axi_muxed_req ( axi_muxed_req ),
     .axi_muxed_rsp ( axi_muxed_rsp ),
+    .ptme_clk_i    ( ptme_clk      ),
+    .ptme_enc_i    ( ptme_enc      ),
     .*
   );
 

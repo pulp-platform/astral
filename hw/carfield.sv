@@ -142,6 +142,9 @@ module carfield
   output logic [HypNumPhys-1:0][7:0]                  hyper_dq_o,
   output logic [HypNumPhys-1:0]                       hyper_dq_oe_o,
   output logic [HypNumPhys-1:0]                       hyper_reset_no,
+  // TCTM Interface
+  output logic                                        ptme_clk_o,
+  output logic                                        ptme_enc_o,
 `ifdef GEN_NO_HYPERBUS
   // LLC interface
   output logic [LlcArWidth-1:0] llc_ar_data,
@@ -2605,8 +2608,8 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .REM_MCPM_ON_OFFn                   (/* Not Connected */), // : out
       .RM_RECOVERY_RESET                  (/* Not Connected */), // : out
       .RM_RESET                           (/* Not Connected */), // : out
-      .RS422_IF_TME_ENC_CLK               (/* Not Connected */), // : out
-      .RS422_IF_TME_ENC_OUT               (/* Not Connected */), // : out
+      .RS422_IF_TME_ENC_CLK               ( ptme_clk_o ), // : out
+      .RS422_IF_TME_ENC_OUT               ( ptme_enc_o ), // : out
       .RS422_IF_TME_ENC_SYNC              (/* Not Connected */), // : out
       .SYNC_TO_EXT_IF                     (/* Not Connected */), // : out
       .TC_ONDOING                         (/* Not Connected */), // : out
