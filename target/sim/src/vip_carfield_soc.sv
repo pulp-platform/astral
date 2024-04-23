@@ -52,7 +52,9 @@ module vip_carfield_soc
   output axi_slv_ext_rsp_t [NumAxiExtSlvPorts-1:0] axi_slvs_rsp,
   // Multiplexed virtual AXI ports
   output axi_slv_ext_req_t axi_muxed_req,
-  input  axi_slv_ext_rsp_t axi_muxed_rsp
+  input  axi_slv_ext_rsp_t axi_muxed_rsp,
+  input logic ptme_clk_i,
+  input logic ptme_enc_i
 );
 
   `include "cheshire/typedef.svh"
@@ -178,6 +180,12 @@ module vip_carfield_soc
     .slv_resp_o ( slink_axi_mst_mux_rsp ),
     .mst_req_o  ( axi_muxed_req ),
     .mst_resp_i ( axi_muxed_rsp )
+  );
+
+  ptme_emulator i_ptme_emulator (
+    .Reset_N ( rst_n      ),
+    .CADUClk ( ptme_clk_i ),
+    .CADUOut ( ptme_enc_i )
   );
 
 endmodule
