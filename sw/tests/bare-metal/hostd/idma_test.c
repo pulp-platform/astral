@@ -50,10 +50,11 @@ int main() {
 	    if (readd(DST_ADDR+i*8) != i)
         error++;
 
-    if(error!=0)
+    if(error!=0){
        printf("Test failed\r\n");
-    else
+       return -1;
+    } else {
        printf("Test succeed\r\n");
-
-    return 0;
+       return 0;
+    }
 }
