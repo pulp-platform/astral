@@ -210,15 +210,13 @@ pulpd-sw-build: pulpd-sw-init
 # Generate HW #
 ###############
 
-include $(IDMA_ROOT)/idma.mk
-
 ## @section Carfield platform HW generation
 .PHONY: car-hw-init
 ## Initialize Carfield HW. This step takes care of the generation of the missing hardware or the
 ## update of default HW configurations in some of the domains. See the two prerequisite's comment
 ## for more information.
 
-car-hw-init: idma_hw_all spatzd-hw-init chs-hw-init secd-hw-init
+car-hw-init: spatzd-hw-init chs-hw-init secd-hw-init
 
 
 #Build OpenTitan's debug rom with support for coreid != 0x0

@@ -8,8 +8,8 @@
 #include "util.h"
 #include "io.h"
 #include "printf.h"
+#include "car_memory_map.h"
 
-#define IDMA_BASE          0x01000000
 #define SRC_ADDR           0x14000000
 #define DST_ADDR           0x14003000
 
@@ -52,9 +52,9 @@ int main() {
 
     if(error!=0){
        printf("Test failed\r\n");
-       return -1;
     } else {
        printf("Test succeed\r\n");
-       return 0;
     }
+
+    return error;
 }
