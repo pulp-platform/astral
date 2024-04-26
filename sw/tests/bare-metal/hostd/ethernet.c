@@ -28,7 +28,10 @@
 
 #define PRINTF_ON
 
+
 int main(void) { 
+
+  if (hart_id() != 0) wfi();
 
   #ifdef PRINTF_ON
     printf ("Start test Ethernet...\n\r");
@@ -57,7 +60,7 @@ int main(void) {
   }
   
   *reg32(ETH_BASE, MACLO_OFFSET)          = 0x98001032;  
-  *reg32(ETH_BASE, MACHI_OFFSET)          = 0x00012070;  
+  *reg32(ETH_BASE, MACHI_OFFSET)          = 0x00002070;  
 
   *reg32(ETH_BASE, IDMA_SRC_ADDR_OFFSET)  = 0x14000000; 
   *reg32(ETH_BASE, IDMA_DST_ADDR_OFFSET)  = 0x0;
