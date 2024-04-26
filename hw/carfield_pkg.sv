@@ -319,18 +319,19 @@ function automatic int unsigned gen_carfield_domains(islands_cfg_t island_cfg);
   if (island_cfg.spatz.enable   ) begin ret++; end
   if (island_cfg.pulp.enable    ) begin ret++; end
   if (island_cfg.secured.enable ) begin ret++; end
+  if (island_cfg.ethernet.enable) begin ret++; end
   return ret;
 endfunction
 
 localparam islands_cfg_t CarfieldIslandsCfg = '{
-  l2_port0:      '{L2Port0Enable, L2Port0Base, L2Port0Size},
-  l2_port1:      '{L2Port1Enable, L2Port1Base, L2Port1Size},
-  safed:         '{SafetyIslandEnable, SafetyIslandBase, SafetyIslandSize},
+  l2_port0:      '{0, L2Port0Base, L2Port0Size},
+  l2_port1:      '{0, L2Port1Base, L2Port1Size},
+  safed:         '{0, SafetyIslandBase, SafetyIslandSize},
   ethernet:      '{EthernetEnable, EthernetBase, EthernetSize},
   periph:        '{PeriphEnable, PeriphBase, PeriphSize},
-  spatz:         '{SpatzClusterEnable, SpatzClusterBase, SpatzClusterSize},
-  pulp:          '{PulpClusterEnable, PulpClusterBase, PulpClusterSize},
-  secured:       '{SecurityIslandEnable, SecurityIslandBase, SecurityIslandSize},
+  spatz:         '{0, SpatzClusterBase, SpatzClusterSize},
+  pulp:          '{0, PulpClusterBase, PulpClusterSize},
+  secured:       '{0, SecurityIslandBase, SecurityIslandSize},
   mbox:          '{MailboxEnable, MailboxBase, MailboxSize}
 };
 
@@ -375,6 +376,7 @@ typedef struct packed {
   byte_bt secured;
   byte_bt safed;
   byte_bt periph;
+  byte_bt ethernet;
 } carfield_domain_idx_t;
 
 function automatic carfield_domain_idx_t gen_domain_idx(islands_cfg_t island_cfg);
@@ -386,6 +388,7 @@ function automatic carfield_domain_idx_t gen_domain_idx(islands_cfg_t island_cfg
   if (island_cfg.pulp.enable     ) begin ret.pulp    = i; i++; end
   if (island_cfg.spatz.enable    ) begin ret.spatz   = i; i++; end
   if (island_cfg.l2_port0.enable ) begin ret.l2      = i; i++; end
+  if (island_cfg.ethernet.enable ) begin ret.ethernet= i; i++; end
   return ret;
 endfunction
 

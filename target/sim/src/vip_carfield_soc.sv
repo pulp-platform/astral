@@ -89,6 +89,10 @@ module vip_carfield_soc
     .clk_o  ( clk   ),
     .rst_no ( rst_n )
   );
+  
+   /////////////////////////
+  //   Ethernet island  ///
+  /////////////////////////
 
   clk_rst_gen #(
     .ClkPeriod    ( ClkPeriodPeriph ),

@@ -185,6 +185,7 @@ logic    security_rst_n;
 logic    pulp_rst_n;
 logic    spatz_rst_n;
 logic    l2_rst_n;
+logic    eth_rst_n;
 
 logic    host_pwr_on_rst_n;
 logic    periph_pwr_on_rst_n;
@@ -193,6 +194,7 @@ logic    security_pwr_on_rst_n;
 logic    pulp_pwr_on_rst_n;
 logic    spatz_pwr_on_rst_n;
 logic    l2_pwr_on_rst_n;
+logic    eth_pwr_on_rst_n;
 
 logic  periph_clk;
 logic  safety_clk;
@@ -200,6 +202,7 @@ logic  security_clk;
 logic  pulp_clk;
 logic  spatz_clk;
 logic  l2_clk;
+logic  eth_clk;
 
 // verilog_lint: waive-start line-length
 // Peripheral interrupts
@@ -2064,6 +2067,7 @@ end else begin : gen_no_ethernet
   assign eth_txctl_o             = '0;
   assign eth_txd_o               = '0;
 end
+
 
 // APB peripherals
 // Periph Clock Domain
