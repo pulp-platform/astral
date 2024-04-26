@@ -21,13 +21,6 @@ packages:
     dependencies:
     - apb
     - register_interface
-  axi_stream:
-    revision: 54891ff40455ca94a37641b9da4604647878cc07
-    version: 0.1.1
-    source:
-      Git: https://github.com/pulp-platform/axi_stream.git
-    dependencies:
-    - common_cells
   axi:
     revision: ac5deb3ff086aa34b168f392c051e92603d6c0e2
     version: 0.39.2
@@ -97,6 +90,13 @@ packages:
       Git: https://github.com/pulp-platform/axi_slice.git
     dependencies:
     - common_cells
+  axi_stream:
+    revision: 54891ff40455ca94a37641b9da4604647878cc07
+    version: 0.1.1
+    source:
+      Git: https://github.com/pulp-platform/axi_stream.git
+    dependencies:
+    - common_cells
   axi_vga:
     revision: 3718b9930f94a9eaad8ee50b4bccc71df0403084
     version: 0.1.3
@@ -113,7 +113,7 @@ packages:
       Git: https://github.com/AlSaqr-platform/can_bus.git
     dependencies: []
   cheshire:
-    revision: 945d0a6e34437d35fedfab7c923bbab62d89433c
+    revision: 697e8a26c3bb136f04c5f650cc575ff68efb8403
     version: null
     source:
       Git: https://github.com/pulp-platform/cheshire.git
@@ -169,8 +169,8 @@ packages:
     dependencies:
     - hci
   common_cells:
-    revision: ad22699793d98ef714f120c6268fe92d096a61e1
-    version: 1.33.1
+    revision: 0d67563b6b592549542544f1abc0f43e5d4ee8b4
+    version: 1.35.0
     source:
       Git: https://github.com/pulp-platform/common_cells.git
     dependencies:
@@ -266,8 +266,8 @@ packages:
     dependencies:
     - tech_cells_generic
   hwpe-stream:
-    revision: bcb4435f802add732f557dc7fa1c6b5dd8854458
-    version: 1.7.1
+    revision: 65c99a4a2f37a79acee800ab0151f67dfb1edef1
+    version: 1.8.0
     source:
       Git: https://github.com/pulp-platform/hwpe-stream.git
     dependencies:
@@ -296,16 +296,17 @@ packages:
       Git: https://github.com/pulp-platform/icache-intc.git
     dependencies: []
   idma:
-    revision: deaaf3d16b1079db0a45afa096f3d9cd6dfaf411
+    revision: d6245c8bf8faa7a4d44325d6584387170413d53d
     version: 0.6.0
     source:
       Git: https://github.com/pulp-platform/idma.git
     dependencies:
     - axi
+    - axi_stream
     - common_cells
     - common_verification
+    - obi
     - register_interface
-    - axi_stream
   irq_router:
     revision: d1d31350b24f3965b3a51e1bc96c71eb34e94db3
     version: 0.0.1-beta.1
