@@ -292,7 +292,7 @@ include $(CAR_SIM_DIR)/sim.mk
 
 .PHONY: car-init-all
 ## Shortcut to initialize carfield with all the targets described above.
-car-init-all: car-checkout car-hw-init car-sim-init safed-sw-init pulpd-sw-init mibench
+car-init-all: car-checkout car-hw-init car-sim-init safed-sw-init pulpd-sw-init mibench | venv
 
 ## Initialize Carfield and build SW
 .PHONY: car-all
