@@ -6,6 +6,7 @@
 // Luca Valente    <luca.valente@unibo.it>
 // Yvan Tortorella <yvan.tortorella@unibo.it>
 // Alessandro Ottaviano <aottaviano@iis.ee.ethz.ch>
+// Chaoqun Liang   <chaoqun.liang@unibo.it>
 
 `include "cheshire/typedef.svh"
 `include "axi/typedef.svh"
@@ -476,8 +477,8 @@ logic     [NumAsyncRegSlv-1:0] ext_reg_async_slv_ack_out;
 reg_rsp_t [NumAsyncRegSlv-1:0] ext_reg_async_slv_data_in;
 
 // External reg interface slaves (async)
-// Currently for PLL and Padframe
-for (genvar i = 0; i < 2; i++) begin : gen_ext_reg_assign
+// Currently for PLL and Padframe, Ethernet
+for (genvar i = 0; i < 3; i++) begin : gen_ext_reg_assign
   assign ext_reg_async_slv_req_o[i]   = ext_reg_async_slv_req_out[i];
   assign ext_reg_async_slv_ack_in[i]  = ext_reg_async_slv_ack_i[i];
   assign ext_reg_async_slv_data_o[i]  = ext_reg_async_slv_data_out[i];
@@ -487,13 +488,13 @@ for (genvar i = 0; i < 2; i++) begin : gen_ext_reg_assign
 end
 
 // Clocking and reset strategy
-// We have three clock sources that are multiplexed to 6 domains. The default assignment after
+// We have three clock sources that are multiplexed to 7 domains. The default assignment after
 // hard reset is:
 // periph (periph_clk_i) and accelerators (alt_clk_i)
 //
 // The host is statically always assigned to host_clk_i.
 //
-// Furthermore we have six reset domains:
+// Furthermore we have seven reset domains:
 // host             (contained in host clock domain, POR only, no SW reset)
 // periph           (sw reset 0)
 // safety           (sw reset 1)
@@ -501,6 +502,7 @@ end
 // pulp_cluster     (sw reset 3)
 // spatz_cluster    (sw reset 4)
 // shared_l2_memory (sw reset 5)
+// ethernet         (sw reset 6)
 
 // Clock Multiplexing for each sub block
 localparam int unsigned DomainClkDivValueWidth = 24;
@@ -523,7 +525,7 @@ logic [NumDomains-1:0] pwr_on_rsts_n;
 logic [NumDomains-1:0] rsts_n;
 
 
-// Each of the 6 clock gateable domains (periph, safety island, security island, l2, spatz and pulp
+// Each of the 7 clock gateable domains (periph, safety island, security island, l2, ethernet, spatz and pulp
 // cluster) have the following clock distribution scheme:
 // 1. For each domain the user selects one of 3 different clock sources (host clock, alt clock and
 //    per clock). Each of these main clocks are either supplied externally, by a dedicated PLL per
@@ -1967,6 +1969,17 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
     .data_o  ( ),
     .busy_o  ( )
   );
+  // The Ethernet RGMII interfaces mandates a clock of 125MHz (in 1GBit mode) for both TX and RX
+  // clocks. We generate a 125MHz clock starting from the `periph_clk`. The (integer) division value
+  // is SW-programmable.
+  localparam int unsigned EthRgmiiPhyClkDivWidth = 20;
+  // We assume a peripheral clock of 250MHz to get the 125MHz clock for the RGMII interface. Hence,
+  // the default division value after PoR is 250/125.
+  localparam int unsigned EthRgmiiPhyClkDivDefaultValue = 2;
+  logic [EthRgmiiPhyClkDivWidth-1:0] eth_rgmii_phy_clk_div_value;
+  logic                     eth_rgmii_phy_clk_div_value_valid;
+  logic                     eth_rgmii_phy_clk_div_value_ready;
+  logic                     eth_rgmii_phy_clk0;
 
   clk_int_div #(
     .DIV_VALUE_WIDTH ( EthDivWidth ),
