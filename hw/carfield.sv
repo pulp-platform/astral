@@ -6,6 +6,7 @@
 // Luca Valente    <luca.valente@unibo.it>
 // Yvan Tortorella <yvan.tortorella@unibo.it>
 // Alessandro Ottaviano <aottaviano@iis.ee.ethz.ch>
+// Chaoqun Liang   <chaoqun.liang@unibo.it>
 
 `include "cheshire/typedef.svh"
 `include "axi/typedef.svh"
@@ -476,8 +477,8 @@ logic     [NumAsyncRegSlv-1:0] ext_reg_async_slv_ack_out;
 reg_rsp_t [NumAsyncRegSlv-1:0] ext_reg_async_slv_data_in;
 
 // External reg interface slaves (async)
-// Currently for PLL and Padframe
-for (genvar i = 0; i < 2; i++) begin : gen_ext_reg_assign
+// Currently for PLL and Padframe, Ethernet
+for (genvar i = 0; i < 3; i++) begin : gen_ext_reg_assign
   assign ext_reg_async_slv_req_o[i]   = ext_reg_async_slv_req_out[i];
   assign ext_reg_async_slv_ack_in[i]  = ext_reg_async_slv_ack_i[i];
   assign ext_reg_async_slv_data_o[i]  = ext_reg_async_slv_data_out[i];
@@ -487,13 +488,13 @@ for (genvar i = 0; i < 2; i++) begin : gen_ext_reg_assign
 end
 
 // Clocking and reset strategy
-// We have three clock sources that are multiplexed to 6 domains. The default assignment after
+// We have three clock sources that are multiplexed to 7 domains. The default assignment after
 // hard reset is:
 // periph (periph_clk_i) and accelerators (alt_clk_i)
 //
 // The host is statically always assigned to host_clk_i.
 //
-// Furthermore we have six reset domains:
+// Furthermore we have seven reset domains:
 // host             (contained in host clock domain, POR only, no SW reset)
 // periph           (sw reset 0)
 // safety           (sw reset 1)
@@ -501,6 +502,7 @@ end
 // pulp_cluster     (sw reset 3)
 // spatz_cluster    (sw reset 4)
 // shared_l2_memory (sw reset 5)
+// ethernet         (sw reset 6)
 
 // Clock Multiplexing for each sub block
 localparam int unsigned DomainClkDivValueWidth = 24;
@@ -523,7 +525,7 @@ logic [NumDomains-1:0] pwr_on_rsts_n;
 logic [NumDomains-1:0] rsts_n;
 
 
-// Each of the 6 clock gateable domains (periph, safety island, security island, l2, spatz and pulp
+// Each of the 7 clock gateable domains (periph, safety island, security island, l2, ethernet, spatz and pulp
 // cluster) have the following clock distribution scheme:
 // 1. For each domain the user selects one of 3 different clock sources (host clock, alt clock and
 //    per clock). Each of these main clocks are either supplied externally, by a dedicated PLL per
@@ -1909,17 +1911,20 @@ mailbox_unit #(
 // Ethernet Island
 if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet_island
   localparam int unsigned EthAsyncIdx = CarfieldRegBusSlvIdx.ethernet-NumSyncRegSlv;
-  //assign eth_rst_n = rsts_n[CarfieldDomainIdx.ethernet];
-  // assign eth_pwr_on_rst_n = pwr_on_rsts_n[CarfieldDomainIdx.ethernet];
-  assign eth_rst_n = rsts_n[0];
-  assign eth_pwr_on_rst_n = pwr_on_rsts_n[0];
-  assign eth_clk = domain_clk_gated[0];
-  //assign eth_clk = domain_clk_gated[CarfieldDomainIdx.ethernet];
-  assign ethernet_island_isolate_req  = 1; // to-do
-  //assign ethernet_island_isolate_req  = car_regs_reg2hw.security_island_isolate.q
-                                        
+  assign reset_vector[CarfieldDomainIdx.ethernet] = car_regs_reg2hw.ethernet_rst.q;
+  assign domain_clk_sel[CarfieldDomainIdx.ethernet] = car_regs_reg2hw.ethernet_clk_sel.q;
+  assign ethernet_rst_n = rsts_n[CarfieldDomainIdx.ethernet];
+  assign ethernet_pwr_on_rst_n = pwr_on_rsts_n[CarfieldDomainIdx.ethernet];
+  assign ethernet_clk = domain_clk_gated[CarfieldDomainIdx.ethernet];
+  assign domain_clk_div_value[CarfieldDomainIdx.ethernet] = car_regs_reg2hw.ethernet_clk_div_value.q;
+  assign domain_clk_div_changed[CarfieldDomainIdx.ethernet] = car_regs_reg2hw.ethernet_clk_div_value.qe;
+  assign domain_clk_en[CarfieldDomainIdx.ethernet] = car_regs_reg2hw.ethernet_clk_en.q;
+  assign ethernet_island_isolate_req = car_regs_reg2hw.ethernet_isolate.q;
+  assign car_regs_hw2reg.ethernet_isolate_status.d = master_isolated_rsp[EthernetMstIdx];
+  assign car_regs_hw2reg.ethernet_isolate_status.de = 1'b1;
+
   logic clk_125;
-  // add div value reg 
+  // add all regs
   clk_int_div #(
     .DIV_VALUE_WIDTH       ( 3   ),
     .DEFAULT_DIV_VALUE     ( 4   ),
@@ -1935,9 +1940,57 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet_island
       .clk_o          ( clk_125     ),
       .cycl_count_o   (             )
   );
+  // The Ethernet RGMII interfaces mandates a clock of 125MHz (in 1GBit mode) for both TX and RX
+  // clocks. We generate a 125MHz clock starting from the `periph_clk`. The (integer) division value
+  // is SW-programmable.
+  localparam int unsigned EthRgmiiPhyClkDivWidth = 20;
+  // We assume a peripheral clock of 250MHz to get the 125MHz clock for the RGMII interface. Hence,
+  // the default division value after PoR is 250/125.
+  localparam int unsigned EthRgmiiPhyClkDivDefaultValue = 2;
+  logic [EthRgmiiPhyClkDivWidth-1:0] eth_rgmii_phy_clk_div_value;
+  logic                     eth_rgmii_phy_clk_div_value_valid;
+  logic                     eth_rgmii_phy_clk_div_value_ready;
+  logic                     eth_rgmii_phy_clk0;
 
+  // The register file does not support back pressure directly. I.e the hardware side cannot tell
+  // the regfile that a reg value cannot be written at the moment. This is a problem since the clk
+  // divider input of the clk_int_div module will stall the transaction until it is safe to change
+  // the clock division factor. The stream_deposit module converts between these two protocols
+  // (write-pulse only protocol <-> ready-valid protocol). See the documentation in the header of
+  // the module for more details.
+  lossy_valid_to_stream #(
+    .DATA_WIDTH(EthRgmiiPhyClkDivWidth)
+  ) i_eth_rgmii_phy_clk_div_config_decouple (
+    .clk_i   ( ethernet_clk   ),
+    .rst_ni  ( ethernet_rst_n ),
+    .valid_i ( car_regs_reg2hw.eth_rgmii_phy_clk_div_value.qe ),
+    .data_i  ( car_regs_reg2hw.eth_rgmii_phy_clk_div_value.q ),
+    .valid_o ( eth_rgmii_phy_clk_div_value_valid ),
+    .ready_i ( eth_rgmii_phy_clk_div_value_ready ),
+    .data_o  ( eth_rgmii_phy_clk_div_value       ),
+    .busy_o  ( )
+  );
+
+  (* no_ungroup *)
+  (* no_boundary_optimization *)
+  clk_int_div #(
+    .DIV_VALUE_WIDTH       ( EthRgmiiPhyClkDivWidth ),
+    .DEFAULT_DIV_VALUE     ( EthRgmiiPhyClkDivDefaultValue ),
+    .ENABLE_CLOCK_IN_RESET ( 0   )
+  ) i_eth_rgmii_phy_clk_int_div ( 
+      .clk_i          ( ethernet_clk              ),
+      .rst_ni         ( ethernet_rst_n            ),
+      .en_i           ( car_regs_reg2hw.eth_rgmii_phy_clk_div_en.q ),
+      .test_mode_en_i ( test_mode_i             ),
+      .div_i          ( car_regs_reg2hw.eth_rgmii_phy_clk_div_value.q ),
+      .div_valid_i    ( eth_rgmii_phy_clk_div_value_valid ),
+      .div_ready_o    ( eth_rgmii_phy_clk_div_value_ready ),
+      .clk_o          ( eth_rgmii_phy_clk0 ),
+      .cycl_count_o   (                   )
+  );
+ 
   `ifndef ETHERNET_NETLIST
-    eth_idma_wrap_syth #(
+    ethernet_wrap #(
       .AddrWidth             ( Cfg.AddrWidth              ),
       .DataWidth             ( Cfg.AxiDataWidth           ),
       .UserWidth             ( Cfg.AxiUserWidth           ),
@@ -1946,9 +1999,6 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet_island
       .BufferDepth           ( 32'd3                      ), 
       .TFLenWidth            ( 32'd32                     ),
       .MemSysDepth           ( 32'd0                      ),
-      .CombinedShifter       ( 1'b1                       ),    
-      .HardwareLegalizer     ( 1'b1                       ),
-      .RejectZeroTransfers   ( 1'b1                       ),
       .TxFifoLogDepth        ( 32'd4                      ),
       .RxFifoLogDepth        ( 32'd4                      ),
       .AsyncAxiOutAwWidth    ( CarfieldAxiMstAwWidth      ),
@@ -1970,7 +2020,7 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet_island
       .reg_rsp_t             ( carfield_reg_rsp_t         )
     ) i_ethernet_island (
   `else
-  eth_idma_wrap_syth i_ethernet_island (
+  ethernet_wrap i_ethernet_island (
   `endif
       .clk_i                   ( eth_clk          ),
       .clk_125_i               ( clk_125          ),
@@ -2017,11 +2067,11 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet_island
     );
 
 end else begin : gen_no_ethernet_island
-  assign eth_rst_n = '0;
-  assign eth_pwr_on_rst_n = '0;
-  assign eth_clk = '0;
- // assign car_regs_hw2reg.ethernet_island_isolate_status.d = '0;
- // assign car_regs_hw2reg.ethernet_island_isolate_status.de = '0;
+  assign ethernet_rst_n = '0;
+  assign ethernet_pwr_on_rst_n = '0;
+  assign ethernet_clk = '0;
+  assign car_regs_hw2reg.ethernet_isolate_status.d = '0;
+  assign car_regs_hw2reg.ethernet_isolate_status.de = '0;
   assign ethernet_island_isolate_req = '0;
   assign car_eth_intr            = '0;
   assign eth_md_o                = '0;

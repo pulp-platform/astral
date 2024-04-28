@@ -5,6 +5,7 @@
 // Thomas Benz  <tbenz@ethz.ch>
 // Yvan Tortorella <yvan.tortorella@unibo.it>
 // Alessandro Ottaviano <aottaviano@iis.ee.ethz.ch>
+// Chaoqun Liang <chaoqun.liang@unibo.it>
 
 `include "cheshire/typedef.svh"
 
@@ -142,7 +143,7 @@ function automatic carfield_master_idx_t carfield_gen_axi_master_idx(islands_cfg
   if (island_cfg.pulp.enable) begin ret.pulp = i; i++;
   end else begin ret.pulp = MaxExtAxiMst + j; j++; end
   if (island_cfg.ethernet.enable) begin ret.ethernet = i; i++;
-  end else begin ret.pulp = MaxExtAxiMst + j; j++; end 
+  end else begin ret.ethernet = MaxExtAxiMst + j; j++; end 
   return ret;
 endfunction
 
@@ -324,14 +325,14 @@ function automatic int unsigned gen_carfield_domains(islands_cfg_t island_cfg);
 endfunction
 
 localparam islands_cfg_t CarfieldIslandsCfg = '{
-  l2_port0:      '{0, L2Port0Base, L2Port0Size},
-  l2_port1:      '{0, L2Port1Base, L2Port1Size},
-  safed:         '{0, SafetyIslandBase, SafetyIslandSize},
+  l2_port0:      '{L2Port0Enable, L2Port0Base, L2Port0Size},
+  l2_port1:      '{L2Port1Enable, L2Port1Base, L2Port1Size},
+  safed:         '{SafetyIslandEnabl, SafetyIslandBase, SafetyIslandSize},
   ethernet:      '{EthernetEnable, EthernetBase, EthernetSize},
   periph:        '{PeriphEnable, PeriphBase, PeriphSize},
-  spatz:         '{0, SpatzClusterBase, SpatzClusterSize},
-  pulp:          '{0, PulpClusterBase, PulpClusterSize},
-  secured:       '{0, SecurityIslandBase, SecurityIslandSize},
+  spatz:         '{SpatzClusterEnable, SpatzClusterBase, SpatzClusterSize},
+  pulp:          '{PulpClusterEnable, PulpClusterBase, PulpClusterSize},
+  secured:       '{SecurityIslandEnable, SecurityIslandBase, SecurityIslandSize},
   mbox:          '{MailboxEnable, MailboxBase, MailboxSize}
 };
 
