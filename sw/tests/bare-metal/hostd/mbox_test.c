@@ -18,12 +18,13 @@
 
 static dif_rv_plic_t plic0;
 
+#define IRQID 60 // index of mbox irq in the irq vector input to the PLIC
+
 int main(int argc, char const *argv[]) {
 
     // Put SMP Hart to sleep
     if (hart_id() != 0) wfi();
 
-    int mbox_id = 60;                                             // index of mbox irq in the irq vector input to the PLIC
     int prio = 0x1;
     int a,b,c,d,e;
     bool t;
@@ -40,8 +41,11 @@ int main(int argc, char const *argv[]) {
     // PLIC setup
     mmio_region_t plic_base_addr = mmio_region_from_addr(0x04000000);
     t = dif_rv_plic_init(plic_base_addr, &plic0);
-    t = dif_rv_plic_irq_set_priority(&plic0, mbox_id, prio);
-    t = dif_rv_plic_irq_set_enabled(&plic0, mbox_id, 0, kDifToggleEnabled);
+    // Set two consecutive interrupts otherwise the SLINK breaks while loading the binary...
+    for (int i = 0; i < 2; i++) {
+      t = dif_rv_plic_irq_set_priority(&plic0, IRQID+i*4, prio);
+      t = dif_rv_plic_irq_set_enabled(&plic0, IRQID+i*4, 0, kDifToggleEnabled);
+    }
     writew(0xBAADC0DE, 0x40000880);
     a = readw(0x40000880);
     if( a == 0xBAADC0DE )
@@ -53,11 +57,10 @@ int main(int argc, char const *argv[]) {
 
 void trap_vector (void){
    int * claim_irq;
-   int mbox_id = 60;
    dif_rv_plic_irq_claim(&plic0, 0, &claim_irq);
-   dif_rv_plic_irq_complete(&plic0, 0, *claim_irq);
-   writew(0x0, 0x40000C04);
-   writew(0x0, 0x40000C0C);
-   writew(0x1, 0x40000C08);
+   dif_rv_plic_irq_complete(&plic0, 0, &claim_irq);
+   writew(0x0, 0x40001204);
+   writew(0x0, 0x4000120C);
+   writew(0x1, 0x40001208);
    return;
 }
