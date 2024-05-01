@@ -231,8 +231,8 @@ packages:
     dependencies:
     - common_cells
   hci:
-    revision: 82dfd3ffe0c4d9ef77c9a6d4efbbb0411aa2662e
-    version: 2.0.1
+    revision: 97b79affd5d11d45000fa9c97918763d8bffed88
+    version: 2.0.2
     source:
       Git: https://github.com/pulp-platform/hci.git
     dependencies:
@@ -348,7 +348,7 @@ packages:
     - common_cells
     - common_verification
   opentitan:
-    revision: e73f4e16affc27715b0a6f219c286d80f6799270
+    revision: 7d95ef232d70c7bf8c8d3031615661680d63c6b1
     version: null
     source:
       Git: https://github.com/pulp-platform/opentitan.git
