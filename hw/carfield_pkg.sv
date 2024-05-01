@@ -561,6 +561,7 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   AxiDataWidth      : 64,
   AxiUserWidth      : 10,  // {CACHE_PARTITIONING(5[9:5]), ECC_ERROR(1[4:4]), ATOPS(4[3:0])}
   AxiMstIdWidth     : 2,
+  TFLenWidth        : 32,
   AxiMaxMstTrans    : 64,
   AxiMaxSlvTrans    : 64,
   AxiUserAmoMsb     : AxiUserAmoMsb, // A0:0001, A1:0011, SF:0101, FP:0111, SL:1XXX, none: '0
