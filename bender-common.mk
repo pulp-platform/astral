@@ -35,12 +35,15 @@ endif
 
 ifeq ($(shell echo $(SAFED_PRESENT)), 0)
 common_targs += -e safety_island
+else
+common_defs += -D SAFED_ENABLE
 endif
 
 ifeq ($(shell echo $(SPATZD_PRESENT)), 0)
 common_targs += -e spatz
 else
 common_targs += -t spatz
+common_defs += -D SPATZ_ENABLE
 endif
 
 ifeq ($(shell echo $(SECURED_PRESENT)), 0)
