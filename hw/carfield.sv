@@ -1089,7 +1089,8 @@ if (CarfieldIslandsCfg.safed.enable) begin : gen_safety_island
   // Safety island edge-triggered interrupts and synchronized edge-triggered interrupts
   logic [CarfieldNumTimerIntrs-1:0] safed_edge_triggered_intrs, safed_edge_triggered_intrs_sync;
   // Safety island is the only external target for the router in carfield
-  assign safed_intrs_distributed = chs_intrs_distributed[(cheshire_pkg::NumIntIntrs+CarfieldNumExtIntrs)-1:0];
+  assign safed_intrs_distributed = chs_intrs_distributed[(cheshire_pkg::NumIntIntrs+
+                                                          CarfieldNumExtIntrs)-1:0];
 
   // verilog_lint: waive-start line-length
   localparam int unsigned EdgeTriggeredIntrsOffset = cheshire_pkg::NumIntIntrs+IntClusterNumEoc+NumMailboxesHostd+

@@ -514,7 +514,7 @@ localparam dm::hartinfo_t [MaxHartId:0] SafetyIslandExtHartinfo =
       default: '0
   };
 `else
-  localparam SafetyIslandCfg = '0;
+  localparam int unsigned SafetyIslandCfg = '0;
   localparam bit [31:0] SafedDebugOffs          = 0;
   localparam int unsigned SafetyIslandMemOffset = 0;
   localparam int unsigned SafetyIslandPerOffset = 0;
@@ -713,9 +713,9 @@ localparam logic [ 5:0] IntClusterIndex = (PulpHartIdOffs >> 5);
   localparam int unsigned SpatzNumIntHarts = spatz_cluster_pkg::NumCores;
   localparam int unsigned SpatzClusterPeriphStartAddr = spatz_cluster_pkg::PeriStartAddr;
   localparam int unsigned SpatzClusterPeripheralBootControlOffset =
-                 spatz_cluster_peripheral_reg_pkg::SPATZ_CLUSTER_PERIPHERAL_CLUSTER_BOOT_CONTROL_OFFSET;
+  spatz_cluster_peripheral_reg_pkg::SPATZ_CLUSTER_PERIPHERAL_CLUSTER_BOOT_CONTROL_OFFSET;
   localparam int unsigned SpatzClusterPeripheralsEocOffset =
-                 spatz_cluster_peripheral_reg_pkg::SPATZ_CLUSTER_PERIPHERAL_CLUSTER_EOC_EXIT_OFFSET;
+  spatz_cluster_peripheral_reg_pkg::SPATZ_CLUSTER_PERIPHERAL_CLUSTER_EOC_EXIT_OFFSET;
 `else
   localparam int unsigned SpatzNumIntHarts = 0;
   localparam int unsigned SpatzClusterPeriphStartAddr = 0;
