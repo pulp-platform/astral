@@ -586,7 +586,7 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   HmrUnit           : 1,
   Cva6DMR           : 1,
   Cva6DMRFixed      : 0,
-  RapidRecovery     : 0,
+  RapidRecovery     : 1,
   // Debug
   DbgIdCode         : '{
     version: 4'h1,
@@ -695,7 +695,7 @@ localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
   DmaNumOutstandingBursts: 8,
   DmaBurstLength: 256,
   NumMstPeriphs: 1,
-  NumSlvPeriphs: 10,
+  NumSlvPeriphs: 11,
   ClusterAlias: 1,
   ClusterAliasBase: 'h0,
   NumSyncStages: 3,
