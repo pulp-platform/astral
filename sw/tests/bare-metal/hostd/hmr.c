@@ -44,7 +44,7 @@ int main(void) {
                     //    Re-loads the saved state
                     //    Restores the sp
 
-  printf("DMR: we are locked as hart %d!\n", hart_id());
+  printf("%d: DMR!\n", hart_id());
 
   // The two locked harts return
   return 0;
