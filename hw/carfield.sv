@@ -2594,7 +2594,7 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .LVDS_IF_TME_ENC_IQCLK              (/* Not Connected */), // : out
       .LVDS_IF_TME_ENC_QOUT               (/* Not Connected */), // : out
       .PP0Busy_N                          (/* Not Connected */), // : out
-      .PP1Busy_N                          (/* Not Connected */), // : out
+      //.PP1Busy_N                          (/* Not Connected */), // : out
       .PP2Busy_N                          (/* Not Connected */), // : out
       .PP3Busy_N                          (/* Not Connected */), // : out
       .PP4Busy_N                          (/* Not Connected */), // : out
