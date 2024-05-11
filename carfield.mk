@@ -47,7 +47,7 @@ include $(CAR_ROOT)/bender-safed.mk
 ######################
 
 CAR_NONFREE_REMOTE ?= git@iis-git.ee.ethz.ch:astral/astral-nonfree.git
-CAR_NONFREE_COMMIT ?= 07ff3aeeb9769f0d7d4e3ab53e7d1ad07289e302 # branch: yt/synth
+CAR_NONFREE_COMMIT ?= 687656567717bd193ad7d997a0387cc2911a2050 # branch: yt/synth
 
 ## @section Carfield platform nonfree components
 ## Clone the non-free verification IP for Carfield. Some components such as CI scripts and ASIC
@@ -388,7 +388,10 @@ tech-repo := git@iis-git.ee.ethz.ch:Astral/gf12.git
 # no commit by default, change during development
 tech-commit := f854defca7d1e79225ed2203be807ba99d70c584 # branch: elabonly
 
-tech-init:
+tech-clone:
+	git clone $(tech-repo) tech
+
+tech-init: tech-clone
 	git clone $(tech-repo) tech
 	cd $(TECH_ROOT) && git checkout $(tech-commit) && cd $(CAR_ROOT)
 	$(MAKE) -C $(TECH_ROOT) init
