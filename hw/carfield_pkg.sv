@@ -5,7 +5,6 @@
 // Thomas Benz  <tbenz@ethz.ch>
 // Yvan Tortorella <yvan.tortorella@unibo.it>
 // Alessandro Ottaviano <aottaviano@iis.ee.ethz.ch>
-// Chaoqun Liang <chaoqun.liang@unibo.it>
 
 `include "cheshire/typedef.svh"
 
@@ -327,7 +326,7 @@ endfunction
 localparam islands_cfg_t CarfieldIslandsCfg = '{
   l2_port0:      '{L2Port0Enable, L2Port0Base, L2Port0Size},
   l2_port1:      '{L2Port1Enable, L2Port1Base, L2Port1Size},
-  safed:         '{SafetyIslandEnabl, SafetyIslandBase, SafetyIslandSize},
+  safed:         '{SafetyIslandEnable, SafetyIslandBase, SafetyIslandSize},
   ethernet:      '{EthernetEnable, EthernetBase, EthernetSize},
   periph:        '{PeriphEnable, PeriphBase, PeriphSize},
   spatz:         '{SpatzClusterEnable, SpatzClusterBase, SpatzClusterSize},

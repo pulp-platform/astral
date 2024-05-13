@@ -55,14 +55,14 @@ int main(void) {
 
   // load data into mem
   for (int i = 0; i < 8; ++i) {
-        volatile uint64_t *tx_addr = (volatile uint64_t*)(0x14000000 + i * sizeof(uint64_t));
+        volatile uint64_t *tx_addr = (volatile uint64_t*)(0x80000000 + i * sizeof(uint64_t));
         *tx_addr = data_to_write[i];
   }
   
   *reg32(ETH_BASE, MACLO_OFFSET)          = 0x98001032;  
   *reg32(ETH_BASE, MACHI_OFFSET)          = 0x00002070;  
 
-  *reg32(ETH_BASE, IDMA_SRC_ADDR_OFFSET)  = 0x14000000; 
+  *reg32(ETH_BASE, IDMA_SRC_ADDR_OFFSET)  = 0x80000000; 
   *reg32(ETH_BASE, IDMA_DST_ADDR_OFFSET)  = 0x0;
   *reg32(ETH_BASE, IDMA_LENGTH_OFFSET)    = 0x40;
   *reg32(ETH_BASE, IDMA_SRC_PROTO_OFFSET) = 0x0;

@@ -24,6 +24,7 @@ CAR_TGT_DIR := $(CAR_ROOT)/target/
 CAR_XIL_DIR := $(CAR_TGT_DIR)/xilinx
 CAR_SIM_DIR := $(CAR_TGT_DIR)/sim
 SECD_ROOT ?= $(shell $(BENDER) path opentitan)
+IDMA_ROOT   := $(shell $(BENDER) path idma)
 # Questasim
 CAR_VSIM_DIR := $(CAR_TGT_DIR)/sim/vsim
 
@@ -183,7 +184,11 @@ chs-sw-build: chs-sw-all
 
 .PHONY: car-sw-build
 ## Builds carfield application SW and specific libraries. It links against `libcheshire.a`.
+<<<<<<< HEAD
 car-sw-build: chs-sw-build $(SAFED_SW_BUILD) $(PULPD_SW_BUILD) car-sw-all
+=======
+car-sw-build: chs-sw-build pulpd-sw-build car-sw-all safed-sw-build
+>>>>>>> 5b71d91 (multiple changes)
 
 .PHONY: safed-sw-init pulpd-sw-init
 ## Clone safe domain's SW stack in the dedicated repository.
@@ -232,10 +237,14 @@ pulpd-sw-build: pulpd-sw-init
 ## update of default HW configurations in some of the domains. See the two prerequisite's comment
 ## for more information.
 <<<<<<< HEAD
+<<<<<<< HEAD
 car-hw-init: $(SPATZD_HW_INIT) chs-hw-init $(SECD_HW_INIT)
 =======
 car-hw-init: spatzd-hw-init chs-hw-init 
 >>>>>>> 952110f (ethernet island)
+=======
+car-hw-init: spatzd-hw-init chs-hw-init secd-hw-init
+>>>>>>> 5b71d91 (multiple changes)
 
 #Build OpenTitan's debug rom with support for coreid != 0x0
 secd-hw-init:
@@ -264,7 +273,7 @@ $(CAR_SW_DIR)/include/regs/soc_ctrl.h: $(CAR_ROOT)/hw/regs/carfield_regs.hjson |
 .PHONY: $(CAR_SW_DIR)/hw/regs/pcr.md
 $(CAR_HW_DIR)/regs/pcr.md: $(CAR_ROOT)/hw/regs/carfield_regs.hjson | venv
 	$(VENV)/python utils/reggen/regtool.py -d $<  > $@
-
+	
 ## Update host domain PLIC and CLINT interrupt controllers configuration. The default configuration
 ## in cheshire allows for one interruptible hart. When the number of external interruptible harts is
 ## updated in the Cheshire cfg (cheshire_pkg.sv), we need to regenerate the PLIC and CLINT
@@ -310,7 +319,11 @@ include $(CAR_SIM_DIR)/sim.mk
 
 .PHONY: car-init-all
 ## Shortcut to initialize carfield with all the targets described above.
+<<<<<<< HEAD
 car-init-all: car-checkout car-hw-init car-sim-init $(SAFED_SW_INIT) $(PULPD_SW_INIT) mibench
+=======
+car-init-all: car-checkout car-hw-init car-sim-init safed-sw-init pulpd-sw-init mibench
+>>>>>>> 5b71d91 (multiple changes)
 
 ## Initialize Carfield and build SW
 .PHONY: car-all

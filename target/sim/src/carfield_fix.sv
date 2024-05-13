@@ -33,11 +33,12 @@ module carfield_soc_fixture;
   localparam cheshire_cfg_t DutCfg = carfield_pkg::CarfieldCfgDefault;
   `CHESHIRE_TYPEDEF_ALL(, DutCfg)
 
-  localparam time         ClkPeriodSys  = 10ns;
+  localparam time         ClkPeriodSys  = 10ns; 
   localparam time         ClkPeriodJtag = 40ns;
+  localparam time         ClkPeriodPeri  = 2ns; 
   localparam time         ClkPeriodRtc  = 1000ns; // 1MHz RTC clock. Note: needs to equal
                                                   // `DutCfg.RTCFreq` for successful autonomous boot
-                                                  // (e.g., SPI)
+                                                  // (e.g., SPI)                              
   localparam int unsigned RstCycles     = 5;
   localparam real         TAppl         = 0.1;
   localparam real         TTest         = 0.9;
@@ -46,6 +47,7 @@ module carfield_soc_fixture;
   localparam int NumChips = 2;
 
   logic       clk;
+  logic       peri_clk;
   logic       rst_n;
   logic       test_mode;
   logic [1:0] boot_mode;
@@ -140,6 +142,14 @@ module carfield_soc_fixture;
   wire [NumPhys-1:0]                pad_hyper_resetn;
   wire [NumPhys-1:0][7:0]           pad_hyper_dq;
 
+  clk_rst_gen #(
+    .ClkPeriod    ( ClkPeriodPeri ),
+    .RstClkCycles ( RstCycles )
+  ) i_clk_rst_peri (
+    .clk_o  ( peri_clk   ),
+    .rst_no (  )
+  );
+
   carfield      #(
     .Cfg         ( DutCfg    ),
     .HypNumPhys  ( NumPhys   ),
@@ -148,7 +158,7 @@ module carfield_soc_fixture;
     .reg_rsp_t   ( reg_rsp_t )
   ) i_dut                       (
     .host_clk_i                 ( clk                       ),
-    .periph_clk_i               ( clk                       ),
+    .periph_clk_i               ( peri_clk                  ),
     .alt_clk_i                  ( clk                       ),
     .rt_clk_i                   ( rtc                       ),
     .pwr_on_rst_ni              ( rst_n                     ),
@@ -208,7 +218,7 @@ module carfield_soc_fixture;
     .eth_md_o                   ( eth_mdio_o                ),
     .eth_md_oe                  ( eth_mdio_en               ),
     .eth_mdc_o                  ( eth_mdc                   ),
-    .eth_rst_n_o                ( eth_rstn                 ),
+    .eth_rst_n_o                ( eth_rstn                  ),
     .can_rx_i                   ( '0                        ),
     .can_tx_o                   (                           ),
     .gpio_i                     ( '0                        ),

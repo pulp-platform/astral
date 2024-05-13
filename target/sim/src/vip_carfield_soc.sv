@@ -22,7 +22,7 @@ module vip_carfield_soc
   parameter string Hyp0UserPreloadMemFile = "",
   parameter string Hyp1UserPreloadMemFile = "",
   // Timing
-  parameter time         ClkPeriodSys      = 2ns, // 5ns
+  parameter time         ClkPeriodSys      = 5ns, 
   parameter time         ClkPeriodJtag     = 20ns,
   parameter time         ClkPeriodRtc      = 30518ns,
   parameter int unsigned RstCycles         = 5,
@@ -77,8 +77,8 @@ module vip_carfield_soc
   //  SoC Clock, Reset, Modes  //
   ///////////////////////////////
 
-  logic clk, rst_n;
-  assign clk_vip   = clk;
+  logic  clk, rst_n;
+  assign clk_vip   = clk; 
   assign rst_n_vip = rst_n;
 
   clk_rst_gen #(
@@ -89,35 +89,63 @@ module vip_carfield_soc
     .rst_no ( rst_n )
   );
   
-   /////////////////////////
-  //   Ethernet island  ///
-  /////////////////////////
 
-  if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet_tb
+   ///////////////////
+  //   Ethernet     //
+  ///////////////////
+
+  if (CarfieldIslandsCfg.periph.enable) begin : gen_ethernet_tb
     import idma_pkg::*;
-    localparam REG_BUS_AW          = 32;
-    localparam REG_BUS_DW          = 32;
-    localparam time          ClkPeriodEth125   = 8ns;
+    localparam RegAw              = 32;
+    localparam RegDw              = 32;
+    localparam time ClkPeriodEth  = 4ns;
+    localparam time ClkPeriodDma  = 2ns;
+
+    logic eth_clk, dma_clk;
+    logic reg_error;
+    logic [RegDw-1:0] rx_req_ready, rx_rsp_valid;
 
     typedef reg_test::reg_driver #(
-      .AW(REG_BUS_AW),
-      .DW(REG_BUS_DW),
+      .AW(RegAw),
+      .DW(RegDw),
       .TT(ClkPeriodJtag * TTest),
       .TA(ClkPeriodJtag * TAppl)
     ) reg_bus_drv_t;
 
     REG_BUS #(
-      .DATA_WIDTH(REG_BUS_DW),
-      .ADDR_WIDTH(REG_BUS_AW)
+      .DATA_WIDTH(RegDw),
+      .ADDR_WIDTH(RegAw)
     ) reg_bus_rx (
       .clk_i(clk)
     );
     
-    logic                eth_clk_125;
-    logic                eth_clk_90;
-    logic reg_error;
-    logic [REG_BUS_DW-1:0] rx_req_ready, rx_rsp_valid;
+    clk_rst_gen #(
+      .ClkPeriod    ( ClkPeriodDma ),
+      .RstClkCycles ( RstCycles    )
+    ) i_clk_rst_dma (
+      .clk_o  ( dma_clk   ),
+      .rst_no (           )
+    );
 
+    clk_rst_gen #(
+      .ClkPeriod    ( ClkPeriodEth ),
+      .RstClkCycles ( RstCycles    )
+    ) i_clk_rst_eth (
+      .clk_o  ( eth_clk   ),
+      .rst_no (           )
+    );
+
+
+
+  //  initial begin
+  //   forever begin
+  //   eth_clk <= 1;
+  //   #(/2); 
+  //   eth_clk <= 0;
+  //   #(ClkPeriodEth/2);
+  //   end
+  // end
+    
     reg_bus_drv_t reg_drv_rx  = new(reg_bus_rx);
     
     reg_req_t reg_bus_rx_req;
@@ -135,15 +163,20 @@ module vip_carfield_soc
       .AddrWidth           ( DutCfg.AddrWidth     ),
       .UserWidth           ( DutCfg.AxiUserWidth  ),
       .AxiIdWidth          ( DutCfg.AxiMstIdWidth ),
+      .NumAxInFlight       ( 32'd3                ), 
+      .BufferDepth         ( 32'd3                ), 
+      .TFLenWidth          ( 32'd32               ),
+      .MemSysDepth         ( 32'd0                ),
+      .TxFifoLogDepth      ( 32'd4                ),
+      .RxFifoLogDepth      ( 32'd4                ),
       .axi_req_t           ( axi_mst_req_t        ),
       .axi_rsp_t           ( axi_mst_rsp_t        ),
       .reg_req_t           ( reg_req_t            ),
       .reg_rsp_t           ( reg_rsp_t            )
     ) i_rx_eth_idma_wrap (
-      .clk_i               ( clk             ),
+      .clk_i               ( dma_clk         ),
       .rst_ni              ( rst_n           ),  
-      .eth_clk125_i        ( eth_clk_125     ),
-      .eth_clk125q_i       ( eth_clk_90      ),
+      .eth_clk_i           ( eth_clk         ),
       .phy_rx_clk_i        ( eth_txck        ),
       .phy_rxd_i           ( eth_txd         ),
       .phy_rx_ctl_i        ( eth_txctl       ),
@@ -163,7 +196,7 @@ module vip_carfield_soc
       .axi_req_o           ( axi_req_mem     ),
       .axi_rsp_i           ( axi_rsp_mem     )
     );
-    
+
     axi_sim_mem #(
       .AddrWidth         ( DutCfg.AddrWidth     ),
       .DataWidth         ( DutCfg.AxiDataWidth  ),
@@ -182,26 +215,6 @@ module vip_carfield_soc
       .axi_rsp_o          ( axi_rsp_mem       )
     );
   
-  initial begin
-    forever begin
-    eth_clk_125 <= 0;
-    #(ClkPeriodEth125/2); 
-    eth_clk_125 <= 1;
-    #(ClkPeriodEth125/2);
-    end
-  end
-
-  initial begin
-    forever begin
-    eth_clk_90 <= 0;
-    #(ClkPeriodEth125/4);
-    eth_clk_90 <= 1;
-    #(ClkPeriodEth125/2);
-    eth_clk_90 <= 0;
-    #(ClkPeriodEth125/4);
-    end
-  end
-
   initial begin
    @(posedge clk);
   $readmemh("rx_mem_init.vmem", i_rx_axi_sim_mem.mem);
@@ -385,7 +398,7 @@ module vip_carfield_soc_tristate import carfield_pkg::*; # (
   wire                           eth_mdio
 );
   
-  pad_functional_pd padinst_hyper_csno (
+  pad_functional_pd padinst_eth_mdio (
     .OEN ( eth_mdio_en   ),
     .I   ( eth_mdio_o    ),
     .O   ( eth_mdio_i    ),

@@ -52,7 +52,7 @@ module ethernet_wrap #(
   parameter type         reg_rsp_t          = logic
 )(
   input  logic                    clk_i,
-  input  logic                    clk_125_i,
+  input  logic                    eth_clk_i,
   input  logic                    rst_ni, 
   input  logic                    pwr_on_rst_ni,
   /// Ethernet RGMII
@@ -225,7 +225,7 @@ module ethernet_wrap #(
     .clk_i,
     .rst_ni,
      /// Etherent Internal clocks
-    .eth_clk125_i        ( clk_125_i           ), 
+    .eth_clk_i           ( eth_clk_i           ), 
     .phy_rx_clk_i        ( phy_rx_clk_i        ),
     .phy_rxd_i           ( phy_rxd_i           ),
     .phy_rx_ctl_i        ( phy_rx_ctl_i        ),
