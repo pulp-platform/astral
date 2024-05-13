@@ -392,7 +392,6 @@ tech-clone:
 	git clone $(tech-repo) tech
 
 tech-init: tech-clone
-	git clone $(tech-repo) tech
 	cd $(TECH_ROOT) && git checkout $(tech-commit) && cd $(CAR_ROOT)
 	$(MAKE) -C $(TECH_ROOT) init
 
