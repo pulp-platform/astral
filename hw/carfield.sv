@@ -2076,7 +2076,6 @@ end else begin : gen_no_ethernet
   assign eth_txd_o               = '0;
 end
 
-
 // APB peripherals
 // Periph Clock Domain
 // axi_cdc -> axi_amos -> axi_cut -> axi_to_axilite -> axilite_to_apb -> periph devices

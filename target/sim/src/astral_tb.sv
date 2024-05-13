@@ -334,7 +334,6 @@ module tb_astral;
       end
     end
   end
-  
 
   // pulp cluster standalone
   if (CarfieldIslandsCfg.pulp.enable) begin: gen_pulp_tb
