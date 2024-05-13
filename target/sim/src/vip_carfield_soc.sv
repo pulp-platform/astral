@@ -3,8 +3,6 @@
 // SPDX-License-Identifier: SHL-0.51
 //
 // Alessandro Ottaviano <aottaviano@iis.ee.ethz.ch>
-// Chaoqun Liang        <chaoqun.liang@unibo.it>
-
 
 // collects all existing verification ip (vip) for carfield SoC
 

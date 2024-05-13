@@ -1931,7 +1931,7 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
     .DIV_VALUE_WIDTH       ( 4               ),
     .DEFAULT_DIV_VALUE     ( EthClkDivValue  ),
     .ENABLE_CLOCK_IN_RESET ( 0               )
-  ) i_eth_rgmii_phy_clk_int_div ( 
+  ) i_eth_rgmii_phy_clk_int_div (
     .clk_i          ( periph_clk            ),
     .rst_ni         ( periph_rst_n          ),
     .en_i           ( 1'b1                  ),
@@ -1942,85 +1942,81 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
     .clk_o          ( eth_clk               ),
     .cycl_count_o   (                       )
   );
- 
-  `ifndef ETHERNET_NETLIST
-    ethernet_wrap #(
-      .AddrWidth             ( Cfg.AddrWidth              ),
-      .DataWidth             ( Cfg.AxiDataWidth           ),
-      .UserWidth             ( Cfg.AxiUserWidth           ),
-      .AxiIdWidth            ( Cfg.AxiMstIdWidth          ),
-      .NumAxInFlight         ( 32'd3                      ), 
-      .BufferDepth           ( 32'd3                      ), 
-      .TFLenWidth            ( 32'd32                     ),
-      .MemSysDepth           ( 32'd0                      ),
-      .TxFifoLogDepth        ( 32'd4                      ),
-      .RxFifoLogDepth        ( 32'd3                      ),
-      .AsyncAxiOutAwWidth    ( CarfieldAxiMstAwWidth      ),
-      .AsyncAxiOutWWidth     ( CarfieldAxiMstWWidth       ),
-      .AsyncAxiOutBWidth     ( CarfieldAxiMstBWidth       ),
-      .AsyncAxiOutArWidth    ( CarfieldAxiMstArWidth      ),
-      .AsyncAxiOutRWidth     ( CarfieldAxiMstRWidth       ),
-      .axi_out_aw_chan_t     ( carfield_axi_mst_aw_chan_t ),
-      .axi_out_w_chan_t      ( carfield_axi_mst_w_chan_t  ),
-      .axi_out_b_chan_t      ( carfield_axi_mst_b_chan_t  ),
-      .axi_out_ar_chan_t     ( carfield_axi_mst_ar_chan_t ),
-      .axi_out_r_chan_t      ( carfield_axi_mst_r_chan_t  ),
-      .axi_out_req_t         ( carfield_axi_mst_req_t     ),
-      .axi_out_resp_t        ( carfield_axi_mst_rsp_t     ),
-      .LogDepth              ( LogDepth                   ),
-      .CdcSyncStages         ( SyncStages                 ),
-      .SyncStages            ( SyncStages                 ),
-      .reg_req_t             ( carfield_reg_req_t         ),
-      .reg_rsp_t             ( carfield_reg_rsp_t         )
-    ) i_ethernet (
-  `else
-  ethernet_wrap i_ethernet (
-  `endif
-      .clk_i                   ( periph_clk          ),
-      .eth_clk_i               ( eth_clk             ),
-      .rst_ni                  ( periph_rst_n        ),
-      .pwr_on_rst_ni           ( periph_pwr_on_rst_n ),
-      .phy_rx_clk_i            ( eth_rxck_i          ),
-      .phy_rxd_i               ( eth_rxd_i           ),
-      .phy_rx_ctl_i            ( eth_rxctl_i         ),
-      .phy_tx_clk_o            ( eth_txck_o          ),
-      .phy_txd_o               ( eth_txd_o           ),
-      .phy_tx_ctl_o            ( eth_txctl_o         ),
-      .phy_resetn_o            ( eth_rst_n_o         ),
-      .phy_intn_i              ( ),
-      .phy_pme_i               ( ),
-      .phy_mdio_i              ( eth_md_i            ),
-      .phy_mdio_o              ( eth_md_o            ),
-      .phy_mdio_oe             ( eth_md_oe           ),
-      .phy_mdc_o               ( eth_mdc_o           ),
-      .testmode_i              ( test_mode_i         ),
-      .axi_isolate_i           ( 1                   ),
-      .axi_isolated_o          ( ethernet_isolated_rsp                ),
-      .async_axi_out_aw_data_o ( axi_mst_ext_aw_data [EthernetMstIdx] ),
-      .async_axi_out_aw_wptr_o ( axi_mst_ext_aw_wptr [EthernetMstIdx] ),
-      .async_axi_out_aw_rptr_i ( axi_mst_ext_aw_rptr [EthernetMstIdx] ),
-      .async_axi_out_w_data_o  ( axi_mst_ext_w_data  [EthernetMstIdx] ),
-      .async_axi_out_w_wptr_o  ( axi_mst_ext_w_wptr  [EthernetMstIdx] ),
-      .async_axi_out_w_rptr_i  ( axi_mst_ext_w_rptr  [EthernetMstIdx] ),
-      .async_axi_out_b_data_i  ( axi_mst_ext_b_data  [EthernetMstIdx] ),
-      .async_axi_out_b_wptr_i  ( axi_mst_ext_b_wptr  [EthernetMstIdx] ),
-      .async_axi_out_b_rptr_o  ( axi_mst_ext_b_rptr  [EthernetMstIdx] ),
-      .async_axi_out_ar_data_o ( axi_mst_ext_ar_data [EthernetMstIdx] ),
-      .async_axi_out_ar_wptr_o ( axi_mst_ext_ar_wptr [EthernetMstIdx] ),
-      .async_axi_out_ar_rptr_i ( axi_mst_ext_ar_rptr [EthernetMstIdx] ),
-      .async_axi_out_r_data_i  ( axi_mst_ext_r_data  [EthernetMstIdx] ),
-      .async_axi_out_r_wptr_i  ( axi_mst_ext_r_wptr  [EthernetMstIdx] ),
-      .async_axi_out_r_rptr_o  ( axi_mst_ext_r_rptr  [EthernetMstIdx] ),
-      .reg_async_mst_req_i     ( ext_reg_async_slv_req_out [EthAsyncIdx] ),
-      .reg_async_mst_ack_o     ( ext_reg_async_slv_ack_in  [EthAsyncIdx] ),
-      .reg_async_mst_data_i    ( ext_reg_async_slv_data_out[EthAsyncIdx] ),
-      .reg_async_mst_req_o     ( ext_reg_async_slv_req_in  [EthAsyncIdx] ),
-      .reg_async_mst_ack_i     ( ext_reg_async_slv_ack_out [EthAsyncIdx] ),
-      .reg_async_mst_data_o    ( ext_reg_async_slv_data_in [EthAsyncIdx] ),
-      .eth_irq_o               ( car_eth_intr                            )
-    );
 
-end else begin : gen_no_ethernet
+  ethernet_wrap #(
+    .AddrWidth             ( Cfg.AddrWidth              ),
+    .DataWidth             ( Cfg.AxiDataWidth           ),
+    .UserWidth             ( Cfg.AxiUserWidth           ),
+    .AxiIdWidth            ( Cfg.AxiMstIdWidth          ),
+    .NumAxInFlight         ( 32'd3                      ),
+    .BufferDepth           ( 32'd3                      ),
+    .TFLenWidth            ( 32'd32                     ),
+    .MemSysDepth           ( 32'd0                      ),
+    .TxFifoLogDepth        ( 32'd4                      ),
+    .RxFifoLogDepth        ( 32'd3                      ),
+    .AsyncAxiOutAwWidth    ( CarfieldAxiMstAwWidth      ),
+    .AsyncAxiOutWWidth     ( CarfieldAxiMstWWidth       ),
+    .AsyncAxiOutBWidth     ( CarfieldAxiMstBWidth       ),
+    .AsyncAxiOutArWidth    ( CarfieldAxiMstArWidth      ),
+    .AsyncAxiOutRWidth     ( CarfieldAxiMstRWidth       ),
+    .axi_out_aw_chan_t     ( carfield_axi_mst_aw_chan_t ),
+    .axi_out_w_chan_t      ( carfield_axi_mst_w_chan_t  ),
+    .axi_out_b_chan_t      ( carfield_axi_mst_b_chan_t  ),
+    .axi_out_ar_chan_t     ( carfield_axi_mst_ar_chan_t ),
+    .axi_out_r_chan_t      ( carfield_axi_mst_r_chan_t  ),
+    .axi_out_req_t         ( carfield_axi_mst_req_t     ),
+    .axi_out_resp_t        ( carfield_axi_mst_rsp_t     ),
+    .LogDepth              ( LogDepth                   ),
+    .CdcSyncStages         ( SyncStages                 ),
+    .SyncStages            ( SyncStages                 ),
+    .reg_req_t             ( carfield_reg_req_t         ),
+    .reg_rsp_t             ( carfield_reg_rsp_t         )
+  ) i_ethernet (
+    .clk_i                   ( periph_clk          ),
+    .eth_clk_i               ( eth_clk             ),
+    .rst_ni                  ( periph_rst_n        ),
+    .pwr_on_rst_ni           ( periph_pwr_on_rst_n ),
+    .phy_rx_clk_i            ( eth_rxck_i          ),
+    .phy_rxd_i               ( eth_rxd_i           ),
+    .phy_rx_ctl_i            ( eth_rxctl_i         ),
+    .phy_tx_clk_o            ( eth_txck_o          ),
+    .phy_txd_o               ( eth_txd_o           ),
+    .phy_tx_ctl_o            ( eth_txctl_o         ),
+    .phy_resetn_o            ( eth_rst_n_o         ),
+    .phy_intn_i              ( ),
+    .phy_pme_i               ( ),
+    .phy_mdio_i              ( eth_md_i            ),
+    .phy_mdio_o              ( eth_md_o            ),
+    .phy_mdio_oe             ( eth_md_oe           ),
+    .phy_mdc_o               ( eth_mdc_o           ),
+    .testmode_i              ( test_mode_i         ),
+    .axi_isolate_i           ( ethernet_isolate_req                 ),
+    .axi_isolated_o          ( ethernet_isolated_rsp                ),
+    .async_axi_out_aw_data_o ( axi_mst_ext_aw_data [EthernetMstIdx] ),
+    .async_axi_out_aw_wptr_o ( axi_mst_ext_aw_wptr [EthernetMstIdx] ),
+    .async_axi_out_aw_rptr_i ( axi_mst_ext_aw_rptr [EthernetMstIdx] ),
+    .async_axi_out_w_data_o  ( axi_mst_ext_w_data  [EthernetMstIdx] ),
+    .async_axi_out_w_wptr_o  ( axi_mst_ext_w_wptr  [EthernetMstIdx] ),
+    .async_axi_out_w_rptr_i  ( axi_mst_ext_w_rptr  [EthernetMstIdx] ),
+    .async_axi_out_b_data_i  ( axi_mst_ext_b_data  [EthernetMstIdx] ),
+    .async_axi_out_b_wptr_i  ( axi_mst_ext_b_wptr  [EthernetMstIdx] ),
+    .async_axi_out_b_rptr_o  ( axi_mst_ext_b_rptr  [EthernetMstIdx] ),
+    .async_axi_out_ar_data_o ( axi_mst_ext_ar_data [EthernetMstIdx] ),
+    .async_axi_out_ar_wptr_o ( axi_mst_ext_ar_wptr [EthernetMstIdx] ),
+    .async_axi_out_ar_rptr_i ( axi_mst_ext_ar_rptr [EthernetMstIdx] ),
+    .async_axi_out_r_data_i  ( axi_mst_ext_r_data  [EthernetMstIdx] ),
+    .async_axi_out_r_wptr_i  ( axi_mst_ext_r_wptr  [EthernetMstIdx] ),
+    .async_axi_out_r_rptr_o  ( axi_mst_ext_r_rptr  [EthernetMstIdx] ),
+    .reg_async_mst_req_i     ( ext_reg_async_slv_req_out [EthAsyncIdx] ),
+    .reg_async_mst_ack_o     ( ext_reg_async_slv_ack_in  [EthAsyncIdx] ),
+    .reg_async_mst_data_i    ( ext_reg_async_slv_data_out[EthAsyncIdx] ),
+    .reg_async_mst_req_o     ( ext_reg_async_slv_req_in  [EthAsyncIdx] ),
+    .reg_async_mst_ack_i     ( ext_reg_async_slv_ack_out [EthAsyncIdx] ),
+    .reg_async_mst_data_o    ( ext_reg_async_slv_data_in [EthAsyncIdx] ),
+    .eth_irq_o               ( car_eth_intr                            )
+  );
+
+else begin : gen_no_ethernet
   assign eth_clk                 = '0;
   assign ethernet_isolate_req    = '0;
   assign car_eth_intr            = '0;
@@ -2032,7 +2028,6 @@ end else begin : gen_no_ethernet
   assign eth_txctl_o             = '0;
   assign eth_txd_o               = '0;
 end
-
 
 // APB peripherals
 // Periph Clock Domain
