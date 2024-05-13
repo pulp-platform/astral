@@ -7,7 +7,7 @@
 package carfield_reg_pkg;
 
   // Address widths within the block
-  parameter int BlockAw = 9;
+  parameter int BlockAw = 8;
 
   ////////////////////////////
   // Typedefs for registers //
@@ -51,10 +51,6 @@ package carfield_reg_pkg;
 
   typedef struct packed {
     logic        q;
-  } carfield_reg2hw_ethernet_rst_reg_t;
-
-  typedef struct packed {
-    logic        q;
   } carfield_reg2hw_periph_isolate_reg_t;
 
   typedef struct packed {
@@ -72,10 +68,6 @@ package carfield_reg_pkg;
   typedef struct packed {
     logic        q;
   } carfield_reg2hw_spatz_cluster_isolate_reg_t;
-
-  typedef struct packed {
-    logic        q;
-  } carfield_reg2hw_ethernet_isolate_reg_t;
 
   typedef struct packed {
     logic        q;
@@ -103,10 +95,6 @@ package carfield_reg_pkg;
 
   typedef struct packed {
     logic        q;
-  } carfield_reg2hw_ethernet_clk_en_reg_t;
-
-  typedef struct packed {
-    logic        q;
   } carfield_reg2hw_l2_clk_en_reg_t;
 
   typedef struct packed {
@@ -128,10 +116,6 @@ package carfield_reg_pkg;
   typedef struct packed {
     logic [1:0]  q;
   } carfield_reg2hw_spatz_cluster_clk_sel_reg_t;
-
-  typedef struct packed {
-    logic [1:0]  q;
-  } carfield_reg2hw_ethernet_clk_sel_reg_t;
 
   typedef struct packed {
     logic [1:0]  q;
@@ -165,11 +149,6 @@ package carfield_reg_pkg;
   typedef struct packed {
     logic [23:0] q;
     logic        qe;
-  } carfield_reg2hw_ethernet_clk_div_value_reg_t;
-
-  typedef struct packed {
-    logic [23:0] q;
-    logic        qe;
   } carfield_reg2hw_l2_clk_div_value_reg_t;
 
   typedef struct packed {
@@ -187,10 +166,6 @@ package carfield_reg_pkg;
   typedef struct packed {
     logic        q;
   } carfield_reg2hw_pulp_cluster_fetch_enable_reg_t;
-
-  typedef struct packed {
-    logic        q;
-  } carfield_reg2hw_ethernet_fetch_enable_reg_t;
 
   typedef struct packed {
     logic [1:0]  q;
@@ -290,11 +265,6 @@ package carfield_reg_pkg;
   typedef struct packed {
     logic        d;
     logic        de;
-  } carfield_hw2reg_ethernet_isolate_status_reg_t;
-
-  typedef struct packed {
-    logic        d;
-    logic        de;
   } carfield_hw2reg_l2_isolate_status_reg_t;
 
   typedef struct packed {
@@ -369,14 +339,13 @@ package carfield_reg_pkg;
 
   // HW -> register type
   typedef struct packed {
-    carfield_hw2reg_generic_scratch0_reg_t generic_scratch0; // [85:53]
-    carfield_hw2reg_generic_scratch1_reg_t generic_scratch1; // [52:20]
-    carfield_hw2reg_periph_isolate_status_reg_t periph_isolate_status; // [19:18]
-    carfield_hw2reg_safety_island_isolate_status_reg_t safety_island_isolate_status; // [17:16]
-    carfield_hw2reg_security_island_isolate_status_reg_t security_island_isolate_status; // [15:14]
-    carfield_hw2reg_pulp_cluster_isolate_status_reg_t pulp_cluster_isolate_status; // [13:12]
-    carfield_hw2reg_spatz_cluster_isolate_status_reg_t spatz_cluster_isolate_status; // [11:10]
-    carfield_hw2reg_ethernet_isolate_status_reg_t ethernet_isolate_status; // [9:8]
+    carfield_hw2reg_generic_scratch0_reg_t generic_scratch0; // [83:51]
+    carfield_hw2reg_generic_scratch1_reg_t generic_scratch1; // [50:18]
+    carfield_hw2reg_periph_isolate_status_reg_t periph_isolate_status; // [17:16]
+    carfield_hw2reg_safety_island_isolate_status_reg_t safety_island_isolate_status; // [15:14]
+    carfield_hw2reg_security_island_isolate_status_reg_t security_island_isolate_status; // [13:12]
+    carfield_hw2reg_pulp_cluster_isolate_status_reg_t pulp_cluster_isolate_status; // [11:10]
+    carfield_hw2reg_spatz_cluster_isolate_status_reg_t spatz_cluster_isolate_status; // [9:8]
     carfield_hw2reg_l2_isolate_status_reg_t l2_isolate_status; // [7:6]
     carfield_hw2reg_spatz_cluster_busy_reg_t spatz_cluster_busy; // [5:4]
     carfield_hw2reg_pulp_cluster_busy_reg_t pulp_cluster_busy; // [3:2]
@@ -455,7 +424,6 @@ package carfield_reg_pkg;
     CARFIELD_VERSION2,
     CARFIELD_VERSION3,
     CARFIELD_VERSION4,
-    CARFIELD_VERSION5,
     CARFIELD_JEDEC_IDCODE,
     CARFIELD_GENERIC_SCRATCH0,
     CARFIELD_GENERIC_SCRATCH1,
@@ -466,47 +434,40 @@ package carfield_reg_pkg;
     CARFIELD_PULP_CLUSTER_RST,
     CARFIELD_SPATZ_CLUSTER_RST,
     CARFIELD_L2_RST,
-    CARFIELD_ETHERNET_RST,
     CARFIELD_PERIPH_ISOLATE,
     CARFIELD_SAFETY_ISLAND_ISOLATE,
     CARFIELD_SECURITY_ISLAND_ISOLATE,
     CARFIELD_PULP_CLUSTER_ISOLATE,
     CARFIELD_SPATZ_CLUSTER_ISOLATE,
-    CARFIELD_ETHERNET_ISOLATE,
     CARFIELD_L2_ISOLATE,
     CARFIELD_PERIPH_ISOLATE_STATUS,
     CARFIELD_SAFETY_ISLAND_ISOLATE_STATUS,
     CARFIELD_SECURITY_ISLAND_ISOLATE_STATUS,
     CARFIELD_PULP_CLUSTER_ISOLATE_STATUS,
     CARFIELD_SPATZ_CLUSTER_ISOLATE_STATUS,
-    CARFIELD_ETHERNET_ISOLATE_STATUS,
     CARFIELD_L2_ISOLATE_STATUS,
     CARFIELD_PERIPH_CLK_EN,
     CARFIELD_SAFETY_ISLAND_CLK_EN,
     CARFIELD_SECURITY_ISLAND_CLK_EN,
     CARFIELD_PULP_CLUSTER_CLK_EN,
     CARFIELD_SPATZ_CLUSTER_CLK_EN,
-    CARFIELD_ETHERNET_CLK_EN,
     CARFIELD_L2_CLK_EN,
     CARFIELD_PERIPH_CLK_SEL,
     CARFIELD_SAFETY_ISLAND_CLK_SEL,
     CARFIELD_SECURITY_ISLAND_CLK_SEL,
     CARFIELD_PULP_CLUSTER_CLK_SEL,
     CARFIELD_SPATZ_CLUSTER_CLK_SEL,
-    CARFIELD_ETHERNET_CLK_SEL,
     CARFIELD_L2_CLK_SEL,
     CARFIELD_PERIPH_CLK_DIV_VALUE,
     CARFIELD_SAFETY_ISLAND_CLK_DIV_VALUE,
     CARFIELD_SECURITY_ISLAND_CLK_DIV_VALUE,
     CARFIELD_PULP_CLUSTER_CLK_DIV_VALUE,
     CARFIELD_SPATZ_CLUSTER_CLK_DIV_VALUE,
-    CARFIELD_ETHERNET_CLK_DIV_VALUE,
     CARFIELD_L2_CLK_DIV_VALUE,
     CARFIELD_HOST_FETCH_ENABLE,
     CARFIELD_SAFETY_ISLAND_FETCH_ENABLE,
     CARFIELD_SECURITY_ISLAND_FETCH_ENABLE,
     CARFIELD_PULP_CLUSTER_FETCH_ENABLE,
-    CARFIELD_ETHERNET_FETCH_ENABLE,
     CARFIELD_SPATZ_CLUSTER_DEBUG_REQ,
     CARFIELD_HOST_BOOT_ADDR,
     CARFIELD_SAFETY_ISLAND_BOOT_ADDR,
@@ -524,7 +485,7 @@ package carfield_reg_pkg;
   } carfield_id_e;
 
   // Register width information to check illegal writes
-  parameter logic [3:0] CARFIELD_PERMIT [69] = '{
+  parameter logic [3:0] CARFIELD_PERMIT [61] = '{
     4'b 1111, // index[ 0] CARFIELD_VERSION0
     4'b 1111, // index[ 1] CARFIELD_VERSION1
     4'b 1111, // index[ 2] CARFIELD_VERSION2

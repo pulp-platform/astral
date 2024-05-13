@@ -6,7 +6,6 @@
 // Luca Valente    <luca.valente@unibo.it>
 // Yvan Tortorella <yvan.tortorella@unibo.it>
 // Alessandro Ottaviano <aottaviano@iis.ee.ethz.ch>
-// Chaoqun Liang   <chaoqun.liang@unibo.it>
 
 `include "cheshire/typedef.svh"
 `include "axi/typedef.svh"
@@ -186,7 +185,6 @@ logic    security_rst_n;
 logic    pulp_rst_n;
 logic    spatz_rst_n;
 logic    l2_rst_n;
-logic    eth_rst_n;
 
 logic    host_pwr_on_rst_n;
 logic    periph_pwr_on_rst_n;
@@ -195,7 +193,6 @@ logic    security_pwr_on_rst_n;
 logic    pulp_pwr_on_rst_n;
 logic    spatz_pwr_on_rst_n;
 logic    l2_pwr_on_rst_n;
-logic    eth_pwr_on_rst_n;
 
 logic  periph_clk;
 logic  safety_clk;
@@ -203,7 +200,6 @@ logic  security_clk;
 logic  pulp_clk;
 logic  spatz_clk;
 logic  l2_clk;
-logic  eth_clk;
 
 // verilog_lint: waive-start line-length
 // Peripheral interrupts
@@ -488,13 +484,13 @@ for (genvar i = 0; i < 3; i++) begin : gen_ext_reg_assign
 end
 
 // Clocking and reset strategy
-// We have three clock sources that are multiplexed to 7 domains. The default assignment after
+// We have three clock sources that are multiplexed to 6 domains. The default assignment after
 // hard reset is:
 // periph (periph_clk_i) and accelerators (alt_clk_i)
 //
 // The host is statically always assigned to host_clk_i.
 //
-// Furthermore we have seven reset domains:
+// Furthermore we have six reset domains:
 // host             (contained in host clock domain, POR only, no SW reset)
 // periph           (sw reset 0)
 // safety           (sw reset 1)
@@ -502,7 +498,6 @@ end
 // pulp_cluster     (sw reset 3)
 // spatz_cluster    (sw reset 4)
 // shared_l2_memory (sw reset 5)
-// ethernet         (sw reset 6)
 
 // Clock Multiplexing for each sub block
 localparam int unsigned DomainClkDivValueWidth = 24;
@@ -525,7 +520,7 @@ logic [NumDomains-1:0] pwr_on_rsts_n;
 logic [NumDomains-1:0] rsts_n;
 
 
-// Each of the 7 clock gateable domains (periph, safety island, security island, l2, ethernet, spatz and pulp
+// Each of the 6 clock gateable domains (periph, safety island, security island, l2, spatz and pulp
 // cluster) have the following clock distribution scheme:
 // 1. For each domain the user selects one of 3 different clock sources (host clock, alt clock and
 //    per clock). Each of these main clocks are either supplied externally, by a dedicated PLL per

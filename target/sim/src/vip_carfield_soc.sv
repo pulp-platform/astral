@@ -92,9 +92,6 @@ module vip_carfield_soc
     .rst_no ( rst_n )
   );
   
-   /////////////////////////
-  //   Ethernet island  ///
-  /////////////////////////
 
   clk_rst_gen #(
     .ClkPeriod    ( ClkPeriodPeriph ),
@@ -130,6 +127,25 @@ module vip_carfield_soc
       .clk_i(periph_clk)
     );
 
+    clk_rst_gen #(
+      .ClkPeriod    ( ClkPeriodEth ),
+      .RstClkCycles ( RstCycles    )
+    ) i_clk_rst_eth (
+      .clk_o  ( eth_clk   ),
+      .rst_no (           )
+    );
+
+
+
+  //  initial begin
+  //   forever begin
+  //   eth_clk <= 1;
+  //   #(/2); 
+  //   eth_clk <= 0;
+  //   #(ClkPeriodEth/2);
+  //   end
+  // end
+    
     reg_bus_drv_t reg_drv_rx  = new(reg_bus_rx);
 
     reg_req_t reg_bus_rx_req;
