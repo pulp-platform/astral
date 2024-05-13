@@ -47,7 +47,7 @@ include $(CAR_ROOT)/bender-safed.mk
 ######################
 
 CAR_NONFREE_REMOTE ?= git@iis-git.ee.ethz.ch:astral/astral-nonfree.git
-CAR_NONFREE_COMMIT ?= ab863ac30f412e33af0e0bc9b20ec1fb458dd245 # branch: yt/synth
+CAR_NONFREE_COMMIT ?= 6c6b2064e03cccf54c70cb9d754ec112a43332b1 # branch: master
 
 ## @section Carfield platform nonfree components
 ## Clone the non-free verification IP for Carfield. Some components such as CI scripts and ASIC
@@ -386,7 +386,7 @@ car-check-litmus-tests: $(LITMUS_WORK_DIR)/litmus.log
 ##############
 tech-repo := git@iis-git.ee.ethz.ch:Astral/gf12.git
 # no commit by default, change during development
-tech-commit := 71f12499cf797adaf99d5e335bd6f1484ce85863 # branch: elabonly
+tech-commit := a4f49980533a73a46f7dada7b208375371ed1d23 # branch: main
 
 tech-clone:
 	git clone $(tech-repo) tech
