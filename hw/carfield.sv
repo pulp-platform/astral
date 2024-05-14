@@ -2363,7 +2363,7 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
   REG_BUS #(
     .ADDR_WIDTH ( AxiNarrowAddrWidth ),
     .DATA_WIDTH ( AxiNarrowDataWidth )
-  ) reg_bus_hyper (hyp_clk); // 
+  ) reg_bus_hyper (hyp_clk);
 
   apb_to_reg i_apb_to_reg_hyper (
     .clk_i     ( hyp_clk                          ),
