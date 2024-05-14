@@ -2015,8 +2015,7 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
     .reg_async_mst_data_o    ( ext_reg_async_slv_data_in [EthAsyncIdx] ),
     .eth_irq_o               ( car_eth_intr                            )
   );
-
-else begin : gen_no_ethernet
+end else begin : gen_no_ethernet
   assign eth_clk                 = '0;
   assign ethernet_isolate_req    = '0;
   assign car_eth_intr            = '0;
