@@ -114,6 +114,7 @@ sources:
     files:
       - tech/sourcecode/tc_clk.sv
       - tech/sourcecode/tc_sram.sv
+      - tech/sourcecode/configurable_delay.sv
       - target/synth/src/carfield_synth_wrap.sv
 
   - target: tech_sim
