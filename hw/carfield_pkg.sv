@@ -142,7 +142,7 @@ function automatic carfield_master_idx_t carfield_gen_axi_master_idx(islands_cfg
   if (island_cfg.pulp.enable) begin ret.pulp = i; i++;
   end else begin ret.pulp = MaxExtAxiMst + j; j++; end
   if (island_cfg.ethernet.enable) begin ret.ethernet = i; i++;
-  end else begin ret.ethernet = MaxExtAxiMst + j; j++; end 
+  end else begin ret.ethernet = MaxExtAxiMst + j; j++; end
   return ret;
 endfunction
 
