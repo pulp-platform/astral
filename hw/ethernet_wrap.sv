@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: SHL-0.51
 //
 // Chaoqun Liang <chaoqun.liang@unibo.it>
- 
+
 `include "axi/typedef.svh"
 
 module ethernet_wrap #(
@@ -12,7 +12,7 @@ module ethernet_wrap #(
   parameter int unsigned UserWidth        = 32'd10,
   parameter int unsigned AxiIdWidth       = 32'd6,
   parameter int unsigned NumAxInFlight    = 32'd3,
-  parameter int unsigned BufferDepth      = 32'd3, 
+  parameter int unsigned BufferDepth      = 32'd3,
   parameter int unsigned TFLenWidth       = 32'd32,
   parameter int unsigned MemSysDepth      = 32'd0,
   parameter int unsigned TxFifoLogDepth   = 32'd4,
@@ -28,7 +28,7 @@ module ethernet_wrap #(
   parameter type         axi_out_r_chan_t   = logic,
   parameter type         axi_out_req_t      = logic,
   parameter type         axi_out_resp_t     = logic,
-  // AXI Master  
+  // AXI Master
   parameter int unsigned AsyncAxiOutAwWidth = (2**LogDepth)*
                                                axi_pkg::aw_width(AddrWidth ,
                                                                  AxiIdWidth,
@@ -53,7 +53,7 @@ module ethernet_wrap #(
 )(
   input  logic                    clk_i,
   input  logic                    eth_clk_i,
-  input  logic                    rst_ni, 
+  input  logic                    rst_ni,
   input  logic                    pwr_on_rst_ni,
   /// Ethernet RGMII
   input  logic                    phy_rx_clk_i,
@@ -69,7 +69,7 @@ module ethernet_wrap #(
   output logic                    phy_mdio_o,
   output logic                    phy_mdio_oe,
   output logic                    phy_mdc_o,
-  // idma 
+  // idma
   input  logic                    testmode_i,
   // axi isolate
   input  logic                    axi_isolate_i,
@@ -110,7 +110,7 @@ module ethernet_wrap #(
 
   reg_req_t reg_bus_req;
   reg_rsp_t reg_bus_rsp;
-  
+
   logic axi_isolate_sync;
   logic eth_irq;
 
@@ -134,7 +134,7 @@ module ethernet_wrap #(
     .serial_i ( eth_irq       ),
     .serial_o ( eth_irq_o     )
   );
-  
+
   axi_isolate            #(
     .NumPending           ( NumAxInFlight  ),
     .TerminateTransaction ( 1              ),
@@ -208,7 +208,7 @@ module ethernet_wrap #(
   );
 
   eth_idma_wrap#(
-    .DataWidth           ( DataWidth           ),    
+    .DataWidth           ( DataWidth           ),
     .AddrWidth           ( AddrWidth           ),
     .UserWidth           ( UserWidth           ),
     .AxiIdWidth          ( AxiIdWidth          ),
@@ -225,14 +225,14 @@ module ethernet_wrap #(
     .clk_i,
     .rst_ni,
      /// Etherent Internal clocks
-    .eth_clk_i           ( eth_clk_i           ), 
+    .eth_clk_i           ( eth_clk_i           ),
     .phy_rx_clk_i        ( phy_rx_clk_i        ),
     .phy_rxd_i           ( phy_rxd_i           ),
     .phy_rx_ctl_i        ( phy_rx_ctl_i        ),
     .phy_tx_clk_o        ( phy_tx_clk_o        ),
     .phy_txd_o           ( phy_txd_o           ),
     .phy_tx_ctl_o        ( phy_tx_ctl_o        ),
-    .phy_resetn_o        ( phy_resetn_o        ),  
+    .phy_resetn_o        ( phy_resetn_o        ),
     .phy_intn_i          ( phy_intn_i          ),
     .phy_pme_i           ( phy_pme_i           ),
     .phy_mdio_i          ( phy_mdio_i          ),
