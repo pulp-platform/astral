@@ -572,7 +572,7 @@ packages:
     revision: 791ed68ebf97d81e6c16ef501711ab306a694ba8
     version: null
     source:
-      Git: git@gitlab.thalesdigital.io:musa/streamer.git
+      Git: https://gitlab.thalesdigital.io/musa/streamer.git
     dependencies: []
   tagger:
     revision: b288376b65b6bbd5feea196bb3c220f783d96e29
