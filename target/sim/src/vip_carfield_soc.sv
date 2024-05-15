@@ -3,6 +3,8 @@
 // SPDX-License-Identifier: SHL-0.51
 //
 // Alessandro Ottaviano <aottaviano@iis.ee.ethz.ch>
+// Chaoqun Liang        <chaoqun.liang@unibo.it>
+
 
 // collects all existing verification ip (vip) for carfield SoC
 
@@ -132,17 +134,6 @@ module vip_carfield_soc
       .clk_o  ( eth_clk   ),
       .rst_no (           )
     );
-
-
-
-  //  initial begin
-  //   forever begin
-  //   eth_clk <= 1;
-  //   #(/2); 
-  //   eth_clk <= 0;
-  //   #(ClkPeriodEth/2);
-  //   end
-  // end
     
     reg_bus_drv_t reg_drv_rx  = new(reg_bus_rx);
     
@@ -156,7 +147,7 @@ module vip_carfield_soc
     axi_mst_rsp_t axi_rsp_mem;
     idma_pkg::idma_busy_t idma_busy_o;
     
-    eth_idma_wrap#(
+    eth_idma_wrap #(
       .DataWidth           ( DutCfg.AxiDataWidth  ),    
       .AddrWidth           ( DutCfg.AddrWidth     ),
       .UserWidth           ( DutCfg.AxiUserWidth  ),
