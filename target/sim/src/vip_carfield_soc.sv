@@ -369,7 +369,7 @@ end
     .mst_resp_i ( axi_muxed_rsp )
   );
 
-  ptme_emulator i_ptme_emulator (
+  PTME_EMULATOR i_ptme_emulator (
     .Reset_N ( rst_n      ),
     .CADUClk ( ptme_clk_i ),
     .CADUOut ( ptme_enc_i )
