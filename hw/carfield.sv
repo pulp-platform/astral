@@ -903,7 +903,7 @@ assign hyper_isolate_req = car_regs_reg2hw.periph_isolate.q;
 
 `ifndef GEN_NO_HYPERBUS // bender-xilinx.mk
   localparam int unsigned HyperDivWidth = 4;
-  localparam [HyperDivWidth-1:0] HyperClkDivValue = 4'b0101;
+  localparam logic [HyperDivWidth-1:0] HyperClkDivValue = 4'b0101;
   logic hyp_clk;
 
 clk_int_div #(
@@ -1927,7 +1927,7 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
   localparam int unsigned EthAsyncIdx = CarfieldRegBusSlvIdx.ethernet-NumSyncRegSlv;
   assign ethernet_isolate_req = car_regs_reg2hw.periph_isolate.q;
   localparam int unsigned EthDivWidth = 4;
-  localparam [EthDivWidth-1:0] EthClkDivValue = 4'b10;
+  localparam logic [EthDivWidth-1:0] EthClkDivValue = 4'b0010;
   logic eth_clk;
 
   clk_int_div #(
