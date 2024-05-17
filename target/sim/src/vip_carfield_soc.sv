@@ -20,7 +20,7 @@ module vip_carfield_soc
   parameter string Hyp0UserPreloadMemFile = "",
   parameter string Hyp1UserPreloadMemFile = "",
   // Timing
-  parameter time         ClkPeriodSys      = 5ns,
+  parameter time         ClkPeriodSys      = 5ns, 
   parameter time         ClkPeriodJtag     = 20ns,
   parameter time         ClkPeriodRtc      = 30518ns,
   parameter int unsigned RstCycles         = 5,
@@ -76,7 +76,7 @@ module vip_carfield_soc
   ///////////////////////////////
 
   logic  clk, rst_n;
-  assign clk_vip   = clk;
+  assign clk_vip   = clk; 
   assign rst_n_vip = rst_n;
 
   clk_rst_gen #(
@@ -86,7 +86,7 @@ module vip_carfield_soc
     .clk_o  ( clk   ),
     .rst_no ( rst_n )
   );
-
+  
   ///////////////////
   //   Ethernet     //
   ///////////////////
@@ -115,7 +115,7 @@ module vip_carfield_soc
     ) reg_bus_rx (
       .clk_i(clk)
     );
-
+    
     clk_rst_gen #(
       .ClkPeriod    ( ClkPeriodDma ),
       .RstClkCycles ( RstCycles    )
@@ -131,26 +131,26 @@ module vip_carfield_soc
       .clk_o  ( eth_clk   ),
       .rst_no (           )
     );
-
+    
     reg_bus_drv_t reg_drv_rx  = new(reg_bus_rx);
-
+    
     reg_req_t reg_bus_rx_req;
     reg_rsp_t reg_bus_rx_rsp;
 
     `REG_BUS_ASSIGN_TO_REQ (reg_bus_rx_req, reg_bus_rx)
     `REG_BUS_ASSIGN_FROM_RSP (reg_bus_rx, reg_bus_rx_rsp)
-
+   
     axi_mst_req_t axi_req_mem;
     axi_mst_rsp_t axi_rsp_mem;
     idma_pkg::idma_busy_t idma_busy_o;
-
+    
     eth_idma_wrap #(
-      .DataWidth           ( DutCfg.AxiDataWidth  ),
+      .DataWidth           ( DutCfg.AxiDataWidth  ),    
       .AddrWidth           ( DutCfg.AddrWidth     ),
       .UserWidth           ( DutCfg.AxiUserWidth  ),
       .AxiIdWidth          ( DutCfg.AxiMstIdWidth ),
-      .NumAxInFlight       ( 32'd3                ),
-      .BufferDepth         ( 32'd3                ),
+      .NumAxInFlight       ( 32'd3                ), 
+      .BufferDepth         ( 32'd3                ), 
       .TFLenWidth          ( 32'd32               ),
       .MemSysDepth         ( 32'd0                ),
       .TxFifoLogDepth      ( 32'd4                ),
@@ -161,7 +161,7 @@ module vip_carfield_soc
       .reg_rsp_t           ( reg_rsp_t            )
     ) i_rx_eth_idma_wrap (
       .clk_i               ( dma_clk         ),
-      .rst_ni              ( rst_n           ),
+      .rst_ni              ( rst_n           ),  
       .eth_clk_i           ( eth_clk         ),
       .phy_rx_clk_i        ( eth_txck        ),
       .phy_rxd_i           ( eth_txd         ),
@@ -169,7 +169,7 @@ module vip_carfield_soc
       .phy_tx_clk_o        ( eth_rxck        ),
       .phy_txd_o           ( eth_rxd         ),
       .phy_tx_ctl_o        ( eth_rxctl       ),
-      .phy_resetn_o        ( eth_rstn        ),
+      .phy_resetn_o        ( eth_rstn        ),  
       .phy_intn_i          ( 1'b1            ),
       .phy_pme_i           ( 1'b1            ),
       .phy_mdio_i          ( 1'b0            ),
@@ -188,8 +188,8 @@ module vip_carfield_soc
       .DataWidth         ( DutCfg.AxiDataWidth  ),
       .IdWidth           ( DutCfg.AxiMstIdWidth ),
       .UserWidth         ( DutCfg.AxiUserWidth  ),
-      .axi_req_t         ( axi_slv_req_t        ),
-      .axi_rsp_t         ( axi_slv_rsp_t        ),
+      .axi_req_t         ( axi_mst_req_t        ),
+      .axi_rsp_t         ( axi_mst_rsp_t        ),
       .WarnUninitialized ( 1'b0                 ),
       .ClearErrOnAccess  ( 1'b1                 ),
       .ApplDelay         ( ClkPeriodJtag * TAppl ),
@@ -200,49 +200,51 @@ module vip_carfield_soc
       .axi_req_i          ( axi_req_mem       ),
       .axi_rsp_o          ( axi_rsp_mem       )
     );
-
+  
   initial begin
-   @(posedge clk);
-  $readmemh("rx_mem_init.vmem", i_rx_axi_sim_mem.mem);
-
-  @(posedge clk);
-  reg_drv_rx.send_write( 'h20000000, 32'h98001032, 'hf, reg_error); //lower 32bits of MAC address
-  @(posedge clk);
-
-  reg_drv_rx.send_write( 'h20000004, 32'h00002070, 'hf, reg_error); //upper 16bits of MAC address + other configuration set to false/0
-  @(posedge clk);
-
-  reg_drv_rx.send_write( 'h20000014, 32'h0, 'hf, reg_error ); // SRC_ADDR
-  @(posedge clk);
-
-  reg_drv_rx.send_write( 'h20000018, 32'h0, 'hf, reg_error); // DST_ADDR
-  @(posedge clk);
-
-  reg_drv_rx.send_write( 'h2000001c, 32'h40,'hf , reg_error); // Size in bytes
-  @(posedge clk);
-
-  reg_drv_rx.send_write( 'h20000020, 32'h5,'hf , reg_error); // src protocol
-  @(posedge clk);
-
-  reg_drv_rx.send_write( 'h20000024, 32'h0,'hf , reg_error); // dst protocol
-  @(posedge clk);
-
-  reg_drv_rx.send_write( 'h2000003c, 'h1, 'hf , reg_error);   // req valid
-  @(posedge clk);
-
-  reg_drv_rx.send_write( 'h20000044, 'h1, 'hf, reg_error);
-
-  while(1) begin
-    reg_drv_rx.send_read( 'h20000048, rx_rsp_valid, reg_error);
-    if(rx_rsp_valid) begin
-      reg_drv_rx.send_write( 'h20000044, 32'h0, 'hf , reg_error);
-      @(posedge clk);
-      break;
-      end
     @(posedge clk);
+    //$readmemh("target/sim/src/rx_mem_init.vmem", i_rx_axi_sim_mem.mem);
+    $readmemh("../stimuli/rx_mem_init.vmem", i_rx_axi_sim_mem.mem);
+    
+    @(posedge clk);
+    reg_drv_rx.send_write( 'h20000000, 32'h98001032, 'hf, reg_error); //lower 32bits of MAC address
+    @(posedge clk);
+    
+    reg_drv_rx.send_write( 'h20000004, 32'h00002070, 'hf, reg_error); //upper 16bits of MAC address + other configuration set to false/0
+    @(posedge clk);
+
+    reg_drv_rx.send_write( 'h20000014, 32'h0, 'hf, reg_error ); // SRC_ADDR  
+    @(posedge clk);
+    
+    reg_drv_rx.send_write( 'h20000018, 32'h0, 'hf, reg_error); // DST_ADDR
+    @(posedge clk);
+
+    reg_drv_rx.send_write( 'h2000001c, 32'h40,'hf , reg_error); // Size in bytes 
+    @(posedge clk);
+    
+    reg_drv_rx.send_write( 'h20000020, 32'h5,'hf , reg_error); // src protocol
+    @(posedge clk);
+
+    reg_drv_rx.send_write( 'h20000024, 32'h0,'hf , reg_error); // dst protocol
+    @(posedge clk);
+
+    reg_drv_rx.send_write( 'h2000003c, 'h1, 'hf , reg_error);   // req valid
+    @(posedge clk);
+
+    reg_drv_rx.send_write( 'h20000044, 'h1, 'hf, reg_error);   
+
+    while(1) begin
+      reg_drv_rx.send_read( 'h20000048, rx_rsp_valid, reg_error);
+      if(rx_rsp_valid) begin
+        reg_drv_rx.send_write( 'h20000044, 32'h0, 'hf , reg_error);  
+        @(posedge clk);
+        break;
+        end
+      @(posedge clk);
+    end
+    end
   end
-  end
-end
+  
   //////////////
   // Hyperbus //
   //////////////
@@ -365,11 +367,11 @@ module vip_carfield_soc_tristate import carfield_pkg::*; # (
   output logic [HypNumPhys-1:0][7:0]             hyper_dq_i,
   input  logic [HypNumPhys-1:0][7:0]             hyper_dq_o,
   input  logic [HypNumPhys-1:0]                  hyper_dq_oe_o,
-  input  logic [HypNumPhys-1:0]                  hyper_reset_no,
+  input  logic [HypNumPhys-1:0]                  hyper_reset_no, 
   // Ethernet pad IO
   input  logic                  eth_mdio_o,
   output logic                  eth_mdio_i,
-  input  logic                  eth_mdio_en,
+  input  logic                  eth_mdio_en,  
   // Hyperbus wires
   wire [HypNumPhys-1:0][HypNumChips-1:0] pad_hyper_csn,
   wire [HypNumPhys-1:0]                  pad_hyper_ck,
@@ -380,7 +382,7 @@ module vip_carfield_soc_tristate import carfield_pkg::*; # (
   // Ethernet wires
   wire                           eth_mdio
 );
-
+  
   pad_functional_pd padinst_eth_mdio (
     .OEN ( eth_mdio_en   ),
     .I   ( eth_mdio_o    ),

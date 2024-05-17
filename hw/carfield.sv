@@ -474,7 +474,7 @@ reg_rsp_t [NumAsyncRegSlv-1:0] ext_reg_async_slv_data_in;
 
 // External reg interface slaves (async)
 // Currently for PLL and Padframe, Ethernet
-for (genvar i = 0; i < 3; i++) begin : gen_ext_reg_assign
+for (genvar i = 0; i < 2; i++) begin : gen_ext_reg_assign
   assign ext_reg_async_slv_req_o[i]   = ext_reg_async_slv_req_out[i];
   assign ext_reg_async_slv_ack_in[i]  = ext_reg_async_slv_ack_i[i];
   assign ext_reg_async_slv_data_o[i]  = ext_reg_async_slv_data_out[i];
@@ -902,10 +902,12 @@ cheshire i_cheshire_wrap                 (
 assign hyper_isolate_req = car_regs_reg2hw.periph_isolate.q;
 
 `ifndef GEN_NO_HYPERBUS // bender-xilinx.mk
-  localparam int unsigned HyperClkDivValue = 5;
+  localparam int unsigned HyperDivWidth = 4;
+  localparam [HyperDivWidth-1:0] HyperClkDivValue = 4'b0101;
   logic hyp_clk;
+
 clk_int_div #(
-  .DIV_VALUE_WIDTH       ( 4                     ),
+  .DIV_VALUE_WIDTH       ( HyperDivWidth         ),
   .DEFAULT_DIV_VALUE     ( HyperClkDivValue      ),
   .ENABLE_CLOCK_IN_RESET ( 1'b0                  )
 ) i_hyper_clk_div (
@@ -1924,11 +1926,12 @@ mailbox_unit #(
 if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
   localparam int unsigned EthAsyncIdx = CarfieldRegBusSlvIdx.ethernet-NumSyncRegSlv;
   assign ethernet_isolate_req = car_regs_reg2hw.periph_isolate.q;
-  localparam int unsigned EthClkDivValue = 2;
-  logic                   eth_clk;
+  localparam int unsigned EthDivWidth = 4;
+  localparam [EthDivWidth-1:0] EthClkDivValue = 4'b10;
+  logic eth_clk;
 
   clk_int_div #(
-    .DIV_VALUE_WIDTH       ( 4               ),
+    .DIV_VALUE_WIDTH       ( EthDivWidth     ),
     .DEFAULT_DIV_VALUE     ( EthClkDivValue  ),
     .ENABLE_CLOCK_IN_RESET ( 0               )
   ) i_eth_rgmii_phy_clk_int_div (

@@ -106,7 +106,7 @@ module ethernet_wrap #(
   localparam bit RejectZeroTransfers          = 1'b1;
 
   axi_out_req_t axi_out_req, axi_out_isolate_req;
-  axi_out_resp_t axi_out_resp, axi_out_isolate_resp;
+  axi_out_resp_t axi_out_rsp, axi_out_isolate_resp;
 
   reg_req_t reg_bus_req;
   reg_rsp_t reg_bus_rsp;
@@ -151,7 +151,7 @@ module ethernet_wrap #(
     .slv_req_i            ( axi_out_isolate_req  ),
     .slv_resp_o           ( axi_out_isolate_resp ),
     .mst_req_o            ( axi_out_req          ),
-    .mst_resp_i           ( axi_out_resp         ),
+    .mst_resp_i           ( axi_out_rsp          ),
     .isolate_i            ( axi_isolate_sync     ),
     .isolated_o           ( axi_isolated_o       )
   );
