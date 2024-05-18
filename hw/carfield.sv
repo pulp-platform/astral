@@ -473,7 +473,7 @@ logic     [NumAsyncRegSlv-1:0] ext_reg_async_slv_ack_out;
 reg_rsp_t [NumAsyncRegSlv-1:0] ext_reg_async_slv_data_in;
 
 // External reg interface slaves (async)
-// Currently for PLL and Padframe, Ethernet
+// Currently for PLL and Padframe
 for (genvar i = 0; i < 2; i++) begin : gen_ext_reg_assign
   assign ext_reg_async_slv_req_o[i]   = ext_reg_async_slv_req_out[i];
   assign ext_reg_async_slv_ack_in[i]  = ext_reg_async_slv_ack_i[i];
