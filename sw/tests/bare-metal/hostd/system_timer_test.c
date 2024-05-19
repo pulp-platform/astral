@@ -27,8 +27,8 @@
 	} \
     } while (0)
 
-#define DUMMY_TIMER_CNT_GOLDEN_MIN 8000
-#define DUMMY_TIMER_CNT_GOLDEN_MAX 9000
+#define DUMMY_TIMER_CNT_GOLDEN_MIN 40000
+#define DUMMY_TIMER_CNT_GOLDEN_MAX 42000
 
 int main(void) {
 

@@ -220,7 +220,7 @@ pulpd-sw-build: pulpd-sw-init
 #are a user external to ETH, the symlink will not work. We will integrate the compilation flow ASAP.
 
 #.PHONY: spatzd-sw-build spatzd-sw-build: $(MAKE) -C $(SPATZD_MAKEDIR) BENDER=$(BENDER_PATH)
-#LLVM_INSTALL_DIR=$(LLVM_SPATZ_DIR) GCC_INSTALL_DIR=$(GCC_SPATZ_DIR) −B
+#LLVM_INSTALL_DIR=$(LLVM_SPATZ_DIR) GCC_INSTALL_DIR=$(GCC_SPATZ_DIR) ?B
 #SPATZ_CLUSTER_CFG=$(SPATZD_MAKEDIR)/cfg/carfield.hjson HTIF_SERVER=NO sw.vsim
 
 ###############
