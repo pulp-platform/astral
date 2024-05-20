@@ -610,6 +610,7 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   SpiHost           : 1,
   Gpio              : 1,
   Dma               : 1,
+  IOMMU             : 1,
   SerialLink        : CheshireSerialLinkEnable,
   Vga               : 0,
   AxiRt             : 1,
