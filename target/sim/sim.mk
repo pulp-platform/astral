@@ -53,6 +53,8 @@ ifeq ($(TECH_SIM), 1)
 	QUESTA_FLAGS += +nospecify
 	QUESTA_FLAGS += -sdfnoerror
 	QUESTA_FLAGS += -suppress 13271
+## TODO: this is a workaround to suppress sdf error! Fix it!
+	QUESTA_FLAGS += -sdfnoerror
 endif
 ifdef DEBUG
 	VOPT_FLAGS := $(QUESTA_FLAGS) +acc
