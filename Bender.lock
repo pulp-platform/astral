@@ -113,7 +113,7 @@ packages:
       Git: https://github.com/AlSaqr-platform/can_bus.git
     dependencies: []
   cheshire:
-    revision: d60b3fa7f5900c47201766ee91e2e3f2d618ddac
+    revision: 963d0a496de8330b3e797ed1bd7704df49e87020
     version: null
     source:
       Git: https://github.com/pulp-platform/cheshire.git
@@ -192,7 +192,7 @@ packages:
     - fpnew
     - tech_cells_generic
   cva6:
-    revision: dbaecc59b99e3bb4d89fed546d75080f39bfe4f1
+    revision: 2f0d702b58a07827d93ac13a3eed815b76ea4ffc
     version: null
     source:
       Git: https://github.com/pulp-platform/cva6.git
@@ -200,7 +200,6 @@ packages:
     - axi
     - common_cells
     - fpnew
-    - redundancy_cells
     - tech_cells_generic
   dyn_mem:
     revision: 480590062742230dc9bd4050358a15b4747bdf34
