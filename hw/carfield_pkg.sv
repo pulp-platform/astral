@@ -319,7 +319,6 @@ function automatic int unsigned gen_carfield_domains(islands_cfg_t island_cfg);
   if (island_cfg.spatz.enable   ) begin ret++; end
   if (island_cfg.pulp.enable    ) begin ret++; end
   if (island_cfg.secured.enable ) begin ret++; end
-  if (island_cfg.ethernet.enable) begin ret++; end
   return ret;
 endfunction
 
@@ -374,7 +373,6 @@ typedef struct packed {
   byte_bt secured;
   byte_bt safed;
   byte_bt periph;
-  byte_bt ethernet;
 } carfield_domain_idx_t;
 
 function automatic carfield_domain_idx_t gen_domain_idx(islands_cfg_t island_cfg);
@@ -386,7 +384,6 @@ function automatic carfield_domain_idx_t gen_domain_idx(islands_cfg_t island_cfg
   if (island_cfg.pulp.enable     ) begin ret.pulp    = i; i++; end
   if (island_cfg.spatz.enable    ) begin ret.spatz   = i; i++; end
   if (island_cfg.l2_port0.enable ) begin ret.l2      = i; i++; end
-  if (island_cfg.ethernet.enable ) begin ret.ethernet= i; i++; end
   return ret;
 endfunction
 

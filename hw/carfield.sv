@@ -902,20 +902,20 @@ cheshire i_cheshire_wrap                 (
 assign hyper_isolate_req = car_regs_reg2hw.periph_isolate.q;
 
 `ifndef GEN_NO_HYPERBUS // bender-xilinx.mk
-  localparam int unsigned HyperDivWidth = 4;
-  localparam logic [HyperDivWidth-1:0] HyperClkDivValue = 4'b0101;
+  localparam int unsigned HyperDivWidth = 20;
+  localparam int unsigned DefaultHyperClkDivValue = 2;
   logic hyp_clk;
 
 clk_int_div #(
-  .DIV_VALUE_WIDTH       ( HyperDivWidth         ),
-  .DEFAULT_DIV_VALUE     ( HyperClkDivValue      ),
-  .ENABLE_CLOCK_IN_RESET ( 1'b0                  )
+  .DIV_VALUE_WIDTH       ( HyperDivWidth            ),
+  .DEFAULT_DIV_VALUE     ( DefaultHyperClkDivValue  ),
+  .ENABLE_CLOCK_IN_RESET ( 1'b0                     )
 ) i_hyper_clk_div (
   .clk_i                 ( periph_clk            ),
   .rst_ni                ( periph_rst_n          ),
-  .en_i                  ( 1'b1                  ),
+  .en_i                  ( car_regs_reg2hw.hyperbus_clk_div_en.q    ),
   .test_mode_en_i        ( test_mode_i           ),
-  .div_i                 ( HyperClkDivValue      ),
+  .div_i                 ( car_regs_reg2hw.hyperbus_clk_div_value.q ),
   .div_valid_i           ( 1'b0                  ),
   .div_ready_o           (                       ),
   .clk_o                 ( hyp_clk               ),
@@ -1926,20 +1926,20 @@ mailbox_unit #(
 if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
   localparam int unsigned EthAsyncIdx = CarfieldRegBusSlvIdx.ethernet-NumSyncRegSlv;
   assign ethernet_isolate_req = car_regs_reg2hw.periph_isolate.q;
-  localparam int unsigned EthDivWidth = 4;
-  localparam logic [EthDivWidth-1:0] EthClkDivValue = 4'b0010;
+  localparam int unsigned EthDivWidth = 20;
+  localparam int unsigned DefaultEthClkDivValue = 2;
   logic eth_clk;
 
   clk_int_div #(
-    .DIV_VALUE_WIDTH       ( EthDivWidth     ),
-    .DEFAULT_DIV_VALUE     ( EthClkDivValue  ),
-    .ENABLE_CLOCK_IN_RESET ( 0               )
+    .DIV_VALUE_WIDTH       ( EthDivWidth            ),
+    .DEFAULT_DIV_VALUE     ( DefaultEthClkDivValue  ),
+    .ENABLE_CLOCK_IN_RESET ( 0                      )
   ) i_eth_rgmii_phy_clk_int_div (
     .clk_i          ( periph_clk            ),
     .rst_ni         ( periph_rst_n          ),
-    .en_i           ( 1'b1                  ),
+    .en_i           ( car_regs_reg2hw.eth_clk_div_en.q     ),
     .test_mode_en_i ( test_mode_i           ),
-    .div_i          ( EthClkDivValue        ),
+    .div_i          ( car_regs_reg2hw.eth_clk_div_value.q  ),
     .div_valid_i    ( 1'b0                  ),
     .div_ready_o    (                       ),
     .clk_o          ( eth_clk               ),
@@ -2039,8 +2039,8 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
 
   assign slave_isolate_req[PeriphsSlvIdx] = car_regs_reg2hw.periph_isolate.q;
   assign slave_isolated[PeriphsSlvIdx] = slave_isolated_rsp[PeriphsSlvIdx];
-  assign car_regs_hw2reg.periph_isolate_status.d = slave_isolated[PeriphsSlvIdx] |
-                                                   hyper_isolated_rsp | ethernet_isolated_rsp;
+  assign car_regs_hw2reg.periph_isolate_status.d = slave_isolated[PeriphsSlvIdx] &
+                                                   hyper_isolated_rsp & ethernet_isolated_rsp;
   assign car_regs_hw2reg.periph_isolate_status.de = 1'b1;
 
   carfield_axi_slv_req_t axi_d64_a48_peripherals_req;

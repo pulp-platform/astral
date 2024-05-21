@@ -33,12 +33,12 @@ module carfield_soc_fixture;
   localparam cheshire_cfg_t DutCfg = carfield_pkg::CarfieldCfgDefault;
   `CHESHIRE_TYPEDEF_ALL(, DutCfg)
 
-  localparam time         ClkPeriodSys  = 10ns; 
+  localparam time         ClkPeriodSys  = 10ns;
   localparam time         ClkPeriodJtag = 40ns;
-  localparam time         ClkPeriodPeri  = 2ns; 
+  localparam time         ClkPeriodPeriph  = 2ns;
   localparam time         ClkPeriodRtc  = 1000ns; // 1MHz RTC clock. Note: needs to equal
                                                   // `DutCfg.RTCFreq` for successful autonomous boot
-                                                  // (e.g., SPI)                              
+                                                  // (e.g., SPI)
   localparam int unsigned RstCycles     = 5;
   localparam real         TAppl         = 0.1;
   localparam real         TTest         = 0.9;
@@ -47,7 +47,7 @@ module carfield_soc_fixture;
   localparam int NumChips = 2;
 
   logic       clk;
-  logic       peri_clk;
+  logic       periph_clk;
   logic       rst_n;
   logic       test_mode;
   logic [1:0] boot_mode;
@@ -95,7 +95,7 @@ module carfield_soc_fixture;
   logic       eth_txck;
   logic [3:0] eth_txd;
   logic       eth_txctl;
-  logic       eth_rstn;  
+  logic       eth_rstn;
   logic       eth_mdio_i;
   logic       eth_mdio_o;
   logic       eth_mdio_en;
@@ -143,10 +143,10 @@ module carfield_soc_fixture;
   wire [NumPhys-1:0][7:0]           pad_hyper_dq;
 
   clk_rst_gen #(
-    .ClkPeriod    ( ClkPeriodPeri ),
-    .RstClkCycles ( RstCycles )
+    .ClkPeriod    ( ClkPeriodPeriph ),
+    .RstClkCycles ( RstCycles       )
   ) i_clk_rst_peri (
-    .clk_o  ( peri_clk   ),
+    .clk_o  ( periph_clk   ),
     .rst_no (  )
   );
 
@@ -158,7 +158,7 @@ module carfield_soc_fixture;
     .reg_rsp_t   ( reg_rsp_t )
   ) i_dut                       (
     .host_clk_i                 ( clk                       ),
-    .periph_clk_i               ( peri_clk                  ),
+    .periph_clk_i               ( periph_clk                ),
     .alt_clk_i                  ( clk                       ),
     .rt_clk_i                   ( rtc                       ),
     .pwr_on_rst_ni              ( rst_n                     ),
@@ -292,7 +292,7 @@ module carfield_soc_fixture;
     .axi_muxed_rsp ( axi_muxed_rsp ),
     .*
   );
-  
+
   wire       eth_mdio;
   // I/O to INOUT behavioral conversion for carfield's peripherals that require it
   vip_carfield_soc_tristate vip_tristate ( .* );
