@@ -130,11 +130,8 @@ sources:
     files:
       - tech/sourcecode/tc_clk.sv
       - tech/sourcecode/tc_sram.sv
-<<<<<<< HEAD
       - tech/sourcecode/configurable_delay.sv
       - target/synth/src/carfield_synth_wrap.sv
-=======
->>>>>>> 77abc1e (Integrating and instantiating dummy fll and RTL padframe into carfield_synth_wrap)
 
   - target: tech_sim
     files:
