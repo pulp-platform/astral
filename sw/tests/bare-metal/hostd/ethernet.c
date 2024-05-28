@@ -39,19 +39,36 @@ int main(void) {
 
   // Put SMP Hart to sleep
   if (hart_id() != 0) wfi();
-  
+
+
   int prio = 0x1;
   bool t;
   unsigned global_irq_en   = 0x00001808;
-  unsigned external_irq_en = 0x00000800;                                                                                                
+  unsigned external_irq_en = 0x00000800;
 
   asm volatile("csrw  mstatus, %0\n" : : "r"(global_irq_en  ));     // Set global interrupt enable in CVA6 csr
   asm volatile("csrw  mie, %0\n"     : : "r"(external_irq_en));     // Set external interrupt enable in CVA6 csr
-  
+
+  volatile uint64_t data_to_write[8] = {
+        0x1032207098001032,
+        0x3210E20020709800,
+        0x1716151413121110,
+        0x2726252423222120,
+        0x3736353433323130,
+        0x4746454443424140,
+        0x5756555453525150,
+        0x6766656463626160
+  };
+
+  // load data into mem
+  for (int i = 0; i < 8; ++i) {
+        volatile uint64_t *tx_addr = (volatile uint64_t*)(&__base_dram + i * sizeof(uint64_t));
+        *tx_addr = data_to_write[i];
+  }
+
   // PLIC setup
   mmio_region_t plic_base_addr = mmio_region_from_addr(&__base_plic);
   t = dif_rv_plic_init(plic_base_addr, &plic0);
-
   t = dif_rv_plic_irq_set_priority(&plic0, RX_IRQID, prio);
   t = dif_rv_plic_irq_set_enabled(&plic0, RX_IRQID, 0, kDifToggleEnabled);
   // wait til data arrives
@@ -78,6 +95,7 @@ int main(void) {
   // Enable DMA to move data
   *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_RSP_READY_OFFSET) = 0x1;
 
+  wfi();
   return 0;
 }
 
