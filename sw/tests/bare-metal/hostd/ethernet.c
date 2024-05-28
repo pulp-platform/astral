@@ -37,7 +37,12 @@ int main(void) {
 
   // Put SMP Hart to sleep
   if (hart_id() != 0) wfi();
+  
+  unsigned global_irq_en   = 0x00001808;
+  unsigned external_irq_en = 0x00000800;
 
+  asm volatile("csrw  mstatus, %0\n" : : "r"(global_irq_en  ));     // Set global interrupt enable in CVA6 csr
+  asm volatile("csrw  mie, %0\n"     : : "r"(external_irq_en));     // Set external interrupt enable in CVA6 csr
   // PLIC Setup
  *reg32(&__base_plic, RV_PLIC_PRIO83_REG_OFFSET) = 1;
  *reg32(&__base_plic, RV_PLIC_IE0_2_REG_OFFSET)  |= (1 << (RV_PLIC_IE0_2_E_83_BIT)); // Enable interrupt number ;
@@ -79,11 +84,8 @@ int main(void) {
   *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_REQ_VALID_OFFSET) = 0x0;
   // Enable DMA to move data
   *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_RSP_READY_OFFSET) = 0x1;
-  // Interrupt polling
-  while (!((*reg32(&__base_plic, RV_PLIC_IP_2_REG_OFFSET)) & (1 << RV_PLIC_IE0_2_E_83_BIT)));
 
-  printf ("Ethernet test pass...\n\r");
-
+  wfi();
   return 0;
 }
 
