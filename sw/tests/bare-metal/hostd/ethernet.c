@@ -15,8 +15,6 @@
 #include "util.h"
 
 static dif_rv_plic_t plic0;
-volatile uint32_t* const RV_PLIC_CC0 = (volatile uint32_t*)(__base_plic + RV_PLIC_CC0_REG_OFFSET);
-
 
 #define IRQID 83 // index of ethernet irq in the irq vector input to the PLIC
 
