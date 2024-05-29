@@ -15,7 +15,7 @@
 
 static dif_rv_plic_t plic0;
 
-#define RX_IRQID 83 // index of ethernet irq in the irq vector input to the PLIC 
+#define IRQID 83 // index of ethernet irq in the irq vector input to the PLIC
 
 #define MACLO_OFFSET                 0x0
 #define MACHI_OFFSET                 0x4
@@ -40,7 +40,6 @@ int main(void) {
   // Put SMP Hart to sleep
   if (hart_id() != 0) wfi();
 
-
   int prio = 0x1;
   bool t;
   unsigned global_irq_en   = 0x00001808;
@@ -48,6 +47,13 @@ int main(void) {
 
   asm volatile("csrw  mstatus, %0\n" : : "r"(global_irq_en  ));     // Set global interrupt enable in CVA6 csr
   asm volatile("csrw  mie, %0\n"     : : "r"(external_irq_en));     // Set external interrupt enable in CVA6 csr
+
+  // PLIC setup
+  mmio_region_t plic_base_addr = mmio_region_from_addr(&__base_plic);
+  t = dif_rv_plic_init(plic_base_addr, &plic0);
+
+  t = dif_rv_plic_irq_set_priority(&plic0, IRQID, prio);
+  t = dif_rv_plic_irq_set_enabled(&plic0, IRQID, 0, kDifToggleEnabled);
 
   volatile uint64_t data_to_write[8] = {
         0x1032207098001032,
