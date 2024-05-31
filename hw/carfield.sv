@@ -2540,13 +2540,11 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .AUEND_SDU                          (1'b0), // : in
       .AUR_SDU                            (1'b0), // : in
       .BIT_LOCKn                          (3'b0), // : in
-      .BUFFER_BUSY_SET                    (1'b0), // : in
       .CLCW_C_B                           (1'b0), // : in
       .CLCW_S_B                           (1'b0), // : in
       .CONF_REG_ACC_ACK                   (1'b1), // : in
       .CPDU_INPROGRESS                    (1'b0), // : in
       .EXT_OBT_CLK                        (1'b0), // : in
-      .HPC_LLC_CTRL_REG                   (32'b0), // : in
       .INT_PPS_IN                         (1'b0), // : in
       .RFAVN                              (1'b0), // : in
       .SDU_WRONG_LENGTH                   (1'b0), // : in
