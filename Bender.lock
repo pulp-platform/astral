@@ -113,7 +113,7 @@ packages:
       Git: https://github.com/AlSaqr-platform/can_bus.git
     dependencies: []
   riscv-iommu:
-    revision: 7f7a73b268b4e64c9278f29d910a114f58209945
+    revision: 26ae5a84468d3bf8c888340b12fe592b112c706d
     version: null
     source:
       Git: https://github.com/zero-day-labs/riscv-iommu
@@ -122,7 +122,7 @@ packages:
     - axi
     - register_interface
   cheshire:
-    revision: 3e1a63c9c19866eed13400d4fe797fee9d77c2fc
+    revision: 9bf4f288060b17e2293537e3c572d2290c8cab98
     version: null
     source:
       Git: https://github.com/pulp-platform/cheshire.git
@@ -378,7 +378,7 @@ packages:
     - common_cells
     - common_verification
   opentitan:
-    revision: faca6f28e20195e9b56eb822c58bec4a3a19dd4f
+    revision: 1466a339775f62ebec9fababe2859462bf9198b3
     version: null
     source:
       Git: https://github.com/pulp-platform/opentitan.git
