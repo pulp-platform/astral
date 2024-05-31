@@ -145,6 +145,9 @@ module carfield
   // TCTM Interface
   output logic                                        ptme_clk_o,
   output logic                                        ptme_enc_o,
+  input  logic                                        tc_active,
+  input  logic                                        tc_clock,
+  input  logic                                        tc_data,
 `ifdef GEN_NO_HYPERBUS
   // LLC interface
   output logic [LlcArWidth-1:0] llc_ar_data,
@@ -2548,9 +2551,9 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .RFAVN                              (1'b0), // : in
       .SDU_WRONG_LENGTH                   (1'b0), // : in
       .SYNC_RST_N                         (1'b1), // : in
-      .TC_ACTIVE                          (1'b0), // : in
-      .TC_CLOCK                           (1'b0), // : in
-      .TC_DATA                            (1'b0), // : in
+      .TC_ACTIVE                          (tc_active), // : in
+      .TC_CLOCK                           (tc_clock), // : in
+      .TC_DATA                            (tc_data), // : in
       .TME_CLCW_FSR_DAT_FROM_REM_PDEC_SEC (1'b0), // : in
       .TME_ENCR_UNENC_CLK                 (1'b0), // : in
       .TME_ENCR_UNENC_OUT                 (1'b0), // : in
