@@ -289,7 +289,7 @@ spatzd-hw-init:
 ## Generate Cheshire HW. This target has a prerequisite, i.e. the PLIC and serial link
 ## configurations must be chosen before generating the hardware.
 .PHONY: chs-hw-init
-chs-hw-init: update_plic update_serial_link 
+chs-hw-init: update_plic update_serial_link
 	$(MAKE) -B chs-hw-all
 
 ##############
