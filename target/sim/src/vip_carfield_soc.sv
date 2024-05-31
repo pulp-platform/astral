@@ -66,7 +66,10 @@ module vip_carfield_soc
   output axi_slv_ext_req_t axi_muxed_req,
   input  axi_slv_ext_rsp_t axi_muxed_rsp,
   input logic ptme_clk_i,
-  input logic ptme_enc_i
+  input logic ptme_enc_i,
+  output logic tc_active,
+  output logic tc_clk,
+  output logic tc_data
 );
 
   `include "cheshire/typedef.svh"
@@ -369,11 +372,23 @@ end
     .mst_resp_i ( axi_muxed_rsp )
   );
 
+  /*
   PTME_EMULATOR i_ptme_emulator (
     .Reset_N ( rst_n      ),
     .CADUClk ( ptme_clk_i ),
     .CADUOut ( ptme_enc_i )
   );
+  */
+
+  tb_MuSA_compact i_tb_MuSA_compact (
+      .CADUClk   ( ptme_clk_i),
+      .CADUOut   ( ptme_enc_i),
+      .RST_BOARD ( rst_n),
+      .TCA       ( tc_active),
+      .TCC       ( tc_clk),
+      .TCS       ( tc_data)
+   );
+
 
 endmodule
 
