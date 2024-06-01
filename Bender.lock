@@ -170,8 +170,8 @@ packages:
     dependencies:
     - hci
   common_cells:
-    revision: f4d6406070d8e7767e4e9a433f11b039859f03a1
-    version: null
+    revision: 0d67563b6b592549542544f1abc0f43e5d4ee8b4
+    version: 1.35.0
     source:
       Git: https://github.com/pulp-platform/common_cells.git
     dependencies:
@@ -193,7 +193,7 @@ packages:
     - fpnew
     - tech_cells_generic
   cva6:
-    revision: 25c431b449d9b1760c744af74a6c84d55872f922
+    revision: dbaecc59b99e3bb4d89fed546d75080f39bfe4f1
     version: null
     source:
       Git: https://github.com/pulp-platform/cva6.git
@@ -201,7 +201,6 @@ packages:
     - axi
     - common_cells
     - fpnew
-    - redundancy_cells
     - tech_cells_generic
   dyn_mem:
     revision: 480590062742230dc9bd4050358a15b4747bdf34
@@ -340,7 +339,7 @@ packages:
     dependencies:
     - common_cells
   neureka:
-    revision: 6221fd4d17809166333ace71aec37b58ac28ce72
+    revision: 4f201c238c7dd0c1f84306f40d66ebdaa8589307
     version: null
     source:
       Git: https://github.com/pulp-platform/neureka.git
@@ -358,7 +357,7 @@ packages:
     - common_cells
     - common_verification
   opentitan:
-    revision: faca6f28e20195e9b56eb822c58bec4a3a19dd4f
+    revision: 3682dfcc08281ff6de5bf629368ab612fd17f0de
     version: null
     source:
       Git: https://github.com/pulp-platform/opentitan.git
@@ -396,7 +395,7 @@ packages:
     - idma
     - register_interface
   pulp_cluster:
-    revision: 1a167ec4ec46fa4a0c3d054b1213c0e6bc15d075
+    revision: e7a99bb56e3eb57c115c12f0719ec9d9fb4ababa
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp_cluster.git
@@ -560,5 +559,5 @@ packages:
     revision: cc4068a0ccb7691cd062b809c34b2304e7fbfa36
     version: null
     source:
-      Git: https://github.com/yvantor/ibex.git
+      Git: git@github.com:yvantor/ibex.git
     dependencies: []
