@@ -113,7 +113,7 @@ packages:
       Git: https://github.com/AlSaqr-platform/can_bus.git
     dependencies: []
   cheshire:
-    revision: d6274a52dab68d12765b64d670d528774eb36c2c
+    revision: 32d5ced2ad6b71a6875b8f0ea54058fdf520dba1
     version: null
     source:
       Git: https://github.com/pulp-platform/cheshire.git
@@ -132,6 +132,7 @@ packages:
     - idma
     - irq_router
     - opentitan_peripherals
+    - pulp-ethernet
     - redundancy_cells
     - register_interface
     - riscv-dbg
@@ -192,7 +193,7 @@ packages:
     - fpnew
     - tech_cells_generic
   cva6:
-    revision: 2f0d702b58a07827d93ac13a3eed815b76ea4ffc
+    revision: 25c431b449d9b1760c744af74a6c84d55872f922
     version: null
     source:
       Git: https://github.com/pulp-platform/cva6.git
@@ -200,6 +201,7 @@ packages:
     - axi
     - common_cells
     - fpnew
+    - redundancy_cells
     - tech_cells_generic
   dyn_mem:
     revision: 480590062742230dc9bd4050358a15b4747bdf34
@@ -382,13 +384,17 @@ packages:
     dependencies:
     - axi_slice
   pulp-ethernet:
-    revision: bdc8031ab270a49da28df269266ce9ab9a133636
+    revision: bf5fc0055a4d3258361e38ee977566fa312570f0
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp-ethernet.git
     dependencies:
     - axi
+    - axi_stream
+    - common_cells
     - common_verification
+    - idma
+    - register_interface
   pulp_cluster:
     revision: 1a167ec4ec46fa4a0c3d054b1213c0e6bc15d075
     version: null
