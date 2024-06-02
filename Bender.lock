@@ -193,7 +193,7 @@ packages:
     - fpnew
     - tech_cells_generic
   cva6:
-    revision: dbaecc59b99e3bb4d89fed546d75080f39bfe4f1
+    revision: 8ccc3ff4d5dd51278d4af2b1e587b760a8e52b0d
     version: null
     source:
       Git: https://github.com/pulp-platform/cva6.git
@@ -201,6 +201,7 @@ packages:
     - axi
     - common_cells
     - fpnew
+    - redundancy_cells
     - tech_cells_generic
   dyn_mem:
     revision: 480590062742230dc9bd4050358a15b4747bdf34
@@ -436,7 +437,7 @@ packages:
     - hwpe-stream
     - tech_cells_generic
   redundancy_cells:
-    revision: c37bdb47339bf70e8323de8df14ea8bbeafb6583
+    revision: c44ff73521186d2bc1dd77a17664539a3b3e2406
     version: null
     source:
       Git: https://github.com/pulp-platform/redundancy_cells.git
