@@ -1320,7 +1320,7 @@ localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
   DmaNumOutstandingBursts: 8,
   DmaBurstLength: 256,
   NumMstPeriphs: 1,
-  NumSlvPeriphs: 11,
+  NumSlvPeriphs: 12,
   ClusterAlias: 1,
   ClusterAliasBase: 'h0,
   NumSyncStages: 3,

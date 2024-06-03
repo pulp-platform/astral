@@ -237,14 +237,17 @@ packages:
     dependencies:
     - common_cells
   hci:
-    revision: d31af36ebcaf2196fb51676b40782aa8cbd9cc69
+    revision: 47a4ec1424cb7cf4336c917039227efbb1a6f39e
     version: null
     source:
       Git: https://github.com/pulp-platform/hci.git
     dependencies:
     - cluster_interconnect
+    - common_cells
     - hwpe-stream
     - l2_tcdm_hybrid_interco
+    - redundancy_cells
+    - register_interface
   hier-icache:
     revision: 2886cb2a46cea3e2bd2d979b505d88fadfbe150c
     version: null
@@ -338,7 +341,7 @@ packages:
     dependencies:
     - common_cells
   neureka:
-    revision: 6221fd4d17809166333ace71aec37b58ac28ce72
+    revision: d6ef85f743f78133b9000c3d36203854b18fd030
     version: null
     source:
       Git: https://github.com/pulp-platform/neureka.git
@@ -346,6 +349,7 @@ packages:
     - hci
     - hwpe-ctrl
     - hwpe-stream
+    - register_interface
     - zeroriscy
   obi:
     revision: 1aa411df145c4ebdd61f8fed4d003c33f7b20636
@@ -390,7 +394,7 @@ packages:
     - axi
     - common_verification
   pulp_cluster:
-    revision: 1a167ec4ec46fa4a0c3d054b1213c0e6bc15d075
+    revision: 91d17bcc8e7a2a0d89232c35236f562e685dffbb
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp_cluster.git
@@ -418,7 +422,7 @@ packages:
     - tech_cells_generic
     - timer_unit
   redmule:
-    revision: 60ba008c339ec70b5ffa7120bec2cbf5a8f53c99
+    revision: 5e08ee9ebee249c111f952d97121fe19808ae7a2
     version: null
     source:
       Git: https://github.com/pulp-platform/redmule.git
@@ -429,6 +433,7 @@ packages:
     - hci
     - hwpe-ctrl
     - hwpe-stream
+    - register_interface
     - tech_cells_generic
   redundancy_cells:
     revision: c37bdb47339bf70e8323de8df14ea8bbeafb6583
