@@ -208,6 +208,9 @@ module vip_carfield_soc
     );
 
   initial begin
+   
+    @(posedge clk);
+    $readmemh("../stimuli/eth_frame.vmem", i_rx_axi_sim_mem.mem);
 
     @(posedge eth_rx_irq);
     @(posedge periph_clk);
