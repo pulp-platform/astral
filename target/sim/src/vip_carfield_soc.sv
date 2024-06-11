@@ -96,7 +96,6 @@ module vip_carfield_soc
     localparam RegAw              = 32;
     localparam RegDw              = 32;
     localparam time ClkPeriodEth  = 4ns;
-    localparam time ClkPeriodDma  = 2ns;
 
     logic eth_clk, dma_clk;
     logic reg_error;
@@ -105,8 +104,8 @@ module vip_carfield_soc
     typedef reg_test::reg_driver #(
       .AW(RegAw),
       .DW(RegDw),
-      .TT(ClkPeriodJtag * TTest),
-      .TA(ClkPeriodJtag * TAppl)
+      .TT(ClkPeriodSys * TTest),
+      .TA(ClkPeriodSys * TAppl)
     ) reg_bus_drv_t;
 
     REG_BUS #(
@@ -114,14 +113,6 @@ module vip_carfield_soc
       .ADDR_WIDTH(RegAw)
     ) reg_bus_rx (
       .clk_i(clk)
-    );
-
-    clk_rst_gen #(
-      .ClkPeriod    ( ClkPeriodDma ),
-      .RstClkCycles ( RstCycles    )
-    ) i_clk_rst_dma (
-      .clk_o  ( dma_clk   ),
-      .rst_no (           )
     );
 
     clk_rst_gen #(
@@ -160,7 +151,7 @@ module vip_carfield_soc
       .reg_req_t           ( reg_req_t            ),
       .reg_rsp_t           ( reg_rsp_t            )
     ) i_rx_eth_idma_wrap (
-      .clk_i               ( dma_clk         ),
+      .clk_i               ( clk             ),
       .rst_ni              ( rst_n           ),
       .eth_clk_i           ( eth_clk         ),
       .phy_rx_clk_i        ( eth_txck        ),
@@ -192,8 +183,8 @@ module vip_carfield_soc
       .axi_rsp_t         ( axi_mst_rsp_t        ),
       .WarnUninitialized ( 1'b0                 ),
       .ClearErrOnAccess  ( 1'b1                 ),
-      .ApplDelay         ( ClkPeriodJtag * TAppl ),
-      .AcqDelay          ( ClkPeriodJtag * TTest )
+      .ApplDelay         ( ClkPeriodSys * TAppl ),
+      .AcqDelay          ( ClkPeriodSys * TTest )
     ) i_rx_axi_sim_mem (
       .clk_i              ( clk               ),
       .rst_ni             ( rst_n             ),
@@ -203,7 +194,6 @@ module vip_carfield_soc
 
   initial begin
     @(posedge clk);
-    //$readmemh("target/sim/src/rx_mem_init.vmem", i_rx_axi_sim_mem.mem);
     $readmemh("../stimuli/rx_mem_init.vmem", i_rx_axi_sim_mem.mem);
 
     @(posedge clk);
@@ -231,7 +221,10 @@ module vip_carfield_soc
     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_REQ_VALID_OFFSET, 'h1, 'hf , reg_error);   // req valid
     @(posedge clk);
 
+    @(posedge clk);
     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_RSP_READY_OFFSET, 'h1, 'hf, reg_error);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_REQ_VALID_OFFSET, 'h0, 'hf , reg_error);   // req valid
 
     while(1) begin
       reg_drv_rx.send_read( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_RSP_VALID_OFFSET, rx_rsp_valid, reg_error);
@@ -242,6 +235,7 @@ module vip_carfield_soc
         end
       @(posedge clk);
     end
+    repeat(160) @(posedge clk); // adjust based on num_bytes to write into rx sim mem
     end
   end
 

@@ -68,7 +68,7 @@ int main(void) {
 
   // load data into mem
   for (int i = 0; i < 8; ++i) {
-        volatile uint64_t *tx_addr = (volatile uint64_t*)(&__base_dram + i * sizeof(uint64_t));
+        volatile uint64_t *tx_addr = (volatile uint64_t*)(0x14000000 + i * sizeof(uint64_t));
         *tx_addr = data_to_write[i];
   }
 
@@ -77,7 +77,7 @@ int main(void) {
   // High 16 bit Mac Address
   *reg32(CAR_ETHERNET_BASE_ADDR, MACHI_OFFSET)          = 0x00002070;
   // DMA Source Address
-  *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_SRC_ADDR_OFFSET)  = &__base_dram;
+  *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_SRC_ADDR_OFFSET)  = 0x14000000;
   // DMA Destination Address
   *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_DST_ADDR_OFFSET)  = 0x0;
   // Data length
