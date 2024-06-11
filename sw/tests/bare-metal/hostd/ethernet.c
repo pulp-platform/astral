@@ -15,7 +15,7 @@
 
 static dif_rv_plic_t plic0;
 
-#define IRQID 83 // index of ethernet irq in the irq vector input to the PLIC
+#define RX_IRQID 83 // index of ethernet irq in the irq vector input to the PLIC 
 
 #define MACLO_OFFSET                 0x0
 #define MACHI_OFFSET                 0x4
@@ -43,7 +43,7 @@ int main(void) {
   int prio = 0x1;
   bool t;
   unsigned global_irq_en   = 0x00001808;
-  unsigned external_irq_en = 0x00000800;
+  unsigned external_irq_en = 0x00000800;                                                                                                
 
   asm volatile("csrw  mstatus, %0\n" : : "r"(global_irq_en  ));     // Set global interrupt enable in CVA6 csr
   asm volatile("csrw  mie, %0\n"     : : "r"(external_irq_en));     // Set external interrupt enable in CVA6 csr
@@ -51,41 +51,26 @@ int main(void) {
   // PLIC setup
   mmio_region_t plic_base_addr = mmio_region_from_addr(&__base_plic);
   t = dif_rv_plic_init(plic_base_addr, &plic0);
-    
-  t = dif_rv_plic_irq_set_priority(&plic0, IRQID, prio);
-  t = dif_rv_plic_irq_set_enabled(&plic0, IRQID, 0, kDifToggleEnabled);
-    
-  volatile uint64_t data_to_write[8] = {
-        0x1032207098001032,
-        0x3210E20020709800,
-        0x1716151413121110,
-        0x2726252423222120,
-        0x3736353433323130,
-        0x4746454443424140,
-        0x5756555453525150,
-        0x6766656463626160
-  };
 
-  // load data into mem
-  for (int i = 0; i < 8; ++i) {
-        volatile uint64_t *tx_addr = (volatile uint64_t*)(0x14000000 + i * sizeof(uint64_t));
-        *tx_addr = data_to_write[i];
-  }
-
+  t = dif_rv_plic_irq_set_priority(&plic0, RX_IRQID, prio);
+  t = dif_rv_plic_irq_set_enabled(&plic0, RX_IRQID, 0, kDifToggleEnabled);
+  // wait til data arrives
+  wfi();
+  // configure to Receive data
   // Low 32 bit MAC Address
   *reg32(CAR_ETHERNET_BASE_ADDR, MACLO_OFFSET)          = 0x98001032;
   // High 16 bit Mac Address
   *reg32(CAR_ETHERNET_BASE_ADDR, MACHI_OFFSET)          = 0x00002070;
   // DMA Source Address
-  *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_SRC_ADDR_OFFSET)  = 0x14000000;
+  *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_SRC_ADDR_OFFSET)  = 0x0;
   // DMA Destination Address
-  *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_DST_ADDR_OFFSET)  = 0x0;
+  *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_DST_ADDR_OFFSET)  = 0x14000000;
   // Data length
   *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_LENGTH_OFFSET)    = 0x40;
   // Source Protocol
-  *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_SRC_PROTO_OFFSET) = 0x0;
+  *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_SRC_PROTO_OFFSET) = 0x5;
   // Destination Protocol
-  *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_DST_PROTO_OFFSET) = 0x5;
+  *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_DST_PROTO_OFFSET) = 0x0;
   // Validate Request to DMA
   *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_REQ_VALID_OFFSET) = 0x1;
   // Stop accepting new request
@@ -93,7 +78,6 @@ int main(void) {
   // Enable DMA to move data
   *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_RSP_READY_OFFSET) = 0x1;
 
-  wfi();
   return 0;
 }
 

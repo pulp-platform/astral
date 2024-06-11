@@ -26,7 +26,7 @@ dependencies:
   can_bus:            { git: https://github.com/AlSaqr-platform/can_bus.git,            rev: 0ec0bf8b7dab6d5e4b3f7ec58338a8efee066379 } # branch: pulp
   spatz:              { git: https://github.com/pulp-platform/spatz.git,                rev: 98de97f24fe42675c9b4a8cc08354a03af57400a } # branch: yt/astral
   common_cells:       { git: https://github.com/pulp-platform/common_cells.git,         rev: f4d6406070d8e7767e4e9a433f11b039859f03a1 } # branch: master        
-  pulp-ethernet:      { git: https://github.com/pulp-platform/pulp-ethernet.git,        rev: bf5fc0055a4d3258361e38ee977566fa312570f0 } # branch: cl/eth_idma
+  pulp-ethernet:      { git: https://github.com/pulp-platform/pulp-ethernet.git,        rev: a8a23e632d8abe104122950dafa2446e92598840 } # branch: cl/eth_idma
   riscv-dbg:          { git: https://github.com/pulp-platform/riscv-dbg.git,            version: =0.8.0                               }
 
 workspace:

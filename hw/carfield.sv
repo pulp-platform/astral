@@ -2021,7 +2021,7 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
 end else begin : gen_no_ethernet
   assign eth_clk                 = '0;
   assign ethernet_isolate_req    = '0;
-  assign car_eth_intr            = '0;
+  assign car_eth_intr         = '0;
   assign eth_md_o                = '0;
   assign eth_md_oe               = '0;
   assign eth_mdc_o               = '0;

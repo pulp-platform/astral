@@ -382,7 +382,7 @@ packages:
     dependencies:
     - axi_slice
   pulp-ethernet:
-    revision: bf5fc0055a4d3258361e38ee977566fa312570f0
+    revision: a8a23e632d8abe104122950dafa2446e92598840
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp-ethernet.git

@@ -112,7 +112,7 @@ module ethernet_wrap #(
   reg_rsp_t reg_bus_rsp;
 
   logic axi_isolate_sync;
-  logic eth_irq;
+  logic eth_rx_irq;
 
   // isolate sync
   sync #(
@@ -128,11 +128,11 @@ module ethernet_wrap #(
   sync #(
     .STAGES     ( SyncStages ),
     .ResetValue ( 1'b0       )
-  ) i_irq_sync (
+  ) i_rx_irq_sync (
     .clk_i,
     .rst_ni   ( pwr_on_rst_ni ),
-    .serial_i ( eth_irq       ),
-    .serial_o ( eth_irq_o     )
+    .serial_i ( eth_rx_irq    ),
+    .serial_o ( eth_irq_o  )
   );
 
   axi_isolate            #(
@@ -244,8 +244,7 @@ module ethernet_wrap #(
     .testmode_i          ( testmode_i          ),
     .axi_req_o           ( axi_out_isolate_req  ),
     .axi_rsp_i           ( axi_out_isolate_resp ),
-    .idma_busy_o         (                      ),
-    .eth_irq_o           ( eth_irq              )
+    .eth_rx_irq_o        ( eth_rx_irq           )
   );
 
 endmodule: ethernet_wrap
