@@ -190,7 +190,7 @@ clean-venv:
 
 .PHONY: show-venv
 show-venv: venv
-	@$(VENV)/python -c "import sys; print('Python ' + sys.version.replace('\n',''))"
+	@$(VENV)/$(PYTHON) -c "import sys; print('Python ' + sys.version.replace('\n',''))"
 	@$(VENV)/pip --version
 	@echo venv: $(VENVDIR)
 
@@ -242,9 +242,9 @@ endif
 # Interactive shells
 #
 
-.PHONY: python
+.PHONY: $(PYTHON)
 python: venv
-	exec $(VENV)/python
+	exec $(VENV)/$(PYTHON)
 
 .PHONY: ipython
 ipython: $(VENV)/ipython

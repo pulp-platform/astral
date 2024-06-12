@@ -247,19 +247,19 @@ regenerate_soc_regs: $(CAR_ROOT)/hw/regs/carfield_reg_pkg.sv $(CAR_ROOT)/hw/regs
 
 .PHONY: $(CAR_ROOT)/hw/regs/carfield_regs.hjson
 $(CAR_ROOT)/hw/regs/carfield_regs.hjson: hw/regs/carfield_regs.csv | venv
-	$(VENV)/python ./scripts/csv_to_json.py --input $< --output $@
+	$(VENV)/$(PYTHON) ./scripts/csv_to_json.py --input $< --output $@
 
 .PHONY: $(CAR_ROOT)/hw/regs/carfield_reg_pkg.sv hw/regs/carfield_reg_top.sv
 $(CAR_ROOT)/hw/regs/carfield_reg_pkg.sv $(CAR_ROOT)/hw/regs/carfield_reg_top.sv: $(CAR_ROOT)/hw/regs/carfield_regs.hjson | venv
-	$(VENV)/python utils/reggen/regtool.py -r $< --outdir $(dir $@)
+	$(VENV)/$(PYTHON) utils/reggen/regtool.py -r $< --outdir $(dir $@)
 
 .PHONY: $(CAR_SW_DIR)/include/regs/soc_ctrl.h
 $(CAR_SW_DIR)/include/regs/soc_ctrl.h: $(CAR_ROOT)/hw/regs/carfield_regs.hjson | venv
-	$(VENV)/python utils/reggen/regtool.py -D $<  > $@
+	$(VENV)/$(PYTHON) utils/reggen/regtool.py -D $<  > $@
 
 .PHONY: $(CAR_SW_DIR)/hw/regs/pcr.md
 $(CAR_HW_DIR)/regs/pcr.md: $(CAR_ROOT)/hw/regs/carfield_regs.hjson | venv
-	$(VENV)/python utils/reggen/regtool.py -d $<  > $@
+	$(VENV)/$(PYTHON) utils/reggen/regtool.py -d $<  > $@
 
 ## Update host domain PLIC and CLINT interrupt controllers configuration. The default configuration
 ## in cheshire allows for one interruptible hart. When the number of external interruptible harts is
