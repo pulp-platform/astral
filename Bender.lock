@@ -517,6 +517,18 @@ packages:
     - register_interface
     - riscv-dbg
     - tech_cells_generic
+  spw:
+    revision: fa8d5f82c1bc38e82c8b9961fedeab46758ebaf7
+    version: null
+    source:
+      Git: git@github.com:AstralPlatform/spacewire.git
+    dependencies:
+    - axi
+    - axi_stream
+    - common_cells
+    - idma
+    - register_interface
+    - tech_cells_generic
   tagger:
     revision: b288376b65b6bbd5feea196bb3c220f783d96e29
     version: null

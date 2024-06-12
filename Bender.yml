@@ -28,6 +28,7 @@ dependencies:
   common_cells:       { git: https://github.com/pulp-platform/common_cells.git,         rev: f4d6406070d8e7767e4e9a433f11b039859f03a1 } # branch: master
   pulp-ethernet:      { git: https://github.com/pulp-platform/pulp-ethernet.git,        rev: bdc8031ab270a49da28df269266ce9ab9a133636 } # branch: carfield
   riscv-dbg:          { git: https://github.com/pulp-platform/riscv-dbg.git,            version: =0.8.0                               }
+  spw:                { git: git@github.com:AstralPlatform/spacewire.git,           rev: devel                                    }
 
 workspace:
   package_links:
@@ -40,6 +41,10 @@ workspace:
 sources:
   # Configurations
     # "Small" Astral configuration
+  - target: carfield_l2dual_secure_pulp_periph_can_spw
+    files:
+      - hw/configs/carfield_l2dual_secure_pulp_periph_can_spw.sv
+
   - target: carfield_l2dual_secure_pulp_periph_can
     files:
       - hw/configs/carfield_l2dual_secure_pulp_periph_can.sv
