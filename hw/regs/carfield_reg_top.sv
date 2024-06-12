@@ -10,7 +10,7 @@
 module carfield_reg_top #(
   parameter type reg_req_t = logic,
   parameter type reg_rsp_t = logic,
-  parameter int AW = 8
+  parameter int AW = 9
 ) (
   input logic clk_i,
   input logic rst_ni,
@@ -237,6 +237,20 @@ module carfield_reg_top #(
   logic [19:0] eth_mdio_clk_div_value_qs;
   logic [19:0] eth_mdio_clk_div_value_wd;
   logic eth_mdio_clk_div_value_we;
+  logic spw_clk_divider_enable_qs;
+  logic spw_clk_divider_enable_wd;
+  logic spw_clk_divider_enable_we;
+  logic [5:0] spw_clk_division_value_qs;
+  logic [5:0] spw_clk_division_value_wd;
+  logic spw_clk_division_value_we;
+  logic spw_clk_division_valid_qs;
+  logic spw_clk_division_valid_wd;
+  logic spw_clk_division_valid_we;
+  logic spw_clk_division_ready_qs;
+  logic spw_isolate_qs;
+  logic spw_isolate_wd;
+  logic spw_isolate_we;
+  logic spw_irq_qs;
 
   // Register instances
   // R[version0]: V(False)
@@ -1830,9 +1844,169 @@ module carfield_reg_top #(
   );
 
 
+  // R[spw_clk_divider_enable]: V(False)
+
+  prim_subreg #(
+    .DW      (1),
+    .SWACCESS("RW"),
+    .RESVAL  (1'h0)
+  ) u_spw_clk_divider_enable (
+    .clk_i   (clk_i    ),
+    .rst_ni  (rst_ni  ),
+
+    // from register interface
+    .we     (spw_clk_divider_enable_we),
+    .wd     (spw_clk_divider_enable_wd),
+
+    // from internal hardware
+    .de     (1'b0),
+    .d      ('0  ),
+
+    // to internal hardware
+    .qe     (),
+    .q      (reg2hw.spw_clk_divider_enable.q ),
+
+    // to register interface (read)
+    .qs     (spw_clk_divider_enable_qs)
+  );
 
 
-  logic [62:0] addr_hit;
+  // R[spw_clk_division_value]: V(False)
+
+  prim_subreg #(
+    .DW      (6),
+    .SWACCESS("RW"),
+    .RESVAL  (6'h5)
+  ) u_spw_clk_division_value (
+    .clk_i   (clk_i    ),
+    .rst_ni  (rst_ni  ),
+
+    // from register interface
+    .we     (spw_clk_division_value_we),
+    .wd     (spw_clk_division_value_wd),
+
+    // from internal hardware
+    .de     (1'b0),
+    .d      ('0  ),
+
+    // to internal hardware
+    .qe     (),
+    .q      (reg2hw.spw_clk_division_value.q ),
+
+    // to register interface (read)
+    .qs     (spw_clk_division_value_qs)
+  );
+
+
+  // R[spw_clk_division_valid]: V(False)
+
+  prim_subreg #(
+    .DW      (1),
+    .SWACCESS("RW"),
+    .RESVAL  (1'h0)
+  ) u_spw_clk_division_valid (
+    .clk_i   (clk_i    ),
+    .rst_ni  (rst_ni  ),
+
+    // from register interface
+    .we     (spw_clk_division_valid_we),
+    .wd     (spw_clk_division_valid_wd),
+
+    // from internal hardware
+    .de     (1'b0),
+    .d      ('0  ),
+
+    // to internal hardware
+    .qe     (),
+    .q      (reg2hw.spw_clk_division_valid.q ),
+
+    // to register interface (read)
+    .qs     (spw_clk_division_valid_qs)
+  );
+
+
+  // R[spw_clk_division_ready]: V(False)
+
+  prim_subreg #(
+    .DW      (1),
+    .SWACCESS("RO"),
+    .RESVAL  (1'h0)
+  ) u_spw_clk_division_ready (
+    .clk_i   (clk_i    ),
+    .rst_ni  (rst_ni  ),
+
+    .we     (1'b0),
+    .wd     ('0  ),
+
+    // from internal hardware
+    .de     (hw2reg.spw_clk_division_ready.de),
+    .d      (hw2reg.spw_clk_division_ready.d ),
+
+    // to internal hardware
+    .qe     (),
+    .q      (reg2hw.spw_clk_division_ready.q ),
+
+    // to register interface (read)
+    .qs     (spw_clk_division_ready_qs)
+  );
+
+
+  // R[spw_isolate]: V(False)
+
+  prim_subreg #(
+    .DW      (1),
+    .SWACCESS("RW"),
+    .RESVAL  (1'h0)
+  ) u_spw_isolate (
+    .clk_i   (clk_i    ),
+    .rst_ni  (rst_ni  ),
+
+    // from register interface
+    .we     (spw_isolate_we),
+    .wd     (spw_isolate_wd),
+
+    // from internal hardware
+    .de     (1'b0),
+    .d      ('0  ),
+
+    // to internal hardware
+    .qe     (reg2hw.spw_isolate.qe),
+    .q      (reg2hw.spw_isolate.q ),
+
+    // to register interface (read)
+    .qs     (spw_isolate_qs)
+  );
+
+
+  // R[spw_irq]: V(False)
+
+  prim_subreg #(
+    .DW      (1),
+    .SWACCESS("RO"),
+    .RESVAL  (1'h0)
+  ) u_spw_irq (
+    .clk_i   (clk_i    ),
+    .rst_ni  (rst_ni  ),
+
+    .we     (1'b0),
+    .wd     ('0  ),
+
+    // from internal hardware
+    .de     (hw2reg.spw_irq.de),
+    .d      (hw2reg.spw_irq.d ),
+
+    // to internal hardware
+    .qe     (),
+    .q      (reg2hw.spw_irq.q ),
+
+    // to register interface (read)
+    .qs     (spw_irq_qs)
+  );
+
+
+
+
+  logic [68:0] addr_hit;
   always_comb begin
     addr_hit = '0;
     addr_hit[ 0] = (reg_addr == CARFIELD_VERSION0_OFFSET);
@@ -1898,6 +2072,12 @@ module carfield_reg_top #(
     addr_hit[60] = (reg_addr == CARFIELD_ETH_RGMII_PHY_CLK_DIV_VALUE_OFFSET);
     addr_hit[61] = (reg_addr == CARFIELD_ETH_MDIO_CLK_DIV_EN_OFFSET);
     addr_hit[62] = (reg_addr == CARFIELD_ETH_MDIO_CLK_DIV_VALUE_OFFSET);
+    addr_hit[63] = (reg_addr == CARFIELD_SPW_CLK_DIVIDER_ENABLE_OFFSET);
+    addr_hit[64] = (reg_addr == CARFIELD_SPW_CLK_DIVISION_VALUE_OFFSET);
+    addr_hit[65] = (reg_addr == CARFIELD_SPW_CLK_DIVISION_VALID_OFFSET);
+    addr_hit[66] = (reg_addr == CARFIELD_SPW_CLK_DIVISION_READY_OFFSET);
+    addr_hit[67] = (reg_addr == CARFIELD_SPW_ISOLATE_OFFSET);
+    addr_hit[68] = (reg_addr == CARFIELD_SPW_IRQ_OFFSET);
   end
 
   assign addrmiss = (reg_re || reg_we) ? ~|addr_hit : 1'b0 ;
@@ -1967,7 +2147,13 @@ module carfield_reg_top #(
                (addr_hit[59] & (|(CARFIELD_PERMIT[59] & ~reg_be))) |
                (addr_hit[60] & (|(CARFIELD_PERMIT[60] & ~reg_be))) |
                (addr_hit[61] & (|(CARFIELD_PERMIT[61] & ~reg_be))) |
-               (addr_hit[62] & (|(CARFIELD_PERMIT[62] & ~reg_be)))));
+               (addr_hit[62] & (|(CARFIELD_PERMIT[62] & ~reg_be))) |
+               (addr_hit[63] & (|(CARFIELD_PERMIT[63] & ~reg_be))) |
+               (addr_hit[64] & (|(CARFIELD_PERMIT[64] & ~reg_be))) |
+               (addr_hit[65] & (|(CARFIELD_PERMIT[65] & ~reg_be))) |
+               (addr_hit[66] & (|(CARFIELD_PERMIT[66] & ~reg_be))) |
+               (addr_hit[67] & (|(CARFIELD_PERMIT[67] & ~reg_be))) |
+               (addr_hit[68] & (|(CARFIELD_PERMIT[68] & ~reg_be)))));
   end
 
   assign jedec_idcode_we = addr_hit[5] & reg_we & !reg_error;
@@ -2128,6 +2314,18 @@ module carfield_reg_top #(
 
   assign eth_mdio_clk_div_value_we = addr_hit[62] & reg_we & !reg_error;
   assign eth_mdio_clk_div_value_wd = reg_wdata[19:0];
+
+  assign spw_clk_divider_enable_we = addr_hit[63] & reg_we & !reg_error;
+  assign spw_clk_divider_enable_wd = reg_wdata[0];
+
+  assign spw_clk_division_value_we = addr_hit[64] & reg_we & !reg_error;
+  assign spw_clk_division_value_wd = reg_wdata[5:0];
+
+  assign spw_clk_division_valid_we = addr_hit[65] & reg_we & !reg_error;
+  assign spw_clk_division_valid_wd = reg_wdata[0];
+
+  assign spw_isolate_we = addr_hit[67] & reg_we & !reg_error;
+  assign spw_isolate_wd = reg_wdata[0];
 
   // Read data return
   always_comb begin
@@ -2385,6 +2583,30 @@ module carfield_reg_top #(
         reg_rdata_next[19:0] = eth_mdio_clk_div_value_qs;
       end
 
+      addr_hit[63]: begin
+        reg_rdata_next[0] = spw_clk_divider_enable_qs;
+      end
+
+      addr_hit[64]: begin
+        reg_rdata_next[5:0] = spw_clk_division_value_qs;
+      end
+
+      addr_hit[65]: begin
+        reg_rdata_next[0] = spw_clk_division_valid_qs;
+      end
+
+      addr_hit[66]: begin
+        reg_rdata_next[0] = spw_clk_division_ready_qs;
+      end
+
+      addr_hit[67]: begin
+        reg_rdata_next[0] = spw_isolate_qs;
+      end
+
+      addr_hit[68]: begin
+        reg_rdata_next[0] = spw_irq_qs;
+      end
+
       default: begin
         reg_rdata_next = '1;
       end
@@ -2407,7 +2629,7 @@ endmodule
 
 module carfield_reg_top_intf
 #(
-  parameter int AW = 8,
+  parameter int AW = 9,
   localparam int DW = 32
 ) (
   input logic clk_i,

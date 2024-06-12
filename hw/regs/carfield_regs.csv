@@ -62,4 +62,9 @@ ETH_RGMII_PHY_CLK_DIV_EN,1,rw,hro,1,1,Ethernet RGMII PHY clock divider enable bi
 ETH_RGMII_PHY_CLK_DIV_VALUE,20,rw,hro,1,100,Ethernet RGMII PHY clock divider value
 ETH_MDIO_CLK_DIV_EN,1,rw,hro,1,1,Ethernet MDIO clock divider enable bit
 ETH_MDIO_CLK_DIV_VALUE,20,rw,hro,1,100,Ethernet MDIO clock divider value
-
+SPW_CLK_DIVIDER_ENABLE,1,rw,hro,0,0,SpaceWire Clock divider enable
+SPW_CLK_DIVISION_VALUE,6,rw,hro,0,5,SpaceWire Clock division value
+SPW_CLK_DIVISION_VALID,1,rw,hro,0,0,SpaceWire Clock division value valid
+SPW_CLK_DIVISION_READY,1,ro,hrw,0,0,SpaceWire Clock division value ready
+SPW_ISOLATE,1,rw,hro,1,0,SpaceWire Isolate
+SPW_IRQ,1,ro,hrw,0,0,SpaceWire Irq collector

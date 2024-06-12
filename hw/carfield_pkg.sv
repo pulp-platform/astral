@@ -41,6 +41,7 @@ typedef struct packed {
   islands_properties_t pulp;
   islands_properties_t secured;
   islands_properties_t mbox;
+  islands_properties_t dma_spw;
 } islands_cfg_t;
 
 // Types are obtained from Cheshire package
@@ -72,6 +73,7 @@ typedef struct packed {
   byte_bt secured;
   byte_bt secured_idma;
   byte_bt pulp;
+  byte_bt dma_spw;
 } carfield_master_idx_t;
 
 // Generate the number of AXI slave devices to be connected to the
@@ -126,6 +128,7 @@ function automatic int unsigned gen_num_axi_master(islands_cfg_t island_cfg);
   if (island_cfg.spatz.enable  ) begin ret++; end
   if (island_cfg.pulp.enable   ) begin ret++; end
   if (island_cfg.secured.enable) begin ret+=2; end
+  if (island_cfg.dma_spw.enable) begin ret++; end
   return ret;
 endfunction
 
@@ -143,6 +146,8 @@ function automatic carfield_master_idx_t carfield_gen_axi_master_idx(islands_cfg
   end else begin ret.spatz = MaxExtAxiMst + j; j++; end
   if (island_cfg.pulp.enable) begin ret.pulp = i; i++;
   end else begin ret.pulp = MaxExtAxiMst + j; j++; end
+  if (island_cfg.dma_spw.enable) begin ret.dma_spw = i; i++;
+  end else begin ret.dma_spw = MaxExtAxiMst + j; j++; end
   return ret;
 endfunction
 
@@ -211,6 +216,7 @@ typedef struct packed {
   islands_properties_t pll;
   islands_properties_t padframe;
   islands_properties_t l2ecc;
+  islands_properties_t dma_spw;
 } regbus_cfg_t;
 
 typedef struct packed {
@@ -218,6 +224,7 @@ typedef struct packed {
   byte_bt pll;
   byte_bt padframe;
   byte_bt l2ecc;
+  byte_bt dma_spw;
 } carfield_regbus_slave_idx_t;
 
 // Generate the number of AXI slave devices to be connected to the
@@ -233,6 +240,7 @@ function automatic int unsigned gen_num_regbus_async_slave(regbus_cfg_t regbus_c
   if (regbus_cfg.pll.enable     ) begin ret++; end
   if (regbus_cfg.padframe.enable) begin ret++; end
   if (regbus_cfg.l2ecc.enable   ) begin ret++; end
+  if (regbus_cfg.dma_spw.enable ) begin ret++; end
   return ret;
 endfunction
 
@@ -240,7 +248,8 @@ localparam regbus_cfg_t CarfieldRegBusCfg = '{
   pcrs:     '{1, PcrsBase, PcrsSize},
   pll:      '{PllCfgEnable, PllCfgBase, PllCfgSize},
   padframe: '{PadframeCfgEnable, PadframeCfgBase, PadframeCfgSize},
-  l2ecc:    '{L2EccCfgEnable, L2EccCfgBase, L2EccCfgSize}
+  l2ecc:    '{L2EccCfgEnable, L2EccCfgBase, L2EccCfgSize},
+  dma_spw:  '{DmaSpWCfgEnable, DmaSpWCfgBase, DmaSpwCfgSize}
 };
 
 localparam int unsigned NumSyncRegSlv = gen_num_regbus_sync_slave(CarfieldRegBusCfg);
@@ -262,6 +271,8 @@ function automatic carfield_regbus_slave_idx_t carfield_gen_regbus_slave_idx(reg
   end else begin ret.padframe = NumTotalRegSlv + j; j++; end
   if (regbus_cfg.l2ecc.enable) begin ret.l2ecc = i; i++;
   end else begin ret.l2ecc = NumTotalRegSlv + j; j++; end
+  if (regbus_cfg.dma_spw.enable) begin ret.dma_spw = i; i++;
+  end else begin ret.dma_spw = NumTotalRegSlv + j; j++; end
   return ret;
 endfunction
 
@@ -301,6 +312,12 @@ function automatic regbus_struct_t carfield_gen_regbus_map(int unsigned NumSlave
     ret.RegBusEnd[i] = regbus_cfg.l2ecc.base + regbus_cfg.l2ecc.size;
     if (i < NumSlave - 1) i++;
   end
+  if (regbus_cfg.dma_spw.enable) begin
+    ret.RegBusIdx[i] = idx.dma_spw;
+    ret.RegBusStart[i] = regbus_cfg.dma_spw.base;
+    ret.RegBusEnd[i] = regbus_cfg.dma_spw.base + regbus_cfg.dma_spw.size;
+    if (i < NumSlave - 1) i++;
+  end
   return ret;
 endfunction
 
@@ -325,7 +342,8 @@ localparam islands_cfg_t CarfieldIslandsCfg = '{
   spatz:         '{SpatzClusterEnable, SpatzClusterBase, SpatzClusterSize},
   pulp:          '{PulpClusterEnable, PulpClusterBase, PulpClusterSize},
   secured:       '{SecurityIslandEnable, SecurityIslandBase, SecurityIslandSize},
-  mbox:          '{MailboxEnable, MailboxBase, MailboxSize}
+  mbox:          '{MailboxEnable, MailboxBase, MailboxSize},
+  dma_spw:       '{DmaSpWCfgEnable, 'h0, 'h0}
 };
 
 localparam int unsigned CarfieldAxiNumSlaves  = gen_num_axi_slave(CarfieldIslandsCfg);
@@ -422,7 +440,8 @@ typedef enum byte_bt {
   SecurityIslandTlulMstIdx = CarfieldMstIdx.secured,
   SecurityIslandiDMAMstIdx = CarfieldMstIdx.secured_idma,
   FPClusterMstIdx          = CarfieldMstIdx.spatz,
-  IntClusterMstIdx         = CarfieldMstIdx.pulp
+  IntClusterMstIdx         = CarfieldMstIdx.pulp,
+  DmaSpWMstIdx             = CarfieldMstIdx.dma_spw
 } axi_mst_idx_t;
 
 // APB peripherals

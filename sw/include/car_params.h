@@ -18,6 +18,7 @@ const void* car_l2_intl_0 = 0x78000000;
 const void* car_l2_cont_0 = 0x78010000;
 const void* car_l2_intl_1 = 0x78020000;
 const void* car_l2_cont_1 = 0x78030000;
+const void* car_dmaspw_cfg = 0x21004000;
 
 #else // Pointers to be mapped by the driver
 void* car_soc_ctrl;
@@ -28,4 +29,5 @@ void* car_l2_intl_0;
 void* car_l2_cont_0;
 void* car_l2_intl_1;
 void* car_l2_cont_1;
+void* car_dmaspw_cfg;
 #endif

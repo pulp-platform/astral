@@ -2102,6 +2102,82 @@ end else begin : gen_no_ethernet
 
 end
 
+if (CarfieldIslandsCfg.dma_spw.enable) begin: gen_dma_spw
+  localparam int unsigned DmaSpwAsyncIdx = CarfieldRegBusSlvIdx.dma_spw-NumSyncRegSlv;
+
+  assign car_regs_hw2reg.spw_clk_division_ready.de = 1'b1;
+  assign car_regs_hw2reg.spw_irq.de = 1'b1;
+
+  spw_async #(
+    .DataWidth       ( Cfg.AxiDataWidth ),
+    .AddrWidth       ( Cfg.AddrWidth ),
+    .AxiUserWidth    ( Cfg.AxiUserWidth ),
+    .AxiIdWidth      ( Cfg.AxiMstIdWidth ),
+    .LogDepth        ( LogDepth ),
+    .SyncStages      ( SyncStages ),
+    .DivValueWidth   ( 6 ), // Clock divider up to 64
+    .DefaultDivValue ( 5 ), // Assume 500 MHz peripheral clock.
+    // Enables  divider output clock during async reset assertion
+    // By default set to zero
+    .EnClkAtRst (0),
+    /// AXI4+ATOP channel types
+    .aw_chan_t ( carfield_axi_mst_aw_chan_t ),
+    .w_chan_t  ( carfield_axi_mst_w_chan_t  ),
+    .b_chan_t  ( carfield_axi_mst_b_chan_t  ),
+    .ar_chan_t ( carfield_axi_mst_ar_chan_t ),
+    .r_chan_t  ( carfield_axi_mst_r_chan_t  ),
+    .axi_req_t ( carfield_axi_mst_req_t ),
+    .axi_rsp_t ( carfield_axi_mst_rsp_t ),
+    /// Register Request and Response type
+    .reg_req_t ( carfield_reg_req_t ),
+    .reg_rsp_t ( carfield_reg_rsp_t )
+  ) i_dma_spw (
+    .clk_i  ( periph_clk   ),
+    .rst_ni ( periph_rst_n ),
+    .pwr_on_rst_ni ( periph_pwr_on_rst_n ),
+    .clk_div_en_i    ( car_regs_reg2hw.spw_clk_divider_enable.q ),
+    .clk_div_i       ( car_regs_reg2hw.spw_clk_division_value.q ),
+    .clk_div_valid_i ( car_regs_reg2hw.spw_clk_division_valid.q ),
+    .clk_div_ready_o ( car_regs_hw2reg.spw_clk_division_ready.d ),
+    // Asynchronous AXI interface
+    .axi_isolate_i ( car_regs_reg2hw.spw_isolate.q ),
+    .axi_isolated_o ( master_isolated_rsp [DmaSpWMstIdx] ),
+    .async_data_master_aw_data_o ( axi_mst_ext_aw_data [DmaSpWMstIdx] ),
+    .async_data_master_aw_wptr_o ( axi_mst_ext_aw_wptr [DmaSpWMstIdx] ),
+    .async_data_master_aw_rptr_i ( axi_mst_ext_aw_rptr [DmaSpWMstIdx] ),
+    .async_data_master_w_data_o  ( axi_mst_ext_w_data [DmaSpWMstIdx] ),
+    .async_data_master_w_wptr_o  ( axi_mst_ext_w_wptr [DmaSpWMstIdx] ),
+    .async_data_master_w_rptr_i  ( axi_mst_ext_w_rptr [DmaSpWMstIdx] ),
+    .async_data_master_b_data_i  ( axi_mst_ext_b_data [DmaSpWMstIdx] ),
+    .async_data_master_b_wptr_i  ( axi_mst_ext_b_wptr [DmaSpWMstIdx] ),
+    .async_data_master_b_rptr_o  ( axi_mst_ext_b_rptr [DmaSpWMstIdx] ),
+    .async_data_master_ar_data_o ( axi_mst_ext_ar_data [DmaSpWMstIdx] ),
+    .async_data_master_ar_wptr_o ( axi_mst_ext_ar_wptr [DmaSpWMstIdx] ),
+    .async_data_master_ar_rptr_i ( axi_mst_ext_ar_rptr [DmaSpWMstIdx] ),
+    .async_data_master_r_data_i  ( axi_mst_ext_r_data [DmaSpWMstIdx] ),
+    .async_data_master_r_wptr_i  ( axi_mst_ext_r_wptr [DmaSpWMstIdx] ),
+    .async_data_master_r_rptr_o  ( axi_mst_ext_r_rptr [DmaSpWMstIdx] ),
+    // Asynchronous register interface
+    .reg_async_req_i  ( ext_reg_async_slv_req_out  [DmaSpwAsyncIdx] ),
+    .reg_async_ack_o  ( ext_reg_async_slv_ack_in   [DmaSpwAsyncIdx] ),
+    .reg_async_data_i ( ext_reg_async_slv_data_out [DmaSpwAsyncIdx] ),
+    .reg_async_req_o  ( ext_reg_async_slv_req_in   [DmaSpwAsyncIdx] ),
+    .reg_async_ack_i  ( ext_reg_async_slv_ack_out  [DmaSpwAsyncIdx] ),
+    .reg_async_data_o ( ext_reg_async_slv_data_in  [DmaSpwAsyncIdx] ),
+    // SpW interface
+    .spw_data_i   (1'b0),
+    .spw_strb_i   (1'b0),
+    .spw_data_o   (),
+    .spw_strb_o   (),
+    .spw_irq_o    ( car_regs_hw2reg.spw_irq.d )
+  );
+end else begin: gen_no_dma_spw
+  assign car_regs_hw2reg.spw_clk_division_ready.d = '0;
+  assign car_regs_hw2reg.spw_clk_division_ready.de = '0;
+  assign car_regs_hw2reg.spw_irq.de = '0;
+  assign car_regs_hw2reg.spw_irq.d = '0;
+end
+
 // APB peripherals
 // Periph Clock Domain
 // axi_cdc -> axi_amos -> axi_cut -> axi_to_axilite -> axilite_to_apb -> periph devices

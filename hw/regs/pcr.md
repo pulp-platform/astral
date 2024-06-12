@@ -65,6 +65,12 @@
 | carfield.[`ETH_RGMII_PHY_CLK_DIV_VALUE`](#eth_rgmii_phy_clk_div_value)       | 0xf0     |        4 | Ethernet RGMII PHY clock divider value                                 |
 | carfield.[`ETH_MDIO_CLK_DIV_EN`](#eth_mdio_clk_div_en)                       | 0xf4     |        4 | Ethernet MDIO clock divider enable bit                                 |
 | carfield.[`ETH_MDIO_CLK_DIV_VALUE`](#eth_mdio_clk_div_value)                 | 0xf8     |        4 | Ethernet MDIO clock divider value                                      |
+| carfield.[`SPW_CLK_DIVIDER_ENABLE`](#spw_clk_divider_enable)                 | 0xfc     |        4 | SpaceWire Clock divider enable                                         |
+| carfield.[`SPW_CLK_DIVISION_VALUE`](#spw_clk_division_value)                 | 0x100    |        4 | SpaceWire Clock division value                                         |
+| carfield.[`SPW_CLK_DIVISION_VALID`](#spw_clk_division_valid)                 | 0x104    |        4 | SpaceWire Clock division value valid                                   |
+| carfield.[`SPW_CLK_DIVISION_READY`](#spw_clk_division_ready)                 | 0x108    |        4 | SpaceWire Clock division value ready                                   |
+| carfield.[`SPW_ISOLATE`](#spw_isolate)                                       | 0x10c    |        4 | SpaceWire Isolate                                                      |
+| carfield.[`SPW_IRQ`](#spw_irq)                                               | 0x110    |        4 | SpaceWire Irq collector                                                |
 
 ## VERSION0
 Cheshire sha256 commit
@@ -1123,4 +1129,106 @@ Ethernet MDIO clock divider value
 |:------:|:------:|:-------:|:-----------------------|:--------------|
 | 31:20  |        |         |                        | Reserved      |
 |  19:0  |   rw   |  0x64   | ETH_MDIO_CLK_DIV_VALUE |               |
+
+## SPW_CLK_DIVIDER_ENABLE
+SpaceWire Clock divider enable
+- Offset: `0xfc`
+- Reset default: `0x0`
+- Reset mask: `0x1`
+
+### Fields
+
+```wavejson
+{"reg": [{"name": "SPW_CLK_DIVIDER_ENABLE", "bits": 1, "attr": ["rw"], "rotate": -90}, {"bits": 31}], "config": {"lanes": 1, "fontsize": 10, "vspace": 240}}
+```
+
+|  Bits  |  Type  |  Reset  | Name                   | Description   |
+|:------:|:------:|:-------:|:-----------------------|:--------------|
+|  31:1  |        |         |                        | Reserved      |
+|   0    |   rw   |   0x0   | SPW_CLK_DIVIDER_ENABLE |               |
+
+## SPW_CLK_DIVISION_VALUE
+SpaceWire Clock division value
+- Offset: `0x100`
+- Reset default: `0x5`
+- Reset mask: `0x3f`
+
+### Fields
+
+```wavejson
+{"reg": [{"name": "SPW_CLK_DIVISION_VALUE", "bits": 6, "attr": ["rw"], "rotate": -90}, {"bits": 26}], "config": {"lanes": 1, "fontsize": 10, "vspace": 240}}
+```
+
+|  Bits  |  Type  |  Reset  | Name                   | Description   |
+|:------:|:------:|:-------:|:-----------------------|:--------------|
+|  31:6  |        |         |                        | Reserved      |
+|  5:0   |   rw   |   0x5   | SPW_CLK_DIVISION_VALUE |               |
+
+## SPW_CLK_DIVISION_VALID
+SpaceWire Clock division value valid
+- Offset: `0x104`
+- Reset default: `0x0`
+- Reset mask: `0x1`
+
+### Fields
+
+```wavejson
+{"reg": [{"name": "SPW_CLK_DIVISION_VALID", "bits": 1, "attr": ["rw"], "rotate": -90}, {"bits": 31}], "config": {"lanes": 1, "fontsize": 10, "vspace": 240}}
+```
+
+|  Bits  |  Type  |  Reset  | Name                   | Description   |
+|:------:|:------:|:-------:|:-----------------------|:--------------|
+|  31:1  |        |         |                        | Reserved      |
+|   0    |   rw   |   0x0   | SPW_CLK_DIVISION_VALID |               |
+
+## SPW_CLK_DIVISION_READY
+SpaceWire Clock division value ready
+- Offset: `0x108`
+- Reset default: `0x0`
+- Reset mask: `0x1`
+
+### Fields
+
+```wavejson
+{"reg": [{"name": "SPW_CLK_DIVISION_READY", "bits": 1, "attr": ["ro"], "rotate": -90}, {"bits": 31}], "config": {"lanes": 1, "fontsize": 10, "vspace": 240}}
+```
+
+|  Bits  |  Type  |  Reset  | Name                   | Description   |
+|:------:|:------:|:-------:|:-----------------------|:--------------|
+|  31:1  |        |         |                        | Reserved      |
+|   0    |   ro   |   0x0   | SPW_CLK_DIVISION_READY |               |
+
+## SPW_ISOLATE
+SpaceWire Isolate
+- Offset: `0x10c`
+- Reset default: `0x0`
+- Reset mask: `0x1`
+
+### Fields
+
+```wavejson
+{"reg": [{"name": "SPW_ISOLATE", "bits": 1, "attr": ["rw"], "rotate": -90}, {"bits": 31}], "config": {"lanes": 1, "fontsize": 10, "vspace": 130}}
+```
+
+|  Bits  |  Type  |  Reset  | Name        | Description   |
+|:------:|:------:|:-------:|:------------|:--------------|
+|  31:1  |        |         |             | Reserved      |
+|   0    |   rw   |   0x0   | SPW_ISOLATE |               |
+
+## SPW_IRQ
+SpaceWire Irq collector
+- Offset: `0x110`
+- Reset default: `0x0`
+- Reset mask: `0x1`
+
+### Fields
+
+```wavejson
+{"reg": [{"name": "SPW_IRQ", "bits": 1, "attr": ["ro"], "rotate": -90}, {"bits": 31}], "config": {"lanes": 1, "fontsize": 10, "vspace": 90}}
+```
+
+|  Bits  |  Type  |  Reset  | Name    | Description   |
+|:------:|:------:|:-------:|:--------|:--------------|
+|  31:1  |        |         |         | Reserved      |
+|   0    |   ro   |   0x0   | SPW_IRQ |               |
 

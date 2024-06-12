@@ -704,5 +704,71 @@
         { bits: "19:0" }
       ],
     }
+
+    { name: "SPW_CLK_DIVIDER_ENABLE",
+      desc: "SpaceWire Clock divider enable",
+      swaccess: "rw",
+      hwaccess: "hro",
+      resval: "0",
+      hwqe: "0",
+      fields: [
+        { bits: "0:0" }
+      ],
+    }
+
+    { name: "SPW_CLK_DIVISION_VALUE",
+      desc: "SpaceWire Clock division value",
+      swaccess: "rw",
+      hwaccess: "hro",
+      resval: "5",
+      hwqe: "0",
+      fields: [
+        { bits: "5:0" }
+      ],
+    }
+
+    { name: "SPW_CLK_DIVISION_VALID",
+      desc: "SpaceWire Clock division value valid",
+      swaccess: "rw",
+      hwaccess: "hro",
+      resval: "0",
+      hwqe: "0",
+      fields: [
+        { bits: "0:0" }
+      ],
+    }
+
+    { name: "SPW_CLK_DIVISION_READY",
+      desc: "SpaceWire Clock division value ready",
+      swaccess: "ro",
+      hwaccess: "hrw",
+      resval: "0",
+      hwqe: "0",
+      fields: [
+        { bits: "0:0" }
+      ],
+    }
+
+    { name: "SPW_ISOLATE",
+      desc: "SpaceWire Isolate",
+      swaccess: "rw",
+      hwaccess: "hro",
+      resval: "0",
+      hwqe: "1",
+      fields: [
+        { bits: "0:0" }
+      ],
+    }
+
+    { name: "SPW_IRQ",
+      desc: "SpaceWire Irq collector",
+      swaccess: "ro",
+      hwaccess: "hrw",
+      resval: "0",
+      hwqe: "0",
+      fields: [
+        { bits: "0:0" }
+      ],
+    }
   ],
 }
