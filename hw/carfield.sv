@@ -143,11 +143,20 @@ module carfield
   output logic [HypNumPhys-1:0]                       hyper_dq_oe_o,
   output logic [HypNumPhys-1:0]                       hyper_reset_no,
   // TCTM Interface
+  input  logic                                        tc_active_i,
+  input  logic                                        tc_clock_i,
+  input  logic                                        tc_data_i,
   output logic                                        ptme_clk_o,
   output logic                                        ptme_enc_o,
-  input  logic                                        tc_active,
-  input  logic                                        tc_clock,
-  input  logic                                        tc_data,
+  output logic                                        ptme_sync_o,
+  input  logic                                        ptme_ext_clk_i,
+  output logic [2:0]                                  hpc_addr_o,
+  output logic                                        hpc_cmd_en_o,
+  output logic                                        hpc_sample_o,
+  output logic [1:0]                                  llc_line_o,
+  input  logic                                        obt_ext_clk_i,
+  input  logic                                        obt_pps_in_i,  
+  output logic                                        obt_sync_out_o, 
 `ifdef GEN_NO_HYPERBUS
   // LLC interface
   output logic [LlcArWidth-1:0] llc_ar_data,
@@ -2544,18 +2553,19 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .CLCW_S_B                           (1'b0), // : in
       .CONF_REG_ACC_ACK                   (1'b1), // : in
       .CPDU_INPROGRESS                    (1'b0), // : in
-      .EXT_OBT_CLK                        (1'b0), // : in
-      .INT_PPS_IN                         (1'b0), // : in
+      .EXT_OBT_CLK                        (obt_ext_clk_i), // : in
+      .INT_PPS_IN                         (obt_pps_in_i), // : in
       .RFAVN                              (1'b0), // : in
       .SDU_WRONG_LENGTH                   (1'b0), // : in
       .SYNC_RST_N                         (1'b1), // : in
-      .TC_ACTIVE                          (tc_active), // : in
-      .TC_CLOCK                           (tc_clock), // : in
-      .TC_DATA                            (tc_data), // : in
+      .TC_ACTIVE                          (tc_active_i), // : in
+      .TC_CLOCK                           (tc_clock_i), // : in
+      .TC_DATA                            (tc_data_i), // : in
       .TME_CLCW_FSR_DAT_FROM_REM_PDEC_SEC (1'b0), // : in
       .TME_ENCR_UNENC_CLK                 (1'b0), // : in
       .TME_ENCR_UNENC_OUT                 (1'b0), // : in
       .TME_ENCR_UNENC_SYNC                (1'b0), // : in
+      .TME_EXT_CLK                        (ptme_ext_clk_i), // : in
       .TME_FSR_DAT_FROM_LOC_SEC           (1'b0), // : in
       .ANACOND_LLC_RESET                  (/* Not Connected */), // : out
       .AUTH_SEL                           (/* Not Connected */), // : out
@@ -2572,16 +2582,16 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .CONF_REG_WDATA                     (/* Not Connected */), // : out
 
       .CROSSED_LCL_RESET                  (/* Not Connected */), // : out
-      .CROSSED_POWER_REARM_OUT            (/* Not Connected */), // : out
+      .CROSSED_POWER_REARM_OUT            (llc_line_o[1]), // : out
       .CROSSED_RESET_OUT                  (/* Not Connected */), // : out
       .FPEMO                              (/* Not Connected */), // : out
       .FPRELM                             (/* Not Connected */), // : out
       .GENERAL_INTERRUPT                  (/* Not Connected */), // : out
-      .HPC_ADDR                           (/* Not Connected */), // : out
-      .HPC_CMD_EN                         (/* Not Connected */), // : out
+      .HPC_ADDR                           (hpc_addr_o), // : out
+      .HPC_CMD_EN                         (hpc_cmd_en_o), // : out
       .HPC_INTERRUPT_SOURCES              (/* Not Connected */), // : out
       .HPC_PROTECTIONn                    (/* Not Connected */), // : out
-      .HPC_SMP                            (/* Not Connected */), // : out
+      .HPC_SMP                            (hpc_sample_o), // : out
       .INH_MMA                            (/* Not Connected */), // : out
       .LLC_INTERRUPT_SOURCES              (/* Not Connected */), // : out
       .LLC_IRQ_FORCE_REGISTER             (/* Not Connected */), // : out
@@ -2590,7 +2600,7 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .LOC_HK_ON_OFFn                     (/* Not Connected */), // : out
       .LOC_IO_ON_OFFn                     (/* Not Connected */), // : out
       .LOC_MCPM_ON_OFFn                   (/* Not Connected */), // : out
-      .LOC_MCPM_RESET                     (/* Not Connected */), // : out
+      .LOC_MCPM_RESET                     (llc_line_o[0]), // : out
       .LVDS_IF_TME_ENC_IOUT               (/* Not Connected */), // : out
       .LVDS_IF_TME_ENC_IQCLK              (/* Not Connected */), // : out
       .LVDS_IF_TME_ENC_QOUT               (/* Not Connected */), // : out
@@ -2609,10 +2619,10 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .REM_MCPM_ON_OFFn                   (/* Not Connected */), // : out
       .RM_RECOVERY_RESET                  (/* Not Connected */), // : out
       .RM_RESET                           (/* Not Connected */), // : out
-      .RS422_IF_TME_ENC_CLK               ( ptme_clk_o ), // : out
-      .RS422_IF_TME_ENC_OUT               ( ptme_enc_o ), // : out
-      .RS422_IF_TME_ENC_SYNC              (/* Not Connected */), // : out
-      .SYNC_TO_EXT_IF                     (/* Not Connected */), // : out
+      .RS422_IF_TME_ENC_CLK               (ptme_clk_o), // : out
+      .RS422_IF_TME_ENC_OUT               (ptme_enc_o), // : out
+      .RS422_IF_TME_ENC_SYNC              (ptme_sync_o), // : out
+      .SYNC_TO_EXT_IF                     (obt_sync_out_o), // : out
       .TC_ONDOING                         (/* Not Connected */), // : out
       .TC_STANDARD                        (/* Not Connected */), // : out
       .TME_CLR_UNENC_CLK                  (/* Not Connected */), // : out
