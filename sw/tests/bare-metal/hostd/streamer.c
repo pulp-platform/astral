@@ -101,6 +101,5 @@ int main(void) {
   if (error == 0) printf("Success!\n");
   else printf("Failed!\n");
 
-  while(1);
-  // return error;
+  return error;
 }
