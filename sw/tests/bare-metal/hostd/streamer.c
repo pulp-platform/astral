@@ -19,6 +19,7 @@
 #define PTME_CLK_PRESCALER_ADDR (TCTM_STREAMER_CFG_PTME_BASE + 0x68)
 #define BIT_CLK_DIVISOR_ADDR (TCTM_STREAMER_CFG_PTME_BASE + 0x6C)
 #define TME_INIT_ADDR (TCTM_STREAMER_CFG_PTME_BASE + 0x00)
+#define STREAMER_PENDING_IRQ_ADDR (TCTM_STREAMER_CFG_MAP_ROUTER_BASE + 0x20)
 
 #define PTME_ENABLE_VALUE 0x00010000
 #define TM_FRAME_CFG_VALUE 0x3FFE0020
@@ -53,6 +54,8 @@ int main(void) {
                           0x00, 0x05, 0xAF, 0x07,
                           0x00, 0x06, 0xAF, 0x08,
                           0x00, 0x07 };
+
+  while ( readw(STREAMER_PENDING_IRQ_ADDR) == 0 );
 
   // Start reading TC buffer
   for (int i = 0; i < 4; i++)

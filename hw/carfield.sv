@@ -2695,6 +2695,12 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
     );
   end else begin: gen_no_streamer
   end
+
+  // SpaceWire IP
+  if (carfield_configuration::SpaceWireEnable) begin: gen_spw
+  end else begin: gen_no_spw
+  end
+
 end else begin: gen_no_periph
   assign car_regs_hw2reg.periph_isolate_status.d = '0;
   assign car_regs_hw2reg.periph_isolate_status.de = '0;
