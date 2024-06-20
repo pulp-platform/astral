@@ -71,6 +71,10 @@ localparam doub_bt StreamerCfgBase = 'h20009000;
 localparam doub_bt StreamerCfgSize = 'h00008000;
 localparam doub_bt StreamerApbBase = 'h20011000;
 localparam doub_bt StreamerApbSize = 'h00008000;
+// SpaceWire
+localparam bit SpaceWireEnable = 1;
+localparam doub_bt SpaceWireBase = 'h20019000;
+localparam doub_bt SpaceWireSize = 'h00001000;
 /************************
  * RegBus Configuration *
  ***********************/
