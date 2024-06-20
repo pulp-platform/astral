@@ -10,7 +10,7 @@
 module carfield_reg_top #(
   parameter type reg_req_t = logic,
   parameter type reg_rsp_t = logic,
-  parameter int AW = 8
+  parameter int AW = 9
 ) (
   input logic clk_i,
   input logic rst_ni,
@@ -237,6 +237,12 @@ module carfield_reg_top #(
   logic [19:0] hyperbus_clk_div_value_qs;
   logic [19:0] hyperbus_clk_div_value_wd;
   logic hyperbus_clk_div_value_we;
+  logic streamer_clk_div_enable_qs;
+  logic streamer_clk_div_enable_wd;
+  logic streamer_clk_div_enable_we;
+  logic [5:0] streamer_clk_div_value_qs;
+  logic [5:0] streamer_clk_div_value_wd;
+  logic streamer_clk_div_value_we;
 
   // Register instances
   // R[version0]: V(False)
@@ -1830,9 +1836,63 @@ module carfield_reg_top #(
   );
 
 
+  // R[streamer_clk_div_enable]: V(False)
+
+  prim_subreg #(
+    .DW      (1),
+    .SWACCESS("RW"),
+    .RESVAL  (1'h0)
+  ) u_streamer_clk_div_enable (
+    .clk_i   (clk_i    ),
+    .rst_ni  (rst_ni  ),
+
+    // from register interface
+    .we     (streamer_clk_div_enable_we),
+    .wd     (streamer_clk_div_enable_wd),
+
+    // from internal hardware
+    .de     (1'b0),
+    .d      ('0  ),
+
+    // to internal hardware
+    .qe     (reg2hw.streamer_clk_div_enable.qe),
+    .q      (reg2hw.streamer_clk_div_enable.q ),
+
+    // to register interface (read)
+    .qs     (streamer_clk_div_enable_qs)
+  );
 
 
-  logic [62:0] addr_hit;
+  // R[streamer_clk_div_value]: V(False)
+
+  prim_subreg #(
+    .DW      (6),
+    .SWACCESS("RW"),
+    .RESVAL  (6'h1)
+  ) u_streamer_clk_div_value (
+    .clk_i   (clk_i    ),
+    .rst_ni  (rst_ni  ),
+
+    // from register interface
+    .we     (streamer_clk_div_value_we),
+    .wd     (streamer_clk_div_value_wd),
+
+    // from internal hardware
+    .de     (1'b0),
+    .d      ('0  ),
+
+    // to internal hardware
+    .qe     (reg2hw.streamer_clk_div_value.qe),
+    .q      (reg2hw.streamer_clk_div_value.q ),
+
+    // to register interface (read)
+    .qs     (streamer_clk_div_value_qs)
+  );
+
+
+
+
+  logic [64:0] addr_hit;
   always_comb begin
     addr_hit = '0;
     addr_hit[ 0] = (reg_addr == CARFIELD_VERSION0_OFFSET);
@@ -1898,6 +1958,8 @@ module carfield_reg_top #(
     addr_hit[60] = (reg_addr == CARFIELD_ETH_CLK_DIV_VALUE_OFFSET);
     addr_hit[61] = (reg_addr == CARFIELD_HYPERBUS_CLK_DIV_EN_OFFSET);
     addr_hit[62] = (reg_addr == CARFIELD_HYPERBUS_CLK_DIV_VALUE_OFFSET);
+    addr_hit[63] = (reg_addr == CARFIELD_STREAMER_CLK_DIV_ENABLE_OFFSET);
+    addr_hit[64] = (reg_addr == CARFIELD_STREAMER_CLK_DIV_VALUE_OFFSET);
   end
 
   assign addrmiss = (reg_re || reg_we) ? ~|addr_hit : 1'b0 ;
@@ -1965,7 +2027,11 @@ module carfield_reg_top #(
                (addr_hit[57] & (|(CARFIELD_PERMIT[57] & ~reg_be))) |
                (addr_hit[58] & (|(CARFIELD_PERMIT[58] & ~reg_be))) |
                (addr_hit[59] & (|(CARFIELD_PERMIT[59] & ~reg_be))) |
-               (addr_hit[60] & (|(CARFIELD_PERMIT[60] & ~reg_be)))));
+               (addr_hit[60] & (|(CARFIELD_PERMIT[60] & ~reg_be))) |
+               (addr_hit[61] & (|(CARFIELD_PERMIT[61] & ~reg_be))) |
+               (addr_hit[62] & (|(CARFIELD_PERMIT[62] & ~reg_be))) |
+               (addr_hit[63] & (|(CARFIELD_PERMIT[63] & ~reg_be))) |
+               (addr_hit[64] & (|(CARFIELD_PERMIT[64] & ~reg_be)))));
   end
 
   assign jedec_idcode_we = addr_hit[5] & reg_we & !reg_error;
@@ -2126,6 +2192,12 @@ module carfield_reg_top #(
 
   assign hyperbus_clk_div_value_we = addr_hit[62] & reg_we & !reg_error;
   assign hyperbus_clk_div_value_wd = reg_wdata[19:0];
+
+  assign streamer_clk_div_enable_we = addr_hit[63] & reg_we & !reg_error;
+  assign streamer_clk_div_enable_wd = reg_wdata[0];
+
+  assign streamer_clk_div_value_we = addr_hit[64] & reg_we & !reg_error;
+  assign streamer_clk_div_value_wd = reg_wdata[5:0];
 
   // Read data return
   always_comb begin
@@ -2351,6 +2423,14 @@ module carfield_reg_top #(
         reg_rdata_next[19:0] = hyperbus_clk_div_value_qs;
       end
 
+      addr_hit[63]: begin
+        reg_rdata_next[0] = streamer_clk_div_enable_qs;
+      end
+
+      addr_hit[64]: begin
+        reg_rdata_next[5:0] = streamer_clk_div_value_qs;
+      end
+
       default: begin
         reg_rdata_next = '1;
       end
@@ -2373,7 +2453,7 @@ endmodule
 
 module carfield_reg_top_intf
 #(
-  parameter int AW = 8,
+  parameter int AW = 9,
   localparam int DW = 32
 ) (
   input logic clk_i,

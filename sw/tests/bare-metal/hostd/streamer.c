@@ -7,6 +7,8 @@
 // Streamer access test.
 
 #include "car_util.h"
+#include "car_params.h"
+#include "regs/soc_ctrl.h"
 #include "printf.h"
 
 #define PTME_ENABLE_ADDR (TCTM_STREAMER_CFG_PTME_BASE + 0x04)
@@ -34,6 +36,10 @@
 int main(void) {
 
   if (hart_id() != 0) wfi();
+
+  // Update clock divider value and re-enable streamer clock divider
+  writew(10, car_soc_ctrl + CARFIELD_STREAMER_CLK_DIV_VALUE_REG_OFFSET);
+  writew(0x1, car_soc_ctrl + CARFIELD_STREAMER_CLK_DIV_ENABLE_REG_OFFSET);
 
   uint32_t error = 0;
 

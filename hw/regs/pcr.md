@@ -65,6 +65,8 @@
 | carfield.[`ETH_CLK_DIV_VALUE`](#eth_clk_div_value)                           | 0xf0     |        4 | Ethernet clock divider value                                           |
 | carfield.[`HYPERBUS_CLK_DIV_EN`](#hyperbus_clk_div_en)                       | 0xf4     |        4 | Hyperbus clock divider enable bit                                      |
 | carfield.[`HYPERBUS_CLK_DIV_VALUE`](#hyperbus_clk_div_value)                 | 0xf8     |        4 | Hyperbus clock divider value                                           |
+| carfield.[`STREAMER_CLK_DIV_ENABLE`](#streamer_clk_div_enable)               | 0xfc     |        4 | Streamer clock divider enable                                          |
+| carfield.[`STREAMER_CLK_DIV_VALUE`](#streamer_clk_div_value)                 | 0x100    |        4 | Streamer clock divider value                                           |
 
 ## VERSION0
 Cheshire sha256 commit
@@ -1258,4 +1260,38 @@ Hyperbus clock divider value
 |:------:|:------:|:-------:|:-----------------------|:--------------|
 | 31:20  |        |         |                        | Reserved      |
 |  19:0  |   rw   |   0x1   | HYPERBUS_CLK_DIV_VALUE |               |
+
+## STREAMER_CLK_DIV_ENABLE
+Streamer clock divider enable
+- Offset: `0xfc`
+- Reset default: `0x0`
+- Reset mask: `0x1`
+
+### Fields
+
+```wavejson
+{"reg": [{"name": "STREAMER_CLK_DIV_ENABLE", "bits": 1, "attr": ["rw"], "rotate": -90}, {"bits": 31}], "config": {"lanes": 1, "fontsize": 10, "vspace": 250}}
+```
+
+|  Bits  |  Type  |  Reset  | Name                    | Description   |
+|:------:|:------:|:-------:|:------------------------|:--------------|
+|  31:1  |        |         |                         | Reserved      |
+|   0    |   rw   |   0x0   | STREAMER_CLK_DIV_ENABLE |               |
+
+## STREAMER_CLK_DIV_VALUE
+Streamer clock divider value
+- Offset: `0x100`
+- Reset default: `0x1`
+- Reset mask: `0x3f`
+
+### Fields
+
+```wavejson
+{"reg": [{"name": "STREAMER_CLK_DIV_VALUE", "bits": 6, "attr": ["rw"], "rotate": -90}, {"bits": 26}], "config": {"lanes": 1, "fontsize": 10, "vspace": 240}}
+```
+
+|  Bits  |  Type  |  Reset  | Name                   | Description   |
+|:------:|:------:|:-------:|:-----------------------|:--------------|
+|  31:6  |        |         |                        | Reserved      |
+|  5:0   |   rw   |   0x1   | STREAMER_CLK_DIV_VALUE |               |
 

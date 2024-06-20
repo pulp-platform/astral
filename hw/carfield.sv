@@ -2489,28 +2489,86 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
   // Telemetry and Telecomand IP (Streamer)
   if (carfield_configuration::StreamerEnable) begin: gen_streamer
     localparam int unsigned ZeroBits = Cfg.AddrWidth - AxiNarrowAddrWidth;
+    localparam int unsigned StreamerDivisionValueWidth = 6; // Divide up to 63
     logic [Cfg.AddrWidth-1:0] mask_address;
+    logic streamer_clk;
+    logic streamer_clk_decoupled_valid, streamer_clk_decoupled_ready;
+    logic [StreamerDivisionValueWidth-1:0] streamer_clk_div_value;
+
+    carfield_apb_req_t apb_streamer_req;
+    carfield_apb_rsp_t apb_streamer_rsp;
 
     carfield_a32_d32_reg_req_t reg_streamer_req;
     carfield_a32_d32_reg_rsp_t reg_streamer_rsp;
 
+    lossy_valid_to_stream #(
+      .T ( logic[StreamerDivisionValueWidth-1:0] )
+    ) i_streamer_decouple (
+      .clk_i   ( periph_clk ),
+      .rst_ni  ( periph_pwr_on_rst_n ),
+      .valid_i ( car_regs_reg2hw.streamer_clk_div_value.qe ),
+      .data_i  ( car_regs_reg2hw.streamer_clk_div_value.q ),
+      .valid_o ( streamer_clk_decoupled_valid ),
+      .ready_i ( streamer_clk_decoupled_ready ),
+      .data_o  ( streamer_clk_div_value ),
+      .busy_o  ( )
+    );
+
+    clk_int_div #(
+      .DIV_VALUE_WIDTH(StreamerDivisionValueWidth),
+      .DEFAULT_DIV_VALUE(1),
+      .ENABLE_CLOCK_IN_RESET(1)
+    ) i_streamer_clk_div (
+      .clk_i          ( periph_clk ),
+      .rst_ni         ( periph_pwr_on_rst_n ),
+      .en_i           ( car_regs_reg2hw.streamer_clk_div_enable.q ),
+      .test_mode_en_i ( test_mode_i ),
+      .div_i          ( streamer_clk_div_value ),
+      .div_valid_i    ( streamer_clk_decoupled_valid ),
+      .div_ready_o    ( streamer_clk_decoupled_ready ),
+      .clk_o          ( streamer_clk ),
+      .cycl_count_o   (              )
+    );
+
     REG_BUS #(
       .ADDR_WIDTH ( AxiNarrowAddrWidth ),
       .DATA_WIDTH ( AxiNarrowDataWidth )
-    ) reg_bus_streamer (periph_clk);
+    ) reg_bus_streamer ( streamer_clk );
+
+    (* no_ungroup *)
+    (* no_boundary_optimization *)
+    apb_cdc #(
+      .LogDepth ( LogDepth ),
+      .req_t  ( carfield_apb_req_t ),
+      .resp_t ( carfield_apb_rsp_t ),
+      .addr_t ( car_nar_addrw_t    ),
+      .data_t ( car_nar_dataw_t    ),
+      .strb_t ( car_nar_strb_t     )
+    ) i_apb_streamer_cdc (
+      // synchronous slave port - clocked by `src_pclk_i`
+      .src_pclk_i    ( periph_clk ),
+      .src_preset_ni ( periph_pwr_on_rst_n ),
+      .src_req_i     ( apb_mst_req[StreamerCfgIdx] ),
+      .src_resp_o    ( apb_mst_rsp[StreamerCfgIdx] ),
+      // synchronous master port - clocked by `dst_pclk_i`
+      .dst_pclk_i    ( streamer_clk ),
+      .dst_preset_ni ( periph_pwr_on_rst_n ),
+      .dst_req_o     ( apb_streamer_req    ),
+      .dst_resp_i    ( apb_streamer_rsp    )
+    );
 
     apb_to_reg i_apb_to_reg_streamer (
-      .clk_i     ( periph_clk                          ),
-      .rst_ni    ( periph_pwr_on_rst_n                 ),
-      .penable_i ( apb_mst_req[StreamerCfgIdx].penable ),
-      .pwrite_i  ( apb_mst_req[StreamerCfgIdx].pwrite  ),
-      .paddr_i   ( apb_mst_req[StreamerCfgIdx].paddr   ),
-      .psel_i    ( apb_mst_req[StreamerCfgIdx].psel    ),
-      .pwdata_i  ( apb_mst_req[StreamerCfgIdx].pwdata  ),
-      .prdata_o  ( apb_mst_rsp[StreamerCfgIdx].prdata  ),
-      .pready_o  ( apb_mst_rsp[StreamerCfgIdx].pready  ),
-      .pslverr_o ( apb_mst_rsp[StreamerCfgIdx].pslverr ),
-      .reg_o     ( reg_bus_streamer                    )
+      .clk_i     ( streamer_clk             ),
+      .rst_ni    ( periph_pwr_on_rst_n      ),
+      .penable_i ( apb_streamer_req.penable ),
+      .pwrite_i  ( apb_streamer_req.pwrite  ),
+      .paddr_i   ( apb_streamer_req.paddr   ),
+      .psel_i    ( apb_streamer_req.psel    ),
+      .pwdata_i  ( apb_streamer_req.pwdata  ),
+      .prdata_o  ( apb_streamer_rsp.prdata  ),
+      .pready_o  ( apb_streamer_rsp.pready  ),
+      .pslverr_o ( apb_streamer_rsp.pslverr ),
+      .reg_o     ( reg_bus_streamer         )
     );
 
     // crop the address to 32-bit
@@ -2527,7 +2585,7 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
     assign mask_address = {{ZeroBits{1'b0}}, reg_streamer_req.addr};
 
     TASI_top i_tctm_streamer (
-      .SYS_CLK                            (periph_clk),
+      .SYS_CLK                            (streamer_clk),
       .ASYNC_RST_N                        (periph_rst_n), // FIXME: connect to dedicated one
       .APB_PADD                           (apb_mst_req[StreamerDataIdx].paddr),   // : in
       .APB_PENABLE                        (apb_mst_req[StreamerDataIdx].penable), // : in
