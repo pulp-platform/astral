@@ -2649,7 +2649,7 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .CROSSED_RESET_OUT                  (/* Not Connected */), // : out
       .FPEMO                              (/* Not Connected */), // : out
       .FPRELM                             (/* Not Connected */), // : out
-      .GENERAL_INTERRUPT                  (car_regs_hw2reg.spw_general_irq.d), // : out
+      .GENERAL_INTERRUPT                  (car_regs_hw2reg.streamer_general_irq.d), // : out
       .HPC_ADDR                           (hpc_addr_o), // : out
       .HPC_CMD_EN                         (hpc_cmd_en_o), // : out
       .HPC_INTERRUPT_SOURCES              (/* Not Connected */), // : out
@@ -2699,10 +2699,10 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .TME_UNENC_SYNC                     (/* Not Connected */)  // : out
     );
 
-    assign car_regs_hw2reg.spw_general_irq.de = '1;
+    assign car_regs_hw2reg.streamer_general_irq.de = '1;
   end else begin: gen_no_streamer
-    assign car_regs_hw2reg.spw_general_irq.de = '0;
-    assign car_regs_hw2reg.spw_general_irq.d = '0;
+    assign car_regs_hw2reg.streamer_general_irq.de = '0;
+    assign car_regs_hw2reg.streamer_general_irq.d = '0;
   end
 
   // SpaceWire IP
