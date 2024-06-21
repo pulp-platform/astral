@@ -46,7 +46,7 @@ int main(void) {
 
 
 	//mask all interrupt
-	W_REG(STREAMER_INTERRUPT_MASK) = 0U;
+	W_REG(STREAMER_INTERRUPT_MASK) = 0xFFFF;
 	//clear interrupt
 	W_REG(STREAMER_INTERRUPT_CLEAR) = INTERRUPT_MASK;
 	
