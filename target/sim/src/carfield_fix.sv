@@ -145,6 +145,8 @@ module carfield_soc_fixture;
   wire [NumPhys-1:0]                pad_hyper_resetn;
   wire [NumPhys-1:0][7:0]           pad_hyper_dq;
 
+  wire spw_data, spw_strb;
+
   clk_rst_gen #(
     .ClkPeriod    ( ClkPeriodPeriph ),
     .RstClkCycles ( RstCycles       )
@@ -255,6 +257,10 @@ module carfield_soc_fixture;
     .obt_ext_clk_i              ( '0                        ),
     .obt_pps_in_i               ( '0                        ),
     .obt_sync_out_o             (                           ),
+    .spw_data_i                 ( spw_data                  ),
+    .spw_strb_i                 ( spw_strb                  ),
+    .spw_data_o                 ( spw_data                  ),
+    .spw_strb_o                 ( spw_strb                  ),
     .ext_reg_async_slv_req_i    ( '0                        ),
     .ext_reg_async_slv_ack_o    (                           ),
     .ext_reg_async_slv_data_i   ( '0                        ),

@@ -292,6 +292,16 @@ package carfield_reg_pkg;
     logic        de;
   } carfield_hw2reg_pulp_cluster_eoc_reg_t;
 
+  typedef struct packed {
+    logic        d;
+    logic        de;
+  } carfield_hw2reg_streamer_general_irq_reg_t;
+
+  typedef struct packed {
+    logic        d;
+    logic        de;
+  } carfield_hw2reg_spw_general_irq_reg_t;
+
   // Register -> HW type
   typedef struct packed {
     carfield_reg2hw_generic_scratch0_reg_t generic_scratch0; // [469:438]
@@ -351,17 +361,19 @@ package carfield_reg_pkg;
 
   // HW -> register type
   typedef struct packed {
-    carfield_hw2reg_generic_scratch0_reg_t generic_scratch0; // [83:51]
-    carfield_hw2reg_generic_scratch1_reg_t generic_scratch1; // [50:18]
-    carfield_hw2reg_periph_isolate_status_reg_t periph_isolate_status; // [17:16]
-    carfield_hw2reg_safety_island_isolate_status_reg_t safety_island_isolate_status; // [15:14]
-    carfield_hw2reg_security_island_isolate_status_reg_t security_island_isolate_status; // [13:12]
-    carfield_hw2reg_pulp_cluster_isolate_status_reg_t pulp_cluster_isolate_status; // [11:10]
-    carfield_hw2reg_spatz_cluster_isolate_status_reg_t spatz_cluster_isolate_status; // [9:8]
-    carfield_hw2reg_l2_isolate_status_reg_t l2_isolate_status; // [7:6]
-    carfield_hw2reg_spatz_cluster_busy_reg_t spatz_cluster_busy; // [5:4]
-    carfield_hw2reg_pulp_cluster_busy_reg_t pulp_cluster_busy; // [3:2]
-    carfield_hw2reg_pulp_cluster_eoc_reg_t pulp_cluster_eoc; // [1:0]
+    carfield_hw2reg_generic_scratch0_reg_t generic_scratch0; // [87:55]
+    carfield_hw2reg_generic_scratch1_reg_t generic_scratch1; // [54:22]
+    carfield_hw2reg_periph_isolate_status_reg_t periph_isolate_status; // [21:20]
+    carfield_hw2reg_safety_island_isolate_status_reg_t safety_island_isolate_status; // [19:18]
+    carfield_hw2reg_security_island_isolate_status_reg_t security_island_isolate_status; // [17:16]
+    carfield_hw2reg_pulp_cluster_isolate_status_reg_t pulp_cluster_isolate_status; // [15:14]
+    carfield_hw2reg_spatz_cluster_isolate_status_reg_t spatz_cluster_isolate_status; // [13:12]
+    carfield_hw2reg_l2_isolate_status_reg_t l2_isolate_status; // [11:10]
+    carfield_hw2reg_spatz_cluster_busy_reg_t spatz_cluster_busy; // [9:8]
+    carfield_hw2reg_pulp_cluster_busy_reg_t pulp_cluster_busy; // [7:6]
+    carfield_hw2reg_pulp_cluster_eoc_reg_t pulp_cluster_eoc; // [5:4]
+    carfield_hw2reg_streamer_general_irq_reg_t streamer_general_irq; // [3:2]
+    carfield_hw2reg_spw_general_irq_reg_t spw_general_irq; // [1:0]
   } carfield_hw2reg_t;
 
   // Register offsets
@@ -430,6 +442,8 @@ package carfield_reg_pkg;
   parameter logic [BlockAw-1:0] CARFIELD_HYPERBUS_CLK_DIV_VALUE_OFFSET = 9'h f8;
   parameter logic [BlockAw-1:0] CARFIELD_STREAMER_CLK_DIV_ENABLE_OFFSET = 9'h fc;
   parameter logic [BlockAw-1:0] CARFIELD_STREAMER_CLK_DIV_VALUE_OFFSET = 9'h 100;
+  parameter logic [BlockAw-1:0] CARFIELD_STREAMER_GENERAL_IRQ_OFFSET = 9'h 104;
+  parameter logic [BlockAw-1:0] CARFIELD_SPW_GENERAL_IRQ_OFFSET = 9'h 108;
 
   // Register index
   typedef enum int {
@@ -497,11 +511,13 @@ package carfield_reg_pkg;
     CARFIELD_HYPERBUS_CLK_DIV_EN,
     CARFIELD_HYPERBUS_CLK_DIV_VALUE,
     CARFIELD_STREAMER_CLK_DIV_ENABLE,
-    CARFIELD_STREAMER_CLK_DIV_VALUE
+    CARFIELD_STREAMER_CLK_DIV_VALUE,
+    CARFIELD_STREAMER_GENERAL_IRQ,
+    CARFIELD_SPW_GENERAL_IRQ
   } carfield_id_e;
 
   // Register width information to check illegal writes
-  parameter logic [3:0] CARFIELD_PERMIT [65] = '{
+  parameter logic [3:0] CARFIELD_PERMIT [67] = '{
     4'b 1111, // index[ 0] CARFIELD_VERSION0
     4'b 1111, // index[ 1] CARFIELD_VERSION1
     4'b 1111, // index[ 2] CARFIELD_VERSION2
@@ -566,7 +582,9 @@ package carfield_reg_pkg;
     4'b 0001, // index[61] CARFIELD_HYPERBUS_CLK_DIV_EN
     4'b 0111, // index[62] CARFIELD_HYPERBUS_CLK_DIV_VALUE
     4'b 0001, // index[63] CARFIELD_STREAMER_CLK_DIV_ENABLE
-    4'b 0001  // index[64] CARFIELD_STREAMER_CLK_DIV_VALUE
+    4'b 0001, // index[64] CARFIELD_STREAMER_CLK_DIV_VALUE
+    4'b 0001, // index[65] CARFIELD_STREAMER_GENERAL_IRQ
+    4'b 0001  // index[66] CARFIELD_SPW_GENERAL_IRQ
   };
 
 endpackage
