@@ -155,8 +155,13 @@ module carfield
   output logic                                        hpc_sample_o,
   output logic [1:0]                                  llc_line_o,
   input  logic                                        obt_ext_clk_i,
-  input  logic                                        obt_pps_in_i,  
-  output logic                                        obt_sync_out_o, 
+  input  logic                                        obt_pps_in_i,
+  output logic                                        obt_sync_out_o,
+  // SpW Interface
+  input  logic                                        spw_data_i,
+  input  logic                                        spw_strb_i,
+  output logic                                        spw_data_o,
+  output logic                                        spw_strb_o,
 `ifdef GEN_NO_HYPERBUS
   // LLC interface
   output logic [LlcArWidth-1:0] llc_ar_data,
@@ -2694,11 +2699,79 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .TME_UNENC_SYNC                     (/* Not Connected */)  // : out
     );
   end else begin: gen_no_streamer
+
   end
 
   // SpaceWire IP
   if (carfield_configuration::SpaceWireEnable) begin: gen_spw
+
+    localparam int unsigned SpWZeroBits = Cfg.AddrWidth - AxiNarrowAddrWidth;
+    logic [Cfg.AddrWidth-1:0] spw_address;
+
+    carfield_a32_d32_reg_req_t reg_spw_req;
+    carfield_a32_d32_reg_rsp_t reg_spw_rsp;
+
+    REG_BUS #(
+      .ADDR_WIDTH ( AxiNarrowAddrWidth ),
+      .DATA_WIDTH ( AxiNarrowDataWidth )
+    ) reg_bus_spw ( periph_clk );
+
+    apb_to_reg i_apb_to_reg_streamer (
+      .clk_i     ( periph_clk                        ),
+      .rst_ni    ( periph_rst_n                      ),
+      .penable_i ( apb_mst_req[SpWRegBusIdx].penable ),
+      .pwrite_i  ( apb_mst_req[SpWRegBusIdx].pwrite  ),
+      .paddr_i   ( apb_mst_req[SpWRegBusIdx].paddr   ),
+      .psel_i    ( apb_mst_req[SpWRegBusIdx].psel    ),
+      .pwdata_i  ( apb_mst_req[SpWRegBusIdx].pwdata  ),
+      .prdata_o  ( apb_mst_rsp[SpWRegBusIdx].prdata  ),
+      .pready_o  ( apb_mst_rsp[SpWRegBusIdx].pready  ),
+      .pslverr_o ( apb_mst_rsp[SpWRegBusIdx].pslverr ),
+      .reg_o     ( reg_bus_spw                       )
+    );
+
+    assign reg_spw_req.addr  = reg_bus_spw.addr;
+    assign reg_spw_req.write = reg_bus_spw.write;
+    assign reg_spw_req.wdata = reg_bus_spw.wdata;
+    assign reg_spw_req.valid = reg_bus_spw.valid;
+
+    assign reg_bus_spw.rdata = reg_spw_rsp.rdata;
+    assign reg_bus_spw.error = '0;
+    assign reg_bus_spw.ready = reg_spw_rsp.ready;
+
+    assign spw_address = {{SpWZeroBits{1'b0}}, reg_spw_req.addr};
+
+    spw_astr_top i_spacewire (
+      .ASYNC_RSTN           (periph_rst_n),
+      .SYNC_RSTN            (periph_rst_n),
+      .SYS_CLK              (periph_clk),
+      .SPW_DATA_IN          (spw_data_i),
+      .SPW_STROBE_IN        (spw_strb_i),
+      .SPW_DATA_OUT         (spw_data_o),
+      .SPW_STROBE_OUT       (spw_strb_o),
+      .REG_ADDR_i           (spw_address),
+      .REG_VALID_i          (reg_spw_req.valid),
+      .REG_WDATA_i          (reg_spw_req.wdata),
+      .REG_WRITE_i          (reg_spw_req.write),
+      .REG_RDATA_o          (reg_spw_rsp.rdata),
+      .REG_READY_o          (reg_spw_rsp.ready),
+      .APB_PADD             (apb_mst_req[SpWApbBusIdx].paddr),
+      .APB_PSEL             (apb_mst_req[SpWApbBusIdx].psel),
+      .APB_PENABLE          (apb_mst_req[SpWApbBusIdx].penable),
+      .APB_PWDATA           (apb_mst_req[SpWApbBusIdx].pwdata),
+      .APB_PWRITE           (apb_mst_req[SpWApbBusIdx].pwrite),
+      .APB_PRDATA           (apb_mst_rsp[SpWApbBusIdx].prdata),
+      .APB_PREADY           (apb_mst_rsp[SpWApbBusIdx].pready),
+      .APB_PSLVERR          (apb_mst_rsp[SpWApbBusIdx].pslverr),
+      .GENERAL_INTERRUPT_o  (car_regs_hw2reg.spw_general_irq.d)
+   );
+   assign car_regs_hw2reg.spw_general_irq.de = '1;
+
   end else begin: gen_no_spw
+    assign spw_data_o = '0;
+    assign spw_strb_o = '0;
+    assign car_regs_hw2reg.spw_general_irq.d = '0;
+    assign car_regs_hw2reg.spw_general_irq.de = '0;
   end
 
 end else begin: gen_no_periph

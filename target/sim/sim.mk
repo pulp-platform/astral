@@ -74,7 +74,9 @@ $(CAR_VSIM_DIR)/compile.carfield_soc.tcl:
 	sed -i '2a\
 	set VsimDir "$(CAR_VSIM_DIR)"\
 	set TCTMPATH "$(STREAMER_ROOT)"\
-	source $(STREAMER_ROOT)/astral.compile.tcl' $@
+	set SPWPATH "$(SPACEWIRE_ROOT)"\
+	source $(STREAMER_ROOT)/astral.compile.tcl \
+	source $(SPACEWIRE_ROOT)/astr_compile.tcl' $@
 	echo 'vlog "$(CHS_ROOT)/target/sim/src/elfloader.cpp" -ccflags "-std=c++11"' >> $@
 	echo 'vopt $(VOPT_FLAGS) $(TBENCH) -o $(TBENCH)_opt' >> $@
 

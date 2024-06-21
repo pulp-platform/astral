@@ -814,5 +814,27 @@
         { bits: "5:0" }
       ],
     }
+
+    { name: "STREAMER_GENERAL_IRQ",
+      desc: "Streamer general interrupt",
+      swaccess: "rw",
+      hwaccess: "hwo",
+      resval: "0",
+      hwqe: "1",
+      fields: [
+        { bits: "0:0" }
+      ],
+    }
+
+    { name: "SPW_GENERAL_IRQ",
+      desc: "SpaceWire general interrupt",
+      swaccess: "rw",
+      hwaccess: "hwo",
+      resval: "0",
+      hwqe: "1",
+      fields: [
+        { bits: "0:0" }
+      ],
+    }
   ],
 }

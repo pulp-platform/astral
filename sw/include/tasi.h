@@ -26,9 +26,9 @@
 #define BIT24 24
 
 #define STREAMER_REG_BUS 0x20009000
-#define	STREAMER_APB 0x20011000 
-#define SPW_REG_BUS 0x20009000
-#define	SPW_APB 0x20011000 
+#define	STREAMER_APB 0x20011000
+#define SPW_REG_BUS 0x20019000
+#define	SPW_APB 0x20019100
 
 //Streamer
 
@@ -85,8 +85,8 @@
 
 //SPW
 
-#define SPW_APB_TX  (SPW_APB | 0x000)
-#define SPW_APB_RX  (SPW_APB | 0x800)
+#define SPW_APB_TX  (SPW_APB + 0x000)
+#define SPW_APB_RX  (SPW_APB + 0x400)
 
 #define SPW_CTRL      (SPW_REG_BUS | 0x000)
 #define SPW_STATUS    (SPW_REG_BUS | 0x004)

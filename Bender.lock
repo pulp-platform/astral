@@ -555,7 +555,7 @@ packages:
     - hwpe-stream
     - ibex
   spacewire:
-    revision: 591cb3cfae27458de53a97e48bacdb02d952eaf7
+    revision: ffc60f3361fb9ba01ca5cec9a231434785920f04
     version: null
     source:
       Git: https://gitlab.thalesdigital.io/musa/spacewire.git
@@ -578,7 +578,7 @@ packages:
     revision: 532282c246778668b30ea99f26e34da6d1236222
     version: null
     source:
-      Git: https://gitlab.thalesdigital.io/musa/streamer.git
+      Git: git@gitlab.thalesdigital.io:musa/streamer.git
     dependencies: []
   tagger:
     revision: b288376b65b6bbd5feea196bb3c220f783d96e29

@@ -67,6 +67,8 @@
 | carfield.[`HYPERBUS_CLK_DIV_VALUE`](#hyperbus_clk_div_value)                 | 0xf8     |        4 | Hyperbus clock divider value                                           |
 | carfield.[`STREAMER_CLK_DIV_ENABLE`](#streamer_clk_div_enable)               | 0xfc     |        4 | Streamer clock divider enable                                          |
 | carfield.[`STREAMER_CLK_DIV_VALUE`](#streamer_clk_div_value)                 | 0x100    |        4 | Streamer clock divider value                                           |
+| carfield.[`STREAMER_GENERAL_IRQ`](#streamer_general_irq)                     | 0x104    |        4 | Streamer general interrupt                                             |
+| carfield.[`SPW_GENERAL_IRQ`](#spw_general_irq)                               | 0x108    |        4 | SpaceWire general interrupt                                            |
 
 ## VERSION0
 Cheshire sha256 commit
@@ -1294,4 +1296,38 @@ Streamer clock divider value
 |:------:|:------:|:-------:|:-----------------------|:--------------|
 |  31:6  |        |         |                        | Reserved      |
 |  5:0   |   rw   |   0x1   | STREAMER_CLK_DIV_VALUE |               |
+
+## STREAMER_GENERAL_IRQ
+Streamer general interrupt
+- Offset: `0x104`
+- Reset default: `0x0`
+- Reset mask: `0x1`
+
+### Fields
+
+```wavejson
+{"reg": [{"name": "STREAMER_GENERAL_IRQ", "bits": 1, "attr": ["rw"], "rotate": -90}, {"bits": 31}], "config": {"lanes": 1, "fontsize": 10, "vspace": 220}}
+```
+
+|  Bits  |  Type  |  Reset  | Name                 | Description   |
+|:------:|:------:|:-------:|:---------------------|:--------------|
+|  31:1  |        |         |                      | Reserved      |
+|   0    |   rw   |   0x0   | STREAMER_GENERAL_IRQ |               |
+
+## SPW_GENERAL_IRQ
+SpaceWire general interrupt
+- Offset: `0x108`
+- Reset default: `0x0`
+- Reset mask: `0x1`
+
+### Fields
+
+```wavejson
+{"reg": [{"name": "SPW_GENERAL_IRQ", "bits": 1, "attr": ["rw"], "rotate": -90}, {"bits": 31}], "config": {"lanes": 1, "fontsize": 10, "vspace": 170}}
+```
+
+|  Bits  |  Type  |  Reset  | Name            | Description   |
+|:------:|:------:|:-------:|:----------------|:--------------|
+|  31:1  |        |         |                 | Reserved      |
+|   0    |   rw   |   0x0   | SPW_GENERAL_IRQ |               |
 

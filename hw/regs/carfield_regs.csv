@@ -64,3 +64,5 @@ HYPERBUS_CLK_DIV_EN,1,rw,hro,1,1,Hyperbus clock divider enable bit
 HYPERBUS_CLK_DIV_VALUE,20,rw,hro,1,1,Hyperbus clock divider value
 STREAMER_CLK_DIV_ENABLE,1,rw,hro,1,0,Streamer clock divider enable
 STREAMER_CLK_DIV_VALUE,6,rw,hro,1,1,Streamer clock divider value
+STREAMER_GENERAL_IRQ,1,rw,hwo,1,0,Streamer general interrupt
+SPW_GENERAL_IRQ,1,rw,hwo,1,0,SpaceWire general interrupt

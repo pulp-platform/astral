@@ -103,6 +103,9 @@ SPATZD_BOOTMODE ?= 0 # default jtag bootmode
 # Streamer, implementing telecommand and telemetry protocols
 STREAMER_ROOT ?= $(shell $(BENDER) path streamer)
 
+# SpaceWire IP
+SPACEWIRE_ROOT ?= $(shell $(BENDER) path spacewire)
+
 ###########################
 # System HW configuration #
 ###########################
