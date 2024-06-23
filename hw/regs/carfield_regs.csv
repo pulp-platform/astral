@@ -61,5 +61,4 @@ PULP_CLUSTER_EOC,1,ro,hrw,0,0,PULP Cluster end of computation
 ETH_CLK_DIV_EN,1,rw,hro,1,1,Ethernet clock divider enable bit
 ETH_CLK_DIV_VALUE,20,rw,hro,1,10,Ethernet clock divider value
 HYPERBUS_CLK_DIV_EN,1,rw,hro,1,1,Hyperbus clock divider enable bit
-HYPERBUS_CLK_DIV_VALUE,20,rw,hro,1,10,Hyperbus clock divider value
-
+HYPERBUS_CLK_DIV_VALUE,20,rw,hro,1,1,Hyperbus clock divider value

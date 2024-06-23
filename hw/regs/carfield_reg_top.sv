@@ -1808,7 +1808,7 @@ module carfield_reg_top #(
   prim_subreg #(
     .DW      (20),
     .SWACCESS("RW"),
-    .RESVAL  (20'ha)
+    .RESVAL  (20'h1)
   ) u_hyperbus_clk_div_value (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),

@@ -698,7 +698,7 @@
       desc: "Hyperbus clock divider value",
       swaccess: "rw",
       hwaccess: "hro",
-      resval: "10",
+      resval: "1",
       hwqe: "1",
       fields: [
         { bits: "19:0" }

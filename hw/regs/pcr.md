@@ -1110,7 +1110,7 @@ Hyperbus clock divider enable bit
 ## HYPERBUS_CLK_DIV_VALUE
 Hyperbus clock divider value
 - Offset: `0xf8`
-- Reset default: `0xa`
+- Reset default: `0x1`
 - Reset mask: `0xfffff`
 
 ### Fields
@@ -1122,5 +1122,5 @@ Hyperbus clock divider value
 |  Bits  |  Type  |  Reset  | Name                   | Description   |
 |:------:|:------:|:-------:|:-----------------------|:--------------|
 | 31:20  |        |         |                        | Reserved      |
-|  19:0  |   rw   |   0xa   | HYPERBUS_CLK_DIV_VALUE |               |
+|  19:0  |   rw   |   0x1   | HYPERBUS_CLK_DIV_VALUE |               |
 

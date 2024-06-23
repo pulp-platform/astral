@@ -906,93 +906,109 @@ assign hyper_isolate_req = car_regs_reg2hw.periph_isolate.q;
   localparam int unsigned DefaultHyperClkDivValue = 2;
   logic hyp_clk;
 
-clk_int_div #(
-  .DIV_VALUE_WIDTH       ( HyperDivWidth            ),
-  .DEFAULT_DIV_VALUE     ( DefaultHyperClkDivValue  ),
-  .ENABLE_CLOCK_IN_RESET ( 1'b0                     )
-) i_hyper_clk_div (
-  .clk_i                 ( periph_clk            ),
-  .rst_ni                ( periph_rst_n          ),
-  .en_i                  ( car_regs_reg2hw.hyperbus_clk_div_en.q    ),
-  .test_mode_en_i        ( test_mode_i           ),
-  .div_i                 ( car_regs_reg2hw.hyperbus_clk_div_value.q ),
-  .div_valid_i           ( 1'b0                  ),
-  .div_ready_o           (                       ),
-  .clk_o                 ( hyp_clk               ),
-  .cycl_count_o          (                       )
-);
+  logic hyper_clk_decoupled_valid, hyper_clk_decoupled_ready;
+  logic [HyperDivWidth-1:0] hyper_clk_div_value;
 
-// Hyperbus
-hyperbus_wrap      #(
-  .NumChips         ( HypNumChips                           ),
-  .NumPhys          ( HypNumPhys                            ),
-  .IsClockODelayed  ( 1'b0                                  ),
-  .AxiAddrWidth     ( Cfg.AddrWidth                         ),
-  .AxiDataWidth     ( Cfg.AxiDataWidth                      ),
-  .AxiIdWidth       ( LlcIdWidth                            ),
-  .AxiUserWidth     ( Cfg.AxiUserWidth                      ),
-  .axi_req_t        ( carfield_axi_llc_req_t                ),
-  .axi_rsp_t        ( carfield_axi_llc_rsp_t                ),
-  .axi_w_chan_t     ( carfield_axi_llc_w_chan_t             ),
-  .axi_b_chan_t     ( carfield_axi_llc_b_chan_t             ),
-  .axi_ar_chan_t    ( carfield_axi_llc_ar_chan_t            ),
-  .axi_r_chan_t     ( carfield_axi_llc_r_chan_t             ),
-  .axi_aw_chan_t    ( carfield_axi_llc_aw_chan_t            ),
-  .RegAddrWidth     ( AxiNarrowAddrWidth                    ),
-  .RegDataWidth     ( AxiNarrowDataWidth                    ),
-  .reg_req_t        ( carfield_a32_d32_reg_req_t            ),
-  .reg_rsp_t        ( carfield_a32_d32_reg_rsp_t            ),
-  .RxFifoLogDepth   ( 32'd2                                 ),
-  .TxFifoLogDepth   ( 32'd2                                 ),
-  .RstChipBase      ( Cfg.LlcOutRegionStart                 ),
-  .RstChipSpace     ( HypNumPhys * HypNumChips * 'h800_0000 ),
-  .PhyStartupCycles ( 300 * 200                             ),
-  .AxiLogDepth      ( LogDepth                              ),
-  .AxiSlaveArWidth  ( LlcArWidth                            ),
-  .AxiSlaveAwWidth  ( LlcAwWidth                            ),
-  .AxiSlaveBWidth   ( LlcBWidth                             ),
-  .AxiSlaveRWidth   ( LlcRWidth                             ),
-  .AxiSlaveWWidth   ( LlcWWidth                             ),
-  .AxiMaxTrans      ( Cfg.AxiMaxSlvTrans                    ),
-  .CdcSyncStages    ( SyncStages                            )
-) i_hyperbus_wrap   (
-  .clk_i               ( hyp_clk            ),
-  .rst_ni              ( periph_rst_n       ),
-  .test_mode_i         ( test_mode_i        ),
-  .axi_slave_ar_data_i ( llc_ar_data        ),
-  .axi_slave_ar_wptr_i ( llc_ar_wptr        ),
-  .axi_slave_ar_rptr_o ( llc_ar_rptr        ),
-  .axi_slave_aw_data_i ( llc_aw_data        ),
-  .axi_slave_aw_wptr_i ( llc_aw_wptr        ),
-  .axi_slave_aw_rptr_o ( llc_aw_rptr        ),
-  .axi_slave_b_data_o  ( llc_b_data         ),
-  .axi_slave_b_wptr_o  ( llc_b_wptr         ),
-  .axi_slave_b_rptr_i  ( llc_b_rptr         ),
-  .axi_slave_r_data_o  ( llc_r_data         ),
-  .axi_slave_r_wptr_o  ( llc_r_wptr         ),
-  .axi_slave_r_rptr_i  ( llc_r_rptr         ),
-  .axi_slave_w_data_i  ( llc_w_data         ),
-  .axi_slave_w_wptr_i  ( llc_w_wptr         ),
-  .axi_slave_w_rptr_o  ( llc_w_rptr         ),
-  .rbus_req_addr_i     ( reg_hyper_req.addr  ),
-  .rbus_req_write_i    ( reg_hyper_req.write ),
-  .rbus_req_wdata_i    ( reg_hyper_req.wdata ),
-  .rbus_req_wstrb_i    ( reg_hyper_req.wstrb ),
-  .rbus_req_valid_i    ( reg_hyper_req.valid ),
-  .rbus_rsp_rdata_o    ( reg_hyper_rsp.rdata ),
-  .rbus_rsp_ready_o    ( reg_hyper_rsp.ready ),
-  .rbus_rsp_error_o    ( reg_hyper_rsp.error ),
-  .hyper_cs_no,
-  .hyper_ck_o,
-  .hyper_ck_no,
-  .hyper_rwds_o,
-  .hyper_rwds_i,
-  .hyper_rwds_oe_o,
-  .hyper_dq_i,
-  .hyper_dq_o,
-  .hyper_dq_oe_o,
-  .hyper_reset_no
-);
+  lossy_valid_to_stream #(
+    .T(logic [HyperDivWidth-1:0])
+  ) i_hyperbus_decouple (
+    .clk_i   ( periph_clk ),
+    .rst_ni  ( periph_rst_n ),
+    .valid_i ( car_regs_reg2hw.hyperbus_clk_div_value.qe ),
+    .data_i  ( car_regs_reg2hw.hyperbus_clk_div_value.q  ),
+    .valid_o ( hyper_clk_decoupled_valid ),
+    .ready_i ( hyper_clk_decoupled_ready ),
+    .data_o  ( hyper_clk_div_value ),
+    .busy_o  ( )
+  );
+
+  clk_int_div #(
+    .DIV_VALUE_WIDTH ( HyperDivWidth ),
+    .DEFAULT_DIV_VALUE ( DefaultHyperClkDivValue ),
+    .ENABLE_CLOCK_IN_RESET ( 1 )
+  ) i_hyper_clk_div (
+    .clk_i                 ( periph_clk ),
+    .rst_ni                ( periph_rst_n ),
+    .en_i                  ( car_regs_reg2hw.hyperbus_clk_div_en.q ),
+    .test_mode_en_i        ( test_mode_i ),
+    .div_i                 ( hyper_clk_div_value ),
+    .div_valid_i           ( hyper_clk_decoupled_valid ),
+    .div_ready_o           ( hyper_clk_decoupled_ready ),
+    .clk_o                 ( hyp_clk ),
+    .cycl_count_o          (  )
+  );
+
+  // Hyperbus
+  hyperbus_wrap      #(
+    .NumChips         ( HypNumChips                           ),
+    .NumPhys          ( HypNumPhys                            ),
+    .IsClockODelayed  ( 1'b0                                  ),
+    .AxiAddrWidth     ( Cfg.AddrWidth                         ),
+    .AxiDataWidth     ( Cfg.AxiDataWidth                      ),
+    .AxiIdWidth       ( LlcIdWidth                            ),
+    .AxiUserWidth     ( Cfg.AxiUserWidth                      ),
+    .axi_req_t        ( carfield_axi_llc_req_t                ),
+    .axi_rsp_t        ( carfield_axi_llc_rsp_t                ),
+    .axi_w_chan_t     ( carfield_axi_llc_w_chan_t             ),
+    .axi_b_chan_t     ( carfield_axi_llc_b_chan_t             ),
+    .axi_ar_chan_t    ( carfield_axi_llc_ar_chan_t            ),
+    .axi_r_chan_t     ( carfield_axi_llc_r_chan_t             ),
+    .axi_aw_chan_t    ( carfield_axi_llc_aw_chan_t            ),
+    .RegAddrWidth     ( AxiNarrowAddrWidth                    ),
+    .RegDataWidth     ( AxiNarrowDataWidth                    ),
+    .reg_req_t        ( carfield_a32_d32_reg_req_t            ),
+    .reg_rsp_t        ( carfield_a32_d32_reg_rsp_t            ),
+    .RxFifoLogDepth   ( 32'd2                                 ),
+    .TxFifoLogDepth   ( 32'd2                                 ),
+    .RstChipBase      ( Cfg.LlcOutRegionStart                 ),
+    .RstChipSpace     ( HypNumPhys * HypNumChips * 'h800_0000 ),
+    .PhyStartupCycles ( 300 * 200                             ),
+    .AxiLogDepth      ( LogDepth                              ),
+    .AxiSlaveArWidth  ( LlcArWidth                            ),
+    .AxiSlaveAwWidth  ( LlcAwWidth                            ),
+    .AxiSlaveBWidth   ( LlcBWidth                             ),
+    .AxiSlaveRWidth   ( LlcRWidth                             ),
+    .AxiSlaveWWidth   ( LlcWWidth                             ),
+    .AxiMaxTrans      ( Cfg.AxiMaxSlvTrans                    ),
+    .CdcSyncStages    ( SyncStages                            )
+  ) i_hyperbus_wrap   (
+    .clk_i               ( hyp_clk            ),
+    .rst_ni              ( periph_rst_n       ),
+    .test_mode_i         ( test_mode_i        ),
+    .axi_slave_ar_data_i ( llc_ar_data        ),
+    .axi_slave_ar_wptr_i ( llc_ar_wptr        ),
+    .axi_slave_ar_rptr_o ( llc_ar_rptr        ),
+    .axi_slave_aw_data_i ( llc_aw_data        ),
+    .axi_slave_aw_wptr_i ( llc_aw_wptr        ),
+    .axi_slave_aw_rptr_o ( llc_aw_rptr        ),
+    .axi_slave_b_data_o  ( llc_b_data         ),
+    .axi_slave_b_wptr_o  ( llc_b_wptr         ),
+    .axi_slave_b_rptr_i  ( llc_b_rptr         ),
+    .axi_slave_r_data_o  ( llc_r_data         ),
+    .axi_slave_r_wptr_o  ( llc_r_wptr         ),
+    .axi_slave_r_rptr_i  ( llc_r_rptr         ),
+    .axi_slave_w_data_i  ( llc_w_data         ),
+    .axi_slave_w_wptr_i  ( llc_w_wptr         ),
+    .axi_slave_w_rptr_o  ( llc_w_rptr         ),
+    .rbus_req_addr_i     ( reg_hyper_req.addr  ),
+    .rbus_req_write_i    ( reg_hyper_req.write ),
+    .rbus_req_wdata_i    ( reg_hyper_req.wdata ),
+    .rbus_req_wstrb_i    ( reg_hyper_req.wstrb ),
+    .rbus_req_valid_i    ( reg_hyper_req.valid ),
+    .rbus_rsp_rdata_o    ( reg_hyper_rsp.rdata ),
+    .rbus_rsp_ready_o    ( reg_hyper_rsp.ready ),
+    .rbus_rsp_error_o    ( reg_hyper_rsp.error ),
+    .hyper_cs_no,
+    .hyper_ck_o,
+    .hyper_ck_no,
+    .hyper_rwds_o,
+    .hyper_rwds_i,
+    .hyper_rwds_oe_o,
+    .hyper_dq_i,
+    .hyper_dq_o,
+    .hyper_dq_oe_o,
+    .hyper_reset_no
+  );
 `endif // GEN_NO_HYPERBUS
 
 // Temporary Mailbox parameters (evaluate if we can move everything here).
