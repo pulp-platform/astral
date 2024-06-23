@@ -1925,25 +1925,41 @@ mailbox_unit #(
 // Carfield peripherals
 if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
   localparam int unsigned EthAsyncIdx = CarfieldRegBusSlvIdx.ethernet-NumSyncRegSlv;
-  assign ethernet_isolate_req = car_regs_reg2hw.periph_isolate.q;
   localparam int unsigned EthDivWidth = 20;
   localparam int unsigned DefaultEthClkDivValue = 2;
   logic eth_clk;
+  logic eth_clk_decoupled_valid, eth_clk_decoupled_ready;
+  logic [EthDivWidth-1:0] eth_clk_div_value;
+
+  assign ethernet_isolate_req = car_regs_reg2hw.periph_isolate.q;
+
+  lossy_valid_to_stream #(
+    .T(logic [EthDivWidth-1:0])
+  ) i_ethernet_decouple (
+    .clk_i   ( periph_clk ),
+    .rst_ni  ( periph_rst_n ),
+    .valid_i ( car_regs_reg2hw.eth_clk_div_value.qe ),
+    .data_i  ( car_regs_reg2hw.eth_clk_div_value.q  ),
+    .valid_o ( eth_clk_decoupled_valid ),
+    .ready_i ( eth_clk_decoupled_ready ),
+    .data_o  ( eth_clk_div_value ),
+    .busy_o  ( )
+  );
 
   clk_int_div #(
-    .DIV_VALUE_WIDTH       ( EthDivWidth            ),
-    .DEFAULT_DIV_VALUE     ( DefaultEthClkDivValue  ),
-    .ENABLE_CLOCK_IN_RESET ( 0                      )
-  ) i_eth_rgmii_phy_clk_int_div (
-    .clk_i          ( periph_clk            ),
-    .rst_ni         ( periph_rst_n          ),
-    .en_i           ( car_regs_reg2hw.eth_clk_div_en.q     ),
-    .test_mode_en_i ( test_mode_i           ),
-    .div_i          ( car_regs_reg2hw.eth_clk_div_value.q  ),
-    .div_valid_i    ( 1'b0                  ),
-    .div_ready_o    (                       ),
-    .clk_o          ( eth_clk               ),
-    .cycl_count_o   (                       )
+    .DIV_VALUE_WIDTH ( EthDivWidth ),
+    .DEFAULT_DIV_VALUE ( DefaultEthClkDivValue  ),
+    .ENABLE_CLOCK_IN_RESET ( 1 )
+  ) i_ethernet_clk_div (
+    .clk_i          ( periph_clk ),
+    .rst_ni         ( periph_rst_n ),
+    .en_i           ( car_regs_reg2hw.eth_clk_div_en.q ),
+    .test_mode_en_i ( test_mode_i ),
+    .div_i          ( eth_clk_div_value ),
+    .div_valid_i    ( eth_clk_decoupled_valid ),
+    .div_ready_o    ( eth_clk_decoupled_ready ),
+    .clk_o          ( eth_clk ),
+    .cycl_count_o   ( )
   );
 
   ethernet_wrap #(
@@ -2019,16 +2035,15 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
     .eth_irq_o               ( car_eth_intr                            )
   );
 end else begin : gen_no_ethernet
-  assign eth_clk                 = '0;
-  assign ethernet_isolate_req    = '0;
-  assign car_eth_intr         = '0;
-  assign eth_md_o                = '0;
-  assign eth_md_oe               = '0;
-  assign eth_mdc_o               = '0;
-  assign eth_rst_n_o             = '0;
-  assign eth_txck_o              = '0;
-  assign eth_txctl_o             = '0;
-  assign eth_txd_o               = '0;
+  assign ethernet_isolate_req              = '0;
+  assign car_eth_intr                      = '0;
+  assign eth_md_o                          = '0;
+  assign eth_md_oe                         = '0;
+  assign eth_mdc_o                         = '0;
+  assign eth_rst_n_o                       = '0;
+  assign eth_txck_o                        = '0;
+  assign eth_txctl_o                       = '0;
+  assign eth_txd_o                         = '0;
 end
 
 // APB peripherals
