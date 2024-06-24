@@ -907,7 +907,6 @@ assign hyper_isolate_req = car_regs_reg2hw.periph_isolate.q;
   logic hyp_clk;
 
   logic hyper_clk_decoupled_valid, hyper_clk_decoupled_ready;
-  logic [HyperDivWidth-1:0] hyper_clk_div_value;
 
   lossy_valid_to_stream #(
     .T(logic [HyperDivWidth-1:0])
@@ -918,7 +917,7 @@ assign hyper_isolate_req = car_regs_reg2hw.periph_isolate.q;
     .data_i  ( car_regs_reg2hw.hyperbus_clk_div_value.q  ),
     .valid_o ( hyper_clk_decoupled_valid ),
     .ready_i ( hyper_clk_decoupled_ready ),
-    .data_o  ( hyper_clk_div_value ),
+    .data_o  ( ),
     .busy_o  ( )
   );
 
@@ -931,7 +930,7 @@ assign hyper_isolate_req = car_regs_reg2hw.periph_isolate.q;
     .rst_ni                ( periph_rst_n ),
     .en_i                  ( car_regs_reg2hw.hyperbus_clk_div_en.q ),
     .test_mode_en_i        ( test_mode_i ),
-    .div_i                 ( hyper_clk_div_value ),
+    .div_i                 ( car_regs_reg2hw.hyperbus_clk_div_value.q ),
     .div_valid_i           ( hyper_clk_decoupled_valid ),
     .div_ready_o           ( hyper_clk_decoupled_ready ),
     .clk_o                 ( hyp_clk ),
@@ -1945,7 +1944,6 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
   localparam int unsigned DefaultEthClkDivValue = 2;
   logic eth_clk;
   logic eth_clk_decoupled_valid, eth_clk_decoupled_ready;
-  logic [EthDivWidth-1:0] eth_clk_div_value;
 
   assign ethernet_isolate_req = car_regs_reg2hw.periph_isolate.q;
 
@@ -1958,7 +1956,7 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
     .data_i  ( car_regs_reg2hw.eth_clk_div_value.q  ),
     .valid_o ( eth_clk_decoupled_valid ),
     .ready_i ( eth_clk_decoupled_ready ),
-    .data_o  ( eth_clk_div_value ),
+    .data_o  ( ),
     .busy_o  ( )
   );
 
@@ -1971,7 +1969,7 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
     .rst_ni         ( periph_rst_n ),
     .en_i           ( car_regs_reg2hw.eth_clk_div_en.q ),
     .test_mode_en_i ( test_mode_i ),
-    .div_i          ( eth_clk_div_value ),
+    .div_i          ( car_regs_reg2hw.eth_clk_div_value.q ),
     .div_valid_i    ( eth_clk_decoupled_valid ),
     .div_ready_o    ( eth_clk_decoupled_ready ),
     .clk_o          ( eth_clk ),
