@@ -61,10 +61,10 @@
 | carfield.[`SPATZ_CLUSTER_BUSY`](#spatz_cluster_busy)                         | 0xe0     |        4 | Spatz Cluster busy                                                     |
 | carfield.[`PULP_CLUSTER_BUSY`](#pulp_cluster_busy)                           | 0xe4     |        4 | PULP Cluster busy                                                      |
 | carfield.[`PULP_CLUSTER_EOC`](#pulp_cluster_eoc)                             | 0xe8     |        4 | PULP Cluster end of computation                                        |
-| carfield.[`ETH_RGMII_PHY_CLK_DIV_EN`](#eth_rgmii_phy_clk_div_en)             | 0xec     |        4 | Ethernet RGMII PHY clock divider enable bit                            |
-| carfield.[`ETH_RGMII_PHY_CLK_DIV_VALUE`](#eth_rgmii_phy_clk_div_value)       | 0xf0     |        4 | Ethernet RGMII PHY clock divider value                                 |
-| carfield.[`ETH_MDIO_CLK_DIV_EN`](#eth_mdio_clk_div_en)                       | 0xf4     |        4 | Ethernet MDIO clock divider enable bit                                 |
-| carfield.[`ETH_MDIO_CLK_DIV_VALUE`](#eth_mdio_clk_div_value)                 | 0xf8     |        4 | Ethernet MDIO clock divider value                                      |
+| carfield.[`ETH_CLK_DIV_EN`](#eth_clk_div_en)                                 | 0xec     |        4 | Ethernet clock divider enable bit                                      |
+| carfield.[`ETH_CLK_DIV_VALUE`](#eth_clk_div_value)                           | 0xf0     |        4 | Ethernet clock divider value                                           |
+| carfield.[`HYPERBUS_CLK_DIV_EN`](#hyperbus_clk_div_en)                       | 0xf4     |        4 | Hyperbus clock divider enable bit                                      |
+| carfield.[`HYPERBUS_CLK_DIV_VALUE`](#hyperbus_clk_div_value)                 | 0xf8     |        4 | Hyperbus clock divider value                                           |
 
 ## VERSION0
 Cheshire sha256 commit
@@ -1056,8 +1056,8 @@ PULP Cluster end of computation
 |  31:1  |        |         |                  | Reserved      |
 |   0    |   ro   |   0x0   | PULP_CLUSTER_EOC |               |
 
-## ETH_RGMII_PHY_CLK_DIV_EN
-Ethernet RGMII PHY clock divider enable bit
+## ETH_CLK_DIV_EN
+Ethernet clock divider enable bit
 - Offset: `0xec`
 - Reset default: `0x1`
 - Reset mask: `0x1`
@@ -1065,33 +1065,33 @@ Ethernet RGMII PHY clock divider enable bit
 ### Fields
 
 ```wavejson
-{"reg": [{"name": "ETH_RGMII_PHY_CLK_DIV_EN", "bits": 1, "attr": ["rw"], "rotate": -90}, {"bits": 31}], "config": {"lanes": 1, "fontsize": 10, "vspace": 260}}
+{"reg": [{"name": "ETH_CLK_DIV_EN", "bits": 1, "attr": ["rw"], "rotate": -90}, {"bits": 31}], "config": {"lanes": 1, "fontsize": 10, "vspace": 160}}
 ```
 
-|  Bits  |  Type  |  Reset  | Name                     | Description   |
-|:------:|:------:|:-------:|:-------------------------|:--------------|
-|  31:1  |        |         |                          | Reserved      |
-|   0    |   rw   |   0x1   | ETH_RGMII_PHY_CLK_DIV_EN |               |
+|  Bits  |  Type  |  Reset  | Name           | Description   |
+|:------:|:------:|:-------:|:---------------|:--------------|
+|  31:1  |        |         |                | Reserved      |
+|   0    |   rw   |   0x1   | ETH_CLK_DIV_EN |               |
 
-## ETH_RGMII_PHY_CLK_DIV_VALUE
-Ethernet RGMII PHY clock divider value
+## ETH_CLK_DIV_VALUE
+Ethernet clock divider value
 - Offset: `0xf0`
-- Reset default: `0x64`
+- Reset default: `0xa`
 - Reset mask: `0xfffff`
 
 ### Fields
 
 ```wavejson
-{"reg": [{"name": "ETH_RGMII_PHY_CLK_DIV_VALUE", "bits": 20, "attr": ["rw"], "rotate": 0}, {"bits": 12}], "config": {"lanes": 1, "fontsize": 10, "vspace": 80}}
+{"reg": [{"name": "ETH_CLK_DIV_VALUE", "bits": 20, "attr": ["rw"], "rotate": 0}, {"bits": 12}], "config": {"lanes": 1, "fontsize": 10, "vspace": 80}}
 ```
 
-|  Bits  |  Type  |  Reset  | Name                        | Description   |
-|:------:|:------:|:-------:|:----------------------------|:--------------|
-| 31:20  |        |         |                             | Reserved      |
-|  19:0  |   rw   |  0x64   | ETH_RGMII_PHY_CLK_DIV_VALUE |               |
+|  Bits  |  Type  |  Reset  | Name              | Description   |
+|:------:|:------:|:-------:|:------------------|:--------------|
+| 31:20  |        |         |                   | Reserved      |
+|  19:0  |   rw   |   0xa   | ETH_CLK_DIV_VALUE |               |
 
-## ETH_MDIO_CLK_DIV_EN
-Ethernet MDIO clock divider enable bit
+## HYPERBUS_CLK_DIV_EN
+Hyperbus clock divider enable bit
 - Offset: `0xf4`
 - Reset default: `0x1`
 - Reset mask: `0x1`
@@ -1099,28 +1099,28 @@ Ethernet MDIO clock divider enable bit
 ### Fields
 
 ```wavejson
-{"reg": [{"name": "ETH_MDIO_CLK_DIV_EN", "bits": 1, "attr": ["rw"], "rotate": -90}, {"bits": 31}], "config": {"lanes": 1, "fontsize": 10, "vspace": 210}}
+{"reg": [{"name": "HYPERBUS_CLK_DIV_EN", "bits": 1, "attr": ["rw"], "rotate": -90}, {"bits": 31}], "config": {"lanes": 1, "fontsize": 10, "vspace": 210}}
 ```
 
 |  Bits  |  Type  |  Reset  | Name                | Description   |
 |:------:|:------:|:-------:|:--------------------|:--------------|
 |  31:1  |        |         |                     | Reserved      |
-|   0    |   rw   |   0x1   | ETH_MDIO_CLK_DIV_EN |               |
+|   0    |   rw   |   0x1   | HYPERBUS_CLK_DIV_EN |               |
 
-## ETH_MDIO_CLK_DIV_VALUE
-Ethernet MDIO clock divider value
+## HYPERBUS_CLK_DIV_VALUE
+Hyperbus clock divider value
 - Offset: `0xf8`
-- Reset default: `0x64`
+- Reset default: `0x1`
 - Reset mask: `0xfffff`
 
 ### Fields
 
 ```wavejson
-{"reg": [{"name": "ETH_MDIO_CLK_DIV_VALUE", "bits": 20, "attr": ["rw"], "rotate": 0}, {"bits": 12}], "config": {"lanes": 1, "fontsize": 10, "vspace": 80}}
+{"reg": [{"name": "HYPERBUS_CLK_DIV_VALUE", "bits": 20, "attr": ["rw"], "rotate": 0}, {"bits": 12}], "config": {"lanes": 1, "fontsize": 10, "vspace": 80}}
 ```
 
 |  Bits  |  Type  |  Reset  | Name                   | Description   |
 |:------:|:------:|:-------:|:-----------------------|:--------------|
 | 31:20  |        |         |                        | Reserved      |
-|  19:0  |   rw   |  0x64   | ETH_MDIO_CLK_DIV_VALUE |               |
+|  19:0  |   rw   |   0x1   | HYPERBUS_CLK_DIV_VALUE |               |
 

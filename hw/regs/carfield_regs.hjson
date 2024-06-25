@@ -661,8 +661,8 @@
       ],
     }
 
-    { name: "ETH_RGMII_PHY_CLK_DIV_EN",
-      desc: "Ethernet RGMII PHY clock divider enable bit",
+    { name: "ETH_CLK_DIV_EN",
+      desc: "Ethernet clock divider enable bit",
       swaccess: "rw",
       hwaccess: "hro",
       resval: "1",
@@ -672,19 +672,19 @@
       ],
     }
 
-    { name: "ETH_RGMII_PHY_CLK_DIV_VALUE",
-      desc: "Ethernet RGMII PHY clock divider value",
+    { name: "ETH_CLK_DIV_VALUE",
+      desc: "Ethernet clock divider value",
       swaccess: "rw",
       hwaccess: "hro",
-      resval: "100",
+      resval: "10",
       hwqe: "1",
       fields: [
         { bits: "19:0" }
       ],
     }
 
-    { name: "ETH_MDIO_CLK_DIV_EN",
-      desc: "Ethernet MDIO clock divider enable bit",
+    { name: "HYPERBUS_CLK_DIV_EN",
+      desc: "Hyperbus clock divider enable bit",
       swaccess: "rw",
       hwaccess: "hro",
       resval: "1",
@@ -694,11 +694,11 @@
       ],
     }
 
-    { name: "ETH_MDIO_CLK_DIV_VALUE",
-      desc: "Ethernet MDIO clock divider value",
+    { name: "HYPERBUS_CLK_DIV_VALUE",
+      desc: "Hyperbus clock divider value",
       swaccess: "rw",
       hwaccess: "hro",
-      resval: "100",
+      resval: "1",
       hwqe: "1",
       fields: [
         { bits: "19:0" }

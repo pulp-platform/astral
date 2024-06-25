@@ -35,6 +35,7 @@ module carfield_soc_fixture;
 
   localparam time         ClkPeriodSys  = 10ns;
   localparam time         ClkPeriodJtag = 40ns;
+  localparam time         ClkPeriodPeriph  = 2ns;
   localparam time         ClkPeriodRtc  = 1000ns; // 1MHz RTC clock. Note: needs to equal
                                                   // `DutCfg.RTCFreq` for successful autonomous boot
                                                   // (e.g., SPI)
@@ -46,6 +47,7 @@ module carfield_soc_fixture;
   localparam int NumChips = 2;
 
   logic       clk;
+  logic       periph_clk;
   logic       rst_n;
   logic       test_mode;
   logic [1:0] boot_mode;
@@ -86,6 +88,18 @@ module carfield_soc_fixture;
   logic i2c_scl_o;
   logic i2c_scl_i;
   logic i2c_scl_en;
+
+  logic       eth_rxck;
+  logic [3:0] eth_rxd;
+  logic       eth_rxctl;
+  logic       eth_txck;
+  logic [3:0] eth_txd;
+  logic       eth_txctl;
+  logic       eth_rstn;
+  logic       eth_mdio_i;
+  logic       eth_mdio_o;
+  logic       eth_mdio_en;
+  logic       eth_mdc;
 
   logic                 spih_sck_o;
   logic                 spih_sck_en;
@@ -128,6 +142,14 @@ module carfield_soc_fixture;
   wire [NumPhys-1:0]                pad_hyper_resetn;
   wire [NumPhys-1:0][7:0]           pad_hyper_dq;
 
+  clk_rst_gen #(
+    .ClkPeriod    ( ClkPeriodPeriph ),
+    .RstClkCycles ( RstCycles       )
+  ) i_clk_rst_peri (
+    .clk_o  ( periph_clk   ),
+    .rst_no (  )
+  );
+
   carfield      #(
     .Cfg         ( DutCfg    ),
     .HypNumPhys  ( NumPhys   ),
@@ -136,7 +158,7 @@ module carfield_soc_fixture;
     .reg_rsp_t   ( reg_rsp_t )
   ) i_dut                       (
     .host_clk_i                 ( clk                       ),
-    .periph_clk_i               ( clk                       ),
+    .periph_clk_i               ( periph_clk                ),
     .alt_clk_i                  ( clk                       ),
     .rt_clk_i                   ( rtc                       ),
     .pwr_on_rst_ni              ( rst_n                     ),
@@ -186,17 +208,17 @@ module carfield_soc_fixture;
     .spih_ot_sd_o               ( spi_secd_sd_o             ),
     .spih_ot_sd_en_o            ( spi_secd_sd_en            ),
     .spih_ot_sd_i               ( spi_secd_sd_i             ),
-    .eth_rxck_i                 ( '0                        ),
-    .eth_rxctl_i                ( '0                        ),
-    .eth_rxd_i                  ( '0                        ),
-    .eth_md_i                   ( '0                        ),
-    .eth_txck_o                 ( /* Currently unconnected, tie to 0 */ ),
-    .eth_txctl_o                ( /* Currently unconnected, tie to 0 */ ),
-    .eth_txd_o                  ( /* Currently unconnected, tie to 0 */ ),
-    .eth_md_o                   ( /* Currently unconnected, tie to 0 */ ),
-    .eth_md_oe                  ( /* Currently unconnected, tie to 0 */ ),
-    .eth_mdc_o                  ( /* Currently unconnected, tie to 0 */ ),
-    .eth_rst_n_o                ( /* Currently unconnected, tie to 0 */ ),
+    .eth_rxck_i                 ( eth_rxck                  ),
+    .eth_rxctl_i                ( eth_rxctl                 ),
+    .eth_rxd_i                  ( eth_rxd                   ),
+    .eth_md_i                   ( eth_mdio_i                ),
+    .eth_txck_o                 ( eth_txck                  ),
+    .eth_txctl_o                ( eth_txctl                 ),
+    .eth_txd_o                  ( eth_txd                   ),
+    .eth_md_o                   ( eth_mdio_o                ),
+    .eth_md_oe                  ( eth_mdio_en               ),
+    .eth_mdc_o                  ( eth_mdc                   ),
+    .eth_rst_n_o                ( eth_rstn                  ),
     .can_rx_i                   ( '0                        ),
     .can_tx_o                   (                           ),
     .gpio_i                     ( '0                        ),
@@ -271,6 +293,7 @@ module carfield_soc_fixture;
     .*
   );
 
+  wire       eth_mdio;
   // I/O to INOUT behavioral conversion for carfield's peripherals that require it
   vip_carfield_soc_tristate vip_tristate ( .* );
 
