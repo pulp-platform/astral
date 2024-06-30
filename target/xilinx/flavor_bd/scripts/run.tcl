@@ -18,9 +18,8 @@ set_param general.maxThreads 8
 set_property ip_repo_paths ../xilinx_ips/carfield_ip [current_project]
 update_ip_catalog
 
-# Add params to runs
+# Define sources
 import_files -fileset constrs_1 -norecurse constraints/$::env(XILINX_BOARD).xdc
-import_files -fileset constrs_1 -norecurse ../constraints/carfield_islands.tcl
 source scripts/add_includes.tcl
 
 # Build block design
@@ -28,7 +27,7 @@ source scripts/carfield_bd_$::env(XILINX_BOARD).tcl
 
 # Add the ext_jtag pins to block design
 if {[info exists ::env(GEN_EXT_JTAG)] && ($::env(GEN_EXT_JTAG)==1)} {
-    source scripts/carfield_bd_$::env(XILINX_BOARD)_ext_jtag.tcl
+  source scripts/carfield_bd_$::env(XILINX_BOARD)_ext_jtag.tcl
   import_files -fileset constrs_1 -norecurse constraints/$::env(XILINX_BOARD)_ext_jtag.xdc
 }
 
@@ -47,12 +46,8 @@ generate_target all [get_files *design_1.bd]
 export_ip_user_files -of_objects  [get_files *design_1.bd] -no_script
 create_ip_run [get_files *design_1.bd]
 
-# Make sure carfield.xdc (imported from IP) executes after carfield_islands.tcl (that generates the clocks)
-set_property processing_order LATE [get_files carfield.xdc]
-
 # Bet list of synthesis and OOO synthesis to do
 set synth_runs [get_runs *synth*]
-# Exclude the whole design (synth_1) and the carfield IP (bug)
 if { $rdi::mode == "gui" } {
   # Exclude the whole design the carfield IP from GUI (todo: inspect GUI bug when only carfield ooc has changed)
   set all_ooc_synth [lsearch -regexp -all -inline -not $synth_runs {^synth_1$|carfield}]
@@ -133,7 +128,6 @@ if ($DEBUG) {
   }
   # Need to save save constraints before implementing the core
   set_property target_constrs_file [get_files $::env(XILINX_BOARD).xdc] [current_fileset -constrset]
-
   save_constraints -force
   implement_debug_core
   write_debug_probes -force probes.ltx
