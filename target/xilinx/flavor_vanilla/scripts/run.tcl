@@ -14,7 +14,7 @@ set_param general.maxThreads 8
 
 # Contraints files selection
 switch $::env(XILINX_BOARD) {
-  "vcu128" {
+  "vcu128" - "vcu118" {
     import_files -fileset constrs_1 -norecurse constraints/$::env(XILINX_BOARD).xdc
     import_files -fileset constrs_1 -norecurse constraints/carfield_top_xilinx.xdc
     # General constraints
