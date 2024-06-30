@@ -346,6 +346,8 @@ localparam regbus_struct_t CarfieldRegBusMap = carfield_gen_regbus_map(NumTotalR
 
 localparam int unsigned CarfieldNumDomains = gen_carfield_domains(CarfieldIslandsCfg);
 
+localparam int unsigned NumPlls = 3;
+
 typedef struct {
   int unsigned clock_div_value[CarfieldNumDomains];
 } carfield_clk_div_values_t;
@@ -514,12 +516,14 @@ localparam dm::hartinfo_t [MaxHartId:0] SafetyIslandExtHartinfo =
       default: '0
   };
   localparam int unsigned SafetyIslandIrqs = SafetyIslandCfg.NumInterrupts;
+  localparam safety_island_pkg::bootmode_e SafetyIslandPreloaded = safety_island_pkg::Preloaded;
 `else
   localparam int unsigned SafetyIslandCfg = '0;
   localparam bit [31:0] SafedDebugOffs          = 0;
   localparam int unsigned SafetyIslandMemOffset = 0;
   localparam int unsigned SafetyIslandPerOffset = 0;
   localparam int unsigned SafetyIslandIrqs = 1;
+  localparam int unsigned SafetyIslandPreloaded = 0;
 `endif
 
 // Compute the number of atomic MSBs depending on the configuration

@@ -1619,10 +1619,14 @@ if (CarfieldIslandsCfg.spatz.enable) begin : gen_spatz_cluster
   assign spatzcl_mbox_intr = hostd_spatzcl_mbox_intr_ored | safed_spatzcl_mbox_intr;
   // verilog_lint: waive-stop line-length
 end else begin : gen_no_spatz_cluster
+  assign spatzcl_mbox_intr = '0;
+  assign spatzcl_timer_intr = '0;
   assign car_regs_hw2reg.spatz_cluster_isolate_status.d = 1'b0;
   assign car_regs_hw2reg.spatz_cluster_isolate_status.de = 1'b0;
   assign car_regs_hw2reg.spatz_cluster_busy.d = '0;
   assign car_regs_hw2reg.spatz_cluster_busy.de = 1'b0;
+  assign safed_spatzcl_mbox_intr = '0;
+  assign hostd_spatzcl_mbox_intr = '0;
   assign spatzcl_hostd_mbox_intr = '0;
   assign spatzcl_safed_mbox_intr = '0;
   assign spatz_rst_n = '0;

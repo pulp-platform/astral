@@ -112,6 +112,14 @@ packages:
     source:
       Git: https://github.com/AlSaqr-platform/can_bus.git
     dependencies: []
+  carfield_padframe_behav:
+    revision: null
+    version: null
+    source:
+      Path: target/sim/src/behav-padframe
+    dependencies:
+    - common_cells
+    - register_interface
   cheshire:
     revision: d6274a52dab68d12765b64d670d528774eb36c2c
     version: null
@@ -381,6 +389,16 @@ packages:
       Git: https://github.com/pulp-platform/per2axi.git
     dependencies:
     - axi_slice
+  pll_wrap:
+    revision: e9277fbd73bc0597d5e6259f9d3955ffb13973db
+    version: 2.1.0
+    source:
+      Git: git@iis-git.ee.ethz.ch:carfield/pll_wrap_if.git
+    dependencies:
+    - common_cells
+    - common_verification
+    - register_interface
+    - tech_cells_generic
   pulp-ethernet:
     revision: bdc8031ab270a49da28df269266ce9ab9a133636
     version: null
