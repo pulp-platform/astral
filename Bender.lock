@@ -112,15 +112,6 @@ packages:
     source:
       Git: https://github.com/AlSaqr-platform/can_bus.git
     dependencies: []
-  riscv-iommu:
-    revision: 26ae5a84468d3bf8c888340b12fe592b112c706d
-    version: null
-    source:
-      Git: https://github.com/zero-day-labs/riscv-iommu
-    dependencies:
-    - common_cells
-    - axi
-    - register_interface
   cheshire:
     revision: 0c408119035d1b545da5ff4bb091bc5455036a27
     version: null
@@ -144,10 +135,10 @@ packages:
     - redundancy_cells
     - register_interface
     - riscv-dbg
+    - riscv-iommu
     - serial_link
     - tagger
     - unbent
-    - riscv-iommu
   clic:
     revision: 40ae266dab5768f63ca8dabe70e7474feb403bab
     version: null
@@ -490,6 +481,15 @@ packages:
     dependencies:
     - common_cells
     - tech_cells_generic
+  riscv-iommu:
+    revision: 26ae5a84468d3bf8c888340b12fe592b112c706d
+    version: null
+    source:
+      Git: https://github.com/zero-day-labs/riscv-iommu.git
+    dependencies:
+    - axi
+    - common_cells
+    - register_interface
   safety_island:
     revision: aaef55c798ab53560faaf451a86668fa1e6d0f3b
     version: null
