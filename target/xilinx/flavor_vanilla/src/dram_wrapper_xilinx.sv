@@ -60,13 +60,13 @@ module dram_wrapper_xilinx #(
   };
 `endif
 
-`ifdef TARGET_ZCU102
+`ifdef TARGET_VCU118
   localparam dram_cfg_t cfg = '{
-    EnCDC         : 1, // ??? MHz axi (attention CDC logdepth)
+    EnCDC         : 1, // 300 MHz axi (attention CDC logdepth)
     IdWidth       : 4,
-    AddrWidth     : 29,
-    DataWidth     : 128,
-    StrobeWidth   : 16
+    AddrWidth     : 32, // TODO: in the original patch this was 31, why?
+    DataWidth     : 512,
+    StrobeWidth   : 64
   };
 `endif
 
@@ -270,26 +270,6 @@ module dram_wrapper_xilinx #(
     .c0_ddr4_s_axi_rresp       (cdc_dram_rsp.r.resp),
     .c0_ddr4_s_axi_rlast       (cdc_dram_rsp.r.last),
     .c0_ddr4_s_axi_rvalid      (cdc_dram_rsp.r_valid),
-`ifdef TARGET_VCU128
-    // Axi ctrl
-    .c0_ddr4_s_axi_ctrl_awvalid('0),
-    .c0_ddr4_s_axi_ctrl_awready(),
-    .c0_ddr4_s_axi_ctrl_awaddr ('0),
-    .c0_ddr4_s_axi_ctrl_wvalid ('0),
-    .c0_ddr4_s_axi_ctrl_wready (),
-    .c0_ddr4_s_axi_ctrl_wdata  ('0),
-    .c0_ddr4_s_axi_ctrl_bvalid (),
-    .c0_ddr4_s_axi_ctrl_bready ('0),
-    .c0_ddr4_s_axi_ctrl_bresp  (),
-    .c0_ddr4_s_axi_ctrl_arvalid('0),
-    .c0_ddr4_s_axi_ctrl_arready(),
-    .c0_ddr4_s_axi_ctrl_araddr ('0),
-    .c0_ddr4_s_axi_ctrl_rvalid (),
-    .c0_ddr4_s_axi_ctrl_rready ('0),
-    .c0_ddr4_s_axi_ctrl_rdata  (),
-    .c0_ddr4_s_axi_ctrl_rresp  (),
-    .c0_ddr4_interrupt         (),
-`endif
     // Others
     .c0_init_calib_complete    (),  // keep open
     .addn_ui_clkout1           (dram_clk_o),

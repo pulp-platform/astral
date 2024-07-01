@@ -21,16 +21,16 @@ add_files -fileset constrs_1 constraints/ooc_carfield_ip.xdc
 set_property USED_IN {synthesis out_of_context} [get_files ooc_carfield_ip.xdc]
 import_files -fileset constrs_1 -norecurse constraints/carfield_xilinx_ip.xdc
 # General constraints
-import_files -fileset constrs_1 -norecurse ../../constraints/carfield.xdc
-set_property SCOPED_TO_REF carfield [get_files carfield.xdc]
-set_property processing_order LATE [get_files carfield.xdc]
+# import_files -fileset constrs_1 -norecurse ../../constraints/carfield.xdc
+# set_property SCOPED_TO_REF carfield [get_files carfield.xdc]
+# set_property processing_order LATE [get_files carfield.xdc]
 
 # Package IP
 set_property top carfield_xilinx_ip [current_fileset]
 
 # Attention SFCU is only used because of Carfield's structure
 update_compile_order -fileset sources_1
-synth_design -rtl -name rtl_1 -sfcu
+# synth_design -rtl -name rtl_1 -sfcu
 
 ipx::package_project -root_dir . -vendor ethz.ch -library user -taxonomy /UserIP -set_current false
 

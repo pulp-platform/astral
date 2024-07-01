@@ -99,7 +99,7 @@ sources:
     files:
       - hw/spatz_cluster_wrapper.sv
 
-  - target: test
+  - target: all(test, not(fpga))
     files:
       - target/sim/src/hyp_vip/s27ks0641.v
       - target/sim/src/vip_carfield_soc.sv
