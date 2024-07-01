@@ -112,8 +112,17 @@ packages:
     source:
       Git: https://github.com/AlSaqr-platform/can_bus.git
     dependencies: []
+  riscv-iommu:
+    revision: 26ae5a84468d3bf8c888340b12fe592b112c706d
+    version: null
+    source:
+      Git: https://github.com/zero-day-labs/riscv-iommu
+    dependencies:
+    - common_cells
+    - axi
+    - register_interface
   cheshire:
-    revision: 70bb12ee9a38b6a26c0f41c2d114f89451a156a1
+    revision: 2a79c4e633b06c6e78fb056eff6126bdfe5387cf
     version: null
     source:
       Git: https://github.com/pulp-platform/cheshire.git
@@ -135,9 +144,11 @@ packages:
     - redundancy_cells
     - register_interface
     - riscv-dbg
+    - riscv-iommu
     - serial_link
     - tagger
     - unbent
+    - riscv-iommu
   clic:
     revision: 40ae266dab5768f63ca8dabe70e7474feb403bab
     version: null
@@ -368,7 +379,7 @@ packages:
     - common_cells
     - common_verification
   opentitan:
-    revision: faca6f28e20195e9b56eb822c58bec4a3a19dd4f
+    revision: 1466a339775f62ebec9fababe2859462bf9198b3
     version: null
     source:
       Git: https://github.com/pulp-platform/opentitan.git
@@ -480,6 +491,15 @@ packages:
     dependencies:
     - common_cells
     - tech_cells_generic
+  riscv-iommu:
+    revision: 26ae5a84468d3bf8c888340b12fe592b112c706d
+    version: null
+    source:
+      Git: https://github.com/zero-day-labs/riscv-iommu.git
+    dependencies:
+    - axi
+    - common_cells
+    - register_interface
   safety_island:
     revision: aaef55c798ab53560faaf451a86668fa1e6d0f3b
     version: null
