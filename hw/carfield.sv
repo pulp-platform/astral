@@ -1328,9 +1328,10 @@ localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
   TcdmSize: 128*1024,
   TcdmNumBank: 16,
   HwpePresent: 1,
-  HwpeCfg: '{NumHwpes: 2,
+  HwpeCfg: '{NumHwpes: 3,
              HwpeList: {pulp_cluster_package::NEUREKA,
-                        pulp_cluster_package::REDMULE}
+                        pulp_cluster_package::REDMULE,
+                        pulp_cluster_package::SOFTEX}
             },
   HwpeNumPorts: 9,
   iCacheNumBanks: 2,
