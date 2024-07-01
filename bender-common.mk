@@ -18,6 +18,9 @@ common_targs += -t cv64a6_imafdcsclic_sv39
 common_targs += -t rtl
 # The `snitch_cluster` target is needed for iDMA backend generation
 common_targs += -t snitch_cluster
+# The `deprecated` is needed for the redundancy cells, used as a
+# temporary fix before updating the ECC SRAMs
+common_targs += -t deprecated
 # Carfield config target.
 common_targs += -t $(CARFIELD_CONFIG)
 
@@ -27,6 +30,7 @@ common_defs += -D PRIVATE_ICACHE
 common_defs += -D HIERARCHY_ICACHE_32BIT
 common_defs += -D ICAHE_USE_FF
 common_defs += -D CLUSTER_ALIAS
+common_defs += -D SNITCH_ICACHE
 
 # Island exclusion
 ifeq ($(shell echo $(PULPD_PRESENT)), 0)
