@@ -249,8 +249,8 @@ packages:
     dependencies:
     - common_cells
   hci:
-    revision: d31af36ebcaf2196fb51676b40782aa8cbd9cc69
-    version: null
+    revision: afe0220f9a2f132dc8655c48da05aae5121a570b
+    version: 2.1.1
     source:
       Git: https://github.com/pulp-platform/hci.git
     dependencies:
