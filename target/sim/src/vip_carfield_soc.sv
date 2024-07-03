@@ -67,9 +67,17 @@ module vip_carfield_soc
   input  axi_slv_ext_rsp_t axi_muxed_rsp,
   input logic ptme_clk_i,
   input logic ptme_enc_i,
+  input logic [2:0] hpc_addr_i,
+  input logic hpc_cmd_en_i,
+  input logic hpc_smp_i,
+  input logic [1:0] llc_line_i,
   output logic tc_active,
   output logic tc_clk,
-  output logic tc_data
+  output logic tc_data,
+  input logic spw_din,
+  input logic spw_sin,
+  output logic spw_dout,
+  output logic spw_sout
 );
 
   `include "cheshire/typedef.svh"
@@ -381,12 +389,23 @@ end
   */
 
   tb_MuSA_compact i_tb_MuSA_compact (
-      .CADUClk   ( ptme_clk_i),
-      .CADUOut   ( ptme_enc_i),
-      .RST_BOARD ( rst_n),
-      .TCA       ( tc_active),
-      .TCC       ( tc_clk),
-      .TCS       ( tc_data)
+      .CADUClk    ( ptme_clk_i),
+      .CADUOut    ( ptme_enc_i),
+      .HPC_ADDR   ( hpc_addr_i),
+      .HPC_CMD_EN ( hpc_cmd_en_i),
+      .HPC_SMP    ( hpc_smp_i), 
+      .LLC_LINE   ( llc_line_i),
+      .RST_BOARD  ( rst_n),
+      .TCA        ( tc_active),
+      .TCC        ( tc_clk),
+      .TCS        ( tc_data)
+   );
+
+  spw_codec_tb i_spw_codec_tb (
+      .DATA_IN   (spw_din),
+      .STROBE_IN (spw_sin),
+      .DATA_OUT  (spw_dout),
+      .STROBE_OUT(spw_sout)
    );
 
 

@@ -1,31 +1,8 @@
-
-#include "regs/cheshire.h"
-#include "dif/clint.h"
-#include "dif/uart.h"
-#include "params.h"
-#include "util.h"
-#include "car_util.h"
-#include "printf.h"
 #include "tasi.h"
-#include "regs/system_timer.h"
-
-
-
-
-
-
-
-#define INTERRUPT_MASK ADD_BIT(STREAMER_INTERRUPT_TC) | ADD_BIT(STREAMER_INTERRUPT_RTC) | ADD_BIT(STREAMER_INTERRUPT_TS) | ADD_BIT(STREAMER_INTERRUPT_PPS)
 
 int main(void) {
 
-  // We read the number of available harts.
-  uint32_t NumHarts = readw(CHESHIRE_NUM_INT_HARTS);
-  uint32_t OtherHart = NumHarts - 1 - hart_id(); // If hart_id() == 0 -> return 1;
-                                                 // If hart_id() == 1 -> return 0;
-
-  // Hart 0 enters first
-  if (hart_id() != 0) wfi();
+ 	init_chip();
     
    	unsigned int int_pend_flag,int_pend_reg,busy;
 	unsigned int atss_start,atsss_start,atss_end,atsss_end;
@@ -45,7 +22,7 @@ int main(void) {
 
 
 
-	//mask all interrupt
+	//unmask all interrupt
 	W_REG(STREAMER_INTERRUPT_MASK) = 0xFFFF;
 	//clear interrupt
 	W_REG(STREAMER_INTERRUPT_CLEAR) = INTERRUPT_MASK;
@@ -54,13 +31,14 @@ int main(void) {
 
 
 
-
-
 	//wait RTC
+	/*
 	do
 	{
 		int_pend_flag = BIT_IS_SET (R_REG(STREAMER_INTERRUPT_PENDING), STREAMER_INTERRUPT_RTC);
 	}while (int_pend_flag == 0);
+	*/
+	WAIT_BIT_SET(R_REG(STREAMER_INTERRUPT_PENDING),STREAMER_INTERRUPT_RTC);
 
 	//clear interrupt
 	//W_REG(STREAMER_INTERRUPT_CLEAR) = STREAMER_INTERUPT_RTC;
@@ -79,10 +57,13 @@ int main(void) {
     writed(1, CAR_SYSTEM_TIMER_BASE_ADDR + TIMER_START_LO_OFFSET);
 	
 	//wait RTC
+	/*
 	do
 	{
 		int_pend_flag = BIT_IS_SET (R_REG(STREAMER_INTERRUPT_PENDING), STREAMER_INTERRUPT_RTC);
 	}while (int_pend_flag == 0);
+	*/
+	WAIT_BIT_SET(R_REG(STREAMER_INTERRUPT_PENDING),STREAMER_INTERRUPT_RTC);
 
     // Stop system timer
     writed(0, CAR_SYSTEM_TIMER_BASE_ADDR + TIMER_CFG_LO_OFFSET);
@@ -110,10 +91,14 @@ int main(void) {
 
 
 	//wait TS
+	/*
 	do
 	{
 		int_pend_flag = BIT_IS_SET (R_REG(STREAMER_INTERRUPT_PENDING), STREAMER_INTERRUPT_TS);
 	}while (int_pend_flag == 0);
+	*/
+	WAIT_BIT_SET(R_REG(STREAMER_INTERRUPT_PENDING),STREAMER_INTERRUPT_TS);
+
 
 	//clear interrupt
 	SET_BIT(W_REG(STREAMER_INTERRUPT_CLEAR),STREAMER_INTERRUPT_TS);
@@ -130,11 +115,14 @@ int main(void) {
 	// Start system timer
     writed(1, CAR_SYSTEM_TIMER_BASE_ADDR + TIMER_START_LO_OFFSET);
 	
-	//wait RTC
+	//wait TS
+	/*
 	do
 	{
 		int_pend_flag = BIT_IS_SET (R_REG(STREAMER_INTERRUPT_PENDING), STREAMER_INTERRUPT_TS);
 	}while (int_pend_flag == 0);
+	*/
+	WAIT_BIT_SET(R_REG(STREAMER_INTERRUPT_PENDING),STREAMER_INTERRUPT_TS);
 
     // Stop system timer
     writed(0, CAR_SYSTEM_TIMER_BASE_ADDR + TIMER_CFG_LO_OFFSET);
@@ -157,8 +145,6 @@ int main(void) {
 
 
 
-
-    while (1);
     
     return 0;
 }
