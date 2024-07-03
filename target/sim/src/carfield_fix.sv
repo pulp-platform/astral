@@ -137,6 +137,9 @@ module carfield_soc_fixture;
 
   logic ptme_clk, ptme_enc;
   logic tc_active, tc_clock, tc_data;
+  logic [2:0] hpc_addr;
+  logic hpc_cmd_en, hpc_smp;
+  logic [1:0] llc_line;
 
   wire [NumPhys-1:0][NumChips-1:0]  pad_hyper_csn;
   wire [NumPhys-1:0]                pad_hyper_ck;
@@ -145,7 +148,8 @@ module carfield_soc_fixture;
   wire [NumPhys-1:0]                pad_hyper_resetn;
   wire [NumPhys-1:0][7:0]           pad_hyper_dq;
 
-  wire spw_data, spw_strb;
+  wire spw_data_in, spw_strobe_in;
+  wire spw_data_out, spw_strobe_out;
 
   clk_rst_gen #(
     .ClkPeriod    ( ClkPeriodPeriph ),
@@ -250,17 +254,17 @@ module carfield_soc_fixture;
     .ptme_enc_o                 ( ptme_enc                  ),
     .ptme_sync_o                (                           ),
     .ptme_ext_clk_i             ( '0                        ),
-    .hpc_addr_o                 (                           ),
-    .hpc_cmd_en_o               (                           ),
-    .hpc_sample_o               (                           ),
-    .llc_line_o                 (                           ),
+    .hpc_addr_o                 ( hpc_addr                  ),
+    .hpc_cmd_en_o               ( hpc_cmd_en                ),
+    .hpc_sample_o               ( hpc_smp                   ),
+    .llc_line_o                 ( llc_line                  ),
     .obt_ext_clk_i              ( '0                        ),
     .obt_pps_in_i               ( '0                        ),
     .obt_sync_out_o             (                           ),
-    .spw_data_i                 ( spw_data                  ),
-    .spw_strb_i                 ( spw_strb                  ),
-    .spw_data_o                 ( spw_data                  ),
-    .spw_strb_o                 ( spw_strb                  ),
+    .spw_data_i                 ( spw_data_in               ),
+    .spw_strb_i                 ( spw_strobe_in             ),
+    .spw_data_o                 ( spw_data_out              ),
+    .spw_strb_o                 ( spw_strobe_out            ),
     .ext_reg_async_slv_req_i    ( '0                        ),
     .ext_reg_async_slv_ack_o    (                           ),
     .ext_reg_async_slv_data_i   ( '0                        ),
@@ -323,9 +327,17 @@ module carfield_soc_fixture;
     .axi_muxed_rsp ( axi_muxed_rsp ),
     .ptme_clk_i    ( ptme_clk      ),
     .ptme_enc_i    ( ptme_enc      ),
+    .hpc_addr_i    ( hpc_addr      ),
+    .hpc_cmd_en_i  ( hpc_cmd_en    ),
+    .hpc_smp_i     ( hpc_smp       ),
+    .llc_line_i    ( llc_line      ),
     .tc_active     ( tc_active     ),     
     .tc_clk        ( tc_clock      ),
     .tc_data       ( tc_data       ),
+    .spw_din       ( spw_data_out  ),
+    .spw_sin       ( spw_strobe_out),
+    .spw_dout      ( spw_data_in   ),
+    .spw_sout      ( spw_strobe_in ),
     .*
   );
 
