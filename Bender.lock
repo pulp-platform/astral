@@ -295,8 +295,8 @@ packages:
       Git: https://github.com/pulp-platform/icache-intc.git
     dependencies: []
   idma:
-    revision: 95f366e56f7e772c283fb3c8b343afc4a3978375
-    version: 0.6.2
+    revision: c12caf59bb482fe44b27361f6924ad346b2d22fe
+    version: 0.6.3
     source:
       Git: https://github.com/pulp-platform/idma.git
     dependencies:
@@ -382,7 +382,7 @@ packages:
     dependencies:
     - axi_slice
   pulp-ethernet:
-    revision: a8a23e632d8abe104122950dafa2446e92598840
+    revision: 5ea16a331135125c61e7e4cdc7794ffa9111911d
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp-ethernet.git
