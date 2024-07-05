@@ -88,6 +88,23 @@ sources:
   - hw/carfield_chip_pkg.sv
   - hw/regs/carfield_reg_pkg.sv
   - hw/regs/carfield_reg_top.sv
+#  - target/sim/src/behav-padframe/src/pkg_carfield_padframe_behav.sv
+#  - target/sim/src/behav-padframe/src/pkg_internal_carfield_padframe_behav_periph.sv
+#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_config_reg_pkg.sv
+#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_config_reg_top.sv
+#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_pads.sv
+#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_muxer.sv
+#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph.sv
+#  - target/sim/src/behav-padframe/src/carfield_padframe_behav.sv
+  - hw/padframe/src/pkg_astral_padframe.sv
+  - hw/padframe/src/pkg_internal_astral_padframe_periph.sv
+  - hw/padframe/src/astral_padframe_periph_config_reg_pkg.sv
+  - hw/padframe/src/astral_padframe_periph_config_reg_top.sv
+  - hw/padframe/src/astral_padframe_periph_pads.sv
+  - hw/padframe/src/astral_padframe_periph_muxer.sv
+  - hw/padframe/src/astral_padframe_periph.sv
+  - hw/padframe/src/astral_padframe.sv
+  - hw/padframe/pad_behav.sv
   # Level 1
   - hw/cheshire_wrap.sv
   - hw/hyperbus_wrap.sv
@@ -134,7 +151,7 @@ sources:
 
   - target: test
     files:
-      - target/sim/src/behav-padframe/pad_behav.sv
+      #- target/sim/src/behav-padframe/pad_behav.sv
       - target/sim/src/hyp_vip/s27ks0641.v
       - target/sim/src/vip_carfield_soc.sv
       - target/sim/src/carfield_fix.sv
@@ -155,7 +172,6 @@ sources:
 
   - target: tech_sim
     files:
-      # TODO: add technology dependent padframe
       # TODO: add technology dependent memory cells
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_128x40m2b1w0.v
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x32m2b1w1.v
@@ -195,6 +211,8 @@ sources:
       - tech/sourcecode/fll/rtl/behavioral/gf12_FLL_model.vhd
       - tech/sourcecode/fll/rtl/behavioral/gf12_FLL.v
       - tech/sourcecode/gf12_fll_wrap.sv
+      # PAD Model
+      - tech/sourcecode/pad/io_gppr_12lpplus_t18_mv08_mv18_fs18_rvt_dr.v
 
   - target: all(xilinx, fpga, xilinx_vanilla)
     files:
