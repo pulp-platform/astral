@@ -1,0 +1,1168 @@
+# Astral Padframe
+# authors: Victor Isachi <victor.isachi@unibo.it>
+
+name: astral_padframe
+manifest_version: 2
+pad_domains:
+  - name: periph
+    pad_types:
+      - name: PDVDDTIE_18_18_NT_DR_H
+        description: "gf12 pad, horizontal orientation, I/O power control tie"
+        template: |
+          wire io_pads_rto;
+          wire io_pads_sns;
+
+          PDVDDTIE_18_18_NT_DR_H ${instance_name} (
+            .SNS( io_pads_sns ),
+            .RTO( io_pads_rto )
+          );
+      - name: PVDD_08_08_NT_DR_H
+        description: "gf12 pad, horizontal orientation, core power domain VDD"
+        template: |
+          PVDD_08_08_NT_DR_H ${instance_name} ();
+      - name: PVDD_08_08_NT_DR_V
+        description: "gf12 pad, vertical orientation, core power domain VDD"
+        template: |
+          PVDD_08_08_NT_DR_V ${instance_name} ();
+      - name: PVSS_08_08_NT_DR_H
+        description: "gf12 pad, horizontal orientation, core power domain VSS"
+        template: |
+          PVSS_08_08_NT_DR_H ${instance_name} ();
+      - name: PVSS_08_08_NT_DR_V
+        description: "gf12 pad, vertical orientation, core power domain VSS"
+        template: |
+          PVSS_08_08_NT_DR_V ${instance_name} ();
+      - name: PDVDD_18_18_NT_DR_H
+        description: "gf12 pad, horizontal orientation, pad power domain VDD"
+        template: |
+          PDVDD_18_18_NT_DR_H ${instance_name} ();
+      - name: PDVDD_18_18_NT_DR_V
+        description: "gf12 pad, vertical orientation, pad power domain VDD"
+        template: |
+          PDVDD_18_18_NT_DR_V ${instance_name} ();
+      - name: PDVSS_18_18_NT_DR_H
+        description: "gf12 pad, horizontal orientation, pad power domain VSS"
+        template: |
+          PDVSS_18_18_NT_DR_H ${instance_name} ();
+      - name: PDVSS_18_18_NT_DR_V
+        description: "gf12 pad, vertical orientation, pad power domain VSS"
+        template: |
+          PDVSS_18_18_NT_DR_V ${instance_name} ();
+      - name: PCORNER_18_18_NT_DR
+        description: "gf12 pad, corner"
+        template: |
+          PCORNER_18_18_NT_DR ${instance_name} ();
+      - name: POSCP_18_18_NT_DR_H
+        description: "gf12 pad, horizontal orientation, oscillator 1-4MHz"
+        template: |
+          (* dont_touch *)
+          POSCP_18_18_NT_DR_H ${instance_name} (
+            .CK     ( ${conn["pad2core_clk"]} ),
+            .CK_IOV ( ${conn["pad2io_clk"]} ),
+            .PO     (  ),
+            .PADO   ( ${conn["pad_o"]} ),
+            .E0     ( ${conn["crystal_en"]} ),
+            .PADI   ( ${conn["pad_i"]} ),
+            .POE    ( 1'b0 ),
+            .RTO    ( io_pads_rto ),
+            .SF0    ( 1'b0 ),
+            .SF1    ( 1'b0 ),
+            .SNS    ( io_pads_sns ),
+            .SP     ( 1'b0 ),
+            .TE     ( ${conn["test_en"]} )
+          );
+        pad_signals: &gf12_pad_oscillator_signals
+          - name: pad_i
+            description: "Oscillator input (differential pair)"
+            size: 1
+            kind: pad
+          - name: pad_o
+            description: "Oscillator output (differential pair)"
+            size: 1
+            kind: pad
+          - name: pad2core_clk
+            description: "Core power doman output pin from oscillator"
+            size:  1
+            kind: output
+            conn_type: dynamic
+          - name: pad2io_clk
+            description: "I/O power doman output pin from oscillator"
+            size:  1
+            kind: output
+            conn_type: dynamic
+          - name: crystal_en
+            description: "Oscillator enable signal, active high"
+            size: 1
+            kind: input
+            conn_type: dynamic
+            default_reset_value: 1
+            default_static_value: 1'b1
+          - name: test_en
+            description: "Test enable signal, active high"
+            size: 1
+            kind: input
+            conn_type: dynamic
+            default_reset_value: 0
+            default_static_value: 1'b0
+          
+      - name: PBIDIR_18_18_NT_DR_H
+        description: "gf12 pad, horizontal orientation, digital input/output"
+        template: |
+          (* dont_touch *)
+          PBIDIR_18_18_NT_DR_H ${instance_name} (
+            .PO  (  ),
+            .Y   ( ${conn["pad2chip"]} ),
+            .PAD ( ${conn["pad"]} ),
+            .A   ( ${conn["chip2pad"]} ),
+            .DS0 ( 1'b0 ),
+            .DS1 ( 1'b0 ),
+            .IE  ( ${conn["input_en"]} ),
+            .IS  ( 1'b0 ),
+            .OE  ( ${conn["output_en"]} ),
+            .PE  ( ${conn["pull_en"]} ),
+            .POE ( 1'b0 ),
+            .PS  ( ${conn["pull_sel"]} ),
+            .RTO ( io_pads_rto ),
+            .SNS ( io_pads_sns ),
+            .SR  ( 1'b0 )
+          );
+        pad_signals: &gf12_pad_bidir_signals
+          - name: pad
+            description: "Data external input/output"
+            size: 1
+            kind: pad
+          - name:  chip2pad
+            description: "Data input pin from chip to padframe"
+            size: 1
+            kind: input
+            conn_type: dynamic
+            default_reset_value: 0
+            default_static_value: 1'b0
+          - name: pad2chip
+            description: "Data output pin from padframe to chip"
+            size:  1
+            kind: output
+            conn_type: dynamic
+          - name: input_en
+            description: "Input enable signal, active high"
+            size: 1
+            kind: input
+            conn_type: dynamic
+            default_reset_value: 0
+            default_static_value: 1'b0
+          - name: output_en
+            description: "Output enable signal, active high"
+            size: 1
+            kind: input
+            conn_type: dynamic
+            default_reset_value: 0
+            default_static_value: 1'b0
+          - name: pull_en
+            description: "Pull-up/-down enable signal, active high"
+            size: 1
+            kind: input
+            conn_type: dynamic
+            default_reset_value: 0
+            default_static_value: 1'b0
+          - name: pull_sel
+            description: "Pull-up/-down select signal, high: pull-up, low: pull-down"
+            size: 1
+            kind: input
+            conn_type: dynamic
+            default_reset_value: 0
+            default_static_value: 1'b0
+
+      - name: PBIDIR_18_18_NT_DR_V
+        description: "gf12 pad, vertical orientation, digital input/output"
+        template: |
+          (* dont_touch *)
+          PBIDIR_18_18_NT_DR_V ${instance_name} (
+            .PO  (  ),
+            .Y   ( ${conn["pad2chip"]} ),
+            .PAD ( ${conn["pad"]} ),
+            .A   ( ${conn["chip2pad"]} ),
+            .DS0 ( 1'b0 ),
+            .DS1 ( 1'b0 ),
+            .IE  ( ${conn["input_en"]} ),
+            .IS  ( 1'b0 ),
+            .OE  ( ${conn["output_en"]} ),
+            .PE  ( ${conn["pull_en"]} ),
+            .POE ( 1'b0 ),
+            .PS  ( ${conn["pull_sel"]} ),
+            .RTO ( io_pads_rto ),
+            .SNS ( io_pads_sns ),
+            .SR  ( 1'b0 )
+          );
+        pad_signals: *gf12_pad_bidir_signals
+        
+# END PAD DEFINITIONS    
+###################################################################
+###################################################################
+
+# PAD INSTANCES
+    pad_list:
+
+########################################
+# POWER MANAGEMENT
+########################################
+
+      - name: pad_tie_io
+        description: "I/O power control tie pad"
+        pad_type: PDVDDTIE_18_18_NT_DR_H
+        is_static: true
+
+########################################
+# I/O POWER
+########################################
+
+      - name: pad_dvdd_io_h_{i}
+        multiple: 5
+        description: "I/O power domain horizontal VDD pad"
+        pad_type: PDVDD_18_18_NT_DR_H
+        is_static: true
+
+      - name: pad_dvdd_io_v_{i}
+        multiple: 6
+        description: "I/O power domain vertical VDD pad"
+        pad_type: PDVDD_18_18_NT_DR_V
+        is_static: true
+
+      - name: pad_dvss_io_h_{i}
+        multiple: 5
+        description: "I/O power domain horizontal VSS pad"
+        pad_type: PDVSS_18_18_NT_DR_H
+        is_static: true
+
+      - name: pad_dvss_io_v_{i}
+        multiple: 6
+        description: "I/O power domain vertical VSS pad"
+        pad_type: PDVSS_18_18_NT_DR_V
+        is_static: true
+
+########################################
+# CORE POWER
+########################################
+
+      - name: pad_vdd_core_h_{i}
+        multiple: 4
+        description: "Core power domain horizontal VDD pad"
+        pad_type: PVDD_08_08_NT_DR_H
+        is_static: true
+
+      - name: pad_vdd_core_v_{i}
+        multiple: 4
+        description: "Core power domain vertical VDD pad"
+        pad_type: PVDD_08_08_NT_DR_V
+        is_static: true
+
+      - name: pad_vss_core_h_{i}
+        multiple: 4
+        description: "Core power domain horizontal VSS pad"
+        pad_type: PVSS_08_08_NT_DR_H
+        is_static: true
+
+      - name: pad_vss_core_v_{i}
+        multiple: 4
+        description: "Core power domain vertical VSS pad"
+        pad_type: PVSS_08_08_NT_DR_V
+        is_static: true
+
+########################################
+# CORNER PADS
+########################################
+
+      - name: pad_corner_{i}
+        multiple: 4
+        description: "Corner pad"
+        pad_type: PCORNER_18_18_NT_DR
+        is_static: true
+
+########################################
+# CLOCKS
+########################################
+
+      - name: ref_clk
+        description: "Reference clock in"
+        pad_type: POSCP_18_18_NT_DR_H
+        is_static: true
+        connections:
+          pad2core_clk: ref_clk_i
+          crystal_en: 1'b1
+          test_en: 1'b0
+
+      - name: fll_bypass
+        description: "FLL bypass in, when active bypasses FLL clock with ref_clk"
+        pad_type: PBIDIR_18_18_NT_DR_H
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: fll_bypass_i
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+########################################
+# POWER ON AND RESET
+########################################
+
+      - name: pwr_on_rst_n
+        description: "Power on and reset in, active-low"
+        pad_type: PBIDIR_18_18_NT_DR_H
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: pwr_on_rst_ni
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+########################################
+# TEST MODE
+########################################
+
+      - name: test_mode
+        description: "Test mode in"
+        pad_type: PBIDIR_18_18_NT_DR_H
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: test_mode_i
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+########################################
+# BOOT MODE
+########################################
+
+      - name: boot_mode_{i}
+        multiple: 2
+        description: "Boot mode in"
+        pad_type: PBIDIR_18_18_NT_DR_H
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: boot_mode_{i}_i
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: secure_boot
+        description: "Secure boot in"
+        pad_type: PBIDIR_18_18_NT_DR_H
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: secure_boot_i
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+########################################
+# JTAG
+########################################
+
+      - name: jtag_tclk
+        description: "JTAG tclk in"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: jtag_tclk_i
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: jtag_trst_n
+        description: "JTAG trst in, active-low"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: jtag_trst_ni
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+      
+      - name: jtag_tms
+        description: "JTAG tms in"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: jtag_tms_i
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: jtag_tdi
+        description: "JTAG tdi in"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: jtag_tdi_i
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: jtag_tdo
+        description: "JTAG tdo out"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: jtag_tdo_o
+          #pad2chip
+          input_en: 1'b0
+          output_en: 1'b1
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+########################################
+# JTAG OT
+########################################
+
+      - name: jtag_ot_tclk
+        description: "JTAG OT tclk in"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: jtag_ot_tclk_i
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: jtag_ot_trst_ni
+        description: "JTAG OT trst in, active-low"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: jtag_ot_trst_ni
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+      
+      - name: jtag_ot_tms
+        description: "JTAG OT tms in"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: jtag_ot_tms_i
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: jtag_ot_tdi
+        description: "JTAG OT tdi in"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: jtag_ot_tdi_i
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: jtag_ot_tdo
+        description: "JTAG OT tdo out"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: jtag_ot_tdo_o
+          #pad2chip
+          input_en: 1'b0
+          output_en: 1'b1
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+########################################
+# HYPERBUS
+########################################
+
+      - name: hyper_cs_{i}_n
+        multiple: 2
+        description: "Hyperbus cs out, active-low"
+        pad_type: PBIDIR_18_18_NT_DR_H
+        is_static: true
+        connections:
+          chip2pad: hyper_cs_{i}_no
+          #pad2chip
+          input_en: 1'b0
+          output_en: 1'b1
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: hyper_ck
+        description: "Hyperbus ck out"
+        pad_type: PBIDIR_18_18_NT_DR_H
+        is_static: true
+        connections:
+          chip2pad: hyper_ck_o
+          #pad2chip
+          input_en: 1'b0
+          output_en: 1'b1
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: hyper_ck_n
+        description: "Hyperbus ck out, active-low"
+        pad_type: PBIDIR_18_18_NT_DR_H
+        is_static: true
+        connections:
+          chip2pad: hyper_ck_no
+          #pad2chip
+          input_en: 1'b0
+          output_en: 1'b1
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: hyper_rwds
+        description: "Hyperbus rwds in/out"
+        pad_type: PBIDIR_18_18_NT_DR_H
+        is_static: true
+        connections:
+          chip2pad: hyper_rwds_o
+          pad2chip: hyper_rwds_i
+          input_en: ~hyper_rwds_oen_i
+          output_en: hyper_rwds_oen_i
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: hyper_dq_{i}
+        multiple: 8
+        description: "Hyperbus dq in/out"
+        pad_type: PBIDIR_18_18_NT_DR_H
+        is_static: true
+        connections:
+          chip2pad: hyper_dq_{i}_o
+          pad2chip: hyper_dq_{i}_i
+          input_en: ~hyper_dq_{i}_oen_i
+          output_en: hyper_dq_{i}_oen_i
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: hyper_reset_n
+        description: "Hyperbus reset out, active-low"
+        pad_type: PBIDIR_18_18_NT_DR_H
+        is_static: true
+        connections:
+          chip2pad: hyper_reset_no
+          #pad2chip
+          input_en: 1'b0
+          output_en: 1'b1
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+########################################
+# SPW
+########################################
+
+      - name: spw_data_in
+        description: "SPW data in"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: spw_data_i
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: spw_strb_in
+        description: "SPW strb in"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: spw_srtb_i
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: spw_data_out
+        description: "SPW data out"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: spw_data_o
+          #pad2chip
+          input_en: 1'b0
+          output_en: 1'b1
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+      - name: spw_strb_out
+        description: "SPW strb out"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: spw_srtb_o
+          #pad2chip
+          input_en: 1'b0
+          output_en: 1'b1
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+########################################
+# UART
+########################################
+
+      - name: uart_tx_out
+        description: "UART tx out"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: uart_tx_o
+          #pad2chip
+          input_en: 1'b0
+          output_en: 1'b1
+          pull_en: 1'b0
+          pull_sel: 1'b0
+      
+      - name: uart_rx_in
+        description: "UART rx in"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: true
+        connections:
+          chip2pad: 1'b0
+          pad2chip: uart_rx_i
+          input_en: 1'b1
+          output_en: 1'b0
+          pull_en: 1'b0
+          pull_sel: 1'b0
+
+########################################
+# MUXED PADS
+########################################
+
+      - name: muxed_v_{i:2d}
+        multiple: 22
+        mux_groups: [self]
+        description: "Vertical digital input/output pads that are muxed"
+        pad_type: PBIDIR_18_18_NT_DR_V
+        is_static: false
+
+# END PAD INSTANCES
+###################################################################
+###################################################################
+
+# PORT INSTANCES
+    port_groups:
+
+########################################
+# MUX 0
+########################################
+
+      - name: spi
+        description: "SPI"
+        output_defaults: 1'b0
+        ports:
+          - name: sck
+            mux_groups: [muxed_v_00]
+            description: "SPI sck out"
+            connections:
+              chip2pad: spih_sck_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: spih_sck_pen_i
+              pull_sel: spih_sck_psel_i
+          - name: csb_{i}
+            multiple: 2
+            mux_groups: ["muxed_v_{i+1:2d}"]
+            description: "SPI cs out, active-low"
+            connections:
+              chip2pad: spih_csb_{i}_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: spih_csb_{i}_pen_i
+              pull_sel: spih_csb_{i}_psel_i
+          - name: sd_{i}
+            multiple: 4
+            mux_groups: ["muxed_v_{i+3:2d}"]
+            description: "SPI sd in/out"
+            connections:
+              chip2pad: spih_sd_{i}_o
+              spih_sd_{i}_i: pad2chip
+              input_en: ~spih_sd_{i}_oen_i
+              output_en: spih_sd_{i}_oen_i
+              pull_en: spih_sd_{i}_pen_i
+              pull_sel: spih_sd_{i}_psel_i
+
+      - name: ethernet
+        description: "Ethernet"
+        output_defaults: 1'b0
+        ports:
+          - name: rxck
+            mux_groups: [muxed_v_07]
+            description: "Ethernet rxck in"
+            connections:
+              #chip2pad
+              eth_rxck_i: pad2chip
+              input_en: 1'b1
+              output_en: 1'b0
+              pull_en: eth_rxck_pen_i
+              pull_sel: eth_rxck_psel_i
+          - name: rxctl
+            mux_groups: [muxed_v_08]
+            description: "Ethernet rxctl in"
+            connections:
+              #chip2pad
+              eth_rxctl_i: pad2chip
+              input_en: 1'b1
+              output_en: 1'b0
+              pull_en: eth_rxctl_pen_i
+              pull_sel: eth_rxctl_psel_i
+          - name: rxd_{i}
+            multiple: 4
+            mux_groups: ["muxed_v_{i+9:2d}"]
+            description: "Ethernet rxd in"
+            connections:
+              #chip2pad
+              eth_rxd_{i}_i: pad2chip
+              input_en: 1'b1
+              output_en: 1'b0
+              pull_en: eth_rxd_{i}_pen_i
+              pull_sel: eth_rxd_{i}_psel_i
+          - name: txck
+            mux_groups: [muxed_v_13]
+            description: "Ethernet txck out"
+            connections:
+              chip2pad: eth_txck_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: eth_txck_pen_i
+              pull_sel: eth_txck_psel_i
+          - name: txctl
+            mux_groups: [muxed_v_14]
+            description: "Ethernet txctl out"
+            connections:
+              chip2pad: eth_txctl_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: eth_txctl_pen_i
+              pull_sel: eth_txctl_psel_i
+          - name: txd_{i}
+            multiple: 4
+            mux_groups: ["muxed_v_{i+15:2d}"]
+            description: "Ethernet txd out"
+            connections:
+              chip2pad: eth_txd_{i}_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: eth_txd_{i}_pen_i
+              pull_sel: eth_txd_{i}_psel_i
+          - name: md
+            mux_groups: [muxed_v_19]
+            description: "Ethernet md in/out"
+            connections:
+              chip2pad: eth_md_{i}_o
+              eth_md_{i}_i: pad2chip
+              input_en: ~eth_md_{i}_oen_i
+              output_en: eth_md_{i}_oen_i
+              pull_en: eth_md_{i}_pen_i
+              pull_sel: eth_md_{i}_psel_i
+          - name: mdc
+            mux_groups: [muxed_v_20]
+            description: "Ethernet mdc out"
+            connections:
+              chip2pad: eth_mdc_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: eth_mdc_pen_i
+              pull_sel: eth_mdc_psel_i
+          - name: rst_n
+            mux_groups: [muxed_v_21]
+            description: "Ethernet reset out, active-low"
+            connections:
+              chip2pad: eth_rst_no
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: eth_rst_n_pen_i
+              pull_sel: eth_rst_n_psel_i
+
+########################################
+# MUX 1
+########################################
+
+      - name: can
+        description: "CAN"
+        output_defaults: 1'b0
+        ports:
+          - name: rx
+            mux_groups: [muxed_v_00]
+            description: "CAN rx in"
+            connections:
+              #chip2pad
+              can_rx_i: pad2chip
+              input_en: 1'b1
+              output_en: 1'b0
+              pull_en: can_rx_pen_i
+              pull_sel: can_rx_psel_i
+          - name: tx
+            mux_groups: [muxed_v_01]
+            description: "CAN tx out"
+            connections:
+              chip2pad: can_tx_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: can_tx_pen_i
+              pull_sel: can_tx_psel_i
+
+      - name: serial_link
+        description: "Serial link"
+        output_defaults: 1'b0
+        ports:
+          - name: rcv_clk
+            mux_groups: [muxed_v_05]
+            description: "Serial link scv_clk out"
+            connections:
+              chip2pad: slink_rcv_clk_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: slink_rcv_clk_pen_i
+              pull_sel: slink_rcv_clk_psel_i
+          - name: i_{i}
+            multiple: 8
+            mux_groups: ["muxed_v_{i+6:2d}"]
+            description: "Serial link in"
+            connections:
+              #chip2pad
+              slink_{i}_i: pad2chip
+              input_en: 1'b1
+              output_en: 1'b0
+              pull_en: slink_i_{i}_pen_i
+              pull_sel: slink_i_{i}_psel_i
+          - name: o_{i}
+            multiple: 7
+            mux_groups: ["muxed_v_{i+14:2d}"]
+            description: "Serial link out"
+            connections:
+              chip2pad: slink_{i}_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: slink_o_{i}_pen_i
+              pull_sel: slink_o_{i}_psel_i
+
+########################################
+# MUX 2
+########################################
+
+      - name: i2c
+        description: "I2C"
+        output_defaults: 1'b0
+        ports:
+          - name: sda_o
+            mux_groups: [muxed_v_00]
+            description: "I2C sda out"
+            connections:
+              chip2pad: i2c_sda_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: i2c_sda_o_pen_i
+              pull_sel: i2c_sda_o_psel_i
+          - name: sda_i
+            mux_groups: [muxed_v_01]
+            description: "I2C sda in"
+            connections:
+              #chip2pad
+              i2c_sda_i: pad2chip
+              input_en: 1'b1
+              output_en: 1'b0
+              pull_en: i2c_sda_i_pen_i
+              pull_sel: i2c_sda_i_psel_i
+          - name: sda_en
+            mux_groups: [muxed_v_02]
+            description: "I2C sda_en out"
+            connections:
+              chip2pad: i2c_sda_en_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: i2c_sda_en_pen_i
+              pull_sel: i2c_sda_en_psel_i
+          - name: scl_o
+            mux_groups: [muxed_v_03]
+            description: "I2C scl out"
+            connections:
+              chip2pad: i2c_scl_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: i2c_scl_o_pen_i
+              pull_sel: i2c_scl_o_psel_i
+          - name: scl_i
+            mux_groups: [muxed_v_04]
+            description: "I2C scl in"
+            connections:
+              #chip2pad
+              i2c_scl_i: pad2chip
+              input_en: 1'b1
+              output_en: 1'b0
+              pull_en: i2c_scl_i_pen_i
+              pull_sel: i2c_scl_i_psel_i
+          - name: scl_en
+            mux_groups: [muxed_v_05]
+            description: "I2C scl_en out"
+            connections:
+              chip2pad: i2c_scl_en_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: i2c_scl_en_pen_i
+              pull_sel: i2c_scl_en_psel_i
+
+      - name: tc
+        description: "TC"
+        output_defaults: 1'b0
+        ports:
+          - name: active
+            mux_groups: [muxed_v_07]
+            description: "TC active in"
+            connections:
+              #chip2pad
+              tc_active_i: pad2chip
+              input_en: 1'b1
+              output_en: 1'b0
+              pull_en: tc_active_pen_i
+              pull_sel: tc_active_psel_i
+          - name: clk
+            mux_groups: [muxed_v_08]
+            description: "TC clk in"
+            connections:
+              #chip2pad
+              tc_clk_i: pad2chip
+              input_en: 1'b1
+              output_en: 1'b0
+              pull_en: tc_clk_pen_i
+              pull_sel: tc_clk_psel_i
+          - name: data
+            mux_groups: [muxed_v_09]
+            description: "TC data in"
+            connections:
+              #chip2pad
+              tc_data_i: pad2chip
+              input_en: 1'b1
+              output_en: 1'b0
+              pull_en: tc_data_pen_i
+              pull_sel: tc_data_psel_i
+
+      - name: ptme
+        description: "PTME"
+        output_defaults: 1'b0
+        ports:
+          - name: clk
+            mux_groups: [muxed_v_10]
+            description: "PTME clk out"
+            connections:
+              chip2pad: ptme_clk_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: ptme_clk_pen_i
+              pull_sel: ptme_clk_psel_i
+          - name: enc
+            mux_groups: [muxed_v_11]
+            description: "PTME enc out"
+            connections:
+              chip2pad: ptme_enc_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: ptme_enc_pen_i
+              pull_sel: ptme_enc_psel_i
+          - name: sync
+            mux_groups: [muxed_v_12]
+            description: "PTME sync out"
+            connections:
+              chip2pad: ptme_sync_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: ptme_sync_pen_i
+              pull_sel: ptme_sync_psel_i
+          - name: ext_clk
+            mux_groups: [muxed_v_13]
+            description: "TC ext_clk in"
+            connections:
+              #chip2pad
+              ptme_ext_clk_i: pad2chip
+              input_en: 1'b1
+              output_en: 1'b0
+              pull_en: ptme_ext_clk_pen_i
+              pull_sel: ptme_ext_clk_psel_i
+
+      - name: hpc
+        description: "HPC"
+        output_defaults: 1'b0
+        ports:
+          - name: addr_{i}
+            multiple: 3
+            mux_groups: ["muxed_v_{i+14:2d}"]
+            description: "HPC addr out"
+            connections:
+              chip2pad: hpc_addr_{i}_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: hpc_addr_{i}_pen_i
+              pull_sel: hpc_addr_{i}_psel_i
+          - name: cmd_en
+            mux_groups: [muxed_v_17]
+            description: "HPC cmd_en out"
+            connections:
+              chip2pad: hpc_cmd_en_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: hpc_cmd_en_pen_i
+              pull_sel: hpc_cmd_en_psel_i
+          - name: sample
+            mux_groups: [muxed_v_18]
+            description: "HPC sample out"
+            connections:
+              chip2pad: hpc_sample_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: hpc_sample_pen_i
+              pull_sel: hpc_sample_psel_i
+
+      - name: llc
+        description: "LLC"
+        output_defaults: 1'b0
+        ports:
+          - name: line_{i}
+            multiple: 2
+            mux_groups: ["muxed_v_{i+19:2d}"]
+            description: "LLC line out"
+            connections:
+              chip2pad: llc_line_{i}_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: llc_line_{i}_pen_i
+              pull_sel: llc_line_{i}_psel_i
+
+      - name: obt
+        description: "OBT"
+        output_defaults: 1'b0
+        ports:
+          - name: ext_clk
+            mux_groups: [muxed_v_21]
+            description: "OBT ext_clk in"
+            connections:
+              #chip2pad
+              obt_ext_clk_i: pad2chip
+              input_en: 1'b1
+              output_en: 1'b0
+              pull_en: obt_ext_clk_pen_i
+              pull_sel: obt_ext_clk_psel_i
+
+########################################
+# MUX 3
+########################################
+
+      - name: spi_ot
+        description: "SPI OT"
+        output_defaults: 1'b0
+        ports:
+          - name: sck
+            mux_groups: [muxed_v_00]
+            description: "SPI OT sck out"
+            connections:
+              chip2pad: spih_ot_sck_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: spih_ot_sck_pen_i
+              pull_sel: spih_ot_sck_psel_i
+          - name: csb
+            mux_groups: [muxed_v_01]
+            description: "SPI OT cs out, active-low"
+            connections:
+              chip2pad: spih_ot_csb_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: spih_ot_csb_pen_i
+              pull_sel: spih_ot_csb_psel_i
+          - name: sd_{i}
+            multiple: 4
+            mux_groups: ["muxed_v_{i+2:2d}"]
+            description: "SPI OT sd in/out"
+            connections:
+              chip2pad: spih_ot_sd_{i}_o
+              spih_ot_sd_{i}_i: pad2chip
+              input_en: ~spih_ot_sd_{i}_oen_i
+              output_en: spih_ot_sd_{i}_oen_i
+              pull_en: spih_ot_sd_{i}_pen_i
+              pull_sel: spih_ot_sd_{i}_psel_i
+          
+      - name: pll
+        description: "PLL"
+        output_defaults: 1'b0
+        ports:
+          - name: io_{i}
+            multiple: 7
+            mux_groups: ["muxed_v_{i+7:2d}"]
+            description: "PLL in/out"
+            connections:
+              chip2pad: pll_{i}_o
+              pll_{i}_i: pad2chip
+              input_en: ~pll_{i}_oen_i
+              output_en: pll_{i}_oen_i
+              pull_en: pll_{i}_pen_i
+              pull_sel: pll_{i}_psel_i
+
+########################################
+# MUX 4
+########################################
+
+      - name: gpio
+        description: "GPIO"
+        output_defaults: 1'b0
+        ports:
+          - name: io_{i}
+            multiple: 22
+            mux_groups: ["muxed_v_{i:2d}"]
+            description: "GPIO in/out"
+            connections:
+              chip2pad: gpio_{i}_o
+              gpio_{i}_i: pad2chip
+              input_en: ~gpio_{i}_oen_i
+              output_en: gpio_{i}_oen_i
+              pull_en: gpio_{i}_pen_i
+              pull_sel: gpio_{i}_psel_i
+
+# END PORT INSTANCES
+###################################################################
+###################################################################
