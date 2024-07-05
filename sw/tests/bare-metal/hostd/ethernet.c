@@ -8,6 +8,7 @@
 #include "car_memory_map.h"
 #include "io.h"
 #include "sw/device/lib/dif/dif_rv_plic.h"
+#include "regs/system_timer.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
