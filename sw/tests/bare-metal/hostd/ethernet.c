@@ -9,7 +9,7 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 // Chaoqun Liang <chaoqun.liang@unibo.it>
-//
+
 #include "car_memory_map.h"
 #include "io.h"
 #include "sw/device/lib/dif/dif_rv_plic.h"
