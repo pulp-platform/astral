@@ -15,8 +15,8 @@ module ethernet_wrap #(
   parameter int unsigned BufferDepth      = 32'd3,
   parameter int unsigned TFLenWidth       = 32'd32,
   parameter int unsigned MemSysDepth      = 32'd0,
-  parameter int unsigned TxFifoLogDepth   = 32'd4,
-  parameter int unsigned RxFifoLogDepth   = 32'd4,
+  parameter int unsigned TxFifoLogDepth   = 32'd5,
+  parameter int unsigned RxFifoLogDepth   = 32'd1,
   parameter int unsigned LogDepth         = 3,
   parameter int unsigned CdcSyncStages    = 2,
   parameter int unsigned SyncStages       = 3,
@@ -98,7 +98,8 @@ module ethernet_wrap #(
   input  logic                    reg_async_mst_ack_i,
   output reg_rsp_t                reg_async_mst_data_o,
   // irq cdc
-  output logic                    eth_irq_o
+  output logic                    eth_rx_irq_o,
+  output logic                    eth_tx_irq_o
 );
 
   localparam bit CombinedShifter              = 1'b1;
@@ -112,7 +113,7 @@ module ethernet_wrap #(
   reg_rsp_t reg_bus_rsp;
 
   logic axi_isolate_sync;
-  logic eth_rx_irq;
+  logic eth_rx_irq, eth_tx_irq;
 
   // isolate sync
   sync #(
@@ -132,9 +133,18 @@ module ethernet_wrap #(
     .clk_i,
     .rst_ni   ( pwr_on_rst_ni ),
     .serial_i ( eth_rx_irq    ),
-    .serial_o ( eth_irq_o  )
+    .serial_o ( eth_rx_irq_o  )
   );
 
+  sync #(
+    .STAGES     ( SyncStages ),
+    .ResetValue ( 1'b0       )
+  ) i_tx_irq_sync (
+    .clk_i,
+    .rst_ni   ( pwr_on_rst_ni ),
+    .serial_i ( eth_tx_irq    ),
+    .serial_o ( eth_tx_irq_o  )
+  );
   axi_isolate            #(
     .NumPending           ( NumAxInFlight  ),
     .TerminateTransaction ( 1              ),
@@ -217,6 +227,8 @@ module ethernet_wrap #(
     .TFLenWidth          ( TFLenWidth          ),
     .MemSysDepth         ( MemSysDepth         ),
     .RejectZeroTransfers ( RejectZeroTransfers ),
+    .TxFifoLogDepth      ( TxFifoLogDepth      ),
+    .RxFifoLogDepth      ( RxFifoLogDepth      ),
     .axi_req_t           ( axi_out_req_t       ),
     .axi_rsp_t           ( axi_out_resp_t      ),
     .reg_req_t           ( reg_req_t           ),

@@ -211,7 +211,7 @@ logic       car_sys_timer_lo_intr, car_sys_timer_hi_intr,  car_sys_timer_lo_intr
 logic [3:0] car_adv_timer_intrs, car_adv_timer_events, car_adv_timer_intrs_sync, car_adv_timer_events_sync;
 logic [4:0] car_wdt_intrs;
 logic       car_can_intr;
-logic       car_eth_intr;
+logic       car_eth_tx_intr, car_eth_rx_intr;
 
 // Carfield peripheral interrupts
 // Propagate edge-triggered interrupts between periph and host clock domains
@@ -260,7 +260,8 @@ edge_propagator i_sync_sys_timer_hi_intr (
 
 // Collect carfield peripheral interrupts to feed cheshire in the host domain
 assign car_periph_intrs = {
-  car_eth_intr,               // 1
+  car_eth_tx_intr,            // 1
+  car_eth_rx_intr,            // 1
   car_sys_timer_hi_intr_sync, // 1
   car_sys_timer_lo_intr_sync, // 1
   car_adv_timer_events_sync,  // 4
@@ -903,7 +904,7 @@ assign hyper_isolate_req = car_regs_reg2hw.periph_isolate.q;
 
 `ifndef GEN_NO_HYPERBUS // bender-xilinx.mk
   localparam int unsigned HyperDivWidth = 20;
-  localparam int unsigned DefaultHyperClkDivValue = 2;
+  localparam int unsigned DefaultHyperClkDivValue = 1;
   logic hyp_clk;
 
   logic hyper_clk_decoupled_valid, hyper_clk_decoupled_ready;
@@ -1941,7 +1942,7 @@ mailbox_unit #(
 if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
   localparam int unsigned EthAsyncIdx = CarfieldRegBusSlvIdx.ethernet-NumSyncRegSlv;
   localparam int unsigned EthDivWidth = 20;
-  localparam int unsigned DefaultEthClkDivValue = 2;
+  localparam int unsigned DefaultEthClkDivValue = 1;
   logic eth_clk;
   logic eth_clk_decoupled_valid, eth_clk_decoupled_ready;
 
@@ -1981,11 +1982,11 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
     .DataWidth             ( Cfg.AxiDataWidth           ),
     .UserWidth             ( Cfg.AxiUserWidth           ),
     .AxiIdWidth            ( Cfg.AxiMstIdWidth          ),
-    .NumAxInFlight         ( 32'd3                      ),
-    .BufferDepth           ( 32'd3                      ),
-    .TFLenWidth            ( 32'd32                     ),
+    .NumAxInFlight         ( 32'd15                     ),
+    .BufferDepth           ( 32'd2                      ),
+    .TFLenWidth            ( 32'd20                     ),
     .MemSysDepth           ( 32'd0                      ),
-    .TxFifoLogDepth        ( 32'd4                      ),
+    .TxFifoLogDepth        ( 32'd2                      ),
     .RxFifoLogDepth        ( 32'd3                      ),
     .AsyncAxiOutAwWidth    ( CarfieldAxiMstAwWidth      ),
     .AsyncAxiOutWWidth     ( CarfieldAxiMstWWidth       ),
@@ -2046,18 +2047,20 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
     .reg_async_mst_req_o     ( ext_reg_async_slv_req_in  [EthAsyncIdx] ),
     .reg_async_mst_ack_i     ( ext_reg_async_slv_ack_out [EthAsyncIdx] ),
     .reg_async_mst_data_o    ( ext_reg_async_slv_data_in [EthAsyncIdx] ),
-    .eth_irq_o               ( car_eth_intr                            )
+    .eth_tx_irq_o            ( car_eth_tx_intr                         ),
+    .eth_rx_irq_o            ( car_eth_rx_intr                         )
   );
 end else begin : gen_no_ethernet
-  assign ethernet_isolate_req              = '0;
-  assign car_eth_intr                      = '0;
-  assign eth_md_o                          = '0;
-  assign eth_md_oe                         = '0;
-  assign eth_mdc_o                         = '0;
-  assign eth_rst_n_o                       = '0;
-  assign eth_txck_o                        = '0;
-  assign eth_txctl_o                       = '0;
-  assign eth_txd_o                         = '0;
+  assign ethernet_isolate_req    = '0;
+  assign car_eth_tx_intr         = '0;
+  assign car_eth_rx_intr         = '0;
+  assign eth_md_o                = '0;
+  assign eth_md_oe               = '0;
+  assign eth_mdc_o               = '0;
+  assign eth_rst_n_o             = '0;
+  assign eth_txck_o              = '0;
+  assign eth_txctl_o             = '0;
+  assign eth_txd_o               = '0;
 end
 
 // APB peripherals

@@ -33,9 +33,9 @@ module carfield_soc_fixture;
   localparam cheshire_cfg_t DutCfg = carfield_pkg::CarfieldCfgDefault;
   `CHESHIRE_TYPEDEF_ALL(, DutCfg)
 
-  localparam time         ClkPeriodSys  = 10ns;
+  localparam time         ClkPeriodSys  = 4ns;// 2ns
   localparam time         ClkPeriodJtag = 40ns;
-  localparam time         ClkPeriodPeriph  = 2ns;
+  localparam time         ClkPeriodPeriph  = 4ns;
   localparam time         ClkPeriodRtc  = 1000ns; // 1MHz RTC clock. Note: needs to equal
                                                   // `DutCfg.RTCFreq` for successful autonomous boot
                                                   // (e.g., SPI)
@@ -247,6 +247,10 @@ module carfield_soc_fixture;
     .debug_signals_o            (                           )
   );
 
+  logic eth_clk;
+
+  assign eth_clk = i_dut.gen_ethernet.eth_clk;
+
   //////////////////
   // Carfield VIP //
   //////////////////
@@ -275,6 +279,7 @@ module carfield_soc_fixture;
     .ClkPeriodSys  ( ClkPeriodSys ),
     .ClkPeriodJtag ( ClkPeriodJtag ),
     .ClkPeriodRtc  ( ClkPeriodRtc),
+    .ClkPeriodPeriph( ClkPeriodPeriph ),
     .RstCycles     ( RstCycles ),
     .TAppl         ( TAppl ),
     .TTest         ( TTest ),
@@ -285,6 +290,7 @@ module carfield_soc_fixture;
     // We use the clock/reset generated in cheshire VIP
     .clk_vip (),
     .rst_n_vip (),
+    .eth_clk ( eth_clk),
     // Multiplex incoming AXI req/rsp and convert through serial link
     .axi_slvs_req ( ext_to_vip_req ),
     .axi_slvs_rsp ( ext_to_vip_rsp ),
