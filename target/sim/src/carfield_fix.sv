@@ -35,7 +35,7 @@ module carfield_soc_fixture;
 
   localparam time         ClkPeriodSys  = 4ns;// 2ns
   localparam time         ClkPeriodJtag = 40ns;
-  localparam time         ClkPeriodPeriph  = 4ns;
+  localparam time         ClkPeriodPeriph = 4ns;
   localparam time         ClkPeriodRtc  = 1000ns; // 1MHz RTC clock. Note: needs to equal
                                                   // `DutCfg.RTCFreq` for successful autonomous boot
                                                   // (e.g., SPI)

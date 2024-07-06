@@ -686,17 +686,20 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   AxiRtNumAddrRegions : 2,
   AxiRtCutPaths       : 1,
   AxiRtEnableChecks   : 0,
-  // Ethernet Config
-  EthTxFifoLogDepth   : 2,  
-  EthRxFifoLogDepth   : 3,
-  EthDmaNumAxInFlight : 15,
-  EthDmaBufferDepth   : 2,
-  EthDmaTFLenWidth    : 20,
-  EthDmaMemSysDepth   : 0,  
   // All non-set values should be zero
   default: '0
 };
 // verilog_lint: waive-stop line-length
+/***********************/
+/* Ethernet Parameters */
+/***********************/
+// Ethernet Config
+localparam int unsigned EthTxFifoLogDepth   = 2;  
+localparam int unsigned EthRxFifoLogDepth   = 3;
+localparam int unsigned EthDmaNumAxInFlight = 15;
+localparam int unsigned EthDmaBufferDepth   = 2;
+localparam int unsigned EthDmaTFLenWidth    = 20;
+localparam int unsigned EthDmaMemSysDepth   = 0; 
 
 // CDC FIFO parameters (FIFO depth).
 localparam int unsigned LogDepth   = 3;

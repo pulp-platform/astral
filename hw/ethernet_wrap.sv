@@ -98,8 +98,7 @@ module ethernet_wrap #(
   input  logic                    reg_async_mst_ack_i,
   output reg_rsp_t                reg_async_mst_data_o,
   // irq cdc
-  output logic                    eth_rx_irq_o,
-  output logic                    eth_tx_irq_o
+  output logic                    eth_rx_irq_o
 );
 
   localparam bit CombinedShifter              = 1'b1;
@@ -113,7 +112,7 @@ module ethernet_wrap #(
   reg_rsp_t reg_bus_rsp;
 
   logic axi_isolate_sync;
-  logic eth_rx_irq, eth_tx_irq;
+  logic eth_rx_irq;
 
   // isolate sync
   sync #(
@@ -136,15 +135,6 @@ module ethernet_wrap #(
     .serial_o ( eth_rx_irq_o  )
   );
 
-  sync #(
-    .STAGES     ( SyncStages ),
-    .ResetValue ( 1'b0       )
-  ) i_tx_irq_sync (
-    .clk_i,
-    .rst_ni   ( pwr_on_rst_ni ),
-    .serial_i ( eth_tx_irq    ),
-    .serial_o ( eth_tx_irq_o  )
-  );
   axi_isolate            #(
     .NumPending           ( NumAxInFlight  ),
     .TerminateTransaction ( 1              ),

@@ -90,7 +90,7 @@ module vip_carfield_soc
     .rst_no ( rst_n )
   );
 
-clk_rst_gen #(
+  clk_rst_gen #(
     .ClkPeriod    ( ClkPeriodPeriph ),
     .RstClkCycles ( RstCycles       )
   ) i_clk_rst_periph (
@@ -107,8 +107,6 @@ clk_rst_gen #(
     localparam RegAw              = 32;
     localparam RegDw              = 32;
 
-    //logic eth_clk;
-    logic [1:0]rx_yet = 0;
     logic reg_error;
     logic [RegDw-1:0] rx_rsp_valid;
 
@@ -136,7 +134,7 @@ clk_rst_gen #(
 
     axi_mst_req_t axi_req_mem;
     axi_mst_rsp_t axi_rsp_mem;
-    logic eth_tx_irq, eth_rx_irq;
+    logic eth_rx_irq;
     idma_pkg::idma_busy_t idma_busy_o;
 
     eth_idma_wrap #(
@@ -176,8 +174,7 @@ clk_rst_gen #(
       .testmode_i          ( 1'b0            ),
       .axi_req_o           ( axi_req_mem     ),
       .axi_rsp_i           ( axi_rsp_mem     ),
-      .eth_rx_irq_o        ( eth_rx_irq      ),
-      .eth_tx_irq_o        ( eth_tx_irq      )
+      .eth_rx_irq_o        ( eth_rx_irq      )
     );
 
     axi_sim_mem #(
@@ -203,7 +200,6 @@ clk_rst_gen #(
 
     @(posedge eth_rx_irq);
     @(posedge periph_clk);
-    // $readmemh("../stimuli/rx_mem_init.vmem", i_rx_axi_sim_mem.mem);
 
     @(posedge periph_clk);
     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_MACLO_ADDR_OFFSET, 32'h98001032, 'hf, reg_error); //lower 32bits of MAC address
@@ -229,18 +225,21 @@ clk_rst_gen #(
 
     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_REQ_VALID_OFFSET, 'h1, 'hf , reg_error);   // req valid
     @(posedge periph_clk);
+    
+    //wait till all data written into rx_axi_sim_mem
+    while(1) begin
+      reg_drv_rx.send_read( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_RSP_VALID_OFFSET, rx_rsp_valid, reg_error);
+      if( rx_rsp_valid ) begin
+        break;
+      end
+      @(posedge periph_clk);
+    end
 
-    // @(posedge periph_clk);
-    // reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_RSP_READY_OFFSET, 'h1, 'hf, reg_error);
-
-    repeat(300) @(posedge periph_clk); // adjust based on num_bytes to write into rx sim mem
-    //RX done, all data written into rx_axi_sim_mem
-    rx_yet = 1;
-    // tx test starts here 
+    // Tx test starts here: external back to core
     @(posedge periph_clk);
     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_MACLO_ADDR_OFFSET, 32'h98001032, 'hf, reg_error); //lower 32bits of MAC address
     @(posedge periph_clk);
-    rx_yet = 0;
+
     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_MACHI_MDIO_OFFSET, 32'h00002070, 'hf, reg_error); //upper 16bits of MAC address + other configuration set to false/0
     @(posedge periph_clk);
 
@@ -261,12 +260,7 @@ clk_rst_gen #(
 
     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_REQ_VALID_OFFSET, 'h1, 'hf , reg_error);   // req valid
     @(posedge periph_clk);
-
-    // @(posedge periph_clk);
-    // reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_RSP_READY_OFFSET, 'h1, 'hf, reg_error);
-
   end
-
 end
 
   //////////////
