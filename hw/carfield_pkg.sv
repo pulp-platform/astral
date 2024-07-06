@@ -686,6 +686,13 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   AxiRtNumAddrRegions : 2,
   AxiRtCutPaths       : 1,
   AxiRtEnableChecks   : 0,
+  // Ethernet Config
+  EthTxFifoLogDepth   : 2,  
+  EthRxFifoLogDepth   : 3,
+  EthDmaNumAxInFlight : 15,
+  EthDmaBufferDepth   : 2,
+  EthDmaTFLenWidth    : 20,
+  EthDmaMemSysDepth   : 0,  
   // All non-set values should be zero
   default: '0
 };
