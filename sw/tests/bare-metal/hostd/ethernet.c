@@ -1,19 +1,13 @@
-// Copyright 2023 ETH Zurich and University of Bologna.
+// Copyright 2024 ETH Zurich and University of Bologna.
 // Licensed under the Apache License, Version 2.0, see LICENSE for details.
 // SPDX-License-Identifier: Apache-2.0
 //
 // Chaoqun Liang <chaoqun.liang@unibo.it>
-// //
-// Copyright 2023 ETH Zurich and University of Bologna.
-// Licensed under the Apache License, Version 2.0, see LICENSE for details.
-// SPDX-License-Identifier: Apache-2.0
 //
-// Chaoqun Liang <chaoqun.liang@unibo.it>
 
 #include "car_memory_map.h"
 #include "io.h"
 #include "sw/device/lib/dif/dif_rv_plic.h"
-#include "regs/system_timer.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -106,15 +100,9 @@ int main(void) {
   // Destination Protocol
   *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_DST_PROTO_OFFSET) = 0x5;
 
-  // while (!(*reg32(CAR_ETHERNET_BASE_ADDR,IDMA_REQ_READY_OFFSET)));
   // Validate Request to DMA
   *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_REQ_VALID_OFFSET) = 0x1;
-  // Stop accepting new request
-  //*reg32(CAR_ETHERNET_BASE_ADDR, IDMA_REQ_VALID_OFFSET) = 0x0;
-  // for (volatile int i = 0; i < 10; i++)
-  // ;
-  //*reg32(CAR_ETHERNET_BASE_ADDR, IDMA_RSP_READY_OFFSET) = 0x1; //}
-
+  
   wfi();  // rx irq
 
   // RX test
@@ -132,11 +120,11 @@ int main(void) {
   *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_SRC_PROTO_OFFSET) = 0x5;
   // Destination Protocol
   *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_DST_PROTO_OFFSET) = 0x0;
-
-  // while (!(*reg32(CAR_ETHERNET_BASE_ADDR,IDMA_REQ_READY_OFFSET)));
+  
   // Validate Request to DMA
   *reg32(CAR_ETHERNET_BASE_ADDR, IDMA_REQ_VALID_OFFSET) = 0x1;
-
+  
+  // wait until DMA moves all data
   while (!(*reg32(CAR_ETHERNET_BASE_ADDR, IDMA_RSP_VALID_OFFSET)));
 
   uint32_t error = 0;
