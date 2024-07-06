@@ -693,13 +693,12 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
 /***********************/
 /* Ethernet Parameters */
 /***********************/
-// Ethernet Config
-localparam int unsigned EthTxFifoLogDepth   = 2;  
+localparam int unsigned EthTxFifoLogDepth   = 2;
 localparam int unsigned EthRxFifoLogDepth   = 3;
 localparam int unsigned EthDmaNumAxInFlight = 15;
 localparam int unsigned EthDmaBufferDepth   = 2;
 localparam int unsigned EthDmaTFLenWidth    = 20;
-localparam int unsigned EthDmaMemSysDepth   = 0; 
+localparam int unsigned EthDmaMemSysDepth   = 0;
 
 // CDC FIFO parameters (FIFO depth).
 localparam int unsigned LogDepth   = 3;
