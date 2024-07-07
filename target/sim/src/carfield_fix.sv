@@ -33,7 +33,7 @@ module carfield_soc_fixture;
   localparam cheshire_cfg_t DutCfg = carfield_pkg::CarfieldCfgDefault;
   `CHESHIRE_TYPEDEF_ALL(, DutCfg)
 
-  localparam time         ClkPeriodSys  = 4ns;// 2ns
+  localparam time         ClkPeriodSys  = 10ns;
   localparam time         ClkPeriodJtag = 40ns;
   localparam time         ClkPeriodPeriph = 4ns;
   localparam time         ClkPeriodRtc  = 1000ns; // 1MHz RTC clock. Note: needs to equal
