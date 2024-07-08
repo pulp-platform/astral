@@ -2738,7 +2738,7 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .slv_resp_o ( apb_mst_rsp[SpaceWireIdx] ),
       .mst_req_o  ( apb_spw_req ),
       .mst_resp_i ( apb_spw_rsp ),
-      .select_i   ( streamer_apb_demux_sel )
+      .select_i   ( spw_apb_demux_sel )
     );
 
     apb_to_reg i_spw_apb_to_reg (
