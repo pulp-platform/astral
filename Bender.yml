@@ -88,14 +88,6 @@ sources:
   - hw/carfield_chip_pkg.sv
   - hw/regs/carfield_reg_pkg.sv
   - hw/regs/carfield_reg_top.sv
-#  - target/sim/src/behav-padframe/src/pkg_carfield_padframe_behav.sv
-#  - target/sim/src/behav-padframe/src/pkg_internal_carfield_padframe_behav_periph.sv
-#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_config_reg_pkg.sv
-#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_config_reg_top.sv
-#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_pads.sv
-#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_muxer.sv
-#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph.sv
-#  - target/sim/src/behav-padframe/src/carfield_padframe_behav.sv
   - hw/padframe/src/pkg_astral_padframe.sv
   - hw/padframe/src/pkg_internal_astral_padframe_periph.sv
   - hw/padframe/src/astral_padframe_periph_config_reg_pkg.sv
@@ -113,37 +105,7 @@ sources:
   - hw/carfield_rstgen.sv
   # Level 2
   - hw/carfield.sv
-  - target/synth/src/carfield_synth_wrap.sv
-  # Level 3 - Behavioural padframe
-  - target/sim/src/behav-padframe/src/pkg_carfield_padframe_behav.sv
-  - target/sim/src/behav-padframe/src/pkg_internal_carfield_padframe_behav_periph.sv
-  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_config_reg_pkg.sv
-  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_config_reg_top.sv
-  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_pads.sv
-  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_muxer.sv
-  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph.sv
-  - target/sim/src/behav-padframe/src/carfield_padframe_behav.sv
-  # FLL Model
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLLPkg.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_clk_divider.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_clk_period_quantizer.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_clock_gated.gf12.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_clock_gated.rtl.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_dither_pattern_gen.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_glitchfree_clkdiv.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_glitchfree_clkmux.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_loop_filter.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_mux.gf12.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_mux.rtl.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_reg.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_settling_monitor.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_synchroedge.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_zerodelta.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/FLL_digital/FLL_digital.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/behavioral/gf12_FLL_DCO_model.tc.vhd
-  #- /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/behavioral/gf12_FLL_DCO_model.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/behavioral/gf12_FLL_model.vhd
-  - /usr/pack/gf-12-kgf/eth/gf12_FLL_v1p0/rtl/behavioral/gf12_FLL.v
+  - hw/astral_wrap.sv
 
   - target: spatz
     files:
@@ -151,7 +113,6 @@ sources:
 
   - target: test
     files:
-      #- target/sim/src/behav-padframe/pad_behav.sv
       - target/sim/src/hyp_vip/s27ks0641.v
       - target/sim/src/vip_carfield_soc.sv
       - target/sim/src/carfield_fix.sv

@@ -352,21 +352,22 @@ package pkg_internal_astral_padframe_periph;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_DEFAULT = 3'd0;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_GPIO_IO_4 = 3'd1;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_I2C_SCL_I = 3'd2;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_SPI_SD_1 = 3'd3;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_SPI_OT_SD_2 = 3'd4;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_SERIAL_LINK_RCV_CLK_I = 3'd3;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_SPI_SD_1 = 3'd4;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_SPI_OT_SD_2 = 3'd5;
 
   parameter PAD_MUX_GROUP_MUXED_V_05_SEL_WIDTH = 3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_DEFAULT = 3'd0;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_GPIO_IO_5 = 3'd1;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_I2C_SCL_EN = 3'd2;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_SERIAL_LINK_RCV_CLK = 3'd3;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_SERIAL_LINK_I_0 = 3'd3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_SPI_SD_2 = 3'd4;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_SPI_OT_SD_3 = 3'd5;
 
   parameter PAD_MUX_GROUP_MUXED_V_06_SEL_WIDTH = 2;
   parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_06_SEL_DEFAULT = 2'd0;
   parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_06_SEL_GPIO_IO_6 = 2'd1;
-  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_06_SEL_SERIAL_LINK_I_0 = 2'd2;
+  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_06_SEL_SERIAL_LINK_I_1 = 2'd2;
   parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_06_SEL_SPI_SD_3 = 2'd3;
 
   parameter PAD_MUX_GROUP_MUXED_V_07_SEL_WIDTH = 3;
@@ -374,7 +375,7 @@ package pkg_internal_astral_padframe_periph;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_07_SEL_ETHERNET_RXCK = 3'd1;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_07_SEL_GPIO_IO_7 = 3'd2;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_07_SEL_PLL_IO_0 = 3'd3;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_07_SEL_SERIAL_LINK_I_1 = 3'd4;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_07_SEL_SERIAL_LINK_I_2 = 3'd4;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_07_SEL_TC_ACTIVE = 3'd5;
 
   parameter PAD_MUX_GROUP_MUXED_V_08_SEL_WIDTH = 3;
@@ -382,7 +383,7 @@ package pkg_internal_astral_padframe_periph;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_08_SEL_ETHERNET_RXCTL = 3'd1;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_08_SEL_GPIO_IO_8 = 3'd2;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_08_SEL_PLL_IO_1 = 3'd3;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_08_SEL_SERIAL_LINK_I_2 = 3'd4;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_08_SEL_SERIAL_LINK_I_3 = 3'd4;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_08_SEL_TC_CLK = 3'd5;
 
   parameter PAD_MUX_GROUP_MUXED_V_09_SEL_WIDTH = 3;
@@ -390,7 +391,7 @@ package pkg_internal_astral_padframe_periph;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_09_SEL_ETHERNET_RXD_0 = 3'd1;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_09_SEL_GPIO_IO_9 = 3'd2;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_09_SEL_PLL_IO_2 = 3'd3;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_09_SEL_SERIAL_LINK_I_3 = 3'd4;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_09_SEL_SERIAL_LINK_I_4 = 3'd4;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_09_SEL_TC_DATA = 3'd5;
 
   parameter PAD_MUX_GROUP_MUXED_V_10_SEL_WIDTH = 3;
@@ -399,7 +400,7 @@ package pkg_internal_astral_padframe_periph;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_10_SEL_GPIO_IO_10 = 3'd2;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_10_SEL_PLL_IO_3 = 3'd3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_10_SEL_PTME_CLK = 3'd4;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_10_SEL_SERIAL_LINK_I_4 = 3'd5;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_10_SEL_SERIAL_LINK_I_5 = 3'd5;
 
   parameter PAD_MUX_GROUP_MUXED_V_11_SEL_WIDTH = 3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_11_SEL_DEFAULT = 3'd0;
@@ -407,7 +408,7 @@ package pkg_internal_astral_padframe_periph;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_11_SEL_GPIO_IO_11 = 3'd2;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_11_SEL_PLL_IO_4 = 3'd3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_11_SEL_PTME_ENC = 3'd4;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_11_SEL_SERIAL_LINK_I_5 = 3'd5;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_11_SEL_SERIAL_LINK_I_6 = 3'd5;
 
   parameter PAD_MUX_GROUP_MUXED_V_12_SEL_WIDTH = 3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_12_SEL_DEFAULT = 3'd0;
@@ -415,7 +416,7 @@ package pkg_internal_astral_padframe_periph;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_12_SEL_GPIO_IO_12 = 3'd2;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_12_SEL_PLL_IO_5 = 3'd3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_12_SEL_PTME_SYNC = 3'd4;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_12_SEL_SERIAL_LINK_I_6 = 3'd5;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_12_SEL_SERIAL_LINK_I_7 = 3'd5;
 
   parameter PAD_MUX_GROUP_MUXED_V_13_SEL_WIDTH = 3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_13_SEL_DEFAULT = 3'd0;
@@ -423,7 +424,7 @@ package pkg_internal_astral_padframe_periph;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_13_SEL_GPIO_IO_13 = 3'd2;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_13_SEL_PLL_IO_6 = 3'd3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_13_SEL_PTME_EXT_CLK = 3'd4;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_13_SEL_SERIAL_LINK_I_7 = 3'd5;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_13_SEL_SERIAL_LINK_RCV_CLK_O = 3'd5;
 
   parameter PAD_MUX_GROUP_MUXED_V_14_SEL_WIDTH = 3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_14_SEL_DEFAULT = 3'd0;

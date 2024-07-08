@@ -10,21 +10,14 @@ package pkg_astral_padframe;
       logic        hyper_cs_0_no;
       logic        hyper_cs_1_no;
       logic        hyper_dq_0_o;
-      logic        hyper_dq_0_oen_i;
       logic        hyper_dq_1_o;
-      logic        hyper_dq_1_oen_i;
       logic        hyper_dq_2_o;
-      logic        hyper_dq_2_oen_i;
       logic        hyper_dq_3_o;
-      logic        hyper_dq_3_oen_i;
       logic        hyper_dq_4_o;
-      logic        hyper_dq_4_oen_i;
       logic        hyper_dq_5_o;
-      logic        hyper_dq_5_oen_i;
       logic        hyper_dq_6_o;
-      logic        hyper_dq_6_oen_i;
       logic        hyper_dq_7_o;
-      logic        hyper_dq_7_oen_i;
+      logic        hyper_dq_oen_i;
       logic        hyper_reset_no;
       logic        hyper_rwds_o;
       logic        hyper_rwds_oen_i;
@@ -102,10 +95,10 @@ package pkg_astral_padframe;
      } pad_domain_periph_port_group_spi_pad2soc_t;
 
    typedef struct packed {
-      logic        eth_md_0_o;
-      logic        eth_md_0_oen_i;
-      logic        eth_md_0_pen_i;
-      logic        eth_md_0_psel_i;
+      logic        eth_md_o;
+      logic        eth_md_oen_i;
+      logic        eth_md_pen_i;
+      logic        eth_md_psel_i;
       logic        eth_mdc_o;
       logic        eth_mdc_pen_i;
       logic        eth_mdc_psel_i;
@@ -145,7 +138,7 @@ package pkg_astral_padframe;
      } pad_domain_periph_port_group_ethernet_soc2pad_t;
 
    typedef struct packed {
-      logic        eth_md_0_i;
+      logic        eth_md_i;
       logic        eth_rxck_i;
       logic        eth_rxctl_i;
       logic        eth_rxd_0_i;
@@ -204,9 +197,11 @@ package pkg_astral_padframe;
       logic        slink_o_5_psel_i;
       logic        slink_o_6_pen_i;
       logic        slink_o_6_psel_i;
+      logic        slink_rcv_clk_i_pen_i;
+      logic        slink_rcv_clk_i_psel_i;
       logic        slink_rcv_clk_o;
-      logic        slink_rcv_clk_pen_i;
-      logic        slink_rcv_clk_psel_i;
+      logic        slink_rcv_clk_o_pen_i;
+      logic        slink_rcv_clk_o_psel_i;
      } pad_domain_periph_port_group_serial_link_soc2pad_t;
 
    typedef struct packed {
@@ -218,6 +213,7 @@ package pkg_astral_padframe;
       logic        slink_5_i;
       logic        slink_6_i;
       logic        slink_7_i;
+      logic        slink_rcv_clk_i;
      } pad_domain_periph_port_group_serial_link_pad2soc_t;
 
    typedef struct packed {
