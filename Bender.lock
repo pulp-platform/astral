@@ -558,7 +558,7 @@ packages:
     revision: 415d807b3a7ef455fb574ef6c8b8cfa205edabba
     version: null
     source:
-      Git: https://gitlab.thalesdigital.io/musa/spacewire.git
+      Git: git@gitlab.thalesdigital.io:musa/spacewire.git
     dependencies: []
   spatz:
     revision: 98de97f24fe42675c9b4a8cc08354a03af57400a
