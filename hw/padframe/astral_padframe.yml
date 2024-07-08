@@ -552,8 +552,8 @@ pad_domains:
         connections:
           chip2pad: hyper_dq_{i}_o
           pad2chip: hyper_dq_{i}_i
-          input_en: ~hyper_dq_{i}_oen_i
-          output_en: hyper_dq_{i}_oen_i
+          input_en: ~hyper_dq_oen_i
+          output_en: hyper_dq_oen_i
           pull_en: 1'b0
           pull_sel: 1'b0
 
@@ -778,12 +778,12 @@ pad_domains:
             mux_groups: [muxed_v_19]
             description: "Ethernet md in/out"
             connections:
-              chip2pad: eth_md_{i}_o
-              eth_md_{i}_i: pad2chip
-              input_en: ~eth_md_{i}_oen_i
-              output_en: eth_md_{i}_oen_i
-              pull_en: eth_md_{i}_pen_i
-              pull_sel: eth_md_{i}_psel_i
+              chip2pad: eth_md_o
+              eth_md_i: pad2chip
+              input_en: ~eth_md_oen_i
+              output_en: eth_md_oen_i
+              pull_en: eth_md_pen_i
+              pull_sel: eth_md_psel_i
           - name: mdc
             mux_groups: [muxed_v_20]
             description: "Ethernet mdc out"
@@ -838,19 +838,19 @@ pad_domains:
         description: "Serial link"
         output_defaults: 1'b0
         ports:
-          - name: rcv_clk
-            mux_groups: [muxed_v_05]
-            description: "Serial link scv_clk out"
+          - name: rcv_clk_i
+            mux_groups: [muxed_v_04]
+            description: "Serial link rcv_clk in"
             connections:
-              chip2pad: slink_rcv_clk_o
-              #pad2chip
+              #chip2pad
+              slink_rcv_clk_i: pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: slink_rcv_clk_pen_i
-              pull_sel: slink_rcv_clk_psel_i
+              pull_en: slink_rcv_clk_i_pen_i
+              pull_sel: slink_rcv_clk_i_psel_i
           - name: i_{i}
             multiple: 8
-            mux_groups: ["muxed_v_{i+6:2d}"]
+            mux_groups: ["muxed_v_{i+5:2d}"]
             description: "Serial link in"
             connections:
               #chip2pad
@@ -859,6 +859,16 @@ pad_domains:
               output_en: 1'b0
               pull_en: slink_i_{i}_pen_i
               pull_sel: slink_i_{i}_psel_i
+          - name: rcv_clk_o
+            mux_groups: [muxed_v_13]
+            description: "Serial link rcv_clk out"
+            connections:
+              chip2pad: slink_rcv_clk_o
+              #pad2chip
+              input_en: 1'b0
+              output_en: 1'b1
+              pull_en: slink_rcv_clk_o_pen_i
+              pull_sel: slink_rcv_clk_o_psel_i
           - name: o_{i}
             multiple: 7
             mux_groups: ["muxed_v_{i+14:2d}"]
