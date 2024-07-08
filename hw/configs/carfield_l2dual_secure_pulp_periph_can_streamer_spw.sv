@@ -69,7 +69,7 @@ localparam doub_bt HyperBusSize = 'h00001000;
 localparam bit StreamerEnable = 1;
 localparam doub_bt StreamerCfgBase = 'h20009000;
 localparam doub_bt StreamerCfgSize = 'h00008000;
-localparam doub_bt StreamerApbBase = 'h20011000;
+localparam doub_bt StreamerApbBase = StreamerCfgBase + StreamerCfgSize;
 localparam doub_bt StreamerApbSize = 'h00008000;
 // SpaceWire
 localparam bit SpaceWireEnable = 1;
