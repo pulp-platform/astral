@@ -2551,11 +2551,11 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .addr_t ( car_nar_addrw_t    ),
       .data_t ( car_nar_dataw_t    ),
       .strb_t ( car_nar_strb_t     )
-    ) i_apb_streamer_cdc (
+    ) i_streamer_apb_cdc (
       .src_pclk_i    ( periph_clk ),
       .src_preset_ni ( periph_pwr_on_rst_n ),
-      .src_req_i     ( apb_mst_req[StreamerCfgIdx] ),
-      .src_resp_o    ( apb_mst_rsp[StreamerCfgIdx] ),
+      .src_req_i     ( apb_mst_req[StreamerIdx] ),
+      .src_resp_o    ( apb_mst_rsp[StreamerIdx] ),
       .dst_pclk_i    ( streamer_clk ),
       .dst_preset_ni ( periph_pwr_on_rst_n ),
       .dst_req_o     ( apb_async_req ),
@@ -2577,7 +2577,7 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .select_i   ( streamer_apb_demux_sel )
     );
 
-    apb_to_reg i_apb_to_reg_streamer (
+    apb_to_reg i_streamer_apb_to_reg (
       .clk_i     ( streamer_clk             ),
       .rst_ni    ( periph_pwr_on_rst_n      ),
       .penable_i ( apb_streamer_req[0].penable ),
@@ -2714,40 +2714,50 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
   if (carfield_configuration::SpaceWireEnable) begin: gen_spw
 
     localparam int unsigned SpWZeroBits = Cfg.AddrWidth - AxiNarrowAddrWidth;
+    localparam int unsigned NrSpaceWireApbSlaves = 2; // 0: APB2Reg; 1: APB
+    logic spw_apb_demux_sel;
     logic [Cfg.AddrWidth-1:0] spw_address;
 
-    carfield_a32_d32_reg_req_t reg_spw_req;
-    carfield_a32_d32_reg_rsp_t reg_spw_rsp;
+    carfield_apb_req_t [NrSpaceWireApbSlaves-1:0] apb_spw_req;
+    carfield_apb_rsp_t [NrSpaceWireApbSlaves-1:0] apb_spw_rsp;
 
     REG_BUS #(
       .ADDR_WIDTH ( AxiNarrowAddrWidth ),
       .DATA_WIDTH ( AxiNarrowDataWidth )
     ) reg_bus_spw ( periph_clk );
 
-    apb_to_reg i_apb_to_reg_streamer (
-      .clk_i     ( periph_clk                        ),
-      .rst_ni    ( periph_rst_n                      ),
-      .penable_i ( apb_mst_req[SpWRegBusIdx].penable ),
-      .pwrite_i  ( apb_mst_req[SpWRegBusIdx].pwrite  ),
-      .paddr_i   ( apb_mst_req[SpWRegBusIdx].paddr   ),
-      .psel_i    ( apb_mst_req[SpWRegBusIdx].psel    ),
-      .pwdata_i  ( apb_mst_req[SpWRegBusIdx].pwdata  ),
-      .prdata_o  ( apb_mst_rsp[SpWRegBusIdx].prdata  ),
-      .pready_o  ( apb_mst_rsp[SpWRegBusIdx].pready  ),
-      .pslverr_o ( apb_mst_rsp[SpWRegBusIdx].pslverr ),
-      .reg_o     ( reg_bus_spw                       )
+    assign spw_apb_demux_sel =
+    (apb_mst_req[SpaceWireIdx].paddr < carfield_configuration::SpaceWireApbBase) ? 'h0 : 'h1;
+
+    apb_demux #(
+      .NoMstPorts ( NrSpaceWireApbSlaves ),
+      .req_t      ( carfield_apb_req_t   ),
+      .resp_t     ( carfield_apb_rsp_t   )
+    ) i_spw_apb_demux (
+      .slv_req_i  ( apb_mst_req[SpaceWireIdx] ),
+      .slv_resp_o ( apb_mst_rsp[SpaceWireIdx] ),
+      .mst_req_o  ( apb_spw_req ),
+      .mst_resp_i ( apb_spw_rsp ),
+      .select_i   ( streamer_apb_demux_sel )
     );
 
-    assign reg_spw_req.addr  = reg_bus_spw.addr;
-    assign reg_spw_req.write = reg_bus_spw.write;
-    assign reg_spw_req.wdata = reg_bus_spw.wdata;
-    assign reg_spw_req.valid = reg_bus_spw.valid;
+    apb_to_reg i_spw_apb_to_reg (
+      .clk_i     ( periph_clk             ),
+      .rst_ni    ( periph_rst_n           ),
+      .penable_i ( apb_spw_req[0].penable ),
+      .pwrite_i  ( apb_spw_req[0].pwrite  ),
+      .paddr_i   ( apb_spw_req[0].paddr   ),
+      .psel_i    ( apb_spw_req[0].psel    ),
+      .pwdata_i  ( apb_spw_req[0].pwdata  ),
+      .prdata_o  ( apb_spw_rsp[0].prdata  ),
+      .pready_o  ( apb_spw_rsp[0].pready  ),
+      .pslverr_o ( apb_spw_rsp[0].pslverr ),
+      .reg_o     ( reg_bus_spw            )
+    );
 
-    assign reg_bus_spw.rdata = reg_spw_rsp.rdata;
     assign reg_bus_spw.error = '0;
-    assign reg_bus_spw.ready = reg_spw_rsp.ready;
 
-    assign spw_address = {{SpWZeroBits{1'b0}}, reg_spw_req.addr};
+    assign spw_address = {{SpWZeroBits{1'b0}}, reg_bus_spw.addr};
 
     spw_astr_top i_spacewire (
       .ASYNC_RSTN           (periph_rst_n),
@@ -2758,19 +2768,19 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .SPW_DATA_OUT         (spw_data_o),
       .SPW_STROBE_OUT       (spw_strb_o),
       .REG_ADDR_i           (spw_address),
-      .REG_VALID_i          (reg_spw_req.valid),
-      .REG_WDATA_i          (reg_spw_req.wdata),
-      .REG_WRITE_i          (reg_spw_req.write),
-      .REG_RDATA_o          (reg_spw_rsp.rdata),
-      .REG_READY_o          (reg_spw_rsp.ready),
-      .APB_PADD             (apb_mst_req[SpWApbBusIdx].paddr),
-      .APB_PSEL             (apb_mst_req[SpWApbBusIdx].psel),
-      .APB_PENABLE          (apb_mst_req[SpWApbBusIdx].penable),
-      .APB_PWDATA           (apb_mst_req[SpWApbBusIdx].pwdata),
-      .APB_PWRITE           (apb_mst_req[SpWApbBusIdx].pwrite),
-      .APB_PRDATA           (apb_mst_rsp[SpWApbBusIdx].prdata),
-      .APB_PREADY           (apb_mst_rsp[SpWApbBusIdx].pready),
-      .APB_PSLVERR          (apb_mst_rsp[SpWApbBusIdx].pslverr),
+      .REG_VALID_i          (reg_bus_spw.valid),
+      .REG_WDATA_i          (reg_bus_spw.wdata),
+      .REG_WRITE_i          (reg_bus_spw.write),
+      .REG_RDATA_o          (reg_bus_spw.rdata),
+      .REG_READY_o          (reg_bus_spw.ready),
+      .APB_PADD             (apb_spw_req[1].paddr),
+      .APB_PSEL             (apb_spw_req[1].psel),
+      .APB_PENABLE          (apb_spw_req[1].penable),
+      .APB_PWDATA           (apb_spw_req[1].pwdata),
+      .APB_PWRITE           (apb_spw_req[1].pwrite),
+      .APB_PRDATA           (apb_spw_rsp[1].prdata),
+      .APB_PREADY           (apb_spw_rsp[1].pready),
+      .APB_PSLVERR          (apb_spw_rsp[1].pslverr),
       .GENERAL_INTERRUPT_o  (car_regs_hw2reg.spw_general_irq.d)
    );
    assign car_regs_hw2reg.spw_general_irq.de = '1;
