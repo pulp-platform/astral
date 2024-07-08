@@ -37,7 +37,7 @@
   assign load.spih_sd_3_psel_i = driver.spih_sd_3_psel_i; \
 
 `define ASSIGN_PERIPH_ETHERNET_PAD2SOC(load, driver) \
-  assign load.eth_md_0_i = driver.eth_md_0_i; \
+  assign load.eth_md_i = driver.eth_md_i; \
   assign load.eth_rxck_i = driver.eth_rxck_i; \
   assign load.eth_rxctl_i = driver.eth_rxctl_i; \
   assign load.eth_rxd_0_i = driver.eth_rxd_0_i; \
@@ -46,10 +46,10 @@
   assign load.eth_rxd_3_i = driver.eth_rxd_3_i; \
 
 `define ASSIGN_PERIPH_ETHERNET_SOC2PAD(load, driver) \
-  assign load.eth_md_0_o = driver.eth_md_0_o; \
-  assign load.eth_md_0_oen_i = driver.eth_md_0_oen_i; \
-  assign load.eth_md_0_pen_i = driver.eth_md_0_pen_i; \
-  assign load.eth_md_0_psel_i = driver.eth_md_0_psel_i; \
+  assign load.eth_md_o = driver.eth_md_o; \
+  assign load.eth_md_oen_i = driver.eth_md_oen_i; \
+  assign load.eth_md_pen_i = driver.eth_md_pen_i; \
+  assign load.eth_md_psel_i = driver.eth_md_psel_i; \
   assign load.eth_mdc_o = driver.eth_mdc_o; \
   assign load.eth_mdc_pen_i = driver.eth_mdc_pen_i; \
   assign load.eth_mdc_psel_i = driver.eth_mdc_psel_i; \
@@ -106,6 +106,7 @@
   assign load.slink_5_i = driver.slink_5_i; \
   assign load.slink_6_i = driver.slink_6_i; \
   assign load.slink_7_i = driver.slink_7_i; \
+  assign load.slink_rcv_clk_i = driver.slink_rcv_clk_i; \
 
 `define ASSIGN_PERIPH_SERIAL_LINK_SOC2PAD(load, driver) \
   assign load.slink_0_o = driver.slink_0_o; \
@@ -145,9 +146,11 @@
   assign load.slink_o_5_psel_i = driver.slink_o_5_psel_i; \
   assign load.slink_o_6_pen_i = driver.slink_o_6_pen_i; \
   assign load.slink_o_6_psel_i = driver.slink_o_6_psel_i; \
+  assign load.slink_rcv_clk_i_pen_i = driver.slink_rcv_clk_i_pen_i; \
+  assign load.slink_rcv_clk_i_psel_i = driver.slink_rcv_clk_i_psel_i; \
   assign load.slink_rcv_clk_o = driver.slink_rcv_clk_o; \
-  assign load.slink_rcv_clk_pen_i = driver.slink_rcv_clk_pen_i; \
-  assign load.slink_rcv_clk_psel_i = driver.slink_rcv_clk_psel_i; \
+  assign load.slink_rcv_clk_o_pen_i = driver.slink_rcv_clk_o_pen_i; \
+  assign load.slink_rcv_clk_o_psel_i = driver.slink_rcv_clk_o_psel_i; \
 
 `define ASSIGN_PERIPH_I2C_PAD2SOC(load, driver) \
   assign load.i2c_scl_i = driver.i2c_scl_i; \
