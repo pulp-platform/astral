@@ -2495,16 +2495,18 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
   if (carfield_configuration::StreamerEnable) begin: gen_streamer
     localparam int unsigned ZeroBits = Cfg.AddrWidth - AxiNarrowAddrWidth;
     localparam int unsigned StreamerDivisionValueWidth = 6; // Divide up to 63
+    localparam int unsigned NrStreamerApbSlaves = 2; // 0: APB2Reg; 1: APB
     logic [Cfg.AddrWidth-1:0] mask_address;
     logic streamer_clk;
     logic streamer_clk_decoupled_valid, streamer_clk_decoupled_ready;
+    logic streamer_apb_demux_sel;
     logic [StreamerDivisionValueWidth-1:0] streamer_clk_div_value;
 
-    carfield_apb_req_t apb_streamer_req;
-    carfield_apb_rsp_t apb_streamer_rsp;
+    carfield_apb_req_t apb_async_req;
+    carfield_apb_rsp_t apb_async_rsp;
 
-    carfield_a32_d32_reg_req_t reg_streamer_req;
-    carfield_a32_d32_reg_rsp_t reg_streamer_rsp;
+    carfield_apb_req_t [NrStreamerApbSlaves-1:0] apb_streamer_req;
+    carfield_apb_rsp_t [NrStreamerApbSlaves-1:0] apb_streamer_rsp;
 
     lossy_valid_to_stream #(
       .T ( logic[StreamerDivisionValueWidth-1:0] )
@@ -2550,65 +2552,68 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
       .data_t ( car_nar_dataw_t    ),
       .strb_t ( car_nar_strb_t     )
     ) i_apb_streamer_cdc (
-      // synchronous slave port - clocked by `src_pclk_i`
       .src_pclk_i    ( periph_clk ),
       .src_preset_ni ( periph_pwr_on_rst_n ),
       .src_req_i     ( apb_mst_req[StreamerCfgIdx] ),
       .src_resp_o    ( apb_mst_rsp[StreamerCfgIdx] ),
-      // synchronous master port - clocked by `dst_pclk_i`
       .dst_pclk_i    ( streamer_clk ),
       .dst_preset_ni ( periph_pwr_on_rst_n ),
-      .dst_req_o     ( apb_streamer_req    ),
-      .dst_resp_i    ( apb_streamer_rsp    )
+      .dst_req_o     ( apb_async_req ),
+      .dst_resp_i    ( apb_async_rsp )
+    );
+
+    assign streamer_apb_demux_sel =
+    (apb_async_req.paddr < carfield_configuration::StreamerApbBase) ? 'h0 : 'h1;
+
+    apb_demux #(
+      .NoMstPorts ( NrStreamerApbSlaves ),
+      .req_t      ( carfield_apb_req_t  ),
+      .resp_t     ( carfield_apb_rsp_t  )
+    ) i_streamer_apb_demux (
+      .slv_req_i  ( apb_async_req ),
+      .slv_resp_o ( apb_async_rsp ),
+      .mst_req_o  ( apb_streamer_req ),
+      .mst_resp_i ( apb_streamer_rsp ),
+      .select_i   ( streamer_apb_demux_sel )
     );
 
     apb_to_reg i_apb_to_reg_streamer (
       .clk_i     ( streamer_clk             ),
       .rst_ni    ( periph_pwr_on_rst_n      ),
-      .penable_i ( apb_streamer_req.penable ),
-      .pwrite_i  ( apb_streamer_req.pwrite  ),
-      .paddr_i   ( apb_streamer_req.paddr   ),
-      .psel_i    ( apb_streamer_req.psel    ),
-      .pwdata_i  ( apb_streamer_req.pwdata  ),
-      .prdata_o  ( apb_streamer_rsp.prdata  ),
-      .pready_o  ( apb_streamer_rsp.pready  ),
-      .pslverr_o ( apb_streamer_rsp.pslverr ),
+      .penable_i ( apb_streamer_req[0].penable ),
+      .pwrite_i  ( apb_streamer_req[0].pwrite  ),
+      .paddr_i   ( apb_streamer_req[0].paddr   ),
+      .psel_i    ( apb_streamer_req[0].psel    ),
+      .pwdata_i  ( apb_streamer_req[0].pwdata  ),
+      .prdata_o  ( apb_streamer_rsp[0].prdata  ),
+      .pready_o  ( apb_streamer_rsp[0].pready  ),
+      .pslverr_o ( apb_streamer_rsp[0].pslverr ),
       .reg_o     ( reg_bus_streamer         )
     );
 
-    // crop the address to 32-bit
-    assign reg_streamer_req.addr  = reg_bus_streamer.addr;
-    assign reg_streamer_req.write = reg_bus_streamer.write;
-    assign reg_streamer_req.wdata = reg_bus_streamer.wdata;
-    assign reg_streamer_req.wstrb = reg_bus_streamer.wstrb;
-    assign reg_streamer_req.valid = reg_bus_streamer.valid;
-
-    assign reg_bus_streamer.rdata = reg_streamer_rsp.rdata;
     assign reg_bus_streamer.error = '0;
-    assign reg_bus_streamer.ready = reg_streamer_rsp.ready;
-
-    assign mask_address = {{ZeroBits{1'b0}}, reg_streamer_req.addr};
+    assign mask_address = {{ZeroBits{1'b0}}, reg_bus_streamer.addr};
 
     TASI_top i_tctm_streamer (
       .SYS_CLK                            (streamer_clk),
-      .ASYNC_RST_N                        (periph_rst_n), // FIXME: connect to dedicated one
-      .APB_PADD                           (apb_mst_req[StreamerDataIdx].paddr),   // : in
-      .APB_PENABLE                        (apb_mst_req[StreamerDataIdx].penable), // : in
-      .APB_PPROT                          (3'b0),                            // : in
-      .APB_PSEL                           (apb_mst_req[StreamerDataIdx].psel),  // : in
-      .APB_PSTROBE                        (4'b1111),                            // : in
-      .APB_PWDATA                         (apb_mst_req[StreamerDataIdx].pwdata), // : in
-      .APB_PWRITE                         (apb_mst_req[StreamerDataIdx].pwrite), // : in
-      .APB_PRDATA                         (apb_mst_rsp[StreamerDataIdx].prdata), // : out
-      .APB_PREADY                         (apb_mst_rsp[StreamerDataIdx].pready), // : out
-      .APB_PSLVERR                        (apb_mst_rsp[StreamerDataIdx].pslverr), // : out
+      .ASYNC_RST_N                        (periph_rst_n),
+      .APB_PADD                           (apb_streamer_req[1].paddr),   // : in
+      .APB_PENABLE                        (apb_streamer_req[1].penable), // : in
+      .APB_PPROT                          (3'b0),                        // : in
+      .APB_PSEL                           (apb_streamer_req[1].psel),    // : in
+      .APB_PSTROBE                        (4'b1111),                     // : in
+      .APB_PWDATA                         (apb_streamer_req[1].pwdata),  // : in
+      .APB_PWRITE                         (apb_streamer_req[1].pwrite),  // : in
+      .APB_PRDATA                         (apb_streamer_rsp[1].prdata),  // : out
+      .APB_PREADY                         (apb_streamer_rsp[1].pready),  // : out
+      .APB_PSLVERR                        (apb_streamer_rsp[1].pslverr), // : out
       .REG_ADDR                           (mask_address), // : in
       .REG_M_ID                           (3'b001), // : in
-      .REG_VALID                          (reg_streamer_req.valid), // : in
-      .REG_WDATA                          (reg_streamer_req.wdata), // : in
-      .REG_WRITE                          (reg_streamer_req.write), // : in
-      .REG_RDATA                          (reg_streamer_rsp.rdata), // : out
-      .REG_READY                          (reg_streamer_rsp.ready), // : out
+      .REG_VALID                          (reg_bus_streamer.valid), // : in
+      .REG_WDATA                          (reg_bus_streamer.wdata), // : in
+      .REG_WRITE                          (reg_bus_streamer.write), // : in
+      .REG_RDATA                          (reg_bus_streamer.rdata), // : out
+      .REG_READY                          (reg_bus_streamer.ready), // : out
       .AUEND_SDU                          (1'b0), // : in
       .AUR_SDU                            (1'b0), // : in
       .BIT_LOCKn                          (3'b0), // : in
