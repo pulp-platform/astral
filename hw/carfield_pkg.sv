@@ -762,10 +762,8 @@ typedef enum int {
   SystemWdtIdx     = 'd2,
   CanIdx           = 'd3,
   HyperBusIdx      = 'd4,
-  StreamerCfgIdx   = 'd5,
-  StreamerDataIdx  = 'd6,
-  SpWRegBusIdx     = 'd7,
-  SpWApbBusIdx     = 'd8
+  StreamerIdx      = 'd5,
+  SpaceWireIdx     = 'd6
 } carfield_peripherals_e;
 
 // Address map of peripheral system
@@ -776,7 +774,7 @@ typedef struct packed {
 } carfield_addr_map_rule_t;
 
 localparam carfield_addr_map_rule_t [NumApbMst-1:0] PeriphApbAddrMapRule = '{
-   // 0: System Timer
+  // 0: System Timer
   '{ idx: SystemTimerIdx,   start_addr: SystemTimerBase,
                             end_addr: SystemTimerBase + SystemTimerSize  },
   // 1: Advanced Timer
@@ -791,18 +789,12 @@ localparam carfield_addr_map_rule_t [NumApbMst-1:0] PeriphApbAddrMapRule = '{
   // 4: Hyperbus
   '{ idx: HyperBusIdx,      start_addr: HyperBusBase,
                             end_addr: HyperBusBase + HyperBusSize },
-  // 5: Streamer Config
-  '{ idx: StreamerCfgIdx,   start_addr: StreamerCfgBase,
-                            end_addr: StreamerCfgBase + StreamerCfgSize },
-  // 6: Streamer Data
-  '{ idx: StreamerDataIdx,  start_addr: StreamerApbBase,
-                            end_addr: StreamerApbBase + StreamerApbSize },
-  // 7: SpW Reg Bus
-  '{ idx: SpWRegBusIdx,  start_addr: SpaceWireRegBase,
-                         end_addr: SpaceWireRegBase + SpaceWireRegSize },
-    // 98: SpW APB Bus
-  '{ idx: SpWApbBusIdx,  start_addr: SpaceWireApbBase,
-                         end_addr: SpaceWireApbBase + SpaceWireApbSize }
+  // 5: Streamer
+  '{ idx: StreamerIdx,   start_addr: StreamerCfgBase,
+                         end_addr: StreamerApbBase + StreamerApbSize },
+  // 6: SpW
+  '{ idx: SpaceWireIdx,  start_addr: SpaceWireRegBase,
+                         end_addr:  SpaceWireApbBase + SpaceWireApbSize }
 };
 
 // Narrow reg types
