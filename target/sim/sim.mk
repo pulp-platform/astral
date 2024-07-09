@@ -7,8 +7,7 @@
 ## @section Carfield platform simulation
 
 QUESTA ?= questa-2023.4
-#TBENCH ?= tb_carfield_soc
-TBENCH ?= tb_carfield_chip
+TBENCH ?= tb_astral
 
 ## Get HyperRAM verification IP (VIP) for simulation
 $(CAR_TGT_DIR)/sim/src/hyp_vip:
@@ -106,7 +105,7 @@ car-vsim-sim-clean:
 ## @param PULPD_BOOTMODE=0 The bootmode of safe domain <0 JTAG|1 Serial Link>
 ## @param SPATZD_BINARY==<path_to_elf> ELF to be executed on integer PMCA
 ## @param SPATZD_BOOTMODE=0 The bootmode of safe domain <0 JTAG|1 Serial Link>
-## @param TESTBENCH=tb_carfield_soc_opt The optimised toplevel testbench to use. Defaults to 'tb_carfield_soc_opt'.
+## @param TESTBENCH=tb_astral_opt The optimised toplevel testbench to use. Defaults to 'tb_astral_opt'.
 ## @param VSIM_FLAGS The flags for the vsim invocation
 car-vsim-sim-run:
 	$(eval CHS_BINARY_ABS := $(realpath $(CHS_BINARY)))
