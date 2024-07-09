@@ -558,7 +558,7 @@ packages:
     revision: ce956039b428f481200298737b13a9f4980574b7
     version: null
     source:
-      Git: https://gitlab.thalesdigital.io/musa/spacewire.git
+      Git: git@gitlab.thalesdigital.io:musa/spacewire.git
     dependencies: []
   spatz:
     revision: 98de97f24fe42675c9b4a8cc08354a03af57400a
@@ -578,7 +578,7 @@ packages:
     revision: 3f19ccb87572eb08ad252ac20da61bd1162e6c03
     version: null
     source:
-      Git: https://gitlab.thalesdigital.io/musa/streamer.git
+      Git: git@gitlab.thalesdigital.io:musa/streamer.git
     dependencies: []
   tagger:
     revision: b288376b65b6bbd5feea196bb3c220f783d96e29

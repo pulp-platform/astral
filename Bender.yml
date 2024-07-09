@@ -28,8 +28,8 @@ dependencies:
   common_cells:       { git: https://github.com/pulp-platform/common_cells.git,         version: 1.37.0                               } # branch: master        
   pulp-ethernet:      { git: https://github.com/pulp-platform/pulp-ethernet.git,        rev: 1f8f1776ec494773f8e6c48e16685eb35d5f445e } # branch: handshake
   riscv-dbg:          { git: https://github.com/pulp-platform/riscv-dbg.git,            version: =0.8.0                               }
-  streamer:           { git: https://gitlab.thalesdigital.io/musa/streamer.git,         rev: astral-2024-07-09 }
-  spacewire:          { git: https://gitlab.thalesdigital.io/musa/spacewire.git,        rev: astral-2024-07-09 }
+  streamer:           { git: git@gitlab.thalesdigital.io:musa/streamer.git,             rev: astral-2024-07-09 }
+  spacewire:          { git: git@gitlab.thalesdigital.io:musa/spacewire.git,            rev: astral-2024-07-09 }
 
 workspace:
   package_links:
