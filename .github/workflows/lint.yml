@@ -27,6 +27,8 @@ jobs:
         # Exclude generated headers (no license checker support for optional lines)
         exclude_paths: |
           sw/include/regs/*.h
+          sw/include/tasi.h
+          sw/tests/bare-metal/hostd/tasi_*
           .dir-locals.el
           utils/*
           scripts/*
