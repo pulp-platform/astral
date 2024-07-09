@@ -555,7 +555,7 @@ packages:
     - hwpe-stream
     - ibex
   spacewire:
-    revision: da4112f400be4a4d25886a8f2f0397f91d0fc0c3
+    revision: ce956039b428f481200298737b13a9f4980574b7
     version: null
     source:
       Git: https://gitlab.thalesdigital.io/musa/spacewire.git
@@ -575,7 +575,7 @@ packages:
     - riscv-dbg
     - tech_cells_generic
   streamer:
-    revision: bb9c6240936544a3033d12f41865b7b6fdb6d0b3
+    revision: 3f19ccb87572eb08ad252ac20da61bd1162e6c03
     version: null
     source:
       Git: https://gitlab.thalesdigital.io/musa/streamer.git
