@@ -7,19 +7,20 @@
 // Paul Scheffler <paulsc@iis.ee.ethz.ch>
 // Alessandro Ottaviano <aottaviano@iis.ee.ethz.ch>
 // Maicol Ciani <maicol.ciano@unibo.it>
+// Victor Isachi <victor.isachi@unibo.it>
 
-// The security island is inaccessible from other parts of the SoC, hence we
-// need to preload it from the testbench. This testbench checks the
-// mailbox-based communication between the security_island and other subsystems.
+// Main testbench for carfield chip. It contains code sequences to boot the
+// various islands standalone or in cooperation.
 
-module tb_carfield_soc;
+module tb_astral;
 
   import uvm_pkg::*;
   import carfield_pkg::*;
   import cheshire_pkg::*;
+  import astral_padframe_periph_config_reg_pkg::*;
+  import pkg_internal_astral_padframe_periph::*;
 
-  // carfield top
-  carfield_soc_fixture fix();
+  astral_fixture fix();
   bit jtag_check_write = 1'b0;
 
   // cheshire
@@ -33,7 +34,7 @@ module tb_carfield_soc;
   // hyperbus
   localparam int unsigned HyperbusTburstMax = 32'h20009008;
 
-  // mailbox unit
+  // MailBox
   parameter logic [31:0] CAR_MBOX_BASE             = 32'h40000000;
   parameter logic [31:0] CAR_NUM_MAILBOXES         = 32'h25;
   parameter logic [31:0] MBOX_INT_SND_STAT_OFFSET  = 32'h00;
@@ -52,9 +53,17 @@ module tb_carfield_soc;
 
   parameter int unsigned HyperRstCycles = 120100;
 
+  // Padframe configuration
+  parameter int unsigned PAD_CFG_ADDR = 32'h2100_0000;
+  parameter int unsigned PAD_CFG_LEN  = 32'h1000;
+
   logic [63:0] unused;
 
-  logic        secure_boot;
+  // bypass pll
+  logic       bypass_pll;
+
+  // secure boot mode
+  logic       secure_boot;
 
   // Decide whether to preload hyperram model at time 0
   logic        hyp_user_preload;
@@ -66,26 +75,39 @@ module tb_carfield_soc;
     $timeformat(-9, 0, "ns", 9);
   end : timing_format
 
-  // Cheshire standalone binary execution
   initial begin
     // Fetch plusargs or use safe (fail-fast) defaults
+    if (!$value$plusargs("BYPASS_PLL=%d",   bypass_pll))      bypass_pll      = 0;
     if (!$value$plusargs("SECURE_BOOT=%d",  secure_boot))     secure_boot     = 0;
     if (!$value$plusargs("CHS_BOOTMODE=%d", boot_mode))       boot_mode       = 0;
     if (!$value$plusargs("CHS_PRELMODE=%d", preload_mode))    preload_mode    = 0;
     if (!$value$plusargs("CHS_BINARY=%s",   chs_preload_elf)) chs_preload_elf = "";
     if (!$value$plusargs("CHS_IMAGE=%s",    chs_boot_hex))    chs_boot_hex    = "";
-    if (!$value$plusargs("CHS_MEM_RAND=%d", chs_mem_rand))   chs_mem_rand    = 0;
+    if (!$value$plusargs("CHS_MEM_RAND=%d", chs_mem_rand))    chs_mem_rand    = 0;
+
+    // PLL bypass
+    fix.set_bypass_pll(bypass_pll);
 
     // Set boot mode and preload boot image if there is one
     fix.set_secure_boot(secure_boot);
     fix.chs_vip.set_boot_mode(boot_mode);
+    // Configure I2C padframe
+    fix.configure_i2c_pad(jtag_check_write);
     fix.chs_vip.i2c_eeprom_preload(chs_boot_hex);
+    // Configure SPI padframe
+    fix.configure_spi_pad(jtag_check_write);
     fix.chs_vip.spih_norflash_preload(chs_boot_hex);
+
+    // Configure Serial link padframe
+    fix.configure_sl_pad(jtag_check_write);
 
     if (chs_preload_elf != "" || chs_boot_hex != "") begin
 
       // Wait for reset
       fix.chs_vip.wait_for_reset();
+
+      // Wait for FLL lock
+      fix.wait_fll_lock();
 
       // We need to initialize memories after the reset due to limitations of the memory models.
       if (chs_mem_rand) begin
@@ -113,36 +135,36 @@ module tb_carfield_soc;
       $display("[TB] INFO: Configuring Hyperbus through serial link.");
       fix.chs_vip.slink_write_32(HyperbusTburstMax, 32'd128);
 
-      // If the safety island is enabled, when Cheshire is offloading to it
-      // it should be set in passive preload bootmode
-      `ifdef SAFED_PRESENT
-        fix.boot_mode_safed = safety_island_pkg::Preloaded;
-      `else
-        fix.boot_mode_safed = '0;
-      `endif
-
+      // When Cheshire is offloading to safety island, the latter should be set in passive preloaded
+      // bootmode
+`ifdef SAFED_PRESENT
+      fix.gen_safed_vip.safed_vip.set_safed_boot_mode(SafetyIslandPreloaded);
+`endif
       // Preload in idle mode or wait for completion in autonomous boot
       if (boot_mode == 0) begin
         // Idle boot: preload with the specified mode
         case (preload_mode)
-          0: begin // Standalone JTAG passive preload
+          0: begin  // Standalone JTAG passive preload
             // Cheshire
             is_dram = uvm_re_match("dram",chs_preload_elf);
             if(~is_dram) begin
               $display("[TB] %t - Wait for HyperRAM", $realtime);
               repeat(HyperRstCycles)
-                @(posedge fix.clk);
+`ifndef CARFIELD_CHIP_NETLIST
+                @(posedge fix.i_dut.periph_clk);
+`else
+                #10ns;
+`endif
             end
             fix.chs_vip.jtag_init();
             $display("[TB] %t - Loading '%s' through JTAG", $realtime, chs_preload_elf);
             fix.chs_vip.jtag_elf_run(chs_preload_elf);
             fix.chs_vip.jtag_wait_for_eoc(exit_code);
           end 1: begin  // Standalone Serial Link passive preload
-            // Cheshire
             $display("[TB] %t - Loading '%s' through SLINK", $realtime, chs_preload_elf);
             fix.chs_vip.slink_elf_run(chs_preload_elf);
             fix.chs_vip.slink_wait_for_eoc(exit_code);
-          end 2: begin // Standalone UART passive preload
+          end 2: begin  // Standalone UART passive preload
             fix.chs_vip.uart_debug_elf_run_and_wait(chs_preload_elf, exit_code);
           end 3: begin  // Secure boot: Opentitan booting CVA6
             fix.chs_vip.slink_elf_preload(chs_preload_elf, unused);
@@ -155,14 +177,29 @@ module tb_carfield_soc;
         endcase
       end else if (boot_mode == 1) begin
         $fatal(1, "Unsupported boot mode %d (SD Card)!", boot_mode);
+      end else if (boot_mode == 2) begin
+        // Configure SPI padframe
+        fix.configure_spi_pad(jtag_check_write);
+        // Autonomous boot: Only poll return code
+        $display("[TB] %t - Entering autonomous boot mode", $realtime);
+        fix.chs_vip.jtag_init();
+        fix.chs_vip.jtag_wait_for_eoc(exit_code);
       end else begin
+        // Configure I2C padframe
+        fix.configure_i2c_pad(jtag_check_write);
         // Autonomous boot: Only poll return code
         $display("[TB] %t - Entering autonomous boot mode", $realtime);
         fix.chs_vip.jtag_init();
         fix.chs_vip.jtag_wait_for_eoc(exit_code);
       end
 
-      // Eventually wait for HWRoT to end initialization anda ssert Ibex's fetch enable
+      // Configure Serial link padframe
+      fix.configure_sl_pad(jtag_check_write);
+
+      // Sample carfield's clock source frequencies (host, alt, periph)
+      //fix.sample_freq_debug_signals();
+
+      // Eventually wait for HWRoT to end initialization and assert Ibex's fetch enable
       fix.passthrough_or_wait_for_secd_hw_init();
 
       // Wait for the UART to finish reading the current byte
@@ -183,25 +220,35 @@ module tb_carfield_soc;
     bit         safed_exit_status;
     bit  [31:0] safed_isolated;
 
-    localparam int unsigned SafetyIslandClkEnRegAddr         = 32'h20010070;
-    localparam int unsigned SafetyIslandIsolateRegAddr       = 32'h20010040;
-    localparam int unsigned SafetyIslandIsolateStatusRegAddr = 32'h20010058;
+    localparam int unsigned SafetyIslandClkEnRegAddr         = carfield_configuration::PcrsBase + carfield_reg_pkg::CARFIELD_SAFETY_ISLAND_CLK_EN_OFFSET;
+    localparam int unsigned SafetyIslandIsolateRegAddr       = carfield_configuration::PcrsBase + carfield_reg_pkg::CARFIELD_SAFETY_ISLAND_ISOLATE_OFFSET;
+    localparam int unsigned SafetyIslandIsolateStatusRegAddr = carfield_configuration::PcrsBase + carfield_reg_pkg::CARFIELD_SAFETY_ISLAND_ISOLATE_STATUS_OFFSET;
 
     initial begin
       // Fetch plusargs or use safe (fail-fast) defaults
-      if (!$value$plusargs("SECURE_BOOT=%d",    secure_boot))       secure_boot      = 0;
+      if (!$value$plusargs("BYPASS_PLL=%d",     bypass_pll))        bypass_pll        = 0;
+      if (!$value$plusargs("SECURE_BOOT=%d",    secure_boot))       secure_boot       = 0;
       if (!$value$plusargs("SAFED_BOOTMODE=%d", safed_boot_mode))   safed_boot_mode   = 0;
       if (!$value$plusargs("SAFED_BINARY=%s",   safed_preload_elf)) safed_preload_elf = "";
+      
+      // PLL bypass
+      fix.set_bypass_pll(bypass_pll);
 
       // set secure boot mode
       fix.set_secure_boot(secure_boot);
 
+      // Configure Serial link padframe
+      fix.configure_sl_pad(jtag_check_write);
+
       // set boot mode before reset
-      fix.boot_mode_safed = safed_boot_mode;
+      fix.gen_safed_vip.safed_vip.set_safed_boot_mode(safed_boot_mode);
 
       if (safed_preload_elf != "") begin
 
         fix.gen_safed_vip.safed_vip.safed_wait_for_reset();
+
+        // Wait for FLL lock
+        fix.wait_fll_lock();
 
         // Writing max burst length in Hyperbus configuration registers to
         // prevent the Verification IPs from triggering timing checks.
@@ -224,7 +271,7 @@ module tb_carfield_soc;
           end 1: begin
             fix.gen_safed_vip.safed_vip.axi_safed_elf_run(safed_preload_elf);
             fix.gen_safed_vip.safed_vip.axi_safed_wait_for_eoc(safed_exit_code, safed_exit_status);
-         end default: begin
+        end default: begin
             $fatal(1, "Unsupported boot mode %d (reserved)!", safed_boot_mode);
           end
         endcase
@@ -234,22 +281,28 @@ module tb_carfield_soc;
     end
   end
 
-  // security island
+  // security island standalone
   if (CarfieldIslandsCfg.secured.enable) begin: gen_secured_tb
     string      secd_preload_elf;
     string      secd_flash_vmem;
     logic       secd_boot_mode;
-  
-    // security island standalone
+
     initial begin
       // Fetch plusargs or use safe (fail-fast) defaults
+      if (!$value$plusargs("BYPASS_PLL=%d",    bypass_pll))       bypass_pll       = 0;
       if (!$value$plusargs("SECURE_BOOT=%d",   secure_boot))      secure_boot      = 0;
       if (!$value$plusargs("SECD_IMAGE=%s",    secd_flash_vmem))  secd_flash_vmem  = "";
       if (!$value$plusargs("SECD_BINARY=%s",   secd_preload_elf)) secd_preload_elf = "";
-      if (!$value$plusargs("SECD_BOOTMODE=%d", secd_boot_mode))   secd_boot_mode = 0;
+      if (!$value$plusargs("SECD_BOOTMODE=%d", secd_boot_mode))   secd_boot_mode   = 0;
+
+      // PLL bypass
+      fix.set_bypass_pll(bypass_pll);
 
       // set secure boot mode
       fix.set_secure_boot(secure_boot);
+
+      // Configure Serial link padframe
+      fix.configure_sl_pad(jtag_check_write);
 
       // set bootmode
       fix.gen_scured_vip.secd_vip.set_secd_boot_mode(secd_boot_mode);
@@ -257,6 +310,9 @@ module tb_carfield_soc;
       if (secd_preload_elf != "" || secd_flash_vmem != "") begin
         // Wait for reset
         fix.chs_vip.wait_for_reset();
+
+        // Wait for FLL lock
+        fix.wait_fll_lock();
 
         // Writing max burst length in Hyperbus configuration registers to
         // prevent the Verification IPs from triggering timing checks.
@@ -267,7 +323,7 @@ module tb_carfield_soc;
           0: begin
             // Wait before security island HW is initialized
             repeat(10000)
-              @(posedge fix.clk);
+              @(posedge fix.ref_clk);
             fix.gen_scured_vip.secd_vip.debug_secd_module_init();
             fix.gen_scured_vip.secd_vip.load_secd_binary(secd_preload_elf);
             fix.gen_scured_vip.secd_vip.jtag_secd_data_preload();
@@ -276,7 +332,7 @@ module tb_carfield_soc;
           end 1: begin
             fix.gen_scured_vip.secd_vip.spih_norflash_preload(secd_flash_vmem);
             repeat(10000)
-                @(posedge fix.clk);
+              @(posedge fix.ref_clk);
             fix.gen_scured_vip.secd_vip.jtag_secd_wait_eoc();
           end default: begin
             $fatal(1, "Unsupported boot mode %d (reserved)!", secd_boot_mode);
@@ -313,12 +369,22 @@ module tb_carfield_soc;
 
     initial begin
       // Fetch plusargs or use safe (fail-fast) defaults
+      if (!$value$plusargs("BYPASS_PLL=%d",         bypass_pll))         bypass_pll        = 0;
       if (!$value$plusargs("PULPD_BOOTMODE=%d",     pulpd_boot_mode))    pulpd_boot_mode   = 0;
       if (!$value$plusargs("PULPD_BINARY=%s",       pulpd_preload_elf))  pulpd_preload_elf = "";
       if (!$value$plusargs("HYP_USER_PRELOAD=%s",   hyp_user_preload))   hyp_user_preload  = 0;
 
+      // PLL bypass
+      fix.set_bypass_pll(bypass_pll);
+
       // Wait for reset
       fix.chs_vip.wait_for_reset();
+
+      // Wait for FLL lock
+      fix.wait_fll_lock();
+
+      // Configure Serial link padframe
+      fix.configure_sl_pad(jtag_check_write);
 
       if (pulpd_preload_elf != "") begin
 
@@ -404,7 +470,11 @@ module tb_carfield_soc;
 
         $display("[TB] %t - Wait for HyperRAM", $realtime);
         repeat(HyperRstCycles)
-          @(posedge fix.clk);
+  `ifndef CARFIELD_CHIP_NETLIST
+          @(posedge fix.i_dut.periph_clk);
+  `else
+          #10ns;
+  `endif
 
         $display("[TB] %t - Enabling PULP cluster clock for stand-alone tests ", $realtime);
         // Clock island after PoR
@@ -451,17 +521,27 @@ module tb_carfield_soc;
 
     initial begin
       // Fetch plusargs or use safe (fail-fast) defaults
+      if (!$value$plusargs("BYPASS_PLL=%d",     bypass_pll))        bypass_pll        = 0;
       if (!$value$plusargs("SECURE_BOOT=%d",     secure_boot))        secure_boot        = 0;
       if (!$value$plusargs("SPATZD_BOOTMODE=%d", spatzd_boot_mode))   spatzd_boot_mode   = 0;
       if (!$value$plusargs("SPATZD_BINARY=%s",   spatzd_preload_elf)) spatzd_preload_elf = "";
 
+      // PLL bypass
+      fix.set_bypass_pll(bypass_pll);
+
       // set secure boot mode
       fix.set_secure_boot(secure_boot);
+
+      // Configure Serial link padframe
+      fix.configure_sl_pad(jtag_check_write);
 
       if (spatzd_preload_elf != "") begin
 
         // Wait for reset
         fix.chs_vip.wait_for_reset();
+
+        // Wait for FLL lock
+        fix.wait_fll_lock();
 
         // Writing max burst length in Hyperbus configuration registers to
         // prevent the Verification IPs from triggering timing checks.
@@ -544,10 +624,9 @@ module tb_carfield_soc;
             $fatal(1, "Unsupported boot mode %d (reserved)!", spatzd_boot_mode);
           end
         endcase
-
         $finish;
       end
     end
   end
 
-endmodule
+endmodule: tb_astral

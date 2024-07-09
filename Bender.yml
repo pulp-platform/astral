@@ -115,10 +115,8 @@ sources:
     files:
       - target/sim/src/hyp_vip/s27ks0641.v
       - target/sim/src/vip_carfield_soc.sv
-      - target/sim/src/carfield_fix.sv
-      - target/sim/src/carfield_tb.sv
-      - target/sim/src/carfield_synth_fix.sv
-      - target/sim/src/carfield_synth_tb.sv
+      - target/sim/src/astral_fix.sv
+      - target/sim/src/astral_tb.sv
 
   - target: spyglass
     files:
