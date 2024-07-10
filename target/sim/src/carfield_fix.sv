@@ -151,6 +151,8 @@ module carfield_soc_fixture;
   wire spw_data_in, spw_strobe_in;
   wire spw_data_out, spw_strobe_out;
 
+  logic eth_clk;
+
   clk_rst_gen #(
     .ClkPeriod    ( ClkPeriodPeriph ),
     .RstClkCycles ( RstCycles       )
@@ -274,9 +276,7 @@ module carfield_soc_fixture;
     .debug_signals_o            (                           )
   );
 
-  logic eth_clk;
-
-  assign eth_clk = i_dut.gen_ethernet.eth_clk;
+  assign eth_clk = i_dut.eth_clk;
 
   //////////////////
   // Carfield VIP //
