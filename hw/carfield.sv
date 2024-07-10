@@ -1963,11 +1963,11 @@ mailbox_unit #(
 );
 
 // Carfield peripherals
+logic eth_clk;
 if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
   localparam int unsigned EthAsyncIdx = CarfieldRegBusSlvIdx.ethernet-NumSyncRegSlv;
   localparam int unsigned EthDivWidth = 20;
   localparam int unsigned DefaultEthClkDivValue = 1;
-  logic eth_clk;
   logic eth_clk_decoupled_valid, eth_clk_decoupled_ready;
 
   assign ethernet_isolate_req = car_regs_reg2hw.periph_isolate.q;
@@ -2085,6 +2085,7 @@ if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet
     .eth_rx_irq_o            ( car_eth_rx_intr                         )
   );
 end else begin : gen_no_ethernet
+  assign eth_clk                 = '0;
   assign ethernet_isolate_req    = '0;
   assign car_eth_rx_intr         = '0;
   assign eth_md_o                = '0;
