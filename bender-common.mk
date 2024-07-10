@@ -6,7 +6,7 @@
 # Author: Matteo Perotti <mperotti@iis.ee.ethz.ch>
 
 # Runtime-selectable Carfield configuration
-CARFIELD_CONFIG ?= carfield_l2dual_secure_pulp_periph_can_streamer_spw
+CARFIELD_CONFIG ?= carfield_l2dual_secure_pulp_periph_can_ethernet_streamer_spw
 
 # bender targets
 common_targs += -t cva6
