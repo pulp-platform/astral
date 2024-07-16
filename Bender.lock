@@ -46,7 +46,7 @@ packages:
     dependencies:
     - axi_slice
   axi_llc:
-    revision: 6c8520809bf11d04a12c6e350a35c3c08a46f251
+    revision: c8724eaa2f5e4fcfad34adb65e3b28009380ff65
     version: null
     source:
       Git: https://github.com/pulp-platform/axi_llc
@@ -114,7 +114,7 @@ packages:
       Git: https://github.com/AlSaqr-platform/can_bus.git
     dependencies: []
   cheshire:
-    revision: 7871297f2525c23ca661ed55eea41bf8f4aaa607
+    revision: dea00787a953bc8058b0f42d5e730524df659e67
     version: null
     source:
       Git: https://github.com/pulp-platform/cheshire.git
@@ -433,7 +433,7 @@ packages:
     - hwpe-stream
     - tech_cells_generic
   redundancy_cells:
-    revision: f41308f0d9afbcc309592783b0b982a2edbe217a
+    revision: ee50d57b2518d9bd6973389be31ab15d1bb7b767
     version: null
     source:
       Git: https://github.com/pulp-platform/redundancy_cells.git
