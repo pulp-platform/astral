@@ -28,8 +28,8 @@ dependencies:
   common_cells:       { git: https://github.com/pulp-platform/common_cells.git,         version: 1.37.0                               } # branch: master        
   pulp-ethernet:      { git: https://github.com/pulp-platform/pulp-ethernet.git,        rev: 1f8f1776ec494773f8e6c48e16685eb35d5f445e } # branch: handshake
   riscv-dbg:          { git: https://github.com/pulp-platform/riscv-dbg.git,            version: =0.8.0                               }
-  streamer:           { git: git@gitlab.thalesdigital.io:musa/streamer.git,             rev: 479533f301228cdf890edabc3c320c6f9bd07984 } # branch: yt/transcript
-  spacewire:          { git: git@gitlab.thalesdigital.io:musa/spacewire.git,            rev: astral-2024-07-09 }
+  streamer:           { git: git@gitlab.thalesdigital.io:musa/streamer.git,             rev: d0db752b50cf94fdade322ad7ab4bdd54411e261 } # branch: yt/synth
+  spacewire:          { git: git@gitlab.thalesdigital.io:musa/spacewire.git,            rev: 4e8ad9fc08c25e6d8db60d6abdcc1310a4c0b289 } # branch: yt/synth
 
 workspace:
   package_links:
@@ -132,6 +132,7 @@ sources:
     files:
       - tech/sourcecode/tc_clk.sv
       - tech/sourcecode/tc_sram.sv
+      - tech/sourcecode/ptme_ram.sv
       - tech/sourcecode/configurable_delay.sv
       - target/synth/src/carfield_synth_wrap.sv
 
@@ -178,6 +179,7 @@ sources:
       - tech/sourcecode/gf12_fll_wrap.sv
       # PAD Model
       - tech/sourcecode/pad/io_gppr_12lpplus_t18_mv08_mv18_fs18_rvt_dr.v
+      - tech/sourcecode/ptme_ram.sv
 
   - target: all(xilinx, fpga, xilinx_vanilla)
     files:
