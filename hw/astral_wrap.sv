@@ -9,13 +9,6 @@ module astral_wrap
   import carfield_chip_pkg::*;
   import carfield_reg_pkg::*;
   import cheshire_pkg::*;
-`ifdef SAFED_ENABLE
-  import safety_island_pkg::*;
-`endif
-  import tlul_ot_pkg::*;
-`ifdef SPATZ_ENABLE
-  import spatz_cluster_pkg::*;
-`endif
   import pkg_astral_padframe::*;
 #(
   parameter cheshire_cfg_t Cfg = carfield_pkg::CarfieldCfgDefault,
