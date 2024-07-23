@@ -23,7 +23,7 @@ localparam bit     SafetyIslandEnable = 1;
 localparam doub_bt SafetyIslandBase = 'h60000000;
 localparam doub_bt SafetyIslandSize = 'h00800000;
 // Ethernet
-localparam bit     EthernetEnable = 0;
+localparam bit     EthernetEnable = 1;
 localparam doub_bt EthernetBase = 'h20000000;
 localparam doub_bt EthernetSize = 'h00001000;
 // Peripherals
@@ -83,5 +83,10 @@ localparam doub_bt PadframeCfgSize = 'h00001000;
 localparam bit     L2EccCfgEnable = 1;
 localparam doub_bt L2EccCfgBase = 'h200B0000;
 localparam doub_bt L2EccCfgSize = 'h00001000;
+/**************************
+ * HyperBus Configuration *
+ **************************/
+localparam doub_bt NumHypPhys = 1;
+localparam doub_bt NumHypChips = 2;
 
 endpackage

@@ -18,7 +18,7 @@
 
 static dif_rv_plic_t plic0;
 
-#define IRQID 60 // index of mbox irq in the irq vector input to the PLIC
+#define IRQID 69 // index of mbox irq in the irq vector input to the PLIC
 
 int main(int argc, char const *argv[]) {
 

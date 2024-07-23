@@ -24,6 +24,7 @@ CAR_TGT_DIR := $(CAR_ROOT)/target/
 CAR_XIL_DIR := $(CAR_TGT_DIR)/xilinx
 CAR_SIM_DIR := $(CAR_TGT_DIR)/sim
 SECD_ROOT ?= $(shell $(BENDER) path opentitan)
+
 # Questasim
 CAR_VSIM_DIR := $(CAR_TGT_DIR)/sim/vsim
 
@@ -47,7 +48,7 @@ include $(CAR_ROOT)/bender-safed.mk
 ######################
 
 CAR_NONFREE_REMOTE ?= git@iis-git.ee.ethz.ch:astral/astral-nonfree.git
-CAR_NONFREE_COMMIT ?= 6c6b2064e03cccf54c70cb9d754ec112a43332b1 # branch: master
+CAR_NONFREE_COMMIT ?= 74628572d14b535c7c089fe3de7c74814b6aff3b # branch: master
 
 ## @section Carfield platform nonfree components
 ## Clone the non-free verification IP for Carfield. Some components such as CI scripts and ASIC
@@ -219,7 +220,7 @@ pulpd-sw-build: pulpd-sw-init
 #are a user external to ETH, the symlink will not work. We will integrate the compilation flow ASAP.
 
 #.PHONY: spatzd-sw-build spatzd-sw-build: $(MAKE) -C $(SPATZD_MAKEDIR) BENDER=$(BENDER_PATH)
-#LLVM_INSTALL_DIR=$(LLVM_SPATZ_DIR) GCC_INSTALL_DIR=$(GCC_SPATZ_DIR) −B
+#LLVM_INSTALL_DIR=$(LLVM_SPATZ_DIR) GCC_INSTALL_DIR=$(GCC_SPATZ_DIR) -B
 #SPATZ_CLUSTER_CFG=$(SPATZD_MAKEDIR)/cfg/carfield.hjson HTIF_SERVER=NO sw.vsim
 
 ###############
@@ -247,19 +248,19 @@ regenerate_soc_regs: $(CAR_ROOT)/hw/regs/carfield_reg_pkg.sv $(CAR_ROOT)/hw/regs
 
 .PHONY: $(CAR_ROOT)/hw/regs/carfield_regs.hjson
 $(CAR_ROOT)/hw/regs/carfield_regs.hjson: hw/regs/carfield_regs.csv | venv
-	$(VENV)/python ./scripts/csv_to_json.py --input $< --output $@
+	$(VENV)/$(PYTHON) ./scripts/csv_to_json.py --input $< --output $@
 
 .PHONY: $(CAR_ROOT)/hw/regs/carfield_reg_pkg.sv hw/regs/carfield_reg_top.sv
 $(CAR_ROOT)/hw/regs/carfield_reg_pkg.sv $(CAR_ROOT)/hw/regs/carfield_reg_top.sv: $(CAR_ROOT)/hw/regs/carfield_regs.hjson | venv
-	$(VENV)/python utils/reggen/regtool.py -r $< --outdir $(dir $@)
+	$(VENV)/$(PYTHON) utils/reggen/regtool.py -r $< --outdir $(dir $@)
 
 .PHONY: $(CAR_SW_DIR)/include/regs/soc_ctrl.h
 $(CAR_SW_DIR)/include/regs/soc_ctrl.h: $(CAR_ROOT)/hw/regs/carfield_regs.hjson | venv
-	$(VENV)/python utils/reggen/regtool.py -D $<  > $@
+	$(VENV)/$(PYTHON) utils/reggen/regtool.py -D $<  > $@
 
 .PHONY: $(CAR_SW_DIR)/hw/regs/pcr.md
 $(CAR_HW_DIR)/regs/pcr.md: $(CAR_ROOT)/hw/regs/carfield_regs.hjson | venv
-	$(VENV)/python utils/reggen/regtool.py -d $<  > $@
+	$(VENV)/$(PYTHON) utils/reggen/regtool.py -d $<  > $@
 
 ## Update host domain PLIC and CLINT interrupt controllers configuration. The default configuration
 ## in cheshire allows for one interruptible hart. When the number of external interruptible harts is
@@ -386,7 +387,7 @@ car-check-litmus-tests: $(LITMUS_WORK_DIR)/litmus.log
 ##############
 tech-repo := git@iis-git.ee.ethz.ch:Astral/gf12.git
 # no commit by default, change during development
-tech-commit := d64d3e55c9de9603b993dd8ad0ef5bb19f0ec5bc # branch: main
+tech-commit := 9971dca7465bfed5a534bdc33e046b67692a3162 # branch: main
 
 tech-clone:
 	git clone $(tech-repo) tech

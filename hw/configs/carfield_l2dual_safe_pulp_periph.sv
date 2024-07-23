@@ -80,5 +80,10 @@ localparam doub_bt PadframeCfgSize = 'h00001000;
 localparam bit     L2EccCfgEnable = 1;
 localparam doub_bt L2EccCfgBase = 'h200B0000;
 localparam doub_bt L2EccCfgSize = 'h00001000;
+/**************************
+ * HyperBus Configuration *
+ **************************/
+localparam doub_bt NumHypPhys = 1;
+localparam doub_bt NumHypChips = 2;
 
 endpackage

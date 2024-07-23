@@ -21,6 +21,7 @@ module vip_carfield_soc
   parameter string Hyp1UserPreloadMemFile = "",
   // Timing
   parameter time         ClkPeriodSys      = 5ns,
+  parameter time         ClkPeriodPeriph   = 2ns,
   parameter time         ClkPeriodJtag     = 20ns,
   parameter time         ClkPeriodRtc      = 30518ns,
   parameter int unsigned RstCycles         = 5,
@@ -47,6 +48,17 @@ module vip_carfield_soc
   wire [HypNumPhys-1:0]                  pad_hyper_rwds,
   wire [HypNumPhys-1:0]                  pad_hyper_resetn,
   wire [HypNumPhys-1:0][7:0]             pad_hyper_dq,
+  // Ethernet interface
+  input  logic                eth_clk,
+  input  logic [ 3:0]         eth_txd,
+  output logic [ 3:0]         eth_rxd,
+  input  logic                eth_txck,
+  output logic                eth_rxck,
+  input  logic                eth_txctl,
+  output logic                eth_rxctl,
+  input  logic                eth_rstn,
+  inout  logic                eth_mdio,
+  input  logic                eth_mdc,
   // External virtual AXI ports
   input  axi_slv_ext_req_t [NumAxiExtSlvPorts-1:0] axi_slvs_req,
   output axi_slv_ext_rsp_t [NumAxiExtSlvPorts-1:0] axi_slvs_rsp,
@@ -57,6 +69,7 @@ module vip_carfield_soc
 
   `include "cheshire/typedef.svh"
   `include "axi/assign.svh"
+  `include "register_interface/assign.svh"
 
   `CHESHIRE_TYPEDEF_ALL(, DutCfg)
 
@@ -64,7 +77,8 @@ module vip_carfield_soc
   //  SoC Clock, Reset, Modes  //
   ///////////////////////////////
 
-  logic clk, rst_n;
+  logic  clk, rst_n;
+  logic  periph_clk;
   assign clk_vip   = clk;
   assign rst_n_vip = rst_n;
 
@@ -75,6 +89,179 @@ module vip_carfield_soc
     .clk_o  ( clk   ),
     .rst_no ( rst_n )
   );
+
+  clk_rst_gen #(
+    .ClkPeriod    ( ClkPeriodPeriph ),
+    .RstClkCycles ( RstCycles       )
+  ) i_clk_rst_periph (
+    .clk_o  ( periph_clk   ),
+    .rst_no (   )
+  );
+
+  ///////////////////
+  //   Ethernet     //
+  ///////////////////
+
+  if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet_tb
+    import idma_pkg::*;
+    localparam RegAw              = 32;
+    localparam RegDw              = 32;
+
+    logic reg_error;
+    logic [RegDw-1:0] rx_rsp_valid;
+
+    typedef reg_test::reg_driver #(
+      .AW(RegAw),
+      .DW(RegDw),
+      .TT(ClkPeriodPeriph * TTest),
+      .TA(ClkPeriodPeriph * TAppl)
+    ) reg_bus_drv_t;
+
+    REG_BUS #(
+      .DATA_WIDTH(RegDw),
+      .ADDR_WIDTH(RegAw)
+    ) reg_bus_rx (
+      .clk_i(periph_clk)
+    );
+
+    reg_bus_drv_t reg_drv_rx  = new(reg_bus_rx);
+
+    reg_req_t reg_bus_rx_req;
+    reg_rsp_t reg_bus_rx_rsp;
+
+    `REG_BUS_ASSIGN_TO_REQ (reg_bus_rx_req, reg_bus_rx)
+    `REG_BUS_ASSIGN_FROM_RSP (reg_bus_rx, reg_bus_rx_rsp)
+
+    axi_mst_req_t axi_req_mem;
+    axi_mst_rsp_t axi_rsp_mem;
+    logic eth_rx_irq;
+    idma_pkg::idma_busy_t idma_busy_o;
+
+    eth_idma_wrap #(
+      .DataWidth           ( DutCfg.AxiDataWidth  ),
+      .AddrWidth           ( DutCfg.AddrWidth     ),
+      .UserWidth           ( DutCfg.AxiUserWidth  ),
+      .AxiIdWidth          ( DutCfg.AxiMstIdWidth ),
+      .NumAxInFlight       ( 32'd9                ),
+      .BufferDepth         ( 32'd2                ),
+      .TFLenWidth          ( 32'd20               ),
+      .MemSysDepth         ( 32'd0                ),
+      .TxFifoLogDepth      ( 32'd2                ),
+      .RxFifoLogDepth      ( 32'd1                ),
+      .axi_req_t           ( axi_mst_req_t        ),
+      .axi_rsp_t           ( axi_mst_rsp_t        ),
+      .reg_req_t           ( reg_req_t            ),
+      .reg_rsp_t           ( reg_rsp_t            )
+    ) i_rx_eth_idma_wrap (
+      .clk_i               ( periph_clk      ),
+      .rst_ni              ( rst_n           ),
+      .eth_clk_i           ( eth_clk         ),
+      .phy_rx_clk_i        ( eth_txck        ),
+      .phy_rxd_i           ( eth_txd         ),
+      .phy_rx_ctl_i        ( eth_txctl       ),
+      .phy_tx_clk_o        ( eth_rxck        ),
+      .phy_txd_o           ( eth_rxd         ),
+      .phy_tx_ctl_o        ( eth_rxctl       ),
+      .phy_resetn_o        ( eth_rstn        ),
+      .phy_intn_i          ( 1'b1            ),
+      .phy_pme_i           ( 1'b1            ),
+      .phy_mdio_i          ( 1'b0            ),
+      .phy_mdio_o          ( eth_mdio_o      ),
+      .phy_mdio_oe         ( eth_mdio_en     ),
+      .phy_mdc_o           ( eth_mdc         ),
+      .reg_req_i           ( reg_bus_rx_req  ),
+      .reg_rsp_o           ( reg_bus_rx_rsp  ),
+      .testmode_i          ( 1'b0            ),
+      .axi_req_o           ( axi_req_mem     ),
+      .axi_rsp_i           ( axi_rsp_mem     ),
+      .eth_rx_irq_o        ( eth_rx_irq      )
+    );
+
+    axi_sim_mem #(
+      .AddrWidth         ( DutCfg.AddrWidth     ),
+      .DataWidth         ( DutCfg.AxiDataWidth  ),
+      .IdWidth           ( DutCfg.AxiMstIdWidth ),
+      .UserWidth         ( DutCfg.AxiUserWidth  ),
+      .axi_req_t         ( axi_mst_req_t        ),
+      .axi_rsp_t         ( axi_mst_rsp_t        ),
+      .WarnUninitialized ( 1'b0                 ),
+      .ClearErrOnAccess  ( 1'b1                 ),
+      .ApplDelay         ( ClkPeriodPeriph * TAppl ),
+      .AcqDelay          ( ClkPeriodPeriph * TTest ),
+      .UninitializedData ( "zeros" )
+    ) i_rx_axi_sim_mem (
+      .clk_i              ( periph_clk        ),
+      .rst_ni             ( rst_n             ),
+      .axi_req_i          ( axi_req_mem       ),
+      .axi_rsp_o          ( axi_rsp_mem       )
+    );
+
+  initial begin
+
+    @(posedge eth_rx_irq);
+    @(posedge periph_clk);
+
+    @(posedge periph_clk);
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_MACLO_ADDR_OFFSET, 32'h98001032, 'hf, reg_error); //lower 32bits of MAC address
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_MACHI_MDIO_OFFSET, 32'h00002070, 'hf, reg_error); //upper 16bits of MAC address + other configuration set to false/0
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_SRC_ADDR_OFFSET, 32'h0, 'hf, reg_error ); // SRC_ADDR
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DST_ADDR_OFFSET, 32'h0, 'hf, reg_error); // DST_ADDR
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_LENGTH_OFFSET, 32'h40,'hf , reg_error); // Size in bytes
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_SRC_PROTOCOL_OFFSET, 32'h5, 'hf , reg_error); // src protocol
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DST_PROTOCOL_OFFSET, 32'h0,'hf , reg_error); // dst protocol
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_REQ_VALID_OFFSET, 'h1, 'hf , reg_error);   // req valid
+    @(posedge periph_clk);
+    
+    //wait till all data written into rx_axi_sim_mem
+    while(1) begin
+      reg_drv_rx.send_read( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_RSP_VALID_OFFSET, rx_rsp_valid, reg_error);
+      if( rx_rsp_valid ) begin
+        break;
+      end
+      @(posedge periph_clk);
+    end
+
+    // Tx test starts here: external back to core
+    @(posedge periph_clk);
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_MACLO_ADDR_OFFSET, 32'h98001032, 'hf, reg_error); //lower 32bits of MAC address
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_MACHI_MDIO_OFFSET, 32'h00002070, 'hf, reg_error); //upper 16bits of MAC address + other configuration set to false/0
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_SRC_ADDR_OFFSET, 32'h0, 'hf, reg_error ); // SRC_ADDR
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DST_ADDR_OFFSET, 32'h0, 'hf, reg_error); // DST_ADDR
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_LENGTH_OFFSET, 32'h40,'hf , reg_error); // Size in bytes
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_SRC_PROTOCOL_OFFSET, 32'h0, 'hf , reg_error); // src protocol
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DST_PROTOCOL_OFFSET, 32'h5,'hf , reg_error); // dst protocol
+    @(posedge periph_clk);
+
+    reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_REQ_VALID_OFFSET, 'h1, 'hf , reg_error);   // req valid
+    @(posedge periph_clk);
+  end
+end
 
   //////////////
   // Hyperbus //
@@ -199,15 +386,28 @@ module vip_carfield_soc_tristate import carfield_pkg::*; # (
   input  logic [HypNumPhys-1:0][7:0]             hyper_dq_o,
   input  logic [HypNumPhys-1:0]                  hyper_dq_oe_o,
   input  logic [HypNumPhys-1:0]                  hyper_reset_no,
+  // Ethernet pad IO
+  input  logic                  eth_mdio_o,
+  output logic                  eth_mdio_i,
+  input  logic                  eth_mdio_en,
   // Hyperbus wires
   wire [HypNumPhys-1:0][HypNumChips-1:0] pad_hyper_csn,
   wire [HypNumPhys-1:0]                  pad_hyper_ck,
   wire [HypNumPhys-1:0]                  pad_hyper_ckn,
   wire [HypNumPhys-1:0]                  pad_hyper_rwds,
   wire [HypNumPhys-1:0]                  pad_hyper_resetn,
-  wire [HypNumPhys-1:0][7:0]             pad_hyper_dq
+  wire [HypNumPhys-1:0][7:0]             pad_hyper_dq,
+  // Ethernet wires
+  wire                           eth_mdio
 );
 
+  pad_functional_pd padinst_eth_mdio (
+    .OEN ( eth_mdio_en   ),
+    .I   ( eth_mdio_o    ),
+    .O   ( eth_mdio_i    ),
+    .PEN (               ),
+    .PAD ( eth_mdio      )
+  );
   for (genvar i = 0 ; i<HypNumPhys; i++) begin : gen_hyper_phy
     for (genvar j = 0; j<HypNumChips; j++) begin : gen_hyper_cs
       pad_functional_pd padinst_hyper_csno (

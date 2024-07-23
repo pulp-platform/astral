@@ -210,22 +210,22 @@ package carfield_reg_pkg;
   typedef struct packed {
     logic        q;
     logic        qe;
-  } carfield_reg2hw_eth_rgmii_phy_clk_div_en_reg_t;
+  } carfield_reg2hw_eth_clk_div_en_reg_t;
 
   typedef struct packed {
     logic [19:0] q;
     logic        qe;
-  } carfield_reg2hw_eth_rgmii_phy_clk_div_value_reg_t;
+  } carfield_reg2hw_eth_clk_div_value_reg_t;
 
   typedef struct packed {
     logic        q;
     logic        qe;
-  } carfield_reg2hw_eth_mdio_clk_div_en_reg_t;
+  } carfield_reg2hw_hyperbus_clk_div_en_reg_t;
 
   typedef struct packed {
     logic [19:0] q;
     logic        qe;
-  } carfield_reg2hw_eth_mdio_clk_div_value_reg_t;
+  } carfield_reg2hw_hyperbus_clk_div_value_reg_t;
 
   typedef struct packed {
     logic [31:0] d;
@@ -331,10 +331,10 @@ package carfield_reg_pkg;
     carfield_reg2hw_spatz_cluster_busy_reg_t spatz_cluster_busy; // [48:48]
     carfield_reg2hw_pulp_cluster_busy_reg_t pulp_cluster_busy; // [47:47]
     carfield_reg2hw_pulp_cluster_eoc_reg_t pulp_cluster_eoc; // [46:46]
-    carfield_reg2hw_eth_rgmii_phy_clk_div_en_reg_t eth_rgmii_phy_clk_div_en; // [45:44]
-    carfield_reg2hw_eth_rgmii_phy_clk_div_value_reg_t eth_rgmii_phy_clk_div_value; // [43:23]
-    carfield_reg2hw_eth_mdio_clk_div_en_reg_t eth_mdio_clk_div_en; // [22:21]
-    carfield_reg2hw_eth_mdio_clk_div_value_reg_t eth_mdio_clk_div_value; // [20:0]
+    carfield_reg2hw_eth_clk_div_en_reg_t eth_clk_div_en; // [45:44]
+    carfield_reg2hw_eth_clk_div_value_reg_t eth_clk_div_value; // [43:23]
+    carfield_reg2hw_hyperbus_clk_div_en_reg_t hyperbus_clk_div_en; // [22:21]
+    carfield_reg2hw_hyperbus_clk_div_value_reg_t hyperbus_clk_div_value; // [20:0]
   } carfield_reg2hw_t;
 
   // HW -> register type
@@ -412,10 +412,10 @@ package carfield_reg_pkg;
   parameter logic [BlockAw-1:0] CARFIELD_SPATZ_CLUSTER_BUSY_OFFSET = 8'h e0;
   parameter logic [BlockAw-1:0] CARFIELD_PULP_CLUSTER_BUSY_OFFSET = 8'h e4;
   parameter logic [BlockAw-1:0] CARFIELD_PULP_CLUSTER_EOC_OFFSET = 8'h e8;
-  parameter logic [BlockAw-1:0] CARFIELD_ETH_RGMII_PHY_CLK_DIV_EN_OFFSET = 8'h ec;
-  parameter logic [BlockAw-1:0] CARFIELD_ETH_RGMII_PHY_CLK_DIV_VALUE_OFFSET = 8'h f0;
-  parameter logic [BlockAw-1:0] CARFIELD_ETH_MDIO_CLK_DIV_EN_OFFSET = 8'h f4;
-  parameter logic [BlockAw-1:0] CARFIELD_ETH_MDIO_CLK_DIV_VALUE_OFFSET = 8'h f8;
+  parameter logic [BlockAw-1:0] CARFIELD_ETH_CLK_DIV_EN_OFFSET = 8'h ec;
+  parameter logic [BlockAw-1:0] CARFIELD_ETH_CLK_DIV_VALUE_OFFSET = 8'h f0;
+  parameter logic [BlockAw-1:0] CARFIELD_HYPERBUS_CLK_DIV_EN_OFFSET = 8'h f4;
+  parameter logic [BlockAw-1:0] CARFIELD_HYPERBUS_CLK_DIV_VALUE_OFFSET = 8'h f8;
 
   // Register index
   typedef enum int {
@@ -478,10 +478,10 @@ package carfield_reg_pkg;
     CARFIELD_SPATZ_CLUSTER_BUSY,
     CARFIELD_PULP_CLUSTER_BUSY,
     CARFIELD_PULP_CLUSTER_EOC,
-    CARFIELD_ETH_RGMII_PHY_CLK_DIV_EN,
-    CARFIELD_ETH_RGMII_PHY_CLK_DIV_VALUE,
-    CARFIELD_ETH_MDIO_CLK_DIV_EN,
-    CARFIELD_ETH_MDIO_CLK_DIV_VALUE
+    CARFIELD_ETH_CLK_DIV_EN,
+    CARFIELD_ETH_CLK_DIV_VALUE,
+    CARFIELD_HYPERBUS_CLK_DIV_EN,
+    CARFIELD_HYPERBUS_CLK_DIV_VALUE
   } carfield_id_e;
 
   // Register width information to check illegal writes
@@ -545,10 +545,10 @@ package carfield_reg_pkg;
     4'b 0001, // index[56] CARFIELD_SPATZ_CLUSTER_BUSY
     4'b 0001, // index[57] CARFIELD_PULP_CLUSTER_BUSY
     4'b 0001, // index[58] CARFIELD_PULP_CLUSTER_EOC
-    4'b 0001, // index[59] CARFIELD_ETH_RGMII_PHY_CLK_DIV_EN
-    4'b 0111, // index[60] CARFIELD_ETH_RGMII_PHY_CLK_DIV_VALUE
-    4'b 0001, // index[61] CARFIELD_ETH_MDIO_CLK_DIV_EN
-    4'b 0111  // index[62] CARFIELD_ETH_MDIO_CLK_DIV_VALUE
+    4'b 0001, // index[59] CARFIELD_ETH_CLK_DIV_EN
+    4'b 0111, // index[60] CARFIELD_ETH_CLK_DIV_VALUE
+    4'b 0001, // index[61] CARFIELD_HYPERBUS_CLK_DIV_EN
+    4'b 0111  // index[62] CARFIELD_HYPERBUS_CLK_DIV_VALUE
   };
 
 endpackage

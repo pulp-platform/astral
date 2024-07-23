@@ -23,13 +23,13 @@ localparam bit     SafetyIslandEnable = 0;
 localparam doub_bt SafetyIslandBase = 'h60000000;
 localparam doub_bt SafetyIslandSize = 'h00800000;
 // Ethernet
-localparam bit     EthernetEnable = 0;
+localparam bit     EthernetEnable = 1;
 localparam doub_bt EthernetBase = 'h20000000;
 localparam doub_bt EthernetSize = 'h00001000;
 // Peripherals
 localparam bit     PeriphEnable = 1;
 localparam doub_bt PeriphBase = 'h20001000;
-localparam doub_bt PeriphSize = 'h00009000;
+localparam doub_bt PeriphSize = 'h01000000;
 // Spatz cluster
 localparam bit     SpatzClusterEnable = 0;
 localparam doub_bt SpatzClusterBase = 'h51000000;
@@ -63,25 +63,30 @@ localparam doub_bt SystemAdvancedTimerSize = 'h00001000;
 localparam doub_bt SystemWatchdogBase = 'h20007000;
 localparam doub_bt SystemWatchdogSize = 'h00001000;
 // Hyperbus Config
-localparam doub_bt HyperBusBase = 'h20009000;
+localparam doub_bt HyperBusBase = 'h20008000;
 localparam doub_bt HyperBusSize = 'h00001000;
 /************************
  * RegBus Configuration *
  ***********************/
-// Platform control registers
-localparam doub_bt PcrsBase = 'h20010000;
-localparam doub_bt PcrsSize = 'h00001000;
-// PLL
-localparam bit     PllCfgEnable = 1;
-localparam doub_bt PllCfgBase = 'h20020000;
-localparam doub_bt PllCfgSize = 'h00001000;
 // Padframe
 localparam bit     PadframeCfgEnable = 1;
-localparam doub_bt PadframeCfgBase = 'h200A0000;
+localparam doub_bt PadframeCfgBase = 'h21000000;
 localparam doub_bt PadframeCfgSize = 'h00001000;
 // L2 ECC
 localparam bit     L2EccCfgEnable = 1;
-localparam doub_bt L2EccCfgBase = 'h200B0000;
+localparam doub_bt L2EccCfgBase = 'h21001000;
 localparam doub_bt L2EccCfgSize = 'h00001000;
+// Platform control registers
+localparam doub_bt PcrsBase = 'h21002000;
+localparam doub_bt PcrsSize = 'h00001000;
+// PLL
+localparam bit     PllCfgEnable = 1;
+localparam doub_bt PllCfgBase = 'h21003000;
+localparam doub_bt PllCfgSize = 'h00001000;
+/**************************
+ * HyperBus Configuration *
+ **************************/
+localparam doub_bt NumHypPhys = 1;
+localparam doub_bt NumHypChips = 2;
 
 endpackage
