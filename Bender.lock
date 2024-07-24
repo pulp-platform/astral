@@ -348,8 +348,8 @@ packages:
     - hwpe-stream
     - zeroriscy
   obi:
-    revision: 1aa411df145c4ebdd61f8fed4d003c33f7b20636
-    version: 0.1.2
+    revision: c2141a653c755461ff44f61d12aeb5d99fc8e760
+    version: 0.1.3
     source:
       Git: https://github.com/pulp-platform/obi.git
     dependencies:
@@ -382,7 +382,7 @@ packages:
     dependencies:
     - axi_slice
   pulp-ethernet:
-    revision: 1f8f1776ec494773f8e6c48e16685eb35d5f445e
+    revision: 0337e00d96b6350298ad88e87d160c4e16936ba3
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp-ethernet.git
