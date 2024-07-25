@@ -28,7 +28,7 @@ dependencies:
   common_cells:       { git: https://github.com/pulp-platform/common_cells.git,         version: 1.37.0                               } # branch: master        
   pulp-ethernet:      { git: https://github.com/pulp-platform/pulp-ethernet.git,        rev: 1f8f1776ec494773f8e6c48e16685eb35d5f445e } # branch: handshake
   riscv-dbg:          { git: https://github.com/pulp-platform/riscv-dbg.git,            version: =0.8.0                               }
-  streamer:           { git: git@gitlab.thalesdigital.io:musa/streamer.git,             rev: 0e4383267481bbcbe0f470ce1a57057aeec00192 } # branch: yt/synth
+  streamer:           { git: git@gitlab.thalesdigital.io:musa/streamer.git,             rev: f5594d3cf7325ed941a88a796a47484e1f8ebacd } # branch: yt/synth-1
   spacewire:          { git: git@gitlab.thalesdigital.io:musa/spacewire.git,            rev: 4e8ad9fc08c25e6d8db60d6abdcc1310a4c0b289 } # branch: yt/synth
 
 workspace:
