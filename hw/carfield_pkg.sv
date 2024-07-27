@@ -649,7 +649,7 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   // LLC: 128 KiB, up to 2 GiB DRAM
   LlcNotBypass      : 1,
   LlcSetAssoc       : 8,
-  LlcNumLines       : 256,
+  LlcNumLines       : 512,
   LlcNumBlocks      : 8,
   LlcMaxReadTxns    : 32,
   LlcMaxWriteTxns   : 32,
