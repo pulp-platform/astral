@@ -1934,12 +1934,13 @@
           resval: 0
           fields: [
               {
-                  bits: "1:0"
+                  bits: "2:0"
                   enum: [
                       { value: "0", name: "register", desc: "Connects the Pad to the internal configuration register."}
                       { value: "1", name: "port_ethernet_rst_n", desc: "Connect port rst_n from port group ethernet to this pad." }
                       { value: "2", name: "port_gpio_io_21", desc: "Connect port io_21 from port group gpio to this pad." }
                       { value: "3", name: "port_obt_ext_clk", desc: "Connect port ext_clk from port group obt to this pad." }
+                      { value: "4", name: "port_serial_link_o_7", desc: "Connect port o_7 from port group serial_link to this pad." }
                   ]
               }
           ]

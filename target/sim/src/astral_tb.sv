@@ -54,10 +54,6 @@ module tb_astral;
 
   parameter int unsigned HyperRstCycles = 120100;
 
-  // Padframe configuration
-  parameter int unsigned PAD_CFG_ADDR = 32'h2100_0000;
-  parameter int unsigned PAD_CFG_LEN  = 32'h1000;
-
   logic [63:0] unused;
 
   // bypass pll

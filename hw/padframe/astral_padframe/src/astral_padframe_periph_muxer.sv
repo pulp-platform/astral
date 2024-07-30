@@ -1130,6 +1130,13 @@ module astral_padframe_periph_muxer
           mux_to_pads_o.muxed_v_21.pull_en = port_signals_soc2pad_i.ethernet.eth_rst_n_pen_i;
           mux_to_pads_o.muxed_v_21.pull_sel = port_signals_soc2pad_i.ethernet.eth_rst_n_psel_i;
        end
+       PAD_MUX_GROUP_MUXED_V_21_SEL_SERIAL_LINK_O_7: begin
+          mux_to_pads_o.muxed_v_21.chip2pad = port_signals_soc2pad_i.serial_link.slink_7_o;
+          mux_to_pads_o.muxed_v_21.input_en = 1'b0;
+          mux_to_pads_o.muxed_v_21.output_en = 1'b1;
+          mux_to_pads_o.muxed_v_21.pull_en = port_signals_soc2pad_i.serial_link.slink_o_7_pen_i;
+          mux_to_pads_o.muxed_v_21.pull_sel = port_signals_soc2pad_i.serial_link.slink_o_7_psel_i;
+       end
        PAD_MUX_GROUP_MUXED_V_21_SEL_OBT_EXT_CLK: begin
           mux_to_pads_o.muxed_v_21.chip2pad = s_reg2hw.muxed_v_21_cfg.chip2pad.q;
           mux_to_pads_o.muxed_v_21.input_en = 1'b1;
@@ -1843,6 +1850,7 @@ module astral_padframe_periph_muxer
        endcase
      end
    end
+
 
 
 

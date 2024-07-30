@@ -88,22 +88,14 @@ sources:
   - hw/carfield_chip_pkg.sv
   - hw/regs/carfield_reg_pkg.sv
   - hw/regs/carfield_reg_top.sv
-#  - target/sim/src/behav-padframe/src/pkg_carfield_padframe_behav.sv
-#  - target/sim/src/behav-padframe/src/pkg_internal_carfield_padframe_behav_periph.sv
-#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_config_reg_pkg.sv
-#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_config_reg_top.sv
-#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_pads.sv
-#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph_muxer.sv
-#  - target/sim/src/behav-padframe/src/carfield_padframe_behav_periph.sv
-#  - target/sim/src/behav-padframe/src/carfield_padframe_behav.sv
-  - hw/padframe/src/pkg_astral_padframe.sv
-  - hw/padframe/src/pkg_internal_astral_padframe_periph.sv
-  - hw/padframe/src/astral_padframe_periph_config_reg_pkg.sv
-  - hw/padframe/src/astral_padframe_periph_config_reg_top.sv
-  - hw/padframe/src/astral_padframe_periph_pads.sv
-  - hw/padframe/src/astral_padframe_periph_muxer.sv
-  - hw/padframe/src/astral_padframe_periph.sv
-  - hw/padframe/src/astral_padframe.sv
+  - hw/padframe/astral_padframe/src/pkg_astral_padframe.sv
+  - hw/padframe/astral_padframe/src/pkg_internal_astral_padframe_periph.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_periph_config_reg_pkg.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_periph_config_reg_top.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_periph_pads.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_periph_muxer.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_periph.sv
+  - hw/padframe/astral_padframe/src/astral_padframe.sv
   - hw/padframe/pad_behav.sv
   # Level 1
   - hw/cheshire_wrap.sv
@@ -120,8 +112,6 @@ sources:
 
   - target: test
     files:
-      - target/sim/src/fll_dummy.sv
-      - target/sim/src/behav-padframe/pad_behav.sv
       - target/sim/src/hyp_vip/s27ks0641.v
       - target/sim/src/vip_carfield_soc.sv
       - target/sim/src/astral_fix.sv
