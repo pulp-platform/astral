@@ -140,7 +140,7 @@ sources:
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x128m2b1w1.v
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_1024x39m4b1w0.v
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_1024x64m4b1w1.v
-      #- tech/sourcecode/tc_clk.sv
+      - tech/sourcecode/tc_clk.sv
       - tech/sourcecode/tc_sram.sv
       # FLL Model
       - tech/sourcecode/fll/rtl/FLL_digital/FLLPkg.vhd
