@@ -43,7 +43,14 @@ RUNTIME_DEFINES += +define+HYP1_PRELOAD_MEM_FILE=\"$(HYP1_PRELOAD_MEM_FILE)\"
 
 QUESTA_FLAGS := -permissive -suppress 3009 -suppress 8386 -error 7 +UVM_NO_RELNOTES
 ifeq ($(TECH_SIM), 1)
+	# Technological memory macros have the checks on hold/setup violations encapsulated
+	# within a 'specify' Questa directive. For this reason, to run simulations of the
+	# system using technological macro cells, we need to add the `+nospecify` flag.
+	# However, such flag results in Questa suppressible errors while parsing the SDF
+	# files of the Hyperram models. We then downgrade such Error to a warning with the
+	# `-sdfnoerror` switch to run technological simulation also in the CI.
 	QUESTA_FLAGS += +nospecify
+	QUESTA_FLAGS += -sdfnoerror
 	QUESTA_FLAGS += -suppress 13271
 endif
 ifdef DEBUG
