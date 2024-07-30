@@ -16,31 +16,58 @@ module PDVDDTIE_18_18_NT_DR_H (
 
 endmodule: PDVDDTIE_18_18_NT_DR_H
 
-module PVDD_08_08_NT_DR_H ();
+module PVDD_08_08_NT_DR_H (
+   input logic SNS,
+   input logic RTO
+);
 endmodule: PVDD_08_08_NT_DR_H
 
-module PVDD_08_08_NT_DR_V ();
+module PVDD_08_08_NT_DR_V (
+   input logic SNS,
+   input logic RTO
+);
 endmodule: PVDD_08_08_NT_DR_V
 
-module PVSS_08_08_NT_DR_H ();
+module PVSS_08_08_NT_DR_H (
+   input logic SNS,
+   input logic RTO
+);
 endmodule: PVSS_08_08_NT_DR_H
 
-module PVSS_08_08_NT_DR_V ();
+module PVSS_08_08_NT_DR_V (
+   input logic SNS,
+   input logic RTO
+);
 endmodule: PVSS_08_08_NT_DR_V
 
-module PDVDD_18_18_NT_DR_H ();
+module PDVDD_18_18_NT_DR_H (
+   input logic SNS,
+   input logic RTO
+);
 endmodule: PDVDD_18_18_NT_DR_H
 
-module PDVDD_18_18_NT_DR_V ();
+module PDVDD_18_18_NT_DR_V (
+   input logic SNS,
+   input logic RTO
+);
 endmodule: PDVDD_18_18_NT_DR_V
 
-module PDVSS_18_18_NT_DR_H ();
+module PDVSS_18_18_NT_DR_H (
+   input logic SNS,
+   input logic RTO
+);
 endmodule: PDVSS_18_18_NT_DR_H
 
-module PDVSS_18_18_NT_DR_V ();
+module PDVSS_18_18_NT_DR_V (
+   input logic SNS,
+   input logic RTO
+);
 endmodule: PDVSS_18_18_NT_DR_V
 
-module PCORNER_18_18_NT_DR ();
+module PCORNER_18_18_NT_DR (
+   input logic SNS,
+   input logic RTO
+);
 endmodule: PCORNER_18_18_NT_DR
 
 

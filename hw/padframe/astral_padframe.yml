@@ -19,39 +19,39 @@ pad_domains:
       - name: PVDD_08_08_NT_DR_H
         description: "gf12 pad, horizontal orientation, core power domain VDD"
         template: |
-          PVDD_08_08_NT_DR_H ${instance_name} ();
+          PVDD_08_08_NT_DR_H ${instance_name} ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
       - name: PVDD_08_08_NT_DR_V
         description: "gf12 pad, vertical orientation, core power domain VDD"
         template: |
-          PVDD_08_08_NT_DR_V ${instance_name} ();
+          PVDD_08_08_NT_DR_V ${instance_name} ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
       - name: PVSS_08_08_NT_DR_H
         description: "gf12 pad, horizontal orientation, core power domain VSS"
         template: |
-          PVSS_08_08_NT_DR_H ${instance_name} ();
+          PVSS_08_08_NT_DR_H ${instance_name} ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
       - name: PVSS_08_08_NT_DR_V
         description: "gf12 pad, vertical orientation, core power domain VSS"
         template: |
-          PVSS_08_08_NT_DR_V ${instance_name} ();
+          PVSS_08_08_NT_DR_V ${instance_name} ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
       - name: PDVDD_18_18_NT_DR_H
         description: "gf12 pad, horizontal orientation, pad power domain VDD"
         template: |
-          PDVDD_18_18_NT_DR_H ${instance_name} ();
+          PDVDD_18_18_NT_DR_H ${instance_name} ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
       - name: PDVDD_18_18_NT_DR_V
         description: "gf12 pad, vertical orientation, pad power domain VDD"
         template: |
-          PDVDD_18_18_NT_DR_V ${instance_name} ();
+          PDVDD_18_18_NT_DR_V ${instance_name} ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
       - name: PDVSS_18_18_NT_DR_H
         description: "gf12 pad, horizontal orientation, pad power domain VSS"
         template: |
-          PDVSS_18_18_NT_DR_H ${instance_name} ();
+          PDVSS_18_18_NT_DR_H ${instance_name} ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
       - name: PDVSS_18_18_NT_DR_V
         description: "gf12 pad, vertical orientation, pad power domain VSS"
         template: |
-          PDVSS_18_18_NT_DR_V ${instance_name} ();
+          PDVSS_18_18_NT_DR_V ${instance_name} ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
       - name: PCORNER_18_18_NT_DR
         description: "gf12 pad, corner"
         template: |
-          PCORNER_18_18_NT_DR ${instance_name} ();
+          PCORNER_18_18_NT_DR ${instance_name} ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
       - name: POSCP_18_18_NT_DR_H
         description: "gf12 pad, horizontal orientation, oscillator 1-4MHz"
         template: |

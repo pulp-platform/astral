@@ -404,26 +404,26 @@ module astral_fixture;
 `endif
     // Reference clock
     .pad_periph_ref_clk_pad_i       ( w_ref_clk ),
-    .pad_periph_ref_clk_pad_o       ( 1'b0 ),
+    .pad_periph_ref_clk_pad_o       ( pd_net ),
     .pad_periph_fll_bypass_pad      ( w_bypass_pll ),
     // POR
     .pad_periph_pwr_on_rst_n_pad    ( w_pwr_on_rst_n ),
     // Bootmode
-    .pad_periph_test_mode_pad       ( 1'b0 ),
+    .pad_periph_test_mode_pad       ( pd_net ),
     .pad_periph_boot_mode_0_pad     ( w_bootmode_hostd[0] ),
     .pad_periph_boot_mode_1_pad     ( w_bootmode_hostd[1] ),
     .pad_periph_secure_boot_pad     ( w_secure_boot ),
     // JTAG
     .pad_periph_jtag_tclk_pad       ( w_jtag_hostd_tck ),
-    .pad_periph_jtag_trst_n_pad     ( w_jtag_hostd_tms ),
-    .pad_periph_jtag_tms_pad        ( w_jtag_hostd_tdi ),
-    .pad_periph_jtag_tdi_pad        ( w_jtag_hostd_trstn ),
+    .pad_periph_jtag_trst_n_pad     ( w_jtag_hostd_trstn ),
+    .pad_periph_jtag_tms_pad        ( w_jtag_hostd_tms ),
+    .pad_periph_jtag_tdi_pad        ( w_jtag_hostd_tdi ),
     .pad_periph_jtag_tdo_pad        ( w_jtag_hostd_tdo ),
     // JTAG OT
     .pad_periph_jtag_ot_tclk_pad    ( w_jtag_secd_tck ),
-    .pad_periph_jtag_ot_trst_ni_pad ( w_jtag_secd_tms ),
-    .pad_periph_jtag_ot_tms_pad     ( w_jtag_secd_tdi ),
-    .pad_periph_jtag_ot_tdi_pad     ( w_jtag_secd_trstn ),
+    .pad_periph_jtag_ot_trst_ni_pad ( w_jtag_secd_trstn ),
+    .pad_periph_jtag_ot_tms_pad     ( w_jtag_secd_tms ),
+    .pad_periph_jtag_ot_tdi_pad     ( w_jtag_secd_tdi ),
     .pad_periph_jtag_ot_tdo_pad     ( w_jtag_secd_tdo ),
     // Hyper
     .pad_periph_hyper_cs_0_n_pad    ( w_hyper_csn[0][0] ),
@@ -472,6 +472,8 @@ module astral_fixture;
     .pad_periph_muxed_v_20_pad      ( w_muxed_v_20 ),
     .pad_periph_muxed_v_21_pad      ( w_muxed_v_21 )
   );
+
+  pulldown pd(pd_net);
 
   ////////////////////////////
   // Muxed Pads Connections //
