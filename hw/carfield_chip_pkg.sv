@@ -27,4 +27,8 @@ typedef enum int {
 // Version                    [31:28]: 4'h1
 localparam int unsigned CarfieldPllJtagIdCode = 32'h1_abc0_db3;
 
+// Padframe configuration
+parameter int unsigned PAD_CFG_ADDR = 32'h2100_0000;
+parameter int unsigned PAD_CFG_LEN  = 32'h1000;
+
 endpackage

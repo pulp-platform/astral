@@ -462,8 +462,8 @@ module astral_padframe_periph_config_reg_top #(
   logic muxed_v_21_cfg_pull_sel_qs;
   logic muxed_v_21_cfg_pull_sel_wd;
   logic muxed_v_21_cfg_pull_sel_we;
-  logic [1:0] muxed_v_21_mux_sel_qs;
-  logic [1:0] muxed_v_21_mux_sel_wd;
+  logic [2:0] muxed_v_21_mux_sel_qs;
+  logic [2:0] muxed_v_21_mux_sel_wd;
   logic muxed_v_21_mux_sel_we;
 
   // Register instances
@@ -3993,9 +3993,9 @@ module astral_padframe_periph_config_reg_top #(
   // R[muxed_v_21_mux_sel]: V(False)
 
   prim_subreg #(
-    .DW      (2),
+    .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (2'h0)
+    .RESVAL  (3'h0)
   ) u_muxed_v_21_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -4515,7 +4515,7 @@ module astral_padframe_periph_config_reg_top #(
   assign muxed_v_21_cfg_pull_sel_wd = reg_wdata[4];
 
   assign muxed_v_21_mux_sel_we = addr_hit[44] & reg_we & !reg_error;
-  assign muxed_v_21_mux_sel_wd = reg_wdata[1:0];
+  assign muxed_v_21_mux_sel_wd = reg_wdata[2:0];
 
   // Read data return
   always_comb begin
@@ -4787,7 +4787,7 @@ module astral_padframe_periph_config_reg_top #(
       end
 
       addr_hit[44]: begin
-        reg_rdata_next[1:0] = muxed_v_21_mux_sel_qs;
+        reg_rdata_next[2:0] = muxed_v_21_mux_sel_qs;
       end
 
       default: begin

@@ -870,7 +870,7 @@ pad_domains:
               pull_en: slink_rcv_clk_o_pen_i
               pull_sel: slink_rcv_clk_o_psel_i
           - name: o_{i}
-            multiple: 7
+            multiple: 8
             mux_groups: ["muxed_v_{i+14:2d}"]
             description: "Serial link out"
             connections:

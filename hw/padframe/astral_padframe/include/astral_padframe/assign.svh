@@ -116,6 +116,7 @@
   assign load.slink_4_o = driver.slink_4_o; \
   assign load.slink_5_o = driver.slink_5_o; \
   assign load.slink_6_o = driver.slink_6_o; \
+  assign load.slink_7_o = driver.slink_7_o; \
   assign load.slink_i_0_pen_i = driver.slink_i_0_pen_i; \
   assign load.slink_i_0_psel_i = driver.slink_i_0_psel_i; \
   assign load.slink_i_1_pen_i = driver.slink_i_1_pen_i; \
@@ -146,6 +147,8 @@
   assign load.slink_o_5_psel_i = driver.slink_o_5_psel_i; \
   assign load.slink_o_6_pen_i = driver.slink_o_6_pen_i; \
   assign load.slink_o_6_psel_i = driver.slink_o_6_psel_i; \
+  assign load.slink_o_7_pen_i = driver.slink_o_7_pen_i; \
+  assign load.slink_o_7_psel_i = driver.slink_o_7_psel_i; \
   assign load.slink_rcv_clk_i_pen_i = driver.slink_rcv_clk_i_pen_i; \
   assign load.slink_rcv_clk_i_psel_i = driver.slink_rcv_clk_i_psel_i; \
   assign load.slink_rcv_clk_o = driver.slink_rcv_clk_o; \
