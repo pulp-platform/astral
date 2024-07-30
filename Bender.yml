@@ -88,14 +88,14 @@ sources:
   - hw/carfield_chip_pkg.sv
   - hw/regs/carfield_reg_pkg.sv
   - hw/regs/carfield_reg_top.sv
-  - hw/padframe/src/pkg_astral_padframe.sv
-  - hw/padframe/src/pkg_internal_astral_padframe_periph.sv
-  - hw/padframe/src/astral_padframe_periph_config_reg_pkg.sv
-  - hw/padframe/src/astral_padframe_periph_config_reg_top.sv
-  - hw/padframe/src/astral_padframe_periph_pads.sv
-  - hw/padframe/src/astral_padframe_periph_muxer.sv
-  - hw/padframe/src/astral_padframe_periph.sv
-  - hw/padframe/src/astral_padframe.sv
+  - hw/padframe/astral_padframe/src/pkg_astral_padframe.sv
+  - hw/padframe/astral_padframe/src/pkg_internal_astral_padframe_periph.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_periph_config_reg_pkg.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_periph_config_reg_top.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_periph_pads.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_periph_muxer.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_periph.sv
+  - hw/padframe/astral_padframe/src/astral_padframe.sv
   - hw/padframe/pad_behav.sv
   # Level 1
   - hw/cheshire_wrap.sv

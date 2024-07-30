@@ -475,11 +475,12 @@ package pkg_internal_astral_padframe_periph;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_20_SEL_LLC_LINE_1 = 3'd3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_20_SEL_SERIAL_LINK_O_6 = 3'd4;
 
-  parameter PAD_MUX_GROUP_MUXED_V_21_SEL_WIDTH = 2;
-  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_21_SEL_DEFAULT = 2'd0;
-  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_21_SEL_ETHERNET_RST_N = 2'd1;
-  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_21_SEL_GPIO_IO_21 = 2'd2;
-  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_21_SEL_OBT_EXT_CLK = 2'd3;
+  parameter PAD_MUX_GROUP_MUXED_V_21_SEL_WIDTH = 3;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_21_SEL_DEFAULT = 3'd0;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_21_SEL_ETHERNET_RST_N = 3'd1;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_21_SEL_GPIO_IO_21 = 3'd2;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_21_SEL_OBT_EXT_CLK = 3'd3;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_21_SEL_SERIAL_LINK_O_7 = 3'd4;
 
   // Dynamic Pad  instance index
 
