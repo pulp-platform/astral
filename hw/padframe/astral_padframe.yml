@@ -2,7 +2,7 @@
 # authors: Victor Isachi <victor.isachi@unibo.it>
 
 name: astral_padframe
-manifest_version: 2
+manifest_version: 3
 pad_domains:
   - name: periph
     pad_types:
@@ -659,6 +659,29 @@ pad_domains:
         description: "Vertical digital input/output pads that are muxed"
         pad_type: PBIDIR_18_18_NT_DR_V
         is_static: false
+        default_port:
+          muxed_v_00: spi.sck
+          muxed_v_01: spi.csb_0
+          muxed_v_02: spi.csb_1
+          muxed_v_03: spi.sd_0
+          muxed_v_04: spi.sd_1
+          muxed_v_05: spi.sd_2
+          muxed_v_06: spi.sd_3
+          muxed_v_07: ethernet.rxck
+          muxed_v_08: ethernet.rxctl
+          muxed_v_09: ethernet.rxd_0
+          muxed_v_10: ethernet.rxd_1
+          muxed_v_11: ethernet.rxd_2
+          muxed_v_12: ethernet.rxd_3
+          muxed_v_13: ethernet.txck
+          muxed_v_14: ethernet.txctl
+          muxed_v_15: ethernet.txd_0
+          muxed_v_16: ethernet.txd_1
+          muxed_v_17: ethernet.txd_2
+          muxed_v_18: ethernet.txd_3
+          muxed_v_19: ethernet.md
+          muxed_v_20: ethernet.mdc
+          muxed_v_21: ethernet.rst_n
 
 # END PAD INSTANCES
 ###################################################################
@@ -683,8 +706,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: spih_sck_pen_i
-              pull_sel: spih_sck_psel_i
+              #pull_en: spih_sck_pen_i
+              #pull_sel: spih_sck_psel_i
           - name: csb_{i}
             multiple: 2
             mux_groups: ["muxed_v_{i+1:2d}"]
@@ -694,8 +717,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: spih_csb_{i}_pen_i
-              pull_sel: spih_csb_{i}_psel_i
+              #pull_en: spih_csb_{i}_pen_i
+              #pull_sel: spih_csb_{i}_psel_i
           - name: sd_{i}
             multiple: 4
             mux_groups: ["muxed_v_{i+3:2d}"]
@@ -705,8 +728,8 @@ pad_domains:
               spih_sd_{i}_i: pad2chip
               input_en: ~spih_sd_{i}_oen_i
               output_en: spih_sd_{i}_oen_i
-              pull_en: spih_sd_{i}_pen_i
-              pull_sel: spih_sd_{i}_psel_i
+              #pull_en: spih_sd_{i}_pen_i
+              #pull_sel: spih_sd_{i}_psel_i
 
       - name: ethernet
         description: "Ethernet"
@@ -720,8 +743,8 @@ pad_domains:
               eth_rxck_i: pad2chip
               input_en: 1'b1
               output_en: 1'b0
-              pull_en: eth_rxck_pen_i
-              pull_sel: eth_rxck_psel_i
+              #pull_en: eth_rxck_pen_i
+              #pull_sel: eth_rxck_psel_i
           - name: rxctl
             mux_groups: [muxed_v_08]
             description: "Ethernet rxctl in"
@@ -730,8 +753,8 @@ pad_domains:
               eth_rxctl_i: pad2chip
               input_en: 1'b1
               output_en: 1'b0
-              pull_en: eth_rxctl_pen_i
-              pull_sel: eth_rxctl_psel_i
+              #pull_en: eth_rxctl_pen_i
+              #pull_sel: eth_rxctl_psel_i
           - name: rxd_{i}
             multiple: 4
             mux_groups: ["muxed_v_{i+9:2d}"]
@@ -741,8 +764,8 @@ pad_domains:
               eth_rxd_{i}_i: pad2chip
               input_en: 1'b1
               output_en: 1'b0
-              pull_en: eth_rxd_{i}_pen_i
-              pull_sel: eth_rxd_{i}_psel_i
+              #pull_en: eth_rxd_{i}_pen_i
+              #pull_sel: eth_rxd_{i}_psel_i
           - name: txck
             mux_groups: [muxed_v_13]
             description: "Ethernet txck out"
@@ -751,8 +774,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: eth_txck_pen_i
-              pull_sel: eth_txck_psel_i
+              #pull_en: eth_txck_pen_i
+              #pull_sel: eth_txck_psel_i
           - name: txctl
             mux_groups: [muxed_v_14]
             description: "Ethernet txctl out"
@@ -761,8 +784,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: eth_txctl_pen_i
-              pull_sel: eth_txctl_psel_i
+              #pull_en: eth_txctl_pen_i
+              #pull_sel: eth_txctl_psel_i
           - name: txd_{i}
             multiple: 4
             mux_groups: ["muxed_v_{i+15:2d}"]
@@ -772,8 +795,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: eth_txd_{i}_pen_i
-              pull_sel: eth_txd_{i}_psel_i
+              #pull_en: eth_txd_{i}_pen_i
+              #pull_sel: eth_txd_{i}_psel_i
           - name: md
             mux_groups: [muxed_v_19]
             description: "Ethernet md in/out"
@@ -782,8 +805,8 @@ pad_domains:
               eth_md_i: pad2chip
               input_en: ~eth_md_oen_i
               output_en: eth_md_oen_i
-              pull_en: eth_md_pen_i
-              pull_sel: eth_md_psel_i
+              #pull_en: eth_md_pen_i
+              #pull_sel: eth_md_psel_i
           - name: mdc
             mux_groups: [muxed_v_20]
             description: "Ethernet mdc out"
@@ -792,8 +815,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: eth_mdc_pen_i
-              pull_sel: eth_mdc_psel_i
+              #pull_en: eth_mdc_pen_i
+              #pull_sel: eth_mdc_psel_i
           - name: rst_n
             mux_groups: [muxed_v_21]
             description: "Ethernet reset out, active-low"
@@ -802,8 +825,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: eth_rst_n_pen_i
-              pull_sel: eth_rst_n_psel_i
+              #pull_en: eth_rst_n_pen_i
+              #pull_sel: eth_rst_n_psel_i
 
 ########################################
 # MUX 1
@@ -821,8 +844,8 @@ pad_domains:
               can_rx_i: pad2chip
               input_en: 1'b1
               output_en: 1'b0
-              pull_en: can_rx_pen_i
-              pull_sel: can_rx_psel_i
+              #pull_en: can_rx_pen_i
+              #pull_sel: can_rx_psel_i
           - name: tx
             mux_groups: [muxed_v_01]
             description: "CAN tx out"
@@ -831,8 +854,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: can_tx_pen_i
-              pull_sel: can_tx_psel_i
+              #pull_en: can_tx_pen_i
+              #pull_sel: can_tx_psel_i
 
       - name: serial_link
         description: "Serial link"
@@ -844,10 +867,10 @@ pad_domains:
             connections:
               #chip2pad
               slink_rcv_clk_i: pad2chip
-              input_en: 1'b0
-              output_en: 1'b1
-              pull_en: slink_rcv_clk_i_pen_i
-              pull_sel: slink_rcv_clk_i_psel_i
+              input_en: 1'b1
+              output_en: 1'b0
+              #pull_en: slink_rcv_clk_i_pen_i
+              #pull_sel: slink_rcv_clk_i_psel_i
           - name: i_{i}
             multiple: 8
             mux_groups: ["muxed_v_{i+5:2d}"]
@@ -857,8 +880,8 @@ pad_domains:
               slink_{i}_i: pad2chip
               input_en: 1'b1
               output_en: 1'b0
-              pull_en: slink_i_{i}_pen_i
-              pull_sel: slink_i_{i}_psel_i
+              #pull_en: slink_i_{i}_pen_i
+              #pull_sel: slink_i_{i}_psel_i
           - name: rcv_clk_o
             mux_groups: [muxed_v_13]
             description: "Serial link rcv_clk out"
@@ -867,8 +890,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: slink_rcv_clk_o_pen_i
-              pull_sel: slink_rcv_clk_o_psel_i
+              #pull_en: slink_rcv_clk_o_pen_i
+              #pull_sel: slink_rcv_clk_o_psel_i
           - name: o_{i}
             multiple: 8
             mux_groups: ["muxed_v_{i+14:2d}"]
@@ -878,8 +901,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: slink_o_{i}_pen_i
-              pull_sel: slink_o_{i}_psel_i
+              #pull_en: slink_o_{i}_pen_i
+              #pull_sel: slink_o_{i}_psel_i
 
 ########################################
 # MUX 2
@@ -897,8 +920,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: i2c_sda_o_pen_i
-              pull_sel: i2c_sda_o_psel_i
+              #pull_en: i2c_sda_o_pen_i
+              #pull_sel: i2c_sda_o_psel_i
           - name: sda_i
             mux_groups: [muxed_v_01]
             description: "I2C sda in"
@@ -907,8 +930,8 @@ pad_domains:
               i2c_sda_i: pad2chip
               input_en: 1'b1
               output_en: 1'b0
-              pull_en: i2c_sda_i_pen_i
-              pull_sel: i2c_sda_i_psel_i
+              #pull_en: i2c_sda_i_pen_i
+              #pull_sel: i2c_sda_i_psel_i
           - name: sda_en
             mux_groups: [muxed_v_02]
             description: "I2C sda_en out"
@@ -917,8 +940,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: i2c_sda_en_pen_i
-              pull_sel: i2c_sda_en_psel_i
+              #pull_en: i2c_sda_en_pen_i
+              #pull_sel: i2c_sda_en_psel_i
           - name: scl_o
             mux_groups: [muxed_v_03]
             description: "I2C scl out"
@@ -927,8 +950,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: i2c_scl_o_pen_i
-              pull_sel: i2c_scl_o_psel_i
+              #pull_en: i2c_scl_o_pen_i
+              #pull_sel: i2c_scl_o_psel_i
           - name: scl_i
             mux_groups: [muxed_v_04]
             description: "I2C scl in"
@@ -937,8 +960,8 @@ pad_domains:
               i2c_scl_i: pad2chip
               input_en: 1'b1
               output_en: 1'b0
-              pull_en: i2c_scl_i_pen_i
-              pull_sel: i2c_scl_i_psel_i
+              #pull_en: i2c_scl_i_pen_i
+              #pull_sel: i2c_scl_i_psel_i
           - name: scl_en
             mux_groups: [muxed_v_05]
             description: "I2C scl_en out"
@@ -947,8 +970,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: i2c_scl_en_pen_i
-              pull_sel: i2c_scl_en_psel_i
+              #pull_en: i2c_scl_en_pen_i
+              #pull_sel: i2c_scl_en_psel_i
 
       - name: tc
         description: "TC"
@@ -962,8 +985,8 @@ pad_domains:
               tc_active_i: pad2chip
               input_en: 1'b1
               output_en: 1'b0
-              pull_en: tc_active_pen_i
-              pull_sel: tc_active_psel_i
+              #pull_en: tc_active_pen_i
+              #pull_sel: tc_active_psel_i
           - name: clk
             mux_groups: [muxed_v_08]
             description: "TC clk in"
@@ -972,8 +995,8 @@ pad_domains:
               tc_clk_i: pad2chip
               input_en: 1'b1
               output_en: 1'b0
-              pull_en: tc_clk_pen_i
-              pull_sel: tc_clk_psel_i
+              #pull_en: tc_clk_pen_i
+              #pull_sel: tc_clk_psel_i
           - name: data
             mux_groups: [muxed_v_09]
             description: "TC data in"
@@ -982,8 +1005,8 @@ pad_domains:
               tc_data_i: pad2chip
               input_en: 1'b1
               output_en: 1'b0
-              pull_en: tc_data_pen_i
-              pull_sel: tc_data_psel_i
+              #pull_en: tc_data_pen_i
+              #pull_sel: tc_data_psel_i
 
       - name: ptme
         description: "PTME"
@@ -997,8 +1020,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: ptme_clk_pen_i
-              pull_sel: ptme_clk_psel_i
+              #pull_en: ptme_clk_pen_i
+              #pull_sel: ptme_clk_psel_i
           - name: enc
             mux_groups: [muxed_v_11]
             description: "PTME enc out"
@@ -1007,8 +1030,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: ptme_enc_pen_i
-              pull_sel: ptme_enc_psel_i
+              #pull_en: ptme_enc_pen_i
+              #pull_sel: ptme_enc_psel_i
           - name: sync
             mux_groups: [muxed_v_12]
             description: "PTME sync out"
@@ -1017,8 +1040,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: ptme_sync_pen_i
-              pull_sel: ptme_sync_psel_i
+              #pull_en: ptme_sync_pen_i
+              #pull_sel: ptme_sync_psel_i
           - name: ext_clk
             mux_groups: [muxed_v_13]
             description: "TC ext_clk in"
@@ -1027,8 +1050,8 @@ pad_domains:
               ptme_ext_clk_i: pad2chip
               input_en: 1'b1
               output_en: 1'b0
-              pull_en: ptme_ext_clk_pen_i
-              pull_sel: ptme_ext_clk_psel_i
+              #pull_en: ptme_ext_clk_pen_i
+              #pull_sel: ptme_ext_clk_psel_i
 
       - name: hpc
         description: "HPC"
@@ -1043,8 +1066,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: hpc_addr_{i}_pen_i
-              pull_sel: hpc_addr_{i}_psel_i
+              #pull_en: hpc_addr_{i}_pen_i
+              #pull_sel: hpc_addr_{i}_psel_i
           - name: cmd_en
             mux_groups: [muxed_v_17]
             description: "HPC cmd_en out"
@@ -1053,8 +1076,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: hpc_cmd_en_pen_i
-              pull_sel: hpc_cmd_en_psel_i
+              #pull_en: hpc_cmd_en_pen_i
+              #pull_sel: hpc_cmd_en_psel_i
           - name: sample
             mux_groups: [muxed_v_18]
             description: "HPC sample out"
@@ -1063,8 +1086,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: hpc_sample_pen_i
-              pull_sel: hpc_sample_psel_i
+              #pull_en: hpc_sample_pen_i
+              #pull_sel: hpc_sample_psel_i
 
       - name: llc
         description: "LLC"
@@ -1079,8 +1102,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: llc_line_{i}_pen_i
-              pull_sel: llc_line_{i}_psel_i
+              #pull_en: llc_line_{i}_pen_i
+              #pull_sel: llc_line_{i}_psel_i
 
       - name: obt
         description: "OBT"
@@ -1094,8 +1117,8 @@ pad_domains:
               obt_ext_clk_i: pad2chip
               input_en: 1'b1
               output_en: 1'b0
-              pull_en: obt_ext_clk_pen_i
-              pull_sel: obt_ext_clk_psel_i
+              #pull_en: obt_ext_clk_pen_i
+              #pull_sel: obt_ext_clk_psel_i
 
 ########################################
 # MUX 3
@@ -1113,8 +1136,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: spih_ot_sck_pen_i
-              pull_sel: spih_ot_sck_psel_i
+              #pull_en: spih_ot_sck_pen_i
+              #pull_sel: spih_ot_sck_psel_i
           - name: csb
             mux_groups: [muxed_v_01]
             description: "SPI OT cs out, active-low"
@@ -1123,8 +1146,8 @@ pad_domains:
               #pad2chip
               input_en: 1'b0
               output_en: 1'b1
-              pull_en: spih_ot_csb_pen_i
-              pull_sel: spih_ot_csb_psel_i
+              #pull_en: spih_ot_csb_pen_i
+              #pull_sel: spih_ot_csb_psel_i
           - name: sd_{i}
             multiple: 4
             mux_groups: ["muxed_v_{i+2:2d}"]
@@ -1134,8 +1157,8 @@ pad_domains:
               spih_ot_sd_{i}_i: pad2chip
               input_en: ~spih_ot_sd_{i}_oen_i
               output_en: spih_ot_sd_{i}_oen_i
-              pull_en: spih_ot_sd_{i}_pen_i
-              pull_sel: spih_ot_sd_{i}_psel_i
+              #pull_en: spih_ot_sd_{i}_pen_i
+              #pull_sel: spih_ot_sd_{i}_psel_i
           
       - name: pll
         description: "PLL"
@@ -1150,8 +1173,8 @@ pad_domains:
               pll_{i}_i: pad2chip
               input_en: ~pll_{i}_oen_i
               output_en: pll_{i}_oen_i
-              pull_en: pll_{i}_pen_i
-              pull_sel: pll_{i}_psel_i
+              #pull_en: pll_{i}_pen_i
+              #pull_sel: pll_{i}_psel_i
 
 ########################################
 # MUX 4
@@ -1170,8 +1193,8 @@ pad_domains:
               gpio_{i}_i: pad2chip
               input_en: ~gpio_{i}_oen_i
               output_en: gpio_{i}_oen_i
-              pull_en: gpio_{i}_pen_i
-              pull_sel: gpio_{i}_psel_i
+              #pull_en: gpio_{i}_pen_i
+              #pull_sel: gpio_{i}_psel_i
 
 # END PORT INSTANCES
 ###################################################################
