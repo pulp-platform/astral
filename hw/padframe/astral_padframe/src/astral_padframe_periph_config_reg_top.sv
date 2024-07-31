@@ -656,7 +656,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h4)
   ) u_muxed_v_00_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -815,7 +815,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h4)
   ) u_muxed_v_01_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -974,7 +974,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h3)
   ) u_muxed_v_02_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -1133,7 +1133,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h3)
   ) u_muxed_v_03_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -1292,7 +1292,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h4)
   ) u_muxed_v_04_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -1451,7 +1451,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h4)
   ) u_muxed_v_05_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -1610,7 +1610,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (2),
     .SWACCESS("RW"),
-    .RESVAL  (2'h0)
+    .RESVAL  (2'h3)
   ) u_muxed_v_06_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -1769,7 +1769,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_07_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -1928,7 +1928,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_08_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -2087,7 +2087,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_09_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -2246,7 +2246,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_10_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -2405,7 +2405,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_11_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -2564,7 +2564,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_12_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -2723,7 +2723,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_13_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -2882,7 +2882,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_14_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -3041,7 +3041,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_15_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -3200,7 +3200,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_16_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -3359,7 +3359,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_17_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -3518,7 +3518,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_18_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -3677,7 +3677,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_19_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -3836,7 +3836,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_20_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -3995,7 +3995,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h0)
+    .RESVAL  (3'h1)
   ) u_muxed_v_21_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
