@@ -82,9 +82,6 @@ module astral_padframe_periph_pads
   );
    PDVDD_18_18_NT_DR_H i_pad_dvdd_io_h_0 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVDD_18_18_NT_DR_H i_pad_dvdd_io_h_1 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
-   PDVDD_18_18_NT_DR_H i_pad_dvdd_io_h_2 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
-   PDVDD_18_18_NT_DR_H i_pad_dvdd_io_h_3 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
-   PDVDD_18_18_NT_DR_H i_pad_dvdd_io_h_4 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVDD_18_18_NT_DR_V i_pad_dvdd_io_v_0 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVDD_18_18_NT_DR_V i_pad_dvdd_io_v_1 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVDD_18_18_NT_DR_V i_pad_dvdd_io_v_2 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
@@ -93,9 +90,6 @@ module astral_padframe_periph_pads
    PDVDD_18_18_NT_DR_V i_pad_dvdd_io_v_5 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVSS_18_18_NT_DR_H i_pad_dvss_io_h_0 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVSS_18_18_NT_DR_H i_pad_dvss_io_h_1 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
-   PDVSS_18_18_NT_DR_H i_pad_dvss_io_h_2 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
-   PDVSS_18_18_NT_DR_H i_pad_dvss_io_h_3 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
-   PDVSS_18_18_NT_DR_H i_pad_dvss_io_h_4 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVSS_18_18_NT_DR_V i_pad_dvss_io_v_0 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVSS_18_18_NT_DR_V i_pad_dvss_io_v_1 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVSS_18_18_NT_DR_V i_pad_dvss_io_v_2 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
@@ -110,6 +104,8 @@ module astral_padframe_periph_pads
    PVDD_08_08_NT_DR_V i_pad_vdd_core_v_1 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVDD_08_08_NT_DR_V i_pad_vdd_core_v_2 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVDD_08_08_NT_DR_V i_pad_vdd_core_v_3 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
+   PVDD_08_08_NT_DR_V i_pad_vdd_core_v_4 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
+   PVDD_08_08_NT_DR_V i_pad_vdd_core_v_5 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVSS_08_08_NT_DR_H i_pad_vss_core_h_0 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVSS_08_08_NT_DR_H i_pad_vss_core_h_1 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVSS_08_08_NT_DR_H i_pad_vss_core_h_2 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
@@ -118,6 +114,8 @@ module astral_padframe_periph_pads
    PVSS_08_08_NT_DR_V i_pad_vss_core_v_1 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVSS_08_08_NT_DR_V i_pad_vss_core_v_2 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVSS_08_08_NT_DR_V i_pad_vss_core_v_3 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
+   PVSS_08_08_NT_DR_V i_pad_vss_core_v_4 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
+   PVSS_08_08_NT_DR_V i_pad_vss_core_v_5 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PCORNER_18_18_NT_DR i_pad_corner_0 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PCORNER_18_18_NT_DR i_pad_corner_1 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PCORNER_18_18_NT_DR i_pad_corner_2 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
@@ -247,7 +245,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_jtag_tclk (
+  PBIDIR_18_18_NT_DR_H i_jtag_tclk (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.jtag_tclk_i ),
     .PAD ( pad_jtag_tclk_pad ),
@@ -265,7 +263,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_jtag_trst_n (
+  PBIDIR_18_18_NT_DR_H i_jtag_trst_n (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.jtag_trst_ni ),
     .PAD ( pad_jtag_trst_n_pad ),
@@ -283,7 +281,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_jtag_tms (
+  PBIDIR_18_18_NT_DR_H i_jtag_tms (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.jtag_tms_i ),
     .PAD ( pad_jtag_tms_pad ),
@@ -301,7 +299,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_jtag_tdi (
+  PBIDIR_18_18_NT_DR_H i_jtag_tdi (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.jtag_tdi_i ),
     .PAD ( pad_jtag_tdi_pad ),
@@ -319,7 +317,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_jtag_tdo (
+  PBIDIR_18_18_NT_DR_H i_jtag_tdo (
     .PO  (  ),
     .Y   (  ),
     .PAD ( pad_jtag_tdo_pad ),
@@ -337,7 +335,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_jtag_ot_tclk (
+  PBIDIR_18_18_NT_DR_H i_jtag_ot_tclk (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.jtag_ot_tclk_i ),
     .PAD ( pad_jtag_ot_tclk_pad ),
@@ -355,7 +353,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_jtag_ot_trst_ni (
+  PBIDIR_18_18_NT_DR_H i_jtag_ot_trst_ni (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.jtag_ot_trst_ni ),
     .PAD ( pad_jtag_ot_trst_ni_pad ),
@@ -373,7 +371,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_jtag_ot_tms (
+  PBIDIR_18_18_NT_DR_H i_jtag_ot_tms (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.jtag_ot_tms_i ),
     .PAD ( pad_jtag_ot_tms_pad ),
@@ -391,7 +389,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_jtag_ot_tdi (
+  PBIDIR_18_18_NT_DR_H i_jtag_ot_tdi (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.jtag_ot_tdi_i ),
     .PAD ( pad_jtag_ot_tdi_pad ),
@@ -409,7 +407,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_jtag_ot_tdo (
+  PBIDIR_18_18_NT_DR_H i_jtag_ot_tdo (
     .PO  (  ),
     .Y   (  ),
     .PAD ( pad_jtag_ot_tdo_pad ),
@@ -427,7 +425,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_cs_0_n (
+  PBIDIR_18_18_NT_DR_V i_hyper_cs_0_n (
     .PO  (  ),
     .Y   (  ),
     .PAD ( pad_hyper_cs_0_n_pad ),
@@ -445,7 +443,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_cs_1_n (
+  PBIDIR_18_18_NT_DR_V i_hyper_cs_1_n (
     .PO  (  ),
     .Y   (  ),
     .PAD ( pad_hyper_cs_1_n_pad ),
@@ -463,7 +461,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_ck (
+  PBIDIR_18_18_NT_DR_V i_hyper_ck (
     .PO  (  ),
     .Y   (  ),
     .PAD ( pad_hyper_ck_pad ),
@@ -481,7 +479,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_ck_n (
+  PBIDIR_18_18_NT_DR_V i_hyper_ck_n (
     .PO  (  ),
     .Y   (  ),
     .PAD ( pad_hyper_ck_n_pad ),
@@ -499,7 +497,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_rwds (
+  PBIDIR_18_18_NT_DR_V i_hyper_rwds (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.hyper_rwds_i ),
     .PAD ( pad_hyper_rwds_pad ),
@@ -517,7 +515,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_dq_0 (
+  PBIDIR_18_18_NT_DR_V i_hyper_dq_0 (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.hyper_dq_0_i ),
     .PAD ( pad_hyper_dq_0_pad ),
@@ -535,7 +533,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_dq_1 (
+  PBIDIR_18_18_NT_DR_V i_hyper_dq_1 (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.hyper_dq_1_i ),
     .PAD ( pad_hyper_dq_1_pad ),
@@ -553,7 +551,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_dq_2 (
+  PBIDIR_18_18_NT_DR_V i_hyper_dq_2 (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.hyper_dq_2_i ),
     .PAD ( pad_hyper_dq_2_pad ),
@@ -571,7 +569,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_dq_3 (
+  PBIDIR_18_18_NT_DR_V i_hyper_dq_3 (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.hyper_dq_3_i ),
     .PAD ( pad_hyper_dq_3_pad ),
@@ -589,7 +587,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_dq_4 (
+  PBIDIR_18_18_NT_DR_V i_hyper_dq_4 (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.hyper_dq_4_i ),
     .PAD ( pad_hyper_dq_4_pad ),
@@ -607,7 +605,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_dq_5 (
+  PBIDIR_18_18_NT_DR_V i_hyper_dq_5 (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.hyper_dq_5_i ),
     .PAD ( pad_hyper_dq_5_pad ),
@@ -625,7 +623,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_dq_6 (
+  PBIDIR_18_18_NT_DR_V i_hyper_dq_6 (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.hyper_dq_6_i ),
     .PAD ( pad_hyper_dq_6_pad ),
@@ -643,7 +641,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_dq_7 (
+  PBIDIR_18_18_NT_DR_V i_hyper_dq_7 (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.hyper_dq_7_i ),
     .PAD ( pad_hyper_dq_7_pad ),
@@ -661,7 +659,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_hyper_reset_n (
+  PBIDIR_18_18_NT_DR_V i_hyper_reset_n (
     .PO  (  ),
     .Y   (  ),
     .PAD ( pad_hyper_reset_n_pad ),
@@ -679,7 +677,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_spw_data_in (
+  PBIDIR_18_18_NT_DR_H i_spw_data_in (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.spw_data_i ),
     .PAD ( pad_spw_data_in_pad ),
@@ -697,7 +695,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_spw_strb_in (
+  PBIDIR_18_18_NT_DR_H i_spw_strb_in (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.spw_srtb_i ),
     .PAD ( pad_spw_strb_in_pad ),
@@ -715,7 +713,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_spw_data_out (
+  PBIDIR_18_18_NT_DR_H i_spw_data_out (
     .PO  (  ),
     .Y   (  ),
     .PAD ( pad_spw_data_out_pad ),
@@ -733,7 +731,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_spw_strb_out (
+  PBIDIR_18_18_NT_DR_H i_spw_strb_out (
     .PO  (  ),
     .Y   (  ),
     .PAD ( pad_spw_strb_out_pad ),
@@ -751,7 +749,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_uart_tx_out (
+  PBIDIR_18_18_NT_DR_H i_uart_tx_out (
     .PO  (  ),
     .Y   (  ),
     .PAD ( pad_uart_tx_out_pad ),
@@ -769,7 +767,7 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_V i_uart_rx_in (
+  PBIDIR_18_18_NT_DR_H i_uart_rx_in (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.uart_rx_i ),
     .PAD ( pad_uart_rx_in_pad ),

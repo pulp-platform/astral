@@ -216,7 +216,7 @@ pad_domains:
 ########################################
 
       - name: pad_dvdd_io_h_{i}
-        multiple: 5
+        multiple: 2
         description: "I/O power domain horizontal VDD pad"
         pad_type: PDVDD_18_18_NT_DR_H
         is_static: true
@@ -228,7 +228,7 @@ pad_domains:
         is_static: true
 
       - name: pad_dvss_io_h_{i}
-        multiple: 5
+        multiple: 2
         description: "I/O power domain horizontal VSS pad"
         pad_type: PDVSS_18_18_NT_DR_H
         is_static: true
@@ -250,7 +250,7 @@ pad_domains:
         is_static: true
 
       - name: pad_vdd_core_v_{i}
-        multiple: 4
+        multiple: 6
         description: "Core power domain vertical VDD pad"
         pad_type: PVDD_08_08_NT_DR_V
         is_static: true
@@ -262,7 +262,7 @@ pad_domains:
         is_static: true
 
       - name: pad_vss_core_v_{i}
-        multiple: 4
+        multiple: 6
         description: "Core power domain vertical VSS pad"
         pad_type: PVSS_08_08_NT_DR_V
         is_static: true
@@ -369,7 +369,7 @@ pad_domains:
 
       - name: jtag_tclk
         description: "JTAG tclk in"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: 1'b0
@@ -381,7 +381,7 @@ pad_domains:
 
       - name: jtag_trst_n
         description: "JTAG trst in, active-low"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: 1'b0
@@ -393,7 +393,7 @@ pad_domains:
       
       - name: jtag_tms
         description: "JTAG tms in"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: 1'b0
@@ -405,7 +405,7 @@ pad_domains:
 
       - name: jtag_tdi
         description: "JTAG tdi in"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: 1'b0
@@ -417,7 +417,7 @@ pad_domains:
 
       - name: jtag_tdo
         description: "JTAG tdo out"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: jtag_tdo_o
@@ -433,7 +433,7 @@ pad_domains:
 
       - name: jtag_ot_tclk
         description: "JTAG OT tclk in"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: 1'b0
@@ -445,7 +445,7 @@ pad_domains:
 
       - name: jtag_ot_trst_ni
         description: "JTAG OT trst in, active-low"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: 1'b0
@@ -457,7 +457,7 @@ pad_domains:
       
       - name: jtag_ot_tms
         description: "JTAG OT tms in"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: 1'b0
@@ -469,7 +469,7 @@ pad_domains:
 
       - name: jtag_ot_tdi
         description: "JTAG OT tdi in"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: 1'b0
@@ -481,7 +481,7 @@ pad_domains:
 
       - name: jtag_ot_tdo
         description: "JTAG OT tdo out"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: jtag_ot_tdo_o
@@ -498,7 +498,7 @@ pad_domains:
       - name: hyper_cs_{i}_n
         multiple: 2
         description: "Hyperbus cs out, active-low"
-        pad_type: PBIDIR_18_18_NT_DR_H
+        pad_type: PBIDIR_18_18_NT_DR_V
         is_static: true
         connections:
           chip2pad: hyper_cs_{i}_no
@@ -510,7 +510,7 @@ pad_domains:
 
       - name: hyper_ck
         description: "Hyperbus ck out"
-        pad_type: PBIDIR_18_18_NT_DR_H
+        pad_type: PBIDIR_18_18_NT_DR_V
         is_static: true
         connections:
           chip2pad: hyper_ck_o
@@ -522,7 +522,7 @@ pad_domains:
 
       - name: hyper_ck_n
         description: "Hyperbus ck out, active-low"
-        pad_type: PBIDIR_18_18_NT_DR_H
+        pad_type: PBIDIR_18_18_NT_DR_V
         is_static: true
         connections:
           chip2pad: hyper_ck_no
@@ -534,7 +534,7 @@ pad_domains:
 
       - name: hyper_rwds
         description: "Hyperbus rwds in/out"
-        pad_type: PBIDIR_18_18_NT_DR_H
+        pad_type: PBIDIR_18_18_NT_DR_V
         is_static: true
         connections:
           chip2pad: hyper_rwds_o
@@ -547,7 +547,7 @@ pad_domains:
       - name: hyper_dq_{i}
         multiple: 8
         description: "Hyperbus dq in/out"
-        pad_type: PBIDIR_18_18_NT_DR_H
+        pad_type: PBIDIR_18_18_NT_DR_V
         is_static: true
         connections:
           chip2pad: hyper_dq_{i}_o
@@ -559,7 +559,7 @@ pad_domains:
 
       - name: hyper_reset_n
         description: "Hyperbus reset out, active-low"
-        pad_type: PBIDIR_18_18_NT_DR_H
+        pad_type: PBIDIR_18_18_NT_DR_V
         is_static: true
         connections:
           chip2pad: hyper_reset_no
@@ -575,7 +575,7 @@ pad_domains:
 
       - name: spw_data_in
         description: "SPW data in"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: 1'b0
@@ -587,7 +587,7 @@ pad_domains:
 
       - name: spw_strb_in
         description: "SPW strb in"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: 1'b0
@@ -599,7 +599,7 @@ pad_domains:
 
       - name: spw_data_out
         description: "SPW data out"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: spw_data_o
@@ -611,7 +611,7 @@ pad_domains:
 
       - name: spw_strb_out
         description: "SPW strb out"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: spw_srtb_o
@@ -627,7 +627,7 @@ pad_domains:
 
       - name: uart_tx_out
         description: "UART tx out"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: uart_tx_o
@@ -639,7 +639,7 @@ pad_domains:
       
       - name: uart_rx_in
         description: "UART rx in"
-        pad_type: PBIDIR_18_18_NT_DR_V
+        pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
           chip2pad: 1'b0
