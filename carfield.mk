@@ -385,7 +385,7 @@ car-check-litmus-tests: $(LITMUS_WORK_DIR)/litmus.log
 # Technology #
 ##############
 tech-repo := git@iis-git.ee.ethz.ch:Astral/gf12.git
-tech-branch := vi/fll
+tech-branch := main
 tech-init:
 	git clone -b $(tech-branch) $(tech-repo) tech
 	$(MAKE) -C $(TECH_ROOT) init
