@@ -3,10 +3,8 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 // Victor Isachi <victor.isachi@unibo.it>
-// Nicole Narr <narrn@student.ethz.ch>
-// Christopher Reinwardt <creinwar@student.ethz.ch>
 //
-// Simple FLL test
+// Simple FLL test - no automatic checking
 
 #include "regs/cheshire.h"
 #include "dif/clint.h"
@@ -101,6 +99,7 @@ int main(void) {
     // Init the HW
     car_init_start();
 
-    printf("Hi\n");
+    // NEED TO MANUALLY VERIFY THE CORECTNESS OF THE GENERATED CLOCKS
+
     return 0;
 }

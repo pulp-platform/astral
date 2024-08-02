@@ -374,9 +374,18 @@ module astral_wrap
   assign host_clk    = clk_fll_out[0];
   assign periph_clk  = clk_fll_out[1];
   assign alt_clk     = clk_fll_out[2];
-  assign rt_clk      = clk_fll_out[3];
   assign clk_fll_e   = '{default: 1'b1};
 
+  clk_int_div_static #(
+    .DIV_VALUE            ( 100  ),
+    .ENABLE_CLOCK_IN_RESET( 1'b1 )
+  ) i_rt_clk_div (
+    .clk_i          ( clk_fll_out[3] ),
+    .rst_ni         ( pwr_on_rst_n   ),
+    .en_i           ( 1'b1           ),
+    .test_mode_en_i ( 1'b0           ),
+    .clk_o          ( rt_clk         )
+  );
 
   assign fll_pwd          = '{default: 1'b0};
   assign fll_test_mode    = '{default: 1'b0};
