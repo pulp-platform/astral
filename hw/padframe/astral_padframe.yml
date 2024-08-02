@@ -287,8 +287,8 @@ pad_domains:
         is_static: true
         connections:
           pad2core_clk: ref_clk_i
-          crystal_en: 1'b1
-          test_en: 1'b0
+          #crystal_en: 1'b1
+          #test_en: 1'b0
 
       - name: fll_bypass
         description: "FLL bypass in, when active bypasses FLL clock with ref_clk"
@@ -660,28 +660,50 @@ pad_domains:
         pad_type: PBIDIR_18_18_NT_DR_V
         is_static: false
         default_port:
-          muxed_v_00: spi.sck
-          muxed_v_01: spi.csb_0
-          muxed_v_02: spi.csb_1
-          muxed_v_03: spi.sd_0
-          muxed_v_04: spi.sd_1
-          muxed_v_05: spi.sd_2
-          muxed_v_06: spi.sd_3
-          muxed_v_07: ethernet.rxck
-          muxed_v_08: ethernet.rxctl
-          muxed_v_09: ethernet.rxd_0
-          muxed_v_10: ethernet.rxd_1
-          muxed_v_11: ethernet.rxd_2
-          muxed_v_12: ethernet.rxd_3
-          muxed_v_13: ethernet.txck
-          muxed_v_14: ethernet.txctl
-          muxed_v_15: ethernet.txd_0
-          muxed_v_16: ethernet.txd_1
-          muxed_v_17: ethernet.txd_2
-          muxed_v_18: ethernet.txd_3
-          muxed_v_19: ethernet.md
-          muxed_v_20: ethernet.mdc
-          muxed_v_21: ethernet.rst_n
+          muxed_v_00: can.rx
+          muxed_v_01: can.tx
+          muxed_v_02: gpio.io_2
+          muxed_v_03: gpio.io_3
+          muxed_v_04: serial_link.rcv_clk_i
+          muxed_v_05: serial_link.i_0
+          muxed_v_06: serial_link.i_1
+          muxed_v_07: serial_link.i_2
+          muxed_v_08: serial_link.i_3
+          muxed_v_09: serial_link.i_4
+          muxed_v_10: serial_link.i_5
+          muxed_v_11: serial_link.i_6
+          muxed_v_12: serial_link.i_7
+          muxed_v_13: serial_link.rcv_clk_o
+          muxed_v_14: serial_link.o_0
+          muxed_v_15: serial_link.o_1
+          muxed_v_16: serial_link.o_2
+          muxed_v_17: serial_link.o_3
+          muxed_v_18: serial_link.o_4
+          muxed_v_19: serial_link.o_5
+          muxed_v_20: serial_link.o_6
+          muxed_v_21: serial_link.o_7
+          # muxed_v_00: spi.sck
+          # muxed_v_01: spi.csb_0
+          # muxed_v_02: spi.csb_1
+          # muxed_v_03: spi.sd_0
+          # muxed_v_04: spi.sd_1
+          # muxed_v_05: spi.sd_2
+          # muxed_v_06: spi.sd_3
+          # muxed_v_07: ethernet.rxck
+          # muxed_v_08: ethernet.rxctl
+          # muxed_v_09: ethernet.rxd_0
+          # muxed_v_10: ethernet.rxd_1
+          # muxed_v_11: ethernet.rxd_2
+          # muxed_v_12: ethernet.rxd_3
+          # muxed_v_13: ethernet.txck
+          # muxed_v_14: ethernet.txctl
+          # muxed_v_15: ethernet.txd_0
+          # muxed_v_16: ethernet.txd_1
+          # muxed_v_17: ethernet.txd_2
+          # muxed_v_18: ethernet.txd_3
+          # muxed_v_19: ethernet.md
+          # muxed_v_20: ethernet.mdc
+          # muxed_v_21: ethernet.rst_n
 
 # END PAD INSTANCES
 ###################################################################
@@ -859,7 +881,7 @@ pad_domains:
 
       - name: serial_link
         description: "Serial link"
-        output_defaults: 1'b0
+        output_defaults: 1'b1
         ports:
           - name: rcv_clk_i
             mux_groups: [muxed_v_04]

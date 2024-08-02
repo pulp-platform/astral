@@ -177,7 +177,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 4
+          resval: 1
           fields: [
               {
                   bits: "2:0"
@@ -261,7 +261,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 4
+          resval: 1
           fields: [
               {
                   bits: "2:0"
@@ -345,7 +345,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 3
+          resval: 1
           fields: [
               {
                   bits: "2:0"
@@ -428,7 +428,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 3
+          resval: 1
           fields: [
               {
                   bits: "2:0"
@@ -511,7 +511,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 4
+          resval: 3
           fields: [
               {
                   bits: "2:0"
@@ -595,7 +595,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 4
+          resval: 3
           fields: [
               {
                   bits: "2:0"
@@ -679,7 +679,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 3
+          resval: 2
           fields: [
               {
                   bits: "1:0"
@@ -761,7 +761,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 4
           fields: [
               {
                   bits: "2:0"
@@ -845,7 +845,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 4
           fields: [
               {
                   bits: "2:0"
@@ -929,7 +929,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 4
           fields: [
               {
                   bits: "2:0"
@@ -1013,7 +1013,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 5
           fields: [
               {
                   bits: "2:0"
@@ -1097,7 +1097,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 5
           fields: [
               {
                   bits: "2:0"
@@ -1181,7 +1181,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 5
           fields: [
               {
                   bits: "2:0"
@@ -1265,7 +1265,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 5
           fields: [
               {
                   bits: "2:0"
@@ -1349,7 +1349,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 4
           fields: [
               {
                   bits: "2:0"
@@ -1432,7 +1432,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 4
           fields: [
               {
                   bits: "2:0"
@@ -1515,7 +1515,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 4
           fields: [
               {
                   bits: "2:0"
@@ -1598,7 +1598,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 4
           fields: [
               {
                   bits: "2:0"
@@ -1681,7 +1681,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 4
           fields: [
               {
                   bits: "2:0"
@@ -1764,7 +1764,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 4
           fields: [
               {
                   bits: "2:0"
@@ -1847,7 +1847,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 4
           fields: [
               {
                   bits: "2:0"
@@ -1930,7 +1930,7 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 1
+          resval: 4
           fields: [
               {
                   bits: "2:0"

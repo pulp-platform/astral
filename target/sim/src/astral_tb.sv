@@ -67,6 +67,9 @@ module tb_astral;
 
   logic        chs_mem_rand;
 
+  // Pad synchronization
+  event pad_configured;
+
   // timing format for $display("...$t..", $realtime)
   initial begin : timing_format
     $timeformat(-9, 0, "ns", 9);
@@ -88,15 +91,8 @@ module tb_astral;
     // Set boot mode and preload boot image if there is one
     fix.set_secure_boot(secure_boot);
     fix.chs_vip.set_boot_mode(boot_mode);
-    // Configure I2C padframe
-    fix.configure_i2c_pad(jtag_check_write);
     fix.chs_vip.i2c_eeprom_preload(chs_boot_hex);
-    // Configure SPI padframe
-    fix.configure_spi_pad(jtag_check_write);
     fix.chs_vip.spih_norflash_preload(chs_boot_hex);
-
-    // Configure Serial link padframe
-    fix.configure_sl_pad(jtag_check_write);
 
     if (chs_preload_elf != "" || chs_boot_hex != "") begin
 
@@ -127,6 +123,11 @@ module tb_astral;
 `endif
       end
 
+      // Configure Serial link padframe
+      fix.configure_sl_pad(jtag_check_write);
+
+      -> pad_configured;
+      
       // Writing max burst length in Hyperbus configuration registers to
       // prevent the Verification IPs from triggering timing checks.
       $display("[TB] INFO: Configuring Hyperbus through serial link.");
@@ -190,9 +191,6 @@ module tb_astral;
         fix.chs_vip.jtag_wait_for_eoc(exit_code);
       end
 
-      // Configure Serial link padframe
-      fix.configure_sl_pad(jtag_check_write);
-
       // Sample carfield's clock source frequencies (host, alt, periph)
       //fix.sample_freq_debug_signals();
 
@@ -234,9 +232,6 @@ module tb_astral;
       // set secure boot mode
       fix.set_secure_boot(secure_boot);
 
-      // Configure Serial link padframe
-      fix.configure_sl_pad(jtag_check_write);
-
       // set boot mode before reset
       fix.gen_safed_vip.safed_vip.set_safed_boot_mode(safed_boot_mode);
 
@@ -247,6 +242,8 @@ module tb_astral;
         // Wait for FLL lock
         fix.wait_fll_lock();
 
+        wait (pad_configured.triggered);
+        
         // Writing max burst length in Hyperbus configuration registers to
         // prevent the Verification IPs from triggering timing checks.
         $display("[TB] INFO: Configuring Hyperbus through serial link.");
@@ -298,9 +295,6 @@ module tb_astral;
       // set secure boot mode
       fix.set_secure_boot(secure_boot);
 
-      // Configure Serial link padframe
-      fix.configure_sl_pad(jtag_check_write);
-
       // set bootmode
       fix.gen_scured_vip.secd_vip.set_secd_boot_mode(secd_boot_mode);
 
@@ -311,6 +305,8 @@ module tb_astral;
         // Wait for FLL lock
         fix.wait_fll_lock();
 
+        wait (pad_configured.triggered);
+        
         // Writing max burst length in Hyperbus configuration registers to
         // prevent the Verification IPs from triggering timing checks.
         $display("[TB] INFO: Configuring Hyperbus through serial link.");
@@ -380,11 +376,10 @@ module tb_astral;
       // Wait for FLL lock
       fix.wait_fll_lock();
 
-      // Configure Serial link padframe
-      fix.configure_sl_pad(jtag_check_write);
-
       if (pulpd_preload_elf != "") begin
 
+        wait (pad_configured.triggered);
+        
         $display("[TB] %t - Enabling PULP cluster clock for stand-alone tests ", $realtime);
         // Clock island after PoR
         fix.chs_vip.slink_write_32(CarSocCtrlPulpdClkEnRegAddr, 32'h1);
@@ -473,6 +468,8 @@ module tb_astral;
           #10ns;
   `endif
 
+        wait (pad_configured.triggered);
+        
         $display("[TB] %t - Enabling PULP cluster clock for stand-alone tests ", $realtime);
         // Clock island after PoR
         fix.chs_vip.slink_write_32(CarSocCtrlPulpdClkEnRegAddr, 32'h1);
@@ -529,9 +526,6 @@ module tb_astral;
       // set secure boot mode
       fix.set_secure_boot(secure_boot);
 
-      // Configure Serial link padframe
-      fix.configure_sl_pad(jtag_check_write);
-
       if (spatzd_preload_elf != "") begin
 
         // Wait for reset
@@ -539,6 +533,8 @@ module tb_astral;
 
         // Wait for FLL lock
         fix.wait_fll_lock();
+
+        wait (pad_configured.triggered);
 
         // Writing max burst length in Hyperbus configuration registers to
         // prevent the Verification IPs from triggering timing checks.
