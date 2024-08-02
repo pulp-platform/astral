@@ -12,6 +12,10 @@ module astral_padframe_periph_pads
   // Landing Pads
   inout wire logic pad_ref_clk_pad_i,
   inout wire logic pad_ref_clk_pad_o,
+  inout wire logic pad_fll_host_pad,
+  inout wire logic pad_fll_periph_pad,
+  inout wire logic pad_fll_alt_pad,
+  inout wire logic pad_fll_rt_pad,
   inout wire logic pad_fll_bypass_pad,
   inout wire logic pad_pwr_on_rst_n_pad,
   inout wire logic pad_test_mode_pad,
@@ -135,6 +139,78 @@ module astral_padframe_periph_pads
     .SNS    ( io_pads_sns ),
     .SP     ( 1'b0 ),
     .TE     ( 1'b0 )
+  );
+   (* dont_touch *)
+  PBIDIR_18_18_NT_DR_H i_fll_host (
+    .PO  (  ),
+    .Y   (  ),
+    .PAD ( pad_fll_host_pad ),
+    .A   ( static_connection_signals_soc2pad.fll_host_clk_o ),
+    .DS0 ( 1'b0 ),
+    .DS1 ( 1'b0 ),
+    .IE  ( 1'b0 ),
+    .IS  ( 1'b0 ),
+    .OE  ( 1'b1 ),
+    .PE  ( 1'b0 ),
+    .POE ( 1'b0 ),
+    .PS  ( 1'b0 ),
+    .RTO ( io_pads_rto ),
+    .SNS ( io_pads_sns ),
+    .SR  ( 1'b0 )
+  );
+   (* dont_touch *)
+  PBIDIR_18_18_NT_DR_H i_fll_periph (
+    .PO  (  ),
+    .Y   (  ),
+    .PAD ( pad_fll_periph_pad ),
+    .A   ( static_connection_signals_soc2pad.fll_periph_clk_o ),
+    .DS0 ( 1'b0 ),
+    .DS1 ( 1'b0 ),
+    .IE  ( 1'b0 ),
+    .IS  ( 1'b0 ),
+    .OE  ( 1'b1 ),
+    .PE  ( 1'b0 ),
+    .POE ( 1'b0 ),
+    .PS  ( 1'b0 ),
+    .RTO ( io_pads_rto ),
+    .SNS ( io_pads_sns ),
+    .SR  ( 1'b0 )
+  );
+   (* dont_touch *)
+  PBIDIR_18_18_NT_DR_H i_fll_alt (
+    .PO  (  ),
+    .Y   (  ),
+    .PAD ( pad_fll_alt_pad ),
+    .A   ( static_connection_signals_soc2pad.fll_alt_clk_o ),
+    .DS0 ( 1'b0 ),
+    .DS1 ( 1'b0 ),
+    .IE  ( 1'b0 ),
+    .IS  ( 1'b0 ),
+    .OE  ( 1'b1 ),
+    .PE  ( 1'b0 ),
+    .POE ( 1'b0 ),
+    .PS  ( 1'b0 ),
+    .RTO ( io_pads_rto ),
+    .SNS ( io_pads_sns ),
+    .SR  ( 1'b0 )
+  );
+   (* dont_touch *)
+  PBIDIR_18_18_NT_DR_H i_fll_rt (
+    .PO  (  ),
+    .Y   (  ),
+    .PAD ( pad_fll_rt_pad ),
+    .A   ( static_connection_signals_soc2pad.fll_rt_clk_o ),
+    .DS0 ( 1'b0 ),
+    .DS1 ( 1'b0 ),
+    .IE  ( 1'b0 ),
+    .IS  ( 1'b0 ),
+    .OE  ( 1'b1 ),
+    .PE  ( 1'b0 ),
+    .POE ( 1'b0 ),
+    .PS  ( 1'b0 ),
+    .RTO ( io_pads_rto ),
+    .SNS ( io_pads_sns ),
+    .SR  ( 1'b0 )
   );
    (* dont_touch *)
   PBIDIR_18_18_NT_DR_H i_fll_bypass (

@@ -23,6 +23,10 @@ module astral_wrap
 ) (
   inout wire logic pad_periph_ref_clk_pad_i,
   inout wire logic pad_periph_ref_clk_pad_o,
+  inout wire logic pad_periph_fll_host_pad,
+  inout wire logic pad_periph_fll_periph_pad,
+  inout wire logic pad_periph_fll_alt_pad,
+  inout wire logic pad_periph_fll_rt_pad,
   inout wire logic pad_periph_fll_bypass_pad,
   inout wire logic pad_periph_pwr_on_rst_n_pad,
   inout wire logic pad_periph_test_mode_pad,
@@ -297,6 +301,13 @@ module astral_wrap
   assign gpio_in_s[21] = pad2soc_port_signals.periph.gpio.gpio_21_i;
   // GPI0 22-31 remain unconnected
   assign gpio_in_s[31:22] = '0;
+
+  // soc2pad
+  // clocks
+  assign st_soc2pad_signals.periph.fll_host_clk_o   = host_clk;
+  assign st_soc2pad_signals.periph.fll_periph_clk_o = periph_clk;
+  assign st_soc2pad_signals.periph.fll_alt_clk_o    = alt_clk;
+  assign st_soc2pad_signals.periph.fll_rt_clk_o     = rt_clk;
 
 
   // soc2pad
@@ -612,6 +623,10 @@ module astral_wrap
     // Landing Pads
     .pad_periph_ref_clk_pad_i,
     .pad_periph_ref_clk_pad_o,
+    .pad_periph_fll_host_pad,
+    .pad_periph_fll_periph_pad,
+    .pad_periph_fll_alt_pad,
+    .pad_periph_fll_rt_pad,
     .pad_periph_fll_bypass_pad,
     .pad_periph_pwr_on_rst_n_pad,
     .pad_periph_test_mode_pad,
