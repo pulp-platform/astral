@@ -6,6 +6,10 @@ package pkg_astral_padframe;
 
   //Static connections signals
    typedef struct packed {
+      logic        fll_alt_clk_o;
+      logic        fll_host_clk_o;
+      logic        fll_periph_clk_o;
+      logic        fll_rt_clk_o;
       logic        hyper_ck_no;
       logic        hyper_ck_o;
       logic        hyper_cs_0_no;
