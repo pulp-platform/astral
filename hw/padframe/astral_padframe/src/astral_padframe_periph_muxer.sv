@@ -1583,14 +1583,14 @@ module astral_padframe_periph_muxer
 
    always_comb begin
      if (port_mux_sel_serial_link_slink_rcv_clk_i_no_connection) begin
-        port_signals_pad2soc_o.serial_link.slink_rcv_clk_i = 1'b0;
+        port_signals_pad2soc_o.serial_link.slink_rcv_clk_i = 1'b1;
      end else begin
         unique case (port_mux_sel_serial_link_slink_rcv_clk_i_arbitrated)
           PORT_MUX_GROUP_MUXED_V_04_SEL_MUXED_V_04: begin
             port_signals_pad2soc_o.serial_link.slink_rcv_clk_i = pads_to_mux_i.muxed_v_04.pad2chip;
           end
           default: begin
-            port_signals_pad2soc_o.serial_link.slink_rcv_clk_i = 1'b0;
+            port_signals_pad2soc_o.serial_link.slink_rcv_clk_i = 1'b1;
           end
        endcase
      end
@@ -1615,14 +1615,14 @@ module astral_padframe_periph_muxer
 
    always_comb begin
      if (port_mux_sel_serial_link_slink_0_i_no_connection) begin
-        port_signals_pad2soc_o.serial_link.slink_0_i = 1'b0;
+        port_signals_pad2soc_o.serial_link.slink_0_i = 1'b1;
      end else begin
         unique case (port_mux_sel_serial_link_slink_0_i_arbitrated)
           PORT_MUX_GROUP_MUXED_V_05_SEL_MUXED_V_05: begin
             port_signals_pad2soc_o.serial_link.slink_0_i = pads_to_mux_i.muxed_v_05.pad2chip;
           end
           default: begin
-            port_signals_pad2soc_o.serial_link.slink_0_i = 1'b0;
+            port_signals_pad2soc_o.serial_link.slink_0_i = 1'b1;
           end
        endcase
      end
@@ -1647,14 +1647,14 @@ module astral_padframe_periph_muxer
 
    always_comb begin
      if (port_mux_sel_serial_link_slink_1_i_no_connection) begin
-        port_signals_pad2soc_o.serial_link.slink_1_i = 1'b0;
+        port_signals_pad2soc_o.serial_link.slink_1_i = 1'b1;
      end else begin
         unique case (port_mux_sel_serial_link_slink_1_i_arbitrated)
           PORT_MUX_GROUP_MUXED_V_06_SEL_MUXED_V_06: begin
             port_signals_pad2soc_o.serial_link.slink_1_i = pads_to_mux_i.muxed_v_06.pad2chip;
           end
           default: begin
-            port_signals_pad2soc_o.serial_link.slink_1_i = 1'b0;
+            port_signals_pad2soc_o.serial_link.slink_1_i = 1'b1;
           end
        endcase
      end
@@ -1679,14 +1679,14 @@ module astral_padframe_periph_muxer
 
    always_comb begin
      if (port_mux_sel_serial_link_slink_2_i_no_connection) begin
-        port_signals_pad2soc_o.serial_link.slink_2_i = 1'b0;
+        port_signals_pad2soc_o.serial_link.slink_2_i = 1'b1;
      end else begin
         unique case (port_mux_sel_serial_link_slink_2_i_arbitrated)
           PORT_MUX_GROUP_MUXED_V_07_SEL_MUXED_V_07: begin
             port_signals_pad2soc_o.serial_link.slink_2_i = pads_to_mux_i.muxed_v_07.pad2chip;
           end
           default: begin
-            port_signals_pad2soc_o.serial_link.slink_2_i = 1'b0;
+            port_signals_pad2soc_o.serial_link.slink_2_i = 1'b1;
           end
        endcase
      end
@@ -1711,14 +1711,14 @@ module astral_padframe_periph_muxer
 
    always_comb begin
      if (port_mux_sel_serial_link_slink_3_i_no_connection) begin
-        port_signals_pad2soc_o.serial_link.slink_3_i = 1'b0;
+        port_signals_pad2soc_o.serial_link.slink_3_i = 1'b1;
      end else begin
         unique case (port_mux_sel_serial_link_slink_3_i_arbitrated)
           PORT_MUX_GROUP_MUXED_V_08_SEL_MUXED_V_08: begin
             port_signals_pad2soc_o.serial_link.slink_3_i = pads_to_mux_i.muxed_v_08.pad2chip;
           end
           default: begin
-            port_signals_pad2soc_o.serial_link.slink_3_i = 1'b0;
+            port_signals_pad2soc_o.serial_link.slink_3_i = 1'b1;
           end
        endcase
      end
@@ -1743,14 +1743,14 @@ module astral_padframe_periph_muxer
 
    always_comb begin
      if (port_mux_sel_serial_link_slink_4_i_no_connection) begin
-        port_signals_pad2soc_o.serial_link.slink_4_i = 1'b0;
+        port_signals_pad2soc_o.serial_link.slink_4_i = 1'b1;
      end else begin
         unique case (port_mux_sel_serial_link_slink_4_i_arbitrated)
           PORT_MUX_GROUP_MUXED_V_09_SEL_MUXED_V_09: begin
             port_signals_pad2soc_o.serial_link.slink_4_i = pads_to_mux_i.muxed_v_09.pad2chip;
           end
           default: begin
-            port_signals_pad2soc_o.serial_link.slink_4_i = 1'b0;
+            port_signals_pad2soc_o.serial_link.slink_4_i = 1'b1;
           end
        endcase
      end
@@ -1775,14 +1775,14 @@ module astral_padframe_periph_muxer
 
    always_comb begin
      if (port_mux_sel_serial_link_slink_5_i_no_connection) begin
-        port_signals_pad2soc_o.serial_link.slink_5_i = 1'b0;
+        port_signals_pad2soc_o.serial_link.slink_5_i = 1'b1;
      end else begin
         unique case (port_mux_sel_serial_link_slink_5_i_arbitrated)
           PORT_MUX_GROUP_MUXED_V_10_SEL_MUXED_V_10: begin
             port_signals_pad2soc_o.serial_link.slink_5_i = pads_to_mux_i.muxed_v_10.pad2chip;
           end
           default: begin
-            port_signals_pad2soc_o.serial_link.slink_5_i = 1'b0;
+            port_signals_pad2soc_o.serial_link.slink_5_i = 1'b1;
           end
        endcase
      end
@@ -1807,14 +1807,14 @@ module astral_padframe_periph_muxer
 
    always_comb begin
      if (port_mux_sel_serial_link_slink_6_i_no_connection) begin
-        port_signals_pad2soc_o.serial_link.slink_6_i = 1'b0;
+        port_signals_pad2soc_o.serial_link.slink_6_i = 1'b1;
      end else begin
         unique case (port_mux_sel_serial_link_slink_6_i_arbitrated)
           PORT_MUX_GROUP_MUXED_V_11_SEL_MUXED_V_11: begin
             port_signals_pad2soc_o.serial_link.slink_6_i = pads_to_mux_i.muxed_v_11.pad2chip;
           end
           default: begin
-            port_signals_pad2soc_o.serial_link.slink_6_i = 1'b0;
+            port_signals_pad2soc_o.serial_link.slink_6_i = 1'b1;
           end
        endcase
      end
@@ -1839,14 +1839,14 @@ module astral_padframe_periph_muxer
 
    always_comb begin
      if (port_mux_sel_serial_link_slink_7_i_no_connection) begin
-        port_signals_pad2soc_o.serial_link.slink_7_i = 1'b0;
+        port_signals_pad2soc_o.serial_link.slink_7_i = 1'b1;
      end else begin
         unique case (port_mux_sel_serial_link_slink_7_i_arbitrated)
           PORT_MUX_GROUP_MUXED_V_12_SEL_MUXED_V_12: begin
             port_signals_pad2soc_o.serial_link.slink_7_i = pads_to_mux_i.muxed_v_12.pad2chip;
           end
           default: begin
-            port_signals_pad2soc_o.serial_link.slink_7_i = 1'b0;
+            port_signals_pad2soc_o.serial_link.slink_7_i = 1'b1;
           end
        endcase
      end
