@@ -204,6 +204,14 @@ module astral_wrap
   assign st_soc2pad_signals.periph.hyper_reset_no   = hyperbus_rst_no_s[0];
   assign st_soc2pad_signals.periph.hyper_rwds_o     = hyperbus_rwds_out_s[0];
   assign st_soc2pad_signals.periph.hyper_rwds_oen_i = hyperbus_rwds_oe_s[0];
+  // TMTC
+  logic [2:0] hpc_addr_out_s;
+  assign soc2pad_port_signals.periph.hpc.hpc_addr_0_o = hpc_addr_out_s[0];
+  assign soc2pad_port_signals.periph.hpc.hpc_addr_1_o = hpc_addr_out_s[1];
+  assign soc2pad_port_signals.periph.hpc.hpc_addr_2_o = hpc_addr_out_s[2];
+  logic [1:0] llc_line_out_s;
+  assign soc2pad_port_signals.periph.llc.llc_line_0_o = llc_line_out_s[0];
+  assign soc2pad_port_signals.periph.llc.llc_line_1_o = llc_line_out_s[1];
 
   //  peripherals
 
@@ -577,6 +585,24 @@ module astral_wrap
     .hyper_dq_o                 ( hyperbus_data_out_s                               ),
     .hyper_dq_oe_o              ( hyperbus_data_oe_s                                ),
     .hyper_reset_no             ( hyperbus_rst_no_s                                 ),
+    .tc_active_i                ( pad2soc_port_signals.periph.tc.tc_active_i        ),
+    .tc_clock_i                 ( pad2soc_port_signals.periph.tc.tc_clk_i           ),
+    .tc_data_i                  ( pad2soc_port_signals.periph.tc.tc_data_i          ),
+    .ptme_clk_o                 ( soc2pad_port_signals.periph.ptme.ptme_clk_o          ),
+    .ptme_enc_o                 ( soc2pad_port_signals.periph.ptme.ptme_enc_o          ),
+    .ptme_sync_o                ( soc2pad_port_signals.periph.ptme.ptme_sync_o         ),
+    .ptme_ext_clk_i             ( pad2soc_port_signals.periph.ptme.ptme.ptme_ext_clk_i ),
+    .hpc_addr_o                 ( hpc_addr_out_s                                    ),
+    .hpc_cmd_en_o               ( soc2pad_port_signals.periph.hpc.hpc_cmd_en_o      ),
+    .hpc_sample_o               ( soc2pad_port_signals.periph.hpc.hpc_sample_o      ),
+    .llc_line_o                 ( llc_line_out_s                                    ),
+    .obt_ext_clk_i              ( pad2soc_port_signals.periph.obt.obt_ext_clk_i     ),
+    .obt_pps_in_i               ( '0 ),
+    .obt_sync_out_o             ( /* Not connected */                               ),
+    .spw_data_i                 ( st_pad2soc_signals.periph.spw_data_i              ),
+    .spw_strb_i                 ( st_pad2soc_signals.periph.spw_strb_i              ),
+    .spw_data_o                 ( st_soc2pad_signals.periph.spw_data_o              ),
+    .spw_strb_o                 ( st_soc2pad_signals.periph.spw_strb_o              ),
     .ext_reg_async_slv_req_o    ( ext_reg_async_slv_req_src_out                     ),
     .ext_reg_async_slv_ack_i    ( ext_reg_async_slv_ack_src_in                      ),
     .ext_reg_async_slv_data_o   ( ext_reg_async_slv_data_src_out                    ),
