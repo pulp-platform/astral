@@ -595,6 +595,7 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   AxiUserErrLsb     : 4,
   RegMaxReadTxns    : 8,
   RegMaxWriteTxns   : 8,
+  CorePostCut       : 1,
   RegAmoNumCuts     : 1,
   RegAmoPostCut     : 1,
   RegAdaptMemCut    : 1,
