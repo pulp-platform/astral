@@ -134,7 +134,6 @@ sources:
       - tech/sourcecode/tc_sram.sv
       - tech/sourcecode/ptme_ram.sv
       - tech/sourcecode/configurable_delay.sv
-      - target/synth/src/carfield_synth_wrap.sv
 
   - target: tech_sim
     files:
