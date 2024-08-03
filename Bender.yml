@@ -154,6 +154,8 @@ sources:
       - tech/sourcecode/macros/sram_dp_hse_rvt_mvt_16384x8m16b8w1.v
       - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_2560x76m4b4w0.v
       - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_4096x76m4b4w0.v
+      - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_16384x39m8b8w0.v
+      - tech/sourcecode/tc_clk.sv
       - tech/sourcecode/tc_sram.sv
       # FLL Model
       - tech/sourcecode/fll/rtl/FLL_digital/FLLPkg.vhd
