@@ -80,7 +80,7 @@ module astral_padframe_periph_pads
    wire io_pads_rto;
   wire io_pads_sns;
   
-  PDVDDTIE_18_18_NT_DR_H i_pad_tie_io (
+  PDVDDTIE_18_18_NT_DR_V i_pad_tie_io (
     .SNS( io_pads_sns ),
     .RTO( io_pads_rto )
   );
@@ -92,6 +92,10 @@ module astral_padframe_periph_pads
    PDVDD_18_18_NT_DR_V i_pad_dvdd_io_v_3 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVDD_18_18_NT_DR_V i_pad_dvdd_io_v_4 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVDD_18_18_NT_DR_V i_pad_dvdd_io_v_5 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
+   PDVDD_18_18_NT_DR_V i_pad_dvdd_io_v_6 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
+   PDVDD_18_18_NT_DR_V i_pad_dvdd_io_v_7 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
+   PDVDD_18_18_NT_DR_V i_pad_dvdd_io_v_8 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
+   PDVDD_18_18_NT_DR_V i_pad_dvdd_io_v_9 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVSS_18_18_NT_DR_H i_pad_dvss_io_h_0 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVSS_18_18_NT_DR_H i_pad_dvss_io_h_1 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVSS_18_18_NT_DR_V i_pad_dvss_io_v_0 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
@@ -100,6 +104,10 @@ module astral_padframe_periph_pads
    PDVSS_18_18_NT_DR_V i_pad_dvss_io_v_3 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVSS_18_18_NT_DR_V i_pad_dvss_io_v_4 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PDVSS_18_18_NT_DR_V i_pad_dvss_io_v_5 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
+   PDVSS_18_18_NT_DR_V i_pad_dvss_io_v_6 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
+   PDVSS_18_18_NT_DR_V i_pad_dvss_io_v_7 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
+   PDVSS_18_18_NT_DR_V i_pad_dvss_io_v_8 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
+   PDVSS_18_18_NT_DR_V i_pad_dvss_io_v_9 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVDD_08_08_NT_DR_H i_pad_vdd_core_h_0 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVDD_08_08_NT_DR_H i_pad_vdd_core_h_1 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVDD_08_08_NT_DR_H i_pad_vdd_core_h_2 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
@@ -773,7 +781,7 @@ module astral_padframe_periph_pads
    (* dont_touch *)
   PBIDIR_18_18_NT_DR_H i_spw_strb_in (
     .PO  (  ),
-    .Y   ( static_connection_signals_pad2soc.spw_srtb_i ),
+    .Y   ( static_connection_signals_pad2soc.spw_strb_i ),
     .PAD ( pad_spw_strb_in_pad ),
     .A   ( 1'b0 ),
     .DS0 ( 1'b0 ),
@@ -811,7 +819,7 @@ module astral_padframe_periph_pads
     .PO  (  ),
     .Y   (  ),
     .PAD ( pad_spw_strb_out_pad ),
-    .A   ( static_connection_signals_soc2pad.spw_srtb_o ),
+    .A   ( static_connection_signals_soc2pad.spw_strb_o ),
     .DS0 ( 1'b0 ),
     .DS1 ( 1'b0 ),
     .IE  ( 1'b0 ),

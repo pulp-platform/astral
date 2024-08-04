@@ -6,13 +6,13 @@ manifest_version: 3
 pad_domains:
   - name: periph
     pad_types:
-      - name: PDVDDTIE_18_18_NT_DR_H
+      - name: PDVDDTIE_18_18_NT_DR_V
         description: "gf12 pad, horizontal orientation, I/O power control tie"
         template: |
           wire io_pads_rto;
           wire io_pads_sns;
 
-          PDVDDTIE_18_18_NT_DR_H ${instance_name} (
+          PDVDDTIE_18_18_NT_DR_V ${instance_name} (
             .SNS( io_pads_sns ),
             .RTO( io_pads_rto )
           );
@@ -208,7 +208,7 @@ pad_domains:
 
       - name: pad_tie_io
         description: "I/O power control tie pad"
-        pad_type: PDVDDTIE_18_18_NT_DR_H
+        pad_type: PDVDDTIE_18_18_NT_DR_V
         is_static: true
 
 ########################################
@@ -222,7 +222,7 @@ pad_domains:
         is_static: true
 
       - name: pad_dvdd_io_v_{i}
-        multiple: 6
+        multiple: 10
         description: "I/O power domain vertical VDD pad"
         pad_type: PDVDD_18_18_NT_DR_V
         is_static: true
@@ -234,7 +234,7 @@ pad_domains:
         is_static: true
 
       - name: pad_dvss_io_v_{i}
-        multiple: 6
+        multiple: 10
         description: "I/O power domain vertical VSS pad"
         pad_type: PDVSS_18_18_NT_DR_V
         is_static: true
@@ -639,7 +639,7 @@ pad_domains:
         is_static: true
         connections:
           chip2pad: 1'b0
-          pad2chip: spw_srtb_i
+          pad2chip: spw_strb_i
           input_en: 1'b1
           output_en: 1'b0
           pull_en: 1'b0
@@ -662,7 +662,7 @@ pad_domains:
         pad_type: PBIDIR_18_18_NT_DR_H
         is_static: true
         connections:
-          chip2pad: spw_srtb_o
+          chip2pad: spw_strb_o
           #pad2chip
           input_en: 1'b0
           output_en: 1'b1

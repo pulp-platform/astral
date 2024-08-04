@@ -29,7 +29,7 @@ package pkg_astral_padframe;
       logic        jtag_ot_tdo_o;
       logic        jtag_tdo_o;
       logic        spw_data_o;
-      logic        spw_srtb_o;
+      logic        spw_strb_o;
       logic        uart_tx_o;
      } pad_domain_periph_static_connection_signals_soc2pad_t;
 
@@ -58,7 +58,7 @@ package pkg_astral_padframe;
       logic        ref_clk_i;
       logic        secure_boot_i;
       logic        spw_data_i;
-      logic        spw_srtb_i;
+      logic        spw_strb_i;
       logic        test_mode_i;
       logic        uart_rx_i;
      } pad_domain_periph_static_connection_signals_pad2soc_t;
