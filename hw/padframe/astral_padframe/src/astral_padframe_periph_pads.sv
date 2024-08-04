@@ -18,15 +18,15 @@ module astral_padframe_periph_pads
   inout wire logic pad_fll_rt_pad,
   inout wire logic pad_fll_bypass_pad,
   inout wire logic pad_pwr_on_rst_n_pad,
-  inout wire logic pad_test_mode_pad,
-  inout wire logic pad_boot_mode_0_pad,
-  inout wire logic pad_boot_mode_1_pad,
   inout wire logic pad_secure_boot_pad,
   inout wire logic pad_jtag_tclk_pad,
   inout wire logic pad_jtag_trst_n_pad,
   inout wire logic pad_jtag_tms_pad,
   inout wire logic pad_jtag_tdi_pad,
   inout wire logic pad_jtag_tdo_pad,
+  inout wire logic pad_test_mode_pad,
+  inout wire logic pad_boot_mode_0_pad,
+  inout wire logic pad_boot_mode_1_pad,
   inout wire logic pad_jtag_ot_tclk_pad,
   inout wire logic pad_jtag_ot_trst_ni_pad,
   inout wire logic pad_jtag_ot_tms_pad,
@@ -257,60 +257,6 @@ module astral_padframe_periph_pads
     .SR  ( 1'b0 )
   );
    (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_test_mode (
-    .PO  (  ),
-    .Y   ( static_connection_signals_pad2soc.test_mode_i ),
-    .PAD ( pad_test_mode_pad ),
-    .A   ( 1'b0 ),
-    .DS0 ( 1'b0 ),
-    .DS1 ( 1'b0 ),
-    .IE  ( 1'b1 ),
-    .IS  ( 1'b0 ),
-    .OE  ( 1'b0 ),
-    .PE  ( 1'b0 ),
-    .POE ( 1'b0 ),
-    .PS  ( 1'b0 ),
-    .RTO ( io_pads_rto ),
-    .SNS ( io_pads_sns ),
-    .SR  ( 1'b0 )
-  );
-   (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_boot_mode_0 (
-    .PO  (  ),
-    .Y   ( static_connection_signals_pad2soc.boot_mode_0_i ),
-    .PAD ( pad_boot_mode_0_pad ),
-    .A   ( 1'b0 ),
-    .DS0 ( 1'b0 ),
-    .DS1 ( 1'b0 ),
-    .IE  ( 1'b1 ),
-    .IS  ( 1'b0 ),
-    .OE  ( 1'b0 ),
-    .PE  ( 1'b0 ),
-    .POE ( 1'b0 ),
-    .PS  ( 1'b0 ),
-    .RTO ( io_pads_rto ),
-    .SNS ( io_pads_sns ),
-    .SR  ( 1'b0 )
-  );
-   (* dont_touch *)
-  PBIDIR_18_18_NT_DR_H i_boot_mode_1 (
-    .PO  (  ),
-    .Y   ( static_connection_signals_pad2soc.boot_mode_1_i ),
-    .PAD ( pad_boot_mode_1_pad ),
-    .A   ( 1'b0 ),
-    .DS0 ( 1'b0 ),
-    .DS1 ( 1'b0 ),
-    .IE  ( 1'b1 ),
-    .IS  ( 1'b0 ),
-    .OE  ( 1'b0 ),
-    .PE  ( 1'b0 ),
-    .POE ( 1'b0 ),
-    .PS  ( 1'b0 ),
-    .RTO ( io_pads_rto ),
-    .SNS ( io_pads_sns ),
-    .SR  ( 1'b0 )
-  );
-   (* dont_touch *)
   PBIDIR_18_18_NT_DR_H i_secure_boot (
     .PO  (  ),
     .Y   ( static_connection_signals_pad2soc.secure_boot_i ),
@@ -411,6 +357,60 @@ module astral_padframe_periph_pads
     .IE  ( 1'b0 ),
     .IS  ( 1'b0 ),
     .OE  ( 1'b1 ),
+    .PE  ( 1'b0 ),
+    .POE ( 1'b0 ),
+    .PS  ( 1'b0 ),
+    .RTO ( io_pads_rto ),
+    .SNS ( io_pads_sns ),
+    .SR  ( 1'b0 )
+  );
+   (* dont_touch *)
+  PBIDIR_18_18_NT_DR_H i_test_mode (
+    .PO  (  ),
+    .Y   ( static_connection_signals_pad2soc.test_mode_i ),
+    .PAD ( pad_test_mode_pad ),
+    .A   ( 1'b0 ),
+    .DS0 ( 1'b0 ),
+    .DS1 ( 1'b0 ),
+    .IE  ( 1'b1 ),
+    .IS  ( 1'b0 ),
+    .OE  ( 1'b0 ),
+    .PE  ( 1'b0 ),
+    .POE ( 1'b0 ),
+    .PS  ( 1'b0 ),
+    .RTO ( io_pads_rto ),
+    .SNS ( io_pads_sns ),
+    .SR  ( 1'b0 )
+  );
+   (* dont_touch *)
+  PBIDIR_18_18_NT_DR_H i_boot_mode_0 (
+    .PO  (  ),
+    .Y   ( static_connection_signals_pad2soc.boot_mode_0_i ),
+    .PAD ( pad_boot_mode_0_pad ),
+    .A   ( 1'b0 ),
+    .DS0 ( 1'b0 ),
+    .DS1 ( 1'b0 ),
+    .IE  ( 1'b1 ),
+    .IS  ( 1'b0 ),
+    .OE  ( 1'b0 ),
+    .PE  ( 1'b0 ),
+    .POE ( 1'b0 ),
+    .PS  ( 1'b0 ),
+    .RTO ( io_pads_rto ),
+    .SNS ( io_pads_sns ),
+    .SR  ( 1'b0 )
+  );
+   (* dont_touch *)
+  PBIDIR_18_18_NT_DR_H i_boot_mode_1 (
+    .PO  (  ),
+    .Y   ( static_connection_signals_pad2soc.boot_mode_1_i ),
+    .PAD ( pad_boot_mode_1_pad ),
+    .A   ( 1'b0 ),
+    .DS0 ( 1'b0 ),
+    .DS1 ( 1'b0 ),
+    .IE  ( 1'b1 ),
+    .IS  ( 1'b0 ),
+    .OE  ( 1'b0 ),
     .PE  ( 1'b0 ),
     .POE ( 1'b0 ),
     .PS  ( 1'b0 ),
