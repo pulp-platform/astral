@@ -421,6 +421,10 @@ module astral_wrap
     .init_no ()
   );
 
+`ifdef SYNTHESIS
+`define GF12_FLL
+`endif
+
 `ifdef GF12_FLL
   gf12_fll_wrap #(
     .NUM_FLL        ( 4                  ),
