@@ -6,7 +6,7 @@
 //
 // Author: Victor Isachi <victor.isachi@unibo.it>
 
-module PDVDDTIE_18_18_NT_DR_H (
+module PDVDDTIE_18_18_NT_DR_V (
    output logic SNS,
    output logic RTO
 );
@@ -14,7 +14,7 @@ module PDVDDTIE_18_18_NT_DR_H (
    assign SNS = 1'b1;
    assign RTO = 1'b1;
 
-endmodule: PDVDDTIE_18_18_NT_DR_H
+endmodule: PDVDDTIE_18_18_NT_DR_V
 
 module PVDD_08_08_NT_DR_H (
    input logic SNS,

@@ -57,6 +57,8 @@ ifeq ($(TECH_SIM), 1)
 	QUESTA_FLAGS += -suppress 13271
 ## TODO: this is a workaround to suppress sdf error! Fix it!
 	QUESTA_FLAGS += -sdfnoerror
+## TODO: this is a workaround to enable simulations with Thales IP! Fix this!
+	QUESTA_FLAGS += -suppress 1565
 endif
 ifdef DEBUG
 	VOPT_FLAGS := $(QUESTA_FLAGS) +acc

@@ -28,8 +28,9 @@ dependencies:
   common_cells:       { git: https://github.com/pulp-platform/common_cells.git,         version: 1.37.0                               } # branch: master        
   pulp-ethernet:      { git: https://github.com/pulp-platform/pulp-ethernet.git,        rev: 1f8f1776ec494773f8e6c48e16685eb35d5f445e } # branch: handshake
   riscv-dbg:          { git: https://github.com/pulp-platform/riscv-dbg.git,            version: =0.8.0                               }
-  streamer:           { git: git@gitlab.thalesdigital.io:musa/streamer.git,             rev: astral-2024-08-04                        }
-  spacewire:          { git: git@gitlab.thalesdigital.io:musa/spacewire.git,            rev: astral-2024-08-04                        }
+  pll_wrap:           { git: git@iis-git.ee.ethz.ch:carfield/pll_wrap_if.git,           version: 2.1.0                                }
+  streamer:           { path: "/usr/scratch2/lagrev5/mciani/astral-project/streamer"                                                  }
+  spacewire:          { path: "/usr/scratch2/lagrev5/mciani/astral-project/spacewire"                                                 }
 
 workspace:
   package_links:
@@ -137,7 +138,6 @@ sources:
 
   - target: tech_sim
     files:
-      # TODO: add technology dependent memory cells
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_128x40m2b1w0.v
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x32m2b1w1.v
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x39m4b1w0.v
@@ -154,7 +154,6 @@ sources:
       - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_2560x76m4b4w0.v
       - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_4096x76m4b4w0.v
       - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_16384x39m8b8w0.v
-      - tech/sourcecode/tc_clk.sv
       - tech/sourcecode/tc_sram.sv
       # FLL Model
       - tech/sourcecode/fll/rtl/FLL_digital/FLLPkg.vhd

@@ -695,6 +695,7 @@ module astral_fixture;
     .ClkPeriodSys  ( ClkPeriodRef ),
     .ClkPeriodJtag ( ClkPeriodJtag ),
     .RstCycles     ( RstCyclesVip ),
+    .ClkPeriodEth  ( ClkPeriodRef ),
     .TAppl         ( TAppl ),
     .TTest         ( TTest ),
     .NumAxiExtSlvPorts ( CarNumAxiExtSlvPorts ),

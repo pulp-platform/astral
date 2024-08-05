@@ -26,6 +26,7 @@ module vip_carfield_soc
   parameter time         ClkPeriodPeriph   = 2ns,
   parameter time         ClkPeriodJtag     = 20ns,
   parameter time         ClkPeriodRtc      = 30518ns,
+  parameter time         ClkPeriodEth      = ClkPeriodPeriph,
   parameter int unsigned RstCycles         = 5,
   parameter real         TAppl             = 0.1,
   parameter real         TTest             = 0.9,
