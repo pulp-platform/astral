@@ -14,10 +14,10 @@
 #include "car_util.h"
 #include "printf.h"
 
-#define FLL_HOST_ADDR     (0x20020000)
-#define FLL_PERIPH_ADDR   (0x20020020)
-#define FLL_ALT_ADDR      (0x20020040)
-#define FLL_RT_ADDR       (0x20020060)
+#define FLL_HOST_ADDR     (0x21003000)
+#define FLL_PERIPH_ADDR   (0x21003020)
+#define FLL_ALT_ADDR      (0x21003040)
+#define FLL_RT_ADDR       (0x21003060)
 
 #define FLL_STATUS_REG_I  (0x00)
 #define FLL_CONFIG_REG_I  (0x08)
