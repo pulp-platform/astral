@@ -20,4 +20,4 @@ overrides:
   axi_rt:               { git: "https://github.com/pulp-platform/axi_rt.git"              , version: =0.0.0-alpha.8                         }
   register_interface:   { git: "https://github.com/pulp-platform/register_interface.git"  , version: 0.4.4                                  }
   common_cells:         { git: "https://github.com/pulp-platform/common_cells.git"        , version: 1.37.0                                 } # branch: master
-
+  riscv-iommu:          { git: "https://github.com/zero-day-labs/riscv-iommu.git"         , rev: c1dea3732d0d05e5659b31773e43f3364bc866fc   } # branch: pulp
