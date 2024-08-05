@@ -387,7 +387,7 @@ car-check-litmus-tests: $(LITMUS_WORK_DIR)/litmus.log
 ##############
 tech-repo := git@iis-git.ee.ethz.ch:Astral/gf12.git
 # no commit by default, change during development
-tech-commit := fdb28aed61aa113a897c6840674ec9033eb1f2ed # branch: zx/ecc_llc_256x39
+tech-commit := bb7419218546388667f67b699c2054a40c435030 # branch: lg/top_synth
 
 tech-clone:
 	git clone $(tech-repo) tech
