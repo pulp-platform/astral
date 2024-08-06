@@ -875,120 +875,6 @@ module astral_fixture;
     assign bootmode_secd = '0;
   end
 
-  /////////////////////////
-  // PLL JTAG verif      //
-  /////////////////////////
-
-  localparam time ClkPeriodPllJtag  = ClkPeriodRef * 2;
-  localparam int PLL_JTAG_IR_BYPASS = 'h0;
-  localparam int PLL_JTAG_IR_IDCODE = 'h1;
-  localparam int PLL_JTAG_IR_PLLREG = 'h10;
-
-  // Generate clock for JTAG
-  clk_rst_gen #(
-    .ClkPeriod    ( ClkPeriodPllJtag ),
-    .RstClkCycles ( RstCyclesVip        )
-  ) i_clk_jtag (
-    .clk_o  ( jtag_pll_tck ),
-    .rst_no ( )
-  );
-
-  VJTAG_DV vjtag_pll(jtag_pll_tck);
-
-  typedef vjtag_test::vjtag_driver #(
-    .IrLength( 5                        ),
-    .IrIDCODE( PLL_JTAG_IR_IDCODE       ),
-    .TA      ( ClkPeriodPllJtag * TAppl ),
-    .TT      ( ClkPeriodPllJtag * TTest )
-  ) vjtag_driver_t;
-
-  vjtag_driver_t vjtag_pll_dv = new(vjtag_pll);
-
-  initial begin
-    vjtag_pll_dv.reset_master();
-  end
-
-  assign jtag_pll_trst_n = vjtag_pll.trst_n;
-  assign jtag_pll_tms = vjtag_pll.tms;
-  assign jtag_pll_tdi = vjtag_pll.tdi;
-  assign vjtag_pll.tdo = jtag_pll_tdo;
-
-
-  /////////////////////////
-  // Carfield chip tasks //
-  /////////////////////////
-
-  // PLL bypass mode
-  task set_bypass_pll(input logic bypass);
-    bypass_pll = bypass;
-  endtask
-
-  task set_secure_boot(input logic sb);
-    secure_boot = sb;
-  endtask // set_secure_boot
-
-  // PLL frequency meters
-  localparam MaxSample = 1024;
-  logic [NumPlls-1:0] print_freq_debug_signals, print_freq_pll_out;
-  real  sampled_freq_debug_signals [NumPlls-1:0];
-  real  sampled_freq_pll_out [NumPlls-1:0];
-
-  for(genvar p=0; p<NumPlls; p++) begin
-    freq_meter #(
-      .MAX_SAMPLE ( MaxSample )
-    ) i_freq_meter_debug_signals (
-      .clk        ( debug_signals[p]),
-      .print_freq ( print_freq_debug_signals[p]   ),
-      .freq       ( sampled_freq_debug_signals[p] )
-    );
-
-    //TODO: how should this be managed??? PLL, FLL???
-    // freq_meter #(
-    //   .MAX_SAMPLE ( MaxSample )
-    // ) i_freq_meter_pll_out (
-    //   .clk        ( i_dut.i_pll.clkpll_o[p] ),
-    //   .print_freq ( print_freq_pll_out[p]   ),
-    //   .freq       ( sampled_freq_pll_out[p] )
-    // );
-  end
-
-  task sample_freq_debug_signals ();
-     for(int i=0; i<NumPlls; i++) begin
-         repeat(MaxSample*2)
-           @(posedge debug_signals[i]);
-
-         @(posedge print_freq_debug_signals[i]);
-
-         $display("Sampling debug signal %d. Measured frequency: %f MHz\n", i, sampled_freq_debug_signals[i]*10);
-     end
-  endtask
-
-  //TODO: how should this be managed??? PLL, FLL???
-  // task sample_freq_pll_out ();
-  //    for(int i=0; i<NumPlls; i++) begin
-  //        repeat(MaxSample*2)
-  //          @(posedge  i_dut.i_pll.clkpll_o[i]);
-
-  //        @(posedge print_freq_pll_out[i]);
-
-  //        $display("Sampling PLL output %d. Measured frequency: %f MHz\n", i, sampled_freq_pll_out[i]*10);
-  //    end
-  // endtask
-
-  task check_freq_pll_out (
-    input real sampled_freq_pll_out,
-    input int  desired_freq
-  );
-     real     diff_freq;
-     diff_freq = sampled_freq_pll_out - real'(desired_freq);
-     diff_freq = (diff_freq/sampled_freq_pll_out)*100;
-
-     if((diff_freq < -5) | (diff_freq > 5))
-       $fatal(1,"More than 5 percent of difference between actual and desired frequency! %f vs %d", sampled_freq_pll_out, desired_freq);
-     else
-       $display("Desired: %f actual: %d", desired_freq, sampled_freq_pll_out);
-  endtask
-
   ///////////////////
   // Generic tasks //
   ///////////////////
@@ -1002,6 +888,10 @@ module astral_fixture;
     end
 `endif
   endtask
+
+  task set_secure_boot(input logic sb);
+    secure_boot = sb;
+  endtask // set_secure_boot
 
   task automatic slink_read_reg(
     input doub_bt addr,

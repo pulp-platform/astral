@@ -555,10 +555,10 @@ packages:
     - hwpe-stream
     - ibex
   spacewire:
-    revision: 995c5cf2a519f1912283b5cef3abef594b99528a
+    revision: ~
     version: null
     source:
-      Git: git@gitlab.thalesdigital.io:musa/spacewire.git
+      Path: /usr/scratch2/lagrev5/mciani/astral-project/spacewire
     dependencies: []
   spatz:
     revision: 98de97f24fe42675c9b4a8cc08354a03af57400a
@@ -575,10 +575,10 @@ packages:
     - riscv-dbg
     - tech_cells_generic
   streamer:
-    revision: 1ccfb3190137c60b21580912b9cc9b9ea00b779a
+    revision: ~
     version: null
     source:
-      Git: git@gitlab.thalesdigital.io:musa/streamer.git
+      Path: /usr/scratch2/lagrev5/mciani/astral-project/streamer
     dependencies: []
   tagger:
     revision: b288376b65b6bbd5feea196bb3c220f783d96e29

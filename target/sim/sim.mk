@@ -45,6 +45,10 @@ TASI_LIB += vmap TASI_generic_Lib $ROOT/working_dir/streamer/TASI_generic_Lib
 ## @section Questasim simulator target
 
 QUESTA_FLAGS := -permissive -suppress 3009 -suppress 8386 -error 7 +UVM_NO_RELNOTES
+
+## TODO: this is a workaround to enable simulations with Thales IP! Fix this!
+QUESTA_FLAGS += -suppress 1565
+
 ifeq ($(TECH_SIM), 1)
 	# Technological memory macros have the checks on hold/setup violations encapsulated
 	# within a 'specify' Questa directive. For this reason, to run simulations of the

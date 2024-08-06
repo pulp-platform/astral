@@ -212,8 +212,8 @@ typedef struct packed {
   byte_bt pcrs;
   byte_bt pll;
   byte_bt padframe;
-  byte_bt l2ecc;
   byte_bt ethernet;
+  byte_bt l2ecc;
 } carfield_regbus_slave_idx_t;
 
 // Generate the number of AXI slave devices to be connected to the
