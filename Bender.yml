@@ -28,6 +28,7 @@ dependencies:
   common_cells:       { git: https://github.com/pulp-platform/common_cells.git,         version: 1.37.0                               } # branch: master        
   pulp-ethernet:      { git: https://github.com/pulp-platform/pulp-ethernet.git,        rev: 1f8f1776ec494773f8e6c48e16685eb35d5f445e } # branch: handshake
   riscv-dbg:          { git: https://github.com/pulp-platform/riscv-dbg.git,            version: =0.8.0                               }
+  pll_wrap:           { git: git@iis-git.ee.ethz.ch:carfield/pll_wrap_if.git,           version: 2.1.0                                }
 
 workspace:
   package_links:
@@ -133,17 +134,19 @@ sources:
     files:
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_128x40m2b1w0.v
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x32m2b1w1.v
+      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x39m4b1w0.v
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x44m2b1w1.v
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x46m2b1w1.v
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x64m2b1w1.v
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x128m2b1w1.v
+      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_1024x39m4b1w0.v
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_512x39m4b1w0.v
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_1024x64m4b1w1.v
       - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_128x264m1b1w0.v
+      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_1024x39m4b1w0.v
       - tech/sourcecode/macros/sram_dp_hse_rvt_mvt_16384x8m16b8w1.v
       - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_2560x76m4b4w0.v
       - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_4096x76m4b4w0.v
-      - tech/sourcecode/tc_clk.sv
       - tech/sourcecode/tc_sram.sv
       # FLL Model
       - tech/sourcecode/fll/rtl/FLL_digital/FLLPkg.vhd
