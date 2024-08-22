@@ -7,7 +7,7 @@ overrides:
   axi_riscv_atomics:    { git: https://github.com/pulp-platform/axi_riscv_atomics.git     , rev: 46d567cad5a614a82778702d48b3a789aed7711b } # branch: astral
   apb:                  { git: "https://github.com/pulp-platform/apb.git"                 , version: 0.2.3 }
   redundancy_cells:     { git: "https://github.com/pulp-platform/redundancy_cells.git"    , rev: "9e31f7c6c24877eaf58279903e7a162b16c9a721" } # branch: astral-v0
-  hci:                  { git: "https://github.com/pulp-platform/hci.git"                 , version: 2.1.1 }
+  hci:                  { git: "https://github.com/pulp-platform/hci.git"                 , rev: "38fc2a7eea7978df52434e66ee04a40788fd86b7" } # branch: lg/ecc_rebase_v2.1.1
   tech_cells_generic:   { git: "https://github.com/pulp-platform/tech_cells_generic.git"  , version: =0.2.13                                }
   riscv-dbg:            { git: "https://github.com/pulp-platform/riscv-dbg.git"           , version: =0.8.0                                 }
   idma:                 { git: "https://github.com/pulp-platform/idma.git"                , version: 0.6.2 }
