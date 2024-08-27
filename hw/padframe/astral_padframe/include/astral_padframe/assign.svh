@@ -77,10 +77,10 @@
   assign load.i2c_sda_i = driver.i2c_sda_i; \
 
 `define ASSIGN_PERIPH_I2C_SOC2PAD(load, driver) \
-  assign load.i2c_scl_en_o = driver.i2c_scl_en_o; \
   assign load.i2c_scl_o = driver.i2c_scl_o; \
-  assign load.i2c_sda_en_o = driver.i2c_sda_en_o; \
+  assign load.i2c_scl_oen_i = driver.i2c_scl_oen_i; \
   assign load.i2c_sda_o = driver.i2c_sda_o; \
+  assign load.i2c_sda_oen_i = driver.i2c_sda_oen_i; \
 
 `define ASSIGN_PERIPH_TC_PAD2SOC(load, driver) \
   assign load.tc_active_i = driver.tc_active_i; \

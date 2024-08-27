@@ -1041,66 +1041,26 @@ pad_domains:
         description: "I2C"
         output_defaults: 1'b0
         ports:
-          - name: sda_o
+          - name: sda
             mux_groups: [muxed_v_00]
-            description: "I2C sda out"
+            description: "I2C sda in/out"
             connections:
               chip2pad: i2c_sda_o
-              #pad2chip
-              input_en: 1'b0
-              output_en: 1'b1
-              #pull_en: i2c_sda_o_pen_i
-              #pull_sel: i2c_sda_o_psel_i
-          - name: sda_i
-            mux_groups: [muxed_v_01]
-            description: "I2C sda in"
-            connections:
-              #chip2pad
               i2c_sda_i: pad2chip
-              input_en: 1'b1
-              output_en: 1'b0
-              #pull_en: i2c_sda_i_pen_i
-              #pull_sel: i2c_sda_i_psel_i
-          - name: sda_en
-            mux_groups: [muxed_v_02]
-            description: "I2C sda_en out"
-            connections:
-              chip2pad: i2c_sda_en_o
-              #pad2chip
-              input_en: 1'b0
-              output_en: 1'b1
-              #pull_en: i2c_sda_en_pen_i
-              #pull_sel: i2c_sda_en_psel_i
-          - name: scl_o
-            mux_groups: [muxed_v_03]
-            description: "I2C scl out"
+              input_en: ~i2c_sda_oen_i
+              output_en: i2c_sda_oen_i
+              #pull_en: i2c_sda_pen_i
+              #pull_sel: i2c_sda_psel_i
+          - name: scl
+            mux_groups: [muxed_v_01]
+            description: "I2C scl in/out"
             connections:
               chip2pad: i2c_scl_o
-              #pad2chip
-              input_en: 1'b0
-              output_en: 1'b1
-              #pull_en: i2c_scl_o_pen_i
-              #pull_sel: i2c_scl_o_psel_i
-          - name: scl_i
-            mux_groups: [muxed_v_04]
-            description: "I2C scl in"
-            connections:
-              #chip2pad
               i2c_scl_i: pad2chip
-              input_en: 1'b1
-              output_en: 1'b0
-              #pull_en: i2c_scl_i_pen_i
-              #pull_sel: i2c_scl_i_psel_i
-          - name: scl_en
-            mux_groups: [muxed_v_05]
-            description: "I2C scl_en out"
-            connections:
-              chip2pad: i2c_scl_en_o
-              #pad2chip
-              input_en: 1'b0
-              output_en: 1'b1
-              #pull_en: i2c_scl_en_pen_i
-              #pull_sel: i2c_scl_en_psel_i
+              input_en: ~i2c_scl_oen_i
+              output_en: i2c_scl_oen_i
+              #pull_en: i2c_scl_pen_i
+              #pull_sel: i2c_scl_psel_i
 
       - name: tc
         description: "TC"

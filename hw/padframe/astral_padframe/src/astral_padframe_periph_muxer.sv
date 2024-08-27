@@ -60,10 +60,10 @@ module astral_padframe_periph_muxer
           mux_to_pads_o.muxed_v_00.pull_en = s_reg2hw.muxed_v_00_cfg.pull_en.q;
           mux_to_pads_o.muxed_v_00.pull_sel = s_reg2hw.muxed_v_00_cfg.pull_sel.q;
        end
-       PAD_MUX_GROUP_MUXED_V_00_SEL_I2C_SDA_O: begin
+       PAD_MUX_GROUP_MUXED_V_00_SEL_I2C_SDA: begin
           mux_to_pads_o.muxed_v_00.chip2pad = port_signals_soc2pad_i.i2c.i2c_sda_o;
-          mux_to_pads_o.muxed_v_00.input_en = 1'b0;
-          mux_to_pads_o.muxed_v_00.output_en = 1'b1;
+          mux_to_pads_o.muxed_v_00.input_en = ~port_signals_soc2pad_i.i2c.i2c_sda_oen_i;
+          mux_to_pads_o.muxed_v_00.output_en = port_signals_soc2pad_i.i2c.i2c_sda_oen_i;
           mux_to_pads_o.muxed_v_00.pull_en = s_reg2hw.muxed_v_00_cfg.pull_en.q;
           mux_to_pads_o.muxed_v_00.pull_sel = s_reg2hw.muxed_v_00_cfg.pull_sel.q;
        end
@@ -115,10 +115,10 @@ module astral_padframe_periph_muxer
           mux_to_pads_o.muxed_v_01.pull_en = s_reg2hw.muxed_v_01_cfg.pull_en.q;
           mux_to_pads_o.muxed_v_01.pull_sel = s_reg2hw.muxed_v_01_cfg.pull_sel.q;
        end
-       PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SDA_I: begin
-          mux_to_pads_o.muxed_v_01.chip2pad = s_reg2hw.muxed_v_01_cfg.chip2pad.q;
-          mux_to_pads_o.muxed_v_01.input_en = 1'b1;
-          mux_to_pads_o.muxed_v_01.output_en = 1'b0;
+       PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SCL: begin
+          mux_to_pads_o.muxed_v_01.chip2pad = port_signals_soc2pad_i.i2c.i2c_scl_o;
+          mux_to_pads_o.muxed_v_01.input_en = ~port_signals_soc2pad_i.i2c.i2c_scl_oen_i;
+          mux_to_pads_o.muxed_v_01.output_en = port_signals_soc2pad_i.i2c.i2c_scl_oen_i;
           mux_to_pads_o.muxed_v_01.pull_en = s_reg2hw.muxed_v_01_cfg.pull_en.q;
           mux_to_pads_o.muxed_v_01.pull_sel = s_reg2hw.muxed_v_01_cfg.pull_sel.q;
        end
@@ -163,13 +163,6 @@ module astral_padframe_periph_muxer
           mux_to_pads_o.muxed_v_02.pull_en = s_reg2hw.muxed_v_02_cfg.pull_en.q;
           mux_to_pads_o.muxed_v_02.pull_sel = s_reg2hw.muxed_v_02_cfg.pull_sel.q;
        end
-       PAD_MUX_GROUP_MUXED_V_02_SEL_I2C_SDA_EN: begin
-          mux_to_pads_o.muxed_v_02.chip2pad = port_signals_soc2pad_i.i2c.i2c_sda_en_o;
-          mux_to_pads_o.muxed_v_02.input_en = 1'b0;
-          mux_to_pads_o.muxed_v_02.output_en = 1'b1;
-          mux_to_pads_o.muxed_v_02.pull_en = s_reg2hw.muxed_v_02_cfg.pull_en.q;
-          mux_to_pads_o.muxed_v_02.pull_sel = s_reg2hw.muxed_v_02_cfg.pull_sel.q;
-       end
        PAD_MUX_GROUP_MUXED_V_02_SEL_SPI_OT_SD_0: begin
           mux_to_pads_o.muxed_v_02.chip2pad = port_signals_soc2pad_i.spi_ot.spih_ot_sd_0_o;
           mux_to_pads_o.muxed_v_02.input_en = ~port_signals_soc2pad_i.spi_ot.spih_ot_sd_0_oen_i;
@@ -208,13 +201,6 @@ module astral_padframe_periph_muxer
           mux_to_pads_o.muxed_v_03.chip2pad = port_signals_soc2pad_i.spi.spih_sd_0_o;
           mux_to_pads_o.muxed_v_03.input_en = ~port_signals_soc2pad_i.spi.spih_sd_0_oen_i;
           mux_to_pads_o.muxed_v_03.output_en = port_signals_soc2pad_i.spi.spih_sd_0_oen_i;
-          mux_to_pads_o.muxed_v_03.pull_en = s_reg2hw.muxed_v_03_cfg.pull_en.q;
-          mux_to_pads_o.muxed_v_03.pull_sel = s_reg2hw.muxed_v_03_cfg.pull_sel.q;
-       end
-       PAD_MUX_GROUP_MUXED_V_03_SEL_I2C_SCL_O: begin
-          mux_to_pads_o.muxed_v_03.chip2pad = port_signals_soc2pad_i.i2c.i2c_scl_o;
-          mux_to_pads_o.muxed_v_03.input_en = 1'b0;
-          mux_to_pads_o.muxed_v_03.output_en = 1'b1;
           mux_to_pads_o.muxed_v_03.pull_en = s_reg2hw.muxed_v_03_cfg.pull_en.q;
           mux_to_pads_o.muxed_v_03.pull_sel = s_reg2hw.muxed_v_03_cfg.pull_sel.q;
        end
@@ -266,13 +252,6 @@ module astral_padframe_periph_muxer
           mux_to_pads_o.muxed_v_04.pull_en = s_reg2hw.muxed_v_04_cfg.pull_en.q;
           mux_to_pads_o.muxed_v_04.pull_sel = s_reg2hw.muxed_v_04_cfg.pull_sel.q;
        end
-       PAD_MUX_GROUP_MUXED_V_04_SEL_I2C_SCL_I: begin
-          mux_to_pads_o.muxed_v_04.chip2pad = s_reg2hw.muxed_v_04_cfg.chip2pad.q;
-          mux_to_pads_o.muxed_v_04.input_en = 1'b1;
-          mux_to_pads_o.muxed_v_04.output_en = 1'b0;
-          mux_to_pads_o.muxed_v_04.pull_en = s_reg2hw.muxed_v_04_cfg.pull_en.q;
-          mux_to_pads_o.muxed_v_04.pull_sel = s_reg2hw.muxed_v_04_cfg.pull_sel.q;
-       end
        PAD_MUX_GROUP_MUXED_V_04_SEL_SPI_OT_SD_2: begin
           mux_to_pads_o.muxed_v_04.chip2pad = port_signals_soc2pad_i.spi_ot.spih_ot_sd_2_o;
           mux_to_pads_o.muxed_v_04.input_en = ~port_signals_soc2pad_i.spi_ot.spih_ot_sd_2_oen_i;
@@ -318,13 +297,6 @@ module astral_padframe_periph_muxer
           mux_to_pads_o.muxed_v_05.chip2pad = s_reg2hw.muxed_v_05_cfg.chip2pad.q;
           mux_to_pads_o.muxed_v_05.input_en = 1'b1;
           mux_to_pads_o.muxed_v_05.output_en = 1'b0;
-          mux_to_pads_o.muxed_v_05.pull_en = s_reg2hw.muxed_v_05_cfg.pull_en.q;
-          mux_to_pads_o.muxed_v_05.pull_sel = s_reg2hw.muxed_v_05_cfg.pull_sel.q;
-       end
-       PAD_MUX_GROUP_MUXED_V_05_SEL_I2C_SCL_EN: begin
-          mux_to_pads_o.muxed_v_05.chip2pad = port_signals_soc2pad_i.i2c.i2c_scl_en_o;
-          mux_to_pads_o.muxed_v_05.input_en = 1'b0;
-          mux_to_pads_o.muxed_v_05.output_en = 1'b1;
           mux_to_pads_o.muxed_v_05.pull_en = s_reg2hw.muxed_v_05_cfg.pull_en.q;
           mux_to_pads_o.muxed_v_05.pull_sel = s_reg2hw.muxed_v_05_cfg.pull_sel.q;
        end
@@ -1863,13 +1835,12 @@ module astral_padframe_periph_muxer
 
   // Port Group i2c
 
-
   // Port Signal i2c_sda_i
   logic [0:0] port_mux_sel_i2c_i2c_sda_i_req;
-  logic [PORT_MUX_GROUP_MUXED_V_01_SEL_WIDTH-1:0] port_mux_sel_i2c_i2c_sda_i_arbitrated;
+  logic [PORT_MUX_GROUP_MUXED_V_00_SEL_WIDTH-1:0] port_mux_sel_i2c_i2c_sda_i_arbitrated;
   logic port_mux_sel_i2c_i2c_sda_i_no_connection;
 
-   assign port_mux_sel_i2c_i2c_sda_i_req[PORT_MUX_GROUP_MUXED_V_01_SEL_MUXED_V_01] = s_reg2hw.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SDA_I ? 1'b1 : 1'b0;
+   assign port_mux_sel_i2c_i2c_sda_i_req[PORT_MUX_GROUP_MUXED_V_00_SEL_MUXED_V_00] = s_reg2hw.muxed_v_00_mux_sel.q == PAD_MUX_GROUP_MUXED_V_00_SEL_I2C_SDA ? 1'b1 : 1'b0;
 
    lzc #(
      .WIDTH(1),
@@ -1885,8 +1856,8 @@ module astral_padframe_periph_muxer
         port_signals_pad2soc_o.i2c.i2c_sda_i = 1'b0;
      end else begin
         unique case (port_mux_sel_i2c_i2c_sda_i_arbitrated)
-          PORT_MUX_GROUP_MUXED_V_01_SEL_MUXED_V_01: begin
-            port_signals_pad2soc_o.i2c.i2c_sda_i = pads_to_mux_i.muxed_v_01.pad2chip;
+          PORT_MUX_GROUP_MUXED_V_00_SEL_MUXED_V_00: begin
+            port_signals_pad2soc_o.i2c.i2c_sda_i = pads_to_mux_i.muxed_v_00.pad2chip;
           end
           default: begin
             port_signals_pad2soc_o.i2c.i2c_sda_i = 1'b0;
@@ -1896,14 +1867,12 @@ module astral_padframe_periph_muxer
    end
 
 
-
-
   // Port Signal i2c_scl_i
   logic [0:0] port_mux_sel_i2c_i2c_scl_i_req;
-  logic [PORT_MUX_GROUP_MUXED_V_04_SEL_WIDTH-1:0] port_mux_sel_i2c_i2c_scl_i_arbitrated;
+  logic [PORT_MUX_GROUP_MUXED_V_01_SEL_WIDTH-1:0] port_mux_sel_i2c_i2c_scl_i_arbitrated;
   logic port_mux_sel_i2c_i2c_scl_i_no_connection;
 
-   assign port_mux_sel_i2c_i2c_scl_i_req[PORT_MUX_GROUP_MUXED_V_04_SEL_MUXED_V_04] = s_reg2hw.muxed_v_04_mux_sel.q == PAD_MUX_GROUP_MUXED_V_04_SEL_I2C_SCL_I ? 1'b1 : 1'b0;
+   assign port_mux_sel_i2c_i2c_scl_i_req[PORT_MUX_GROUP_MUXED_V_01_SEL_MUXED_V_01] = s_reg2hw.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SCL ? 1'b1 : 1'b0;
 
    lzc #(
      .WIDTH(1),
@@ -1919,8 +1888,8 @@ module astral_padframe_periph_muxer
         port_signals_pad2soc_o.i2c.i2c_scl_i = 1'b0;
      end else begin
         unique case (port_mux_sel_i2c_i2c_scl_i_arbitrated)
-          PORT_MUX_GROUP_MUXED_V_04_SEL_MUXED_V_04: begin
-            port_signals_pad2soc_o.i2c.i2c_scl_i = pads_to_mux_i.muxed_v_04.pad2chip;
+          PORT_MUX_GROUP_MUXED_V_01_SEL_MUXED_V_01: begin
+            port_signals_pad2soc_o.i2c.i2c_scl_i = pads_to_mux_i.muxed_v_01.pad2chip;
           end
           default: begin
             port_signals_pad2soc_o.i2c.i2c_scl_i = 1'b0;
@@ -1928,7 +1897,6 @@ module astral_padframe_periph_muxer
        endcase
      end
    end
-
 
   // Port Group tc
 

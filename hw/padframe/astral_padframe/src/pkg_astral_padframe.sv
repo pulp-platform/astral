@@ -142,10 +142,10 @@ package pkg_astral_padframe;
      } pad_domain_periph_port_group_serial_link_pad2soc_t;
 
    typedef struct packed {
-      logic        i2c_scl_en_o;
       logic        i2c_scl_o;
-      logic        i2c_sda_en_o;
+      logic        i2c_scl_oen_i;
       logic        i2c_sda_o;
+      logic        i2c_sda_oen_i;
      } pad_domain_periph_port_group_i2c_soc2pad_t;
 
    typedef struct packed {

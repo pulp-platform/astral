@@ -351,7 +351,7 @@ package pkg_internal_astral_padframe_periph;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_00_SEL_DEFAULT = 3'd0;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_00_SEL_CAN_RX = 3'd1;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_00_SEL_GPIO_IO_V_0 = 3'd2;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_00_SEL_I2C_SDA_O = 3'd3;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_00_SEL_I2C_SDA = 3'd3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_00_SEL_SPI_SCK = 3'd4;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_00_SEL_SPI_OT_SCK = 3'd5;
 
@@ -359,39 +359,35 @@ package pkg_internal_astral_padframe_periph;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_01_SEL_DEFAULT = 3'd0;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_01_SEL_CAN_TX = 3'd1;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_01_SEL_GPIO_IO_V_1 = 3'd2;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SDA_I = 3'd3;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SCL = 3'd3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_01_SEL_SPI_CSB_0 = 3'd4;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_01_SEL_SPI_OT_CSB = 3'd5;
 
-  parameter PAD_MUX_GROUP_MUXED_V_02_SEL_WIDTH = 3;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_02_SEL_DEFAULT = 3'd0;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_02_SEL_GPIO_IO_V_2 = 3'd1;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_02_SEL_I2C_SDA_EN = 3'd2;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_02_SEL_SPI_CSB_1 = 3'd3;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_02_SEL_SPI_OT_SD_0 = 3'd4;
+  parameter PAD_MUX_GROUP_MUXED_V_02_SEL_WIDTH = 2;
+  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_02_SEL_DEFAULT = 2'd0;
+  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_02_SEL_GPIO_IO_V_2 = 2'd1;
+  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_02_SEL_SPI_CSB_1 = 2'd2;
+  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_02_SEL_SPI_OT_SD_0 = 2'd3;
 
-  parameter PAD_MUX_GROUP_MUXED_V_03_SEL_WIDTH = 3;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_03_SEL_DEFAULT = 3'd0;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_03_SEL_GPIO_IO_V_3 = 3'd1;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_03_SEL_I2C_SCL_O = 3'd2;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_03_SEL_SPI_SD_0 = 3'd3;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_03_SEL_SPI_OT_SD_1 = 3'd4;
+  parameter PAD_MUX_GROUP_MUXED_V_03_SEL_WIDTH = 2;
+  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_03_SEL_DEFAULT = 2'd0;
+  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_03_SEL_GPIO_IO_V_3 = 2'd1;
+  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_03_SEL_SPI_SD_0 = 2'd2;
+  parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_03_SEL_SPI_OT_SD_1 = 2'd3;
 
   parameter PAD_MUX_GROUP_MUXED_V_04_SEL_WIDTH = 3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_DEFAULT = 3'd0;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_GPIO_IO_V_4 = 3'd1;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_I2C_SCL_I = 3'd2;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_SERIAL_LINK_RCV_CLK_I = 3'd3;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_SPI_SD_1 = 3'd4;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_SPI_OT_SD_2 = 3'd5;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_SERIAL_LINK_RCV_CLK_I = 3'd2;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_SPI_SD_1 = 3'd3;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_04_SEL_SPI_OT_SD_2 = 3'd4;
 
   parameter PAD_MUX_GROUP_MUXED_V_05_SEL_WIDTH = 3;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_DEFAULT = 3'd0;
   parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_GPIO_IO_V_5 = 3'd1;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_I2C_SCL_EN = 3'd2;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_SERIAL_LINK_I_0 = 3'd3;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_SPI_SD_2 = 3'd4;
-  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_SPI_OT_SD_3 = 3'd5;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_SERIAL_LINK_I_0 = 3'd2;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_SPI_SD_2 = 3'd3;
+  parameter logic[2:0] PAD_MUX_GROUP_MUXED_V_05_SEL_SPI_OT_SD_3 = 3'd4;
 
   parameter PAD_MUX_GROUP_MUXED_V_06_SEL_WIDTH = 2;
   parameter logic[1:0] PAD_MUX_GROUP_MUXED_V_06_SEL_DEFAULT = 2'd0;

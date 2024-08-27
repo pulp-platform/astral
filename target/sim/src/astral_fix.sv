@@ -160,12 +160,8 @@ module astral_fixture;
   wire                                w_uart_secd_tx;
   wire                                w_uart_secd_rx;
   // I2C (hostd)
-  wire                                w_i2c_hostd_sda_i;
-  wire                                w_i2c_hostd_sda_o;
-  wire                                w_i2c_hostd_sda_en;
-  wire                                w_i2c_hostd_scl_i;
-  wire                                w_i2c_hostd_scl_o;
-  wire                                w_i2c_hostd_scl_en;
+  wire                                w_i2c_hostd_sda;
+  wire                                w_i2c_hostd_scl;
   // CAN
   wire                                w_can_tx;
   wire                                w_can_rx;
@@ -259,12 +255,8 @@ module astral_fixture;
   logic                               mux_1_slink_5_o;
   logic                               mux_1_slink_6_o;
   logic                               mux_1_slink_7_o;
-  logic                               mux_2_i2c_sda_o;
-  logic                               mux_2_i2c_sda_i;
-  logic                               mux_2_i2c_sda_en;
-  logic                               mux_2_i2c_scl_o;
-  logic                               mux_2_i2c_scl_i;
-  logic                               mux_2_i2c_scl_en;
+  logic                               mux_2_i2c_sda;
+  logic                               mux_2_i2c_scl;
   logic                               mux_3_spih_ot_sck;
   logic                               mux_3_spih_ot_csb;
   logic                               mux_3_spih_ot_sd_0;
@@ -570,22 +562,10 @@ module astral_fixture;
   tranif1 tran_slink_6_o (w_muxed_h_02, w_slink_hostd_to_vip[6], mux_1_slink_6_o);
   tranif1 tran_slink_7_o (w_muxed_h_03, w_slink_hostd_to_vip[7], mux_1_slink_7_o);
   // I2C
-  assign mux_2_i2c_sda_o = (`PAD_MUX_REG_PATH.muxed_v_00_mux_sel.q == PAD_MUX_GROUP_MUXED_V_00_SEL_I2C_SDA_O);
-  assign mux_2_i2c_sda_i = (`PAD_MUX_REG_PATH.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SDA_I);
-  assign mux_2_i2c_sda_en = (`PAD_MUX_REG_PATH.muxed_v_02_mux_sel.q == PAD_MUX_GROUP_MUXED_V_02_SEL_I2C_SDA_EN);
-  assign mux_2_i2c_scl_o = (`PAD_MUX_REG_PATH.muxed_v_03_mux_sel.q == PAD_MUX_GROUP_MUXED_V_03_SEL_I2C_SCL_O);
-  assign mux_2_i2c_scl_i = (`PAD_MUX_REG_PATH.muxed_v_04_mux_sel.q == PAD_MUX_GROUP_MUXED_V_04_SEL_I2C_SCL_I);
-  assign mux_2_i2c_scl_en = (`PAD_MUX_REG_PATH.muxed_v_05_mux_sel.q == PAD_MUX_GROUP_MUXED_V_05_SEL_I2C_SCL_EN);
-  tranif1 tran_i2c_sda_o (w_muxed_v_00, w_i2c_hostd_sda_o, mux_2_i2c_sda_o);
-  tranif1 tran_i2c_sda_i (w_muxed_v_01, w_i2c_hostd_sda_i, mux_2_i2c_sda_i);
-  tranif1 tran_i2c_sda_en (w_muxed_v_02, w_i2c_hostd_sda_en, mux_2_i2c_sda_en);
-  tranif1 tran_i2c_scl_o (w_muxed_v_03, w_i2c_hostd_scl_o, mux_2_i2c_scl_o);
-  tranif1 tran_i2c_scl_i (w_muxed_v_04, w_i2c_hostd_scl_i, mux_2_i2c_scl_i);
-  tranif1 tran_i2c_scl_en (w_muxed_v_05, w_i2c_hostd_scl_en, mux_2_i2c_scl_en);
-  bufif0(w_i2c_hostd_sda, w_i2c_hostd_sda_o, w_i2c_hostd_sda_en);
-  bufif1(w_i2c_hostd_sda_i, w_i2c_hostd_sda, w_i2c_hostd_sda_en);
-  bufif0(w_i2c_hostd_scl, w_i2c_hostd_scl_o, w_i2c_hostd_scl_en);
-  bufif1(w_i2c_hostd_scl_i, w_i2c_hostd_scl, w_i2c_hostd_scl_en);
+  assign mux_2_i2c_sda = (`PAD_MUX_REG_PATH.muxed_v_00_mux_sel.q == PAD_MUX_GROUP_MUXED_V_00_SEL_I2C_SDA);
+  assign mux_2_i2c_scl = (`PAD_MUX_REG_PATH.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SCL);
+  tranif1 tran_i2c_sda (w_muxed_v_00, w_i2c_hostd_sda, mux_2_i2c_sda);
+  tranif1 tran_i2c_scl (w_muxed_v_01, w_i2c_hostd_scl, mux_2_i2c_scl);
   // TC - TODO
   // PTME - TODO
   // HPC - TODO
@@ -943,12 +923,8 @@ module astral_fixture;
 
   task automatic configure_i2c_pad(ref bit jtag_check_write);
     chs_vip.jtag_init();
-    chs_vip.jtag_write_reg32(PAD_CFG_ADDR + ASTRAL_PADFRAME_PERIPH_CONFIG_MUXED_V_00_MUX_SEL_OFFSET, PAD_MUX_GROUP_MUXED_V_00_SEL_I2C_SDA_O, jtag_check_write);
-    chs_vip.jtag_write_reg32(PAD_CFG_ADDR + ASTRAL_PADFRAME_PERIPH_CONFIG_MUXED_V_01_MUX_SEL_OFFSET, PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SDA_I, jtag_check_write);
-    chs_vip.jtag_write_reg32(PAD_CFG_ADDR + ASTRAL_PADFRAME_PERIPH_CONFIG_MUXED_V_02_MUX_SEL_OFFSET, PAD_MUX_GROUP_MUXED_V_02_SEL_I2C_SDA_EN, jtag_check_write);
-    chs_vip.jtag_write_reg32(PAD_CFG_ADDR + ASTRAL_PADFRAME_PERIPH_CONFIG_MUXED_V_03_MUX_SEL_OFFSET, PAD_MUX_GROUP_MUXED_V_03_SEL_I2C_SCL_O, jtag_check_write);
-    chs_vip.jtag_write_reg32(PAD_CFG_ADDR + ASTRAL_PADFRAME_PERIPH_CONFIG_MUXED_V_04_MUX_SEL_OFFSET, PAD_MUX_GROUP_MUXED_V_04_SEL_I2C_SCL_I, jtag_check_write);
-    chs_vip.jtag_write_reg32(PAD_CFG_ADDR + ASTRAL_PADFRAME_PERIPH_CONFIG_MUXED_V_05_MUX_SEL_OFFSET, PAD_MUX_GROUP_MUXED_V_05_SEL_I2C_SCL_EN, jtag_check_write);
+    chs_vip.jtag_write_reg32(PAD_CFG_ADDR + ASTRAL_PADFRAME_PERIPH_CONFIG_MUXED_V_00_MUX_SEL_OFFSET, PAD_MUX_GROUP_MUXED_V_00_SEL_I2C_SDA, jtag_check_write);
+    chs_vip.jtag_write_reg32(PAD_CFG_ADDR + ASTRAL_PADFRAME_PERIPH_CONFIG_MUXED_V_01_MUX_SEL_OFFSET, PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SCL, jtag_check_write);
   endtask: configure_i2c_pad
 
 endmodule: astral_fixture

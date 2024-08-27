@@ -116,6 +116,7 @@ module astral_padframe_periph_pads
    PVSS_08_08_NT_DR_H i_pad_vss_core_h_3 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVSS_08_08_NT_DR_V i_pad_vss_core_v_0 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVSS_08_08_NT_DR_V i_pad_vss_core_v_1 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
+   PVSS_08_08_NT_DR_V i_pad_vss_core_v_2 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVSS_08_08_NT_DR_V i_pad_vss_core_v_3 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVSS_08_08_NT_DR_V i_pad_vss_core_v_4 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );
    PVSS_08_08_NT_DR_V i_pad_vss_core_v_5 ( .SNS( io_pads_sns ), .RTO( io_pads_rto ) );

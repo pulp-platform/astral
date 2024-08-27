@@ -120,8 +120,8 @@ module astral_padframe_periph_config_reg_top #(
   logic muxed_v_02_cfg_pull_sel_qs;
   logic muxed_v_02_cfg_pull_sel_wd;
   logic muxed_v_02_cfg_pull_sel_we;
-  logic [2:0] muxed_v_02_mux_sel_qs;
-  logic [2:0] muxed_v_02_mux_sel_wd;
+  logic [1:0] muxed_v_02_mux_sel_qs;
+  logic [1:0] muxed_v_02_mux_sel_wd;
   logic muxed_v_02_mux_sel_we;
   logic muxed_v_03_cfg_chip2pad_qs;
   logic muxed_v_03_cfg_chip2pad_wd;
@@ -138,8 +138,8 @@ module astral_padframe_periph_config_reg_top #(
   logic muxed_v_03_cfg_pull_sel_qs;
   logic muxed_v_03_cfg_pull_sel_wd;
   logic muxed_v_03_cfg_pull_sel_we;
-  logic [2:0] muxed_v_03_mux_sel_qs;
-  logic [2:0] muxed_v_03_mux_sel_wd;
+  logic [1:0] muxed_v_03_mux_sel_qs;
+  logic [1:0] muxed_v_03_mux_sel_wd;
   logic muxed_v_03_mux_sel_we;
   logic muxed_v_04_cfg_chip2pad_qs;
   logic muxed_v_04_cfg_chip2pad_wd;
@@ -972,9 +972,9 @@ module astral_padframe_periph_config_reg_top #(
   // R[muxed_v_02_mux_sel]: V(False)
 
   prim_subreg #(
-    .DW      (3),
+    .DW      (2),
     .SWACCESS("RW"),
-    .RESVAL  (3'h1)
+    .RESVAL  (2'h1)
   ) u_muxed_v_02_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -1131,9 +1131,9 @@ module astral_padframe_periph_config_reg_top #(
   // R[muxed_v_03_mux_sel]: V(False)
 
   prim_subreg #(
-    .DW      (3),
+    .DW      (2),
     .SWACCESS("RW"),
-    .RESVAL  (3'h1)
+    .RESVAL  (2'h1)
   ) u_muxed_v_03_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -1292,7 +1292,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h3)
+    .RESVAL  (3'h2)
   ) u_muxed_v_04_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -1451,7 +1451,7 @@ module astral_padframe_periph_config_reg_top #(
   prim_subreg #(
     .DW      (3),
     .SWACCESS("RW"),
-    .RESVAL  (3'h3)
+    .RESVAL  (3'h2)
   ) u_muxed_v_05_mux_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),
@@ -4173,7 +4173,7 @@ module astral_padframe_periph_config_reg_top #(
   assign muxed_v_02_cfg_pull_sel_wd = reg_wdata[4];
 
   assign muxed_v_02_mux_sel_we = addr_hit[6] & reg_we & !reg_error;
-  assign muxed_v_02_mux_sel_wd = reg_wdata[2:0];
+  assign muxed_v_02_mux_sel_wd = reg_wdata[1:0];
 
   assign muxed_v_03_cfg_chip2pad_we = addr_hit[7] & reg_we & !reg_error;
   assign muxed_v_03_cfg_chip2pad_wd = reg_wdata[0];
@@ -4191,7 +4191,7 @@ module astral_padframe_periph_config_reg_top #(
   assign muxed_v_03_cfg_pull_sel_wd = reg_wdata[4];
 
   assign muxed_v_03_mux_sel_we = addr_hit[8] & reg_we & !reg_error;
-  assign muxed_v_03_mux_sel_wd = reg_wdata[2:0];
+  assign muxed_v_03_mux_sel_wd = reg_wdata[1:0];
 
   assign muxed_v_04_cfg_chip2pad_we = addr_hit[9] & reg_we & !reg_error;
   assign muxed_v_04_cfg_chip2pad_wd = reg_wdata[0];
@@ -4559,7 +4559,7 @@ module astral_padframe_periph_config_reg_top #(
       end
 
       addr_hit[6]: begin
-        reg_rdata_next[2:0] = muxed_v_02_mux_sel_qs;
+        reg_rdata_next[1:0] = muxed_v_02_mux_sel_qs;
       end
 
       addr_hit[7]: begin
@@ -4571,7 +4571,7 @@ module astral_padframe_periph_config_reg_top #(
       end
 
       addr_hit[8]: begin
-        reg_rdata_next[2:0] = muxed_v_03_mux_sel_qs;
+        reg_rdata_next[1:0] = muxed_v_03_mux_sel_qs;
       end
 
       addr_hit[9]: begin

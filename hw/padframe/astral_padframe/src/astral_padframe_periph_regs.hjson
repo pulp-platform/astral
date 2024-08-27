@@ -190,7 +190,7 @@
                       { value: "0", name: "register", desc: "Connects the Pad to the internal configuration register."}
                       { value: "1", name: "port_can_rx", desc: "Connect port rx from port group can to this pad." }
                       { value: "2", name: "port_gpio_io_v_0", desc: "Connect port io_v_0 from port group gpio to this pad." }
-                      { value: "3", name: "port_i2c_sda_o", desc: "Connect port sda_o from port group i2c to this pad." }
+                      { value: "3", name: "port_i2c_sda", desc: "Connect port sda from port group i2c to this pad." }
                       { value: "4", name: "port_spi_sck", desc: "Connect port sck from port group spi to this pad." }
                       { value: "5", name: "port_spi_ot_sck", desc: "Connect port sck from port group spi_ot to this pad." }
                   ]
@@ -274,7 +274,7 @@
                       { value: "0", name: "register", desc: "Connects the Pad to the internal configuration register."}
                       { value: "1", name: "port_can_tx", desc: "Connect port tx from port group can to this pad." }
                       { value: "2", name: "port_gpio_io_v_1", desc: "Connect port io_v_1 from port group gpio to this pad." }
-                      { value: "3", name: "port_i2c_sda_i", desc: "Connect port sda_i from port group i2c to this pad." }
+                      { value: "3", name: "port_i2c_scl", desc: "Connect port scl from port group i2c to this pad." }
                       { value: "4", name: "port_spi_csb_0", desc: "Connect port csb_0 from port group spi to this pad." }
                       { value: "5", name: "port_spi_ot_csb", desc: "Connect port csb from port group spi_ot to this pad." }
                   ]
@@ -353,13 +353,12 @@
           resval: 1
           fields: [
               {
-                  bits: "2:0"
+                  bits: "1:0"
                   enum: [
                       { value: "0", name: "register", desc: "Connects the Pad to the internal configuration register."}
                       { value: "1", name: "port_gpio_io_v_2", desc: "Connect port io_v_2 from port group gpio to this pad." }
-                      { value: "2", name: "port_i2c_sda_en", desc: "Connect port sda_en from port group i2c to this pad." }
-                      { value: "3", name: "port_spi_csb_1", desc: "Connect port csb_1 from port group spi to this pad." }
-                      { value: "4", name: "port_spi_ot_sd_0", desc: "Connect port sd_0 from port group spi_ot to this pad." }
+                      { value: "2", name: "port_spi_csb_1", desc: "Connect port csb_1 from port group spi to this pad." }
+                      { value: "3", name: "port_spi_ot_sd_0", desc: "Connect port sd_0 from port group spi_ot to this pad." }
                   ]
               }
           ]
@@ -436,13 +435,12 @@
           resval: 1
           fields: [
               {
-                  bits: "2:0"
+                  bits: "1:0"
                   enum: [
                       { value: "0", name: "register", desc: "Connects the Pad to the internal configuration register."}
                       { value: "1", name: "port_gpio_io_v_3", desc: "Connect port io_v_3 from port group gpio to this pad." }
-                      { value: "2", name: "port_i2c_scl_o", desc: "Connect port scl_o from port group i2c to this pad." }
-                      { value: "3", name: "port_spi_sd_0", desc: "Connect port sd_0 from port group spi to this pad." }
-                      { value: "4", name: "port_spi_ot_sd_1", desc: "Connect port sd_1 from port group spi_ot to this pad." }
+                      { value: "2", name: "port_spi_sd_0", desc: "Connect port sd_0 from port group spi to this pad." }
+                      { value: "3", name: "port_spi_ot_sd_1", desc: "Connect port sd_1 from port group spi_ot to this pad." }
                   ]
               }
           ]
@@ -516,17 +514,16 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 3
+          resval: 2
           fields: [
               {
                   bits: "2:0"
                   enum: [
                       { value: "0", name: "register", desc: "Connects the Pad to the internal configuration register."}
                       { value: "1", name: "port_gpio_io_v_4", desc: "Connect port io_v_4 from port group gpio to this pad." }
-                      { value: "2", name: "port_i2c_scl_i", desc: "Connect port scl_i from port group i2c to this pad." }
-                      { value: "3", name: "port_serial_link_rcv_clk_i", desc: "Connect port rcv_clk_i from port group serial_link to this pad." }
-                      { value: "4", name: "port_spi_sd_1", desc: "Connect port sd_1 from port group spi to this pad." }
-                      { value: "5", name: "port_spi_ot_sd_2", desc: "Connect port sd_2 from port group spi_ot to this pad." }
+                      { value: "2", name: "port_serial_link_rcv_clk_i", desc: "Connect port rcv_clk_i from port group serial_link to this pad." }
+                      { value: "3", name: "port_spi_sd_1", desc: "Connect port sd_1 from port group spi to this pad." }
+                      { value: "4", name: "port_spi_ot_sd_2", desc: "Connect port sd_2 from port group spi_ot to this pad." }
                   ]
               }
           ]
@@ -600,17 +597,16 @@
           '''
           swaccess: "rw"
           hwaccess: "hro"
-          resval: 3
+          resval: 2
           fields: [
               {
                   bits: "2:0"
                   enum: [
                       { value: "0", name: "register", desc: "Connects the Pad to the internal configuration register."}
                       { value: "1", name: "port_gpio_io_v_5", desc: "Connect port io_v_5 from port group gpio to this pad." }
-                      { value: "2", name: "port_i2c_scl_en", desc: "Connect port scl_en from port group i2c to this pad." }
-                      { value: "3", name: "port_serial_link_i_0", desc: "Connect port i_0 from port group serial_link to this pad." }
-                      { value: "4", name: "port_spi_sd_2", desc: "Connect port sd_2 from port group spi to this pad." }
-                      { value: "5", name: "port_spi_ot_sd_3", desc: "Connect port sd_3 from port group spi_ot to this pad." }
+                      { value: "2", name: "port_serial_link_i_0", desc: "Connect port i_0 from port group serial_link to this pad." }
+                      { value: "3", name: "port_spi_sd_2", desc: "Connect port sd_2 from port group spi to this pad." }
+                      { value: "4", name: "port_spi_ot_sd_3", desc: "Connect port sd_3 from port group spi_ot to this pad." }
                   ]
               }
           ]
