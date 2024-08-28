@@ -13,88 +13,51 @@
 #include "util.h"
 #include "car_util.h"
 #include "printf.h"
-
-#define FLL_HOST_ADDR     (0x21003000)
-#define FLL_PERIPH_ADDR   (0x21003020)
-#define FLL_ALT_ADDR      (0x21003040)
-#define FLL_RT_ADDR       (0x21003060)
-
-#define FLL_STATUS_REG_I  (0x00)
-#define FLL_CONFIG_REG_I  (0x08)
-#define FLL_CONFIG_REG_II (0x10)
-#define FLL_INTEGR_REG    (0x18)
-
-#define FLL_DCO_CODE_MASK (0x03FF0000)
-#define FLL_CLK_DIV_MASK  (0x3C000000)
-#define FLL_CLK_MUL_MASK  (0x0000FFFF)
-#define FLL_MODE_MASK     (0x80000000)
-
-#define FLL_DCO_CODE_OFFSET (16)
-#define FLL_CLK_DIV_OFFSET  (26)
-#define FLL_CLK_MUL_OFFSET  (0)
-#define FLL_MODE_OFFSET     (31)
-
-inline uint32_t write_bitfield(uint32_t src_reg, uint32_t bitfield_mask, uint32_t bitfield_offset, uint32_t val){
-    return (src_reg & ~bitfield_mask) | (val << bitfield_offset);
-}
+#include "fll.h"
 
 int main(void) {
 
     // Put SMP Hart to sleep
     if (hart_id() != 0) wfi();
 
-    uint32_t config_reg_host;
-    uint32_t config_reg_periph;
-    uint32_t config_reg_alt;
-    uint32_t config_reg_rt;
-
     // Stand-alone mode
 
-    config_reg_host = readw(FLL_HOST_ADDR + FLL_CONFIG_REG_I);
-    config_reg_host = write_bitfield(config_reg_host, FLL_DCO_CODE_MASK, FLL_DCO_CODE_OFFSET, 0x1F5);
-    config_reg_host = write_bitfield(config_reg_host, FLL_CLK_DIV_MASK, FLL_CLK_DIV_OFFSET, 0x1);
-    writew(config_reg_host, FLL_HOST_ADDR + FLL_CONFIG_REG_I);
+    set_fll_dco_code(0x1F5, FLL_HOST_ID);
+    set_fll_clk_div(0x1, FLL_HOST_ID);
 
-    config_reg_periph = readw(FLL_PERIPH_ADDR + FLL_CONFIG_REG_I);
-    config_reg_periph = write_bitfield(config_reg_periph, FLL_DCO_CODE_MASK, FLL_DCO_CODE_OFFSET, 0x1F5);
-    config_reg_periph = write_bitfield(config_reg_periph, FLL_CLK_DIV_MASK, FLL_CLK_DIV_OFFSET, 0x1);
-    writew(config_reg_periph, FLL_PERIPH_ADDR + FLL_CONFIG_REG_I);
+    set_fll_dco_code(0x1F5, FLL_PERIPH_ID);
+    set_fll_clk_div(0x1, FLL_PERIPH_ID);
 
-    config_reg_alt = readw(FLL_ALT_ADDR + FLL_CONFIG_REG_I);
-    config_reg_alt = write_bitfield(config_reg_alt, FLL_DCO_CODE_MASK, FLL_DCO_CODE_OFFSET, 0x1F5);
-    config_reg_alt = write_bitfield(config_reg_alt, FLL_CLK_DIV_MASK, FLL_CLK_DIV_OFFSET, 0x1);
-    writew(config_reg_alt, FLL_ALT_ADDR + FLL_CONFIG_REG_I);
+    set_fll_dco_code(0x1F5, FLL_ALT_ID);
+    set_fll_clk_div(0x1, FLL_ALT_ID);
 
-    config_reg_rt = readw(FLL_RT_ADDR + FLL_CONFIG_REG_I);
-    config_reg_rt = write_bitfield(config_reg_rt, FLL_DCO_CODE_MASK, FLL_DCO_CODE_OFFSET, 0x1F5);
-    config_reg_rt = write_bitfield(config_reg_rt, FLL_CLK_DIV_MASK, FLL_CLK_DIV_OFFSET, 0x1);
-    writew(config_reg_rt, FLL_RT_ADDR + FLL_CONFIG_REG_I);
+    set_fll_dco_code(0x1F5, FLL_SECD_ID);
+    set_fll_clk_div(0x1, FLL_SECD_ID);
+
+    set_fll_dco_code(0x1F5, FLL_RT_ID);
+    set_fll_clk_div(0x1, FLL_RT_ID);
 
     // Normal mode
 
-    config_reg_host = readw(FLL_HOST_ADDR + FLL_CONFIG_REG_I);
-    config_reg_host = write_bitfield(config_reg_host, FLL_CLK_DIV_MASK, FLL_CLK_DIV_OFFSET, 0x2);
-    config_reg_host = write_bitfield(config_reg_host, FLL_CLK_MUL_MASK, FLL_CLK_MUL_OFFSET, 0x63);
-    config_reg_host = write_bitfield(config_reg_host, FLL_MODE_MASK, FLL_MODE_OFFSET, 0x1);
-    writew(config_reg_host, FLL_HOST_ADDR + FLL_CONFIG_REG_I);
+    set_fll_clk_div(0x2, FLL_HOST_ID);
+    set_fll_clk_mul(0x63, FLL_HOST_ID);
+    fll_normal(FLL_HOST_ID);
 
-    config_reg_periph = readw(FLL_PERIPH_ADDR + FLL_CONFIG_REG_I);
-    config_reg_periph = write_bitfield(config_reg_periph, FLL_CLK_DIV_MASK, FLL_CLK_DIV_OFFSET, 0x2);
-    config_reg_periph = write_bitfield(config_reg_periph, FLL_CLK_MUL_MASK, FLL_CLK_MUL_OFFSET, 0x63);
-    config_reg_periph = write_bitfield(config_reg_periph, FLL_MODE_MASK, FLL_MODE_OFFSET, 0x1);
-    writew(config_reg_periph, FLL_PERIPH_ADDR + FLL_CONFIG_REG_I);
+    set_fll_clk_div(0x2, FLL_PERIPH_ID);
+    set_fll_clk_mul(0x63, FLL_PERIPH_ID);
+    fll_normal(FLL_PERIPH_ID);
 
-    config_reg_alt = readw(FLL_ALT_ADDR + FLL_CONFIG_REG_I);
-    config_reg_alt = write_bitfield(config_reg_alt, FLL_CLK_DIV_MASK, FLL_CLK_DIV_OFFSET, 0x2);
-    config_reg_alt = write_bitfield(config_reg_alt, FLL_CLK_MUL_MASK, FLL_CLK_MUL_OFFSET, 0x63);
-    config_reg_alt = write_bitfield(config_reg_alt, FLL_MODE_MASK, FLL_MODE_OFFSET, 0x1);
-    writew(config_reg_alt, FLL_ALT_ADDR + FLL_CONFIG_REG_I);
+    set_fll_clk_div(0x2, FLL_ALT_ID);
+    set_fll_clk_mul(0x63, FLL_ALT_ID);
+    fll_normal(FLL_ALT_ID);
 
-    config_reg_rt = readw(FLL_RT_ADDR + FLL_CONFIG_REG_I);
-    config_reg_rt = write_bitfield(config_reg_rt, FLL_CLK_DIV_MASK, FLL_CLK_DIV_OFFSET, 0x2);
-    config_reg_rt = write_bitfield(config_reg_rt, FLL_CLK_MUL_MASK, FLL_CLK_MUL_OFFSET, 0x63);
-    config_reg_rt = write_bitfield(config_reg_rt, FLL_MODE_MASK, FLL_MODE_OFFSET, 0x1);
-    writew(config_reg_rt, FLL_RT_ADDR + FLL_CONFIG_REG_I);
+    set_fll_clk_div(0x2, FLL_SECD_ID);
+    set_fll_clk_mul(0x63, FLL_SECD_ID);
+    fll_normal(FLL_SECD_ID);
+
+    set_fll_clk_div(0x2, FLL_RT_ID);
+    set_fll_clk_mul(0x63, FLL_RT_ID);
+    fll_normal(FLL_RT_ID);
 
     // Init the HW
     car_init_start();

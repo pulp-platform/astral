@@ -400,7 +400,7 @@ module astral_wrap
     .DIV_VALUE            ( 100  ),
     .ENABLE_CLOCK_IN_RESET( 1'b1 )
   ) i_rt_clk_div (
-    .clk_i          ( clk_fll_out[3] ),
+    .clk_i          ( clk_fll_out[4] ),
     .rst_ni         ( pwr_on_rst_n   ),
     .en_i           ( 1'b1           ),
     .test_mode_en_i ( 1'b0           ),
