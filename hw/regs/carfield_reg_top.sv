@@ -1095,7 +1095,7 @@ module carfield_reg_top #(
   prim_subreg #(
     .DW      (2),
     .SWACCESS("RW"),
-    .RESVAL  (2'h1)
+    .RESVAL  (2'h3)
   ) u_security_island_clk_sel (
     .clk_i   (clk_i    ),
     .rst_ni  (rst_ni  ),

@@ -376,7 +376,7 @@
     }
 
     { name: "PERIPH_CLK_SEL",
-      desc: "Periph Domain pll select (0 -> host pll, 1 -> alt PLL, 2 -> per pll)",
+      desc: "Periph Domain fll select (0 -> host fll, 1 -> alt fll, 2 -> per fll, 3 -> secd fll)",
       swaccess: "rw",
       hwaccess: "hro",
       resval: "2",
@@ -387,7 +387,7 @@
     }
 
     { name: "SAFETY_ISLAND_CLK_SEL",
-      desc: "Safety Island pll select (0 -> host pll, 1 -> alt PLL, 2 -> per pll)",
+      desc: "Safety Island fll select (0 -> host fll, 1 -> alt fll, 2 -> per fll, 3 -> secd fll)",
       swaccess: "rw",
       hwaccess: "hro",
       resval: "1",
@@ -398,10 +398,10 @@
     }
 
     { name: "SECURITY_ISLAND_CLK_SEL",
-      desc: "Security Island pll select (0 -> host pll, 1 -> alt PLL, 2 -> per pll)",
+      desc: "Security Island fll select (0 -> host fll, 1 -> alt fll, 2 -> per fll, 3 -> secd fll)",
       swaccess: "rw",
       hwaccess: "hro",
-      resval: "1",
+      resval: "3",
       hwqe: "0",
       fields: [
         { bits: "1:0" }
@@ -409,7 +409,7 @@
     }
 
     { name: "PULP_CLUSTER_CLK_SEL",
-      desc: "PULP Cluster pll select (0 -> host pll, 1 -> alt PLL, 2 -> per pll)",
+      desc: "PULP Cluster fll select (0 -> host fll, 1 -> alt fll, 2 -> per fll, 3 -> secd fll)",
       swaccess: "rw",
       hwaccess: "hro",
       resval: "1",
@@ -420,7 +420,7 @@
     }
 
     { name: "SPATZ_CLUSTER_CLK_SEL",
-      desc: "Spatz Cluster pll select (0 -> host pll, 1 -> alt PLL, 2 -> per pll)",
+      desc: "Spatz Cluster fll select (0 -> host fll, 1 -> alt fll, 2 -> per fll, 3 -> secd fll)",
       swaccess: "rw",
       hwaccess: "hro",
       resval: "1",
@@ -431,7 +431,7 @@
     }
 
     { name: "L2_CLK_SEL",
-      desc: "L2 Memory pll select (0 -> host pll, 1 -> alt PLL, 2 -> per pll)",
+      desc: "L2 Memory fll select (0 -> host fll, 1 -> alt fll, 2 -> per fll, 3 -> secd fll)",
       swaccess: "rw",
       hwaccess: "hro",
       resval: "1",

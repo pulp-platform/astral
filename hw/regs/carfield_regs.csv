@@ -32,12 +32,12 @@ SECURITY_ISLAND_CLK_EN,1,rw,hro,0,0,Security Island clk gate enable
 PULP_CLUSTER_CLK_EN,1,rw,hro,0,0,PULP Cluster clk gate enable
 SPATZ_CLUSTER_CLK_EN,1,rw,hro,0,0,Spatz Cluster clk gate enable
 L2_CLK_EN,1,rw,hro,0,1,Shared L2 memory clk gate enable
-PERIPH_CLK_SEL,2,rw,hro,0,2,"Periph Domain pll select (0 -> host pll, 1 -> alt PLL, 2 -> per pll)"
-SAFETY_ISLAND_CLK_SEL,2,rw,hro,0,1,"Safety Island pll select (0 -> host pll, 1 -> alt PLL, 2 -> per pll)"
-SECURITY_ISLAND_CLK_SEL,2,rw,hro,0,1,"Security Island pll select (0 -> host pll, 1 -> alt PLL, 2 -> per pll)"
-PULP_CLUSTER_CLK_SEL,2,rw,hro,0,1,"PULP Cluster pll select (0 -> host pll, 1 -> alt PLL, 2 -> per pll)"
-SPATZ_CLUSTER_CLK_SEL,2,rw,hro,0,1,"Spatz Cluster pll select (0 -> host pll, 1 -> alt PLL, 2 -> per pll)"
-L2_CLK_SEL,2,rw,hro,0,1,"L2 Memory pll select (0 -> host pll, 1 -> alt PLL, 2 -> per pll)"
+PERIPH_CLK_SEL,2,rw,hro,0,2,"Periph Domain fll select (0 -> host fll, 1 -> alt fll, 2 -> per fll, 3 -> secd fll)"
+SAFETY_ISLAND_CLK_SEL,2,rw,hro,0,1,"Safety Island fll select (0 -> host fll, 1 -> alt fll, 2 -> per fll, 3 -> secd fll)"
+SECURITY_ISLAND_CLK_SEL,2,rw,hro,0,3,"Security Island fll select (0 -> host fll, 1 -> alt fll, 2 -> per fll, 3 -> secd fll)"
+PULP_CLUSTER_CLK_SEL,2,rw,hro,0,1,"PULP Cluster fll select (0 -> host fll, 1 -> alt fll, 2 -> per fll, 3 -> secd fll)"
+SPATZ_CLUSTER_CLK_SEL,2,rw,hro,0,1,"Spatz Cluster fll select (0 -> host fll, 1 -> alt fll, 2 -> per fll, 3 -> secd fll)"
+L2_CLK_SEL,2,rw,hro,0,1,"L2 Memory fll select (0 -> host fll, 1 -> alt fll, 2 -> per fll, 3 -> secd fll)"
 PERIPH_CLK_DIV_VALUE,24,rw,hro,1,1,Periph Domain clk divider value
 SAFETY_ISLAND_CLK_DIV_VALUE,24,rw,hro,1,1,Safety Island clk divider value
 SECURITY_ISLAND_CLK_DIV_VALUE,24,rw,hro,1,1,Security Island clk divider value
