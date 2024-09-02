@@ -15,6 +15,8 @@
 #include "params.h"
 #include "printf.h"
 #include "util.h"
+#include "padframe.h"
+#include "fll.h"
 
 static dif_rv_plic_t plic0;
 
@@ -47,10 +49,54 @@ static dif_rv_plic_t plic0;
 #define L2_TX_BASE 0x78000000
 #define L2_RX_BASE 0x78001000
 
+#define FLL_WAIT_CYCLES 10000
+
 int main(void) {
 
   // Put SMP Hart to sleep
   if (hart_id() != 0) wfi();
+
+  // Configuring padframe - mux
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_V_07_MUX_SEL, PADFRAME_MUXED_V_07_SEL_ETHERNET_RXCK);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_V_08_MUX_SEL, PADFRAME_MUXED_V_08_SEL_ETHERNET_RXCTL);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_V_09_MUX_SEL, PADFRAME_MUXED_V_09_SEL_ETHERNET_RXD_0);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_V_10_MUX_SEL, PADFRAME_MUXED_V_10_SEL_ETHERNET_RXD_1);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_V_11_MUX_SEL, PADFRAME_MUXED_V_11_SEL_ETHERNET_RXD_2);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_V_12_MUX_SEL, PADFRAME_MUXED_V_12_SEL_ETHERNET_RXD_3);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_V_13_MUX_SEL, PADFRAME_MUXED_V_13_SEL_ETHERNET_TXCK);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_V_14_MUX_SEL, PADFRAME_MUXED_V_14_SEL_ETHERNET_TXCTL);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_V_15_MUX_SEL, PADFRAME_MUXED_V_15_SEL_ETHERNET_TXD_0);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_V_16_MUX_SEL, PADFRAME_MUXED_V_16_SEL_ETHERNET_TXD_1);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_V_17_MUX_SEL, PADFRAME_MUXED_V_17_SEL_ETHERNET_TXD_2);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_H_00_MUX_SEL, PADFRAME_MUXED_H_00_SEL_ETHERNET_TXD_3);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_H_01_MUX_SEL, PADFRAME_MUXED_H_01_SEL_ETHERNET_MD);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_H_02_MUX_SEL, PADFRAME_MUXED_H_02_SEL_ETHERNET_MDC);
+  write_padframe_mux(PADFRAME_CONFIG_MUXED_H_03_MUX_SEL, PADFRAME_MUXED_H_03_SEL_ETHERNET_RST_N);
+  // Configuring padframe - pullup
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_V_07_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_V_07_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_V_08_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_V_08_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_V_09_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_V_09_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_V_10_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_V_10_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_V_11_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_V_11_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_V_12_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_V_12_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_V_13_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_V_13_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_V_14_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_V_14_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_V_15_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_V_15_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_V_16_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_V_16_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_V_17_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_V_17_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_H_00_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_H_00_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_H_01_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_H_01_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_H_02_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_H_02_CFG, 0x1);
+  write_padframe_pen(PADFRAME_CONFIG_MUXED_H_03_CFG, 0x1); write_padframe_psel(PADFRAME_CONFIG_MUXED_H_03_CFG, 0x1);
+
+  // Configuring FLL
+  fll_normal(FLL_PERIPH_ID);
+  set_fll_clk_mul(0x3E7, FLL_PERIPH_ID);
+  set_fll_clk_div(0x2, FLL_PERIPH_ID);
+
+  // Wait for FLL clk out to stabilize
+  for (int i = 0; i < FLL_WAIT_CYCLES; i++)
+    asm volatile("addi x0, x0, 0" ::);
 
   int prio = 0x1;
   bool t;
