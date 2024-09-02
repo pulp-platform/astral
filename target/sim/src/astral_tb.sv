@@ -300,7 +300,7 @@ module tb_astral;
       fix.set_secure_boot(secure_boot);
 
       // set bootmode
-      fix.gen_scured_vip.secd_vip.set_secd_boot_mode(secd_boot_mode);
+      fix.gen_secured_vip.secd_vip.set_secd_boot_mode(secd_boot_mode);
 
       if (secd_preload_elf != "" || secd_flash_vmem != "") begin
         // Wait for reset
@@ -319,16 +319,16 @@ module tb_astral;
             // Wait before security island HW is initialized
             repeat(10000)
               @(posedge fix.ref_clk);
-            fix.gen_scured_vip.secd_vip.debug_secd_module_init();
-            fix.gen_scured_vip.secd_vip.load_secd_binary(secd_preload_elf);
-            fix.gen_scured_vip.secd_vip.jtag_secd_data_preload();
-            fix.gen_scured_vip.secd_vip.jtag_secd_wakeup(32'hE0000080);
-            fix.gen_scured_vip.secd_vip.jtag_secd_wait_eoc();
+            fix.gen_secured_vip.secd_vip.debug_secd_module_init();
+            fix.gen_secured_vip.secd_vip.load_secd_binary(secd_preload_elf);
+            fix.gen_secured_vip.secd_vip.jtag_secd_data_preload();
+            fix.gen_secured_vip.secd_vip.jtag_secd_wakeup(32'hE0000080);
+            fix.gen_secured_vip.secd_vip.jtag_secd_wait_eoc();
           end 1: begin
-            fix.gen_scured_vip.secd_vip.spih_norflash_preload(secd_flash_vmem);
+            fix.gen_secured_vip.secd_vip.spih_norflash_preload(secd_flash_vmem);
             repeat(10000)
               @(posedge fix.ref_clk);
-            fix.gen_scured_vip.secd_vip.jtag_secd_wait_eoc();
+            fix.gen_secured_vip.secd_vip.jtag_secd_wait_eoc();
           end default: begin
             $fatal(1, "Unsupported boot mode %d (reserved)!", secd_boot_mode);
           end

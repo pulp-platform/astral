@@ -906,7 +906,7 @@ module astral_fixture;
   /////////////////////////
 
   if (CarfieldIslandsCfg.secured.enable) begin: gen_scured_vip
-    localparam time ClkPeriodSecdJtag = ClkPeriodRef * 2;
+    localparam time ClkPeriodSecdJtag = ClkPeriodJtag / 5;
 
     // VIP
     vip_security_island_soc #(
