@@ -309,8 +309,6 @@ module tb_astral;
         // Wait for FLL lock
         fix.wait_fll_lock();
 
-        wait (pad_configured.triggered);
-        
         // Writing max burst length in Hyperbus configuration registers to
         // prevent the Verification IPs from triggering timing checks.
         $display("[TB] INFO: Configuring Hyperbus through serial link.");
