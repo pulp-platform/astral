@@ -1512,7 +1512,8 @@ localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
   assign hostd_pulpcl_mbox_intr_ored  = |hostd_pulpcl_mbox_intr ;
   assign pulpcl_mbox_intr = hostd_pulpcl_mbox_intr_ored | safed_pulpcl_mbox_intr;
 
-  assign safed_pulpcl_mbox_intr = snd_mbox_intrs[SafedMboxOffset + CheshireNumIntHarts + 1];
+  // assign safed_pulpcl_mbox_intr = snd_mbox_intrs[SafedMboxOffset + CheshireNumIntHarts + 1];
+  assign safed_pulpcl_mbox_intr = '0;
 end else begin : gen_no_pulp_cluster
   assign pulp_rst_n = '0;
   assign pulp_pwr_on_rst_n = '0;
