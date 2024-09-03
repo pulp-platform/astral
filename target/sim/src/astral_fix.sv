@@ -906,7 +906,7 @@ module astral_fixture;
   // Security island VIP //
   /////////////////////////
 
-  if (CarfieldIslandsCfg.secured.enable) begin: gen_scured_vip
+  if (CarfieldIslandsCfg.secured.enable) begin: gen_secured_vip
     // We assume 50 MHz for OpenTitan JTAG
     localparam time ClkPeriodSecdJtag = 20 ns;
 
