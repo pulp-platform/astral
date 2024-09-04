@@ -283,7 +283,7 @@ module vip_carfield_soc
   // Hyperbus //
   //////////////
 
-  localparam string HypUserPreloadMemFiles [HypNumPhys] = '{Hyp0UserPreloadMemFile, Hyp1UserPreloadMemFile};
+  localparam string HypUserPreloadMemFiles = Hyp0UserPreloadMemFile;
 
   for (genvar i=0; i<HypNumPhys; i++) begin : hyperrams
     for (genvar j=0; j<HypNumChips; j++) begin : chips
