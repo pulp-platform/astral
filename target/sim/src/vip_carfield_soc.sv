@@ -415,7 +415,7 @@ module vip_carfield_soc
 endmodule
 
 module vip_carfield_soc_tristate import carfield_pkg::*; # (
-  parameter int unsigned HypNumPhys  = 2,
+  parameter int unsigned HypNumPhys  = 1,
   parameter int unsigned HypNumChips = 2
 ) (
   // Hyperbus pad IO

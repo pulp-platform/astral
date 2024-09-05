@@ -1437,7 +1437,7 @@ localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
    .Cfg( PulpClusterCfg )
   ) i_integer_cluster               (
 `else
-  int_cluster i_integer_cluster     (
+  pulp_cluster i_integer_cluster     (
 `endif
     .clk_i                       ( pulp_clk                                  ),
     .rst_ni                      ( pulp_rst_n                                ),
