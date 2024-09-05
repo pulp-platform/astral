@@ -249,6 +249,7 @@ module carfield_reg_top #(
   logic spw_general_irq_qs;
   logic spw_general_irq_wd;
   logic spw_general_irq_we;
+  logic [4:0] fll_lock_qs;
 
   // Register instances
   // R[version0]: V(False)
@@ -1950,9 +1951,35 @@ module carfield_reg_top #(
   );
 
 
+  // R[fll_lock]: V(False)
+
+  prim_subreg #(
+    .DW      (5),
+    .SWACCESS("RO"),
+    .RESVAL  (5'h0)
+  ) u_fll_lock (
+    .clk_i   (clk_i    ),
+    .rst_ni  (rst_ni  ),
+
+    .we     (1'b0),
+    .wd     ('0  ),
+
+    // from internal hardware
+    .de     (hw2reg.fll_lock.de),
+    .d      (hw2reg.fll_lock.d ),
+
+    // to internal hardware
+    .qe     (),
+    .q      (reg2hw.fll_lock.q ),
+
+    // to register interface (read)
+    .qs     (fll_lock_qs)
+  );
 
 
-  logic [66:0] addr_hit;
+
+
+  logic [67:0] addr_hit;
   always_comb begin
     addr_hit = '0;
     addr_hit[ 0] = (reg_addr == CARFIELD_VERSION0_OFFSET);
@@ -2022,6 +2049,7 @@ module carfield_reg_top #(
     addr_hit[64] = (reg_addr == CARFIELD_STREAMER_CLK_DIV_VALUE_OFFSET);
     addr_hit[65] = (reg_addr == CARFIELD_STREAMER_GENERAL_IRQ_OFFSET);
     addr_hit[66] = (reg_addr == CARFIELD_SPW_GENERAL_IRQ_OFFSET);
+    addr_hit[67] = (reg_addr == CARFIELD_FLL_LOCK_OFFSET);
   end
 
   assign addrmiss = (reg_re || reg_we) ? ~|addr_hit : 1'b0 ;
@@ -2095,7 +2123,8 @@ module carfield_reg_top #(
                (addr_hit[63] & (|(CARFIELD_PERMIT[63] & ~reg_be))) |
                (addr_hit[64] & (|(CARFIELD_PERMIT[64] & ~reg_be))) |
                (addr_hit[65] & (|(CARFIELD_PERMIT[65] & ~reg_be))) |
-               (addr_hit[66] & (|(CARFIELD_PERMIT[66] & ~reg_be)))));
+               (addr_hit[66] & (|(CARFIELD_PERMIT[66] & ~reg_be))) |
+               (addr_hit[67] & (|(CARFIELD_PERMIT[67] & ~reg_be)))));
   end
 
   assign jedec_idcode_we = addr_hit[5] & reg_we & !reg_error;
@@ -2539,6 +2568,10 @@ module carfield_reg_top #(
 
       addr_hit[66]: begin
         reg_rdata_next[0] = spw_general_irq_qs;
+      end
+
+      addr_hit[67]: begin
+        reg_rdata_next[4:0] = fll_lock_qs;
       end
 
       default: begin

@@ -748,5 +748,16 @@
         { bits: "0:0" }
       ],
     }
+
+    { name: "FLL_LOCK",
+      desc: "FLL lock status",
+      swaccess: "ro",
+      hwaccess: "hrw",
+      resval: "0",
+      hwqe: "0",
+      fields: [
+        { bits: "4:0" }
+      ],
+    }
   ],
 }

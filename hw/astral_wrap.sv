@@ -508,6 +508,7 @@ module astral_wrap
     .pwr_on_rst_ni              ( pwr_on_rst_n                                      ),
     .test_mode_i                ( '0                                                ),
     .boot_mode_i                ( bootmode_host_s[1:0]                              ),
+    .fll_lock_i                 ( fll_lock                                          ),
     .jtag_tck_i                 ( st_pad2soc_signals.periph.jtag_tclk_i             ),
     .jtag_trst_ni               ( st_pad2soc_signals.periph.jtag_trst_ni            ),
     .jtag_tms_i                 ( st_pad2soc_signals.periph.jtag_tms_i              ),

@@ -69,6 +69,7 @@
 | carfield.[`STREAMER_CLK_DIV_VALUE`](#streamer_clk_div_value)                 | 0x100    |        4 | Streamer clock divider value                                                          |
 | carfield.[`STREAMER_GENERAL_IRQ`](#streamer_general_irq)                     | 0x104    |        4 | Streamer general interrupt                                                            |
 | carfield.[`SPW_GENERAL_IRQ`](#spw_general_irq)                               | 0x108    |        4 | SpaceWire general interrupt                                                           |
+| carfield.[`FLL_LOCK`](#fll_lock)                                             | 0x10c    |        4 | FLL lock status                                                                       |
 
 ## VERSION0
 Cheshire sha256 commit
@@ -1195,4 +1196,21 @@ SpaceWire general interrupt
 |:------:|:------:|:-------:|:----------------|:--------------|
 |  31:1  |        |         |                 | Reserved      |
 |   0    |   rw   |   0x0   | SPW_GENERAL_IRQ |               |
+
+## FLL_LOCK
+FLL lock status
+- Offset: `0x10c`
+- Reset default: `0x0`
+- Reset mask: `0x1f`
+
+### Fields
+
+```wavejson
+{"reg": [{"name": "FLL_LOCK", "bits": 5, "attr": ["ro"], "rotate": 0}, {"bits": 27}], "config": {"lanes": 1, "fontsize": 10, "vspace": 80}}
+```
+
+|  Bits  |  Type  |  Reset  | Name     | Description   |
+|:------:|:------:|:-------:|:---------|:--------------|
+|  31:5  |        |         |          | Reserved      |
+|  4:0   |   ro   |   0x0   | FLL_LOCK |               |
 
