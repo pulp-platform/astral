@@ -155,7 +155,7 @@ module tb_astral;
             if(~is_dram) begin
               $display("[TB] %t - Wait for HyperRAM", $realtime);
               repeat(HyperRstCycles)
-`ifndef CARFIELD_CHIP_NETLIST
+`ifndef ASTRAL_TOP_NETLIST
                 @(posedge fix.i_dut.periph_clk);
 `else
                 #10ns;
@@ -475,7 +475,7 @@ module tb_astral;
 
         $display("[TB] %t - Wait for HyperRAM", $realtime);
         repeat(HyperRstCycles)
-  `ifndef CARFIELD_CHIP_NETLIST
+  `ifndef ASTRAL_TOP_NETLIST
           @(posedge fix.i_dut.periph_clk);
   `else
           #10ns;

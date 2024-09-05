@@ -416,7 +416,7 @@ module astral_fixture;
   `CHESHIRE_TYPEDEF_ALL(, DutCfg)
 
 
-`ifndef CARFIELD_CHIP_NETLIST
+`ifndef ASTRAL_TOP_NETLIST
   astral_wrap #(
     .HypNumPhys  ( NumPhys  ),
     .HypNumChips ( NumChips )
@@ -943,7 +943,7 @@ module astral_fixture;
   ///////////////////
 
   task passthrough_or_wait_for_secd_hw_init();
-`ifndef CARFIELD_CHIP_NETLIST
+`ifndef ASTRAL_TOP_NETLIST
     if ((secure_boot || !i_dut.i_dut.car_regs_hw2reg.security_island_isolate_status.d) &&
         i_dut.i_dut.gen_secure_subsystem.i_security_island.u_RoT.u_rv_core_ibex.fetch_enable != lc_ctrl_pkg::On) begin
       $display("Wait for OT to boot...");
