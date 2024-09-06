@@ -1904,6 +1904,7 @@ axi_riscv_atomics_structs #(
   .AxiUserIdLsb     ( Cfg.AxiUserAmoLsb      ),
   .RiscvWordWidth   ( 64                     ),
   .NAxiCuts         ( 0                      ),
+  .CutOupPopInpGnt  ( 1                      ),
   .axi_req_t        ( carfield_axi_slv_req_t ),
   .axi_rsp_t        ( carfield_axi_slv_rsp_t )
 ) i_atomics_mbox (
@@ -2173,6 +2174,7 @@ if (CarfieldIslandsCfg.periph.enable) begin: gen_periph // Handle with care...
     .AxiUserIdLsb     ( Cfg.AxiUserAmoLsb      ),
     .RiscvWordWidth   ( 64                     ),
     .NAxiCuts         ( Cfg.RegAmoNumCuts      ),
+    .CutOupPopInpGnt  ( 1                      ),
     .axi_req_t        ( carfield_axi_slv_req_t ),
     .axi_rsp_t        ( carfield_axi_slv_rsp_t )
   ) i_atomics_peripherals (
