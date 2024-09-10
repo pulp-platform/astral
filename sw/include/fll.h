@@ -66,9 +66,16 @@ void set_fll_clk_mul(uint32_t clk_mul, uint8_t fll_id){
 // The following API uses a default divider by 2 to program the peripheral FLL
 void set_periph_fll_div2(uint32_t clk_freq){
   unsigned int divdier = 2;
-  fll_normal(FLL_PERIPH_ID);
   set_fll_clk_mul((divdier*clk_freq) - 1, FLL_PERIPH_ID);
   set_fll_clk_div(divdier, FLL_PERIPH_ID);
+  fll_normal(FLL_PERIPH_ID);
+}
+
+void set_host_fll_div2(uint32_t clk_freq){
+  unsigned int divdier = 2;
+  set_fll_clk_mul((divdier*clk_freq) - 1, FLL_HOST_ID);
+  set_fll_clk_div(divdier, FLL_HOST_ID);
+  fll_normal(FLL_HOST_ID);
 }
 
 #endif /*__FLL_H*/

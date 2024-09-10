@@ -372,14 +372,6 @@ module astral_fixture;
   // CAN
   // TODO connect
   assign w_can_rx                       = '0;
-  // Ethernet
-  // TODO connect
-  assign w_eth_rxck                     = '0;
-  assign w_eth_rxctl                    = '0;
-  assign w_eth_rxd0                     = '0;
-  assign w_eth_rxd1                     = '0;
-  assign w_eth_rxd2                     = '0;
-  assign w_eth_rxd3                     = '0;
   // PLL JTAG
   assign w_jtag_pll_tck                 = jtag_pll_tck;
   assign w_jtag_pll_tms                 = jtag_pll_tms;
@@ -778,7 +770,7 @@ module astral_fixture;
     .eth_rxd       ( w_eth_rxd     ),
     .eth_txck      ( w_eth_txck    ),
     .eth_rxck      ( w_eth_rxck    ),
-    .eth_txctl     ( w_eth_rxctl   ),
+    .eth_txctl     ( w_eth_txctl   ),
     .eth_rxctl     ( w_eth_rxctl   ),
     .eth_rstn      ( w_eth_rst     ),
     .eth_mdio      ( w_eth_md      ),
