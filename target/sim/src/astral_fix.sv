@@ -488,16 +488,30 @@ module astral_fixture;
   // Muxed Pads Connections //
   ////////////////////////////
 
-  `define PAD_MUX_REG_PATH i_dut.i_astral_padframe.i_periph.i_periph_muxer.s_reg2hw
+  `ifndef ASTRAL_TOP_NETLIST
+  `define PAD_MUX_REG_MUX_SEL_PATH(PAD_NAME, NUM_BITS) i_dut.i_astral_padframe.i_periph.i_periph_muxer.s_reg2hw.muxed_``PAD_NAME``_mux_sel.q
+
+  `else
+
+  `define PAD_MUX_REG_MUX_SEL_PATH(PAD_NAME, NUM_BITS) `PAD_MUX_REG_MUX_SEL_PATH_``NUM_BITS``(PAD_NAME)
+  `define PAD_MUX_REG_MUX_SEL_PATH_3(PAD_NAME) \
+  {i_dut.i_astral_padframe.i_periph.i_periph_muxer.s_reg2hw_muxed_``PAD_NAME``_mux_sel__q__2_, \
+  i_dut.i_astral_padframe.i_periph.i_periph_muxer.s_reg2hw_muxed_``PAD_NAME``_mux_sel__q__1_, \
+  i_dut.i_astral_padframe.i_periph.i_periph_muxer.s_reg2hw_muxed_``PAD_NAME``_mux_sel__q__0_}
+  `define PAD_MUX_REG_MUX_SEL_PATH_2(PAD_NAME) \
+  {i_dut.i_astral_padframe.i_periph.i_periph_muxer.s_reg2hw_muxed_``PAD_NAME``_mux_sel__q__1_, \
+  i_dut.i_astral_padframe.i_periph.i_periph_muxer.s_reg2hw_muxed_``PAD_NAME``_mux_sel__q__0_}
+
+  `endif
 
   // SPI
-  assign mux_0_spih_sck = (`PAD_MUX_REG_PATH.muxed_v_00_mux_sel.q == PAD_MUX_GROUP_MUXED_V_00_SEL_SPI_SCK);
-  assign mux_0_spih_csb_0 = (`PAD_MUX_REG_PATH.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_SPI_CSB_0);
-  assign mux_0_spih_csb_1 = (`PAD_MUX_REG_PATH.muxed_v_02_mux_sel.q == PAD_MUX_GROUP_MUXED_V_02_SEL_SPI_CSB_1);
-  assign mux_0_spih_sd_0 = (`PAD_MUX_REG_PATH.muxed_v_03_mux_sel.q == PAD_MUX_GROUP_MUXED_V_03_SEL_SPI_SD_0);
-  assign mux_0_spih_sd_1 = (`PAD_MUX_REG_PATH.muxed_v_04_mux_sel.q == PAD_MUX_GROUP_MUXED_V_04_SEL_SPI_SD_1);
-  assign mux_0_spih_sd_2 = (`PAD_MUX_REG_PATH.muxed_v_05_mux_sel.q == PAD_MUX_GROUP_MUXED_V_05_SEL_SPI_SD_2);
-  assign mux_0_spih_sd_3 = (`PAD_MUX_REG_PATH.muxed_v_06_mux_sel.q == PAD_MUX_GROUP_MUXED_V_06_SEL_SPI_SD_3);
+  assign mux_0_spih_sck   = (`PAD_MUX_REG_MUX_SEL_PATH(v_00, 3) == PAD_MUX_GROUP_MUXED_V_00_SEL_SPI_SCK);
+  assign mux_0_spih_csb_0 = (`PAD_MUX_REG_MUX_SEL_PATH(v_01, 3) == PAD_MUX_GROUP_MUXED_V_01_SEL_SPI_CSB_0);
+  assign mux_0_spih_csb_1 = (`PAD_MUX_REG_MUX_SEL_PATH(v_02, 2) == PAD_MUX_GROUP_MUXED_V_02_SEL_SPI_CSB_1);
+  assign mux_0_spih_sd_0  = (`PAD_MUX_REG_MUX_SEL_PATH(v_03, 2) == PAD_MUX_GROUP_MUXED_V_03_SEL_SPI_SD_0);
+  assign mux_0_spih_sd_1  = (`PAD_MUX_REG_MUX_SEL_PATH(v_04, 3) == PAD_MUX_GROUP_MUXED_V_04_SEL_SPI_SD_1);
+  assign mux_0_spih_sd_2  = (`PAD_MUX_REG_MUX_SEL_PATH(v_05, 3) == PAD_MUX_GROUP_MUXED_V_05_SEL_SPI_SD_2);
+  assign mux_0_spih_sd_3  = (`PAD_MUX_REG_MUX_SEL_PATH(v_06, 2) == PAD_MUX_GROUP_MUXED_V_06_SEL_SPI_SD_3);
   tranif1 tran_spih_sck (w_muxed_v_00, w_spi_hostd_sck, mux_0_spih_sck);
   tranif1 tran_spih_csb_0 (w_muxed_v_01, w_spi_hostd_csb[0], mux_0_spih_csb_0);
   tranif1 tran_spih_csb_1 (w_muxed_v_02, w_spi_hostd_csb[1], mux_0_spih_csb_1);
@@ -511,21 +525,21 @@ module astral_fixture;
   pullup (w_spi_hostd_sd[2]);
   pullup (w_spi_hostd_sd[3]);
   // Ethernet
-  assign mux_0_eth_rxck = (`PAD_MUX_REG_PATH.muxed_v_07_mux_sel.q == PAD_MUX_GROUP_MUXED_V_07_SEL_ETHERNET_RXCK);
-  assign mux_0_eth_rxctl = (`PAD_MUX_REG_PATH.muxed_v_08_mux_sel.q == PAD_MUX_GROUP_MUXED_V_08_SEL_ETHERNET_RXCTL);
-  assign mux_0_eth_rxd_0 = (`PAD_MUX_REG_PATH.muxed_v_09_mux_sel.q == PAD_MUX_GROUP_MUXED_V_09_SEL_ETHERNET_RXD_0);
-  assign mux_0_eth_rxd_1 = (`PAD_MUX_REG_PATH.muxed_v_10_mux_sel.q == PAD_MUX_GROUP_MUXED_V_10_SEL_ETHERNET_RXD_1);
-  assign mux_0_eth_rxd_2 = (`PAD_MUX_REG_PATH.muxed_v_11_mux_sel.q == PAD_MUX_GROUP_MUXED_V_11_SEL_ETHERNET_RXD_2);
-  assign mux_0_eth_rxd_3 = (`PAD_MUX_REG_PATH.muxed_v_12_mux_sel.q == PAD_MUX_GROUP_MUXED_V_12_SEL_ETHERNET_RXD_3);
-  assign mux_0_eth_txck = (`PAD_MUX_REG_PATH.muxed_v_13_mux_sel.q == PAD_MUX_GROUP_MUXED_V_13_SEL_ETHERNET_TXCK);
-  assign mux_0_eth_txctl = (`PAD_MUX_REG_PATH.muxed_v_14_mux_sel.q == PAD_MUX_GROUP_MUXED_V_14_SEL_ETHERNET_TXCTL);
-  assign mux_0_eth_txd_0 = (`PAD_MUX_REG_PATH.muxed_v_15_mux_sel.q == PAD_MUX_GROUP_MUXED_V_15_SEL_ETHERNET_TXD_0);
-  assign mux_0_eth_txd_1 = (`PAD_MUX_REG_PATH.muxed_v_16_mux_sel.q == PAD_MUX_GROUP_MUXED_V_16_SEL_ETHERNET_TXD_1);
-  assign mux_0_eth_txd_2 = (`PAD_MUX_REG_PATH.muxed_v_17_mux_sel.q == PAD_MUX_GROUP_MUXED_V_17_SEL_ETHERNET_TXD_2);
-  assign mux_0_eth_txd_3 = (`PAD_MUX_REG_PATH.muxed_h_00_mux_sel.q == PAD_MUX_GROUP_MUXED_H_00_SEL_ETHERNET_TXD_3);
-  assign mux_0_eth_md = (`PAD_MUX_REG_PATH.muxed_h_01_mux_sel.q == PAD_MUX_GROUP_MUXED_H_01_SEL_ETHERNET_MD);
-  assign mux_0_eth_mdc = (`PAD_MUX_REG_PATH.muxed_h_02_mux_sel.q == PAD_MUX_GROUP_MUXED_H_02_SEL_ETHERNET_MDC);
-  assign mux_0_eth_rst_n = (`PAD_MUX_REG_PATH.muxed_h_03_mux_sel.q == PAD_MUX_GROUP_MUXED_H_03_SEL_ETHERNET_RST_N);
+  assign mux_0_eth_rxck  = (`PAD_MUX_REG_MUX_SEL_PATH(v_07, 3) == PAD_MUX_GROUP_MUXED_V_07_SEL_ETHERNET_RXCK);
+  assign mux_0_eth_rxctl = (`PAD_MUX_REG_MUX_SEL_PATH(v_08, 3) == PAD_MUX_GROUP_MUXED_V_08_SEL_ETHERNET_RXCTL);
+  assign mux_0_eth_rxd_0 = (`PAD_MUX_REG_MUX_SEL_PATH(v_09, 3) == PAD_MUX_GROUP_MUXED_V_09_SEL_ETHERNET_RXD_0);
+  assign mux_0_eth_rxd_1 = (`PAD_MUX_REG_MUX_SEL_PATH(v_10, 3) == PAD_MUX_GROUP_MUXED_V_10_SEL_ETHERNET_RXD_1);
+  assign mux_0_eth_rxd_2 = (`PAD_MUX_REG_MUX_SEL_PATH(v_11, 3) == PAD_MUX_GROUP_MUXED_V_11_SEL_ETHERNET_RXD_2);
+  assign mux_0_eth_rxd_3 = (`PAD_MUX_REG_MUX_SEL_PATH(v_12, 3) == PAD_MUX_GROUP_MUXED_V_12_SEL_ETHERNET_RXD_3);
+  assign mux_0_eth_txck  = (`PAD_MUX_REG_MUX_SEL_PATH(v_13, 3) == PAD_MUX_GROUP_MUXED_V_13_SEL_ETHERNET_TXCK);
+  assign mux_0_eth_txctl = (`PAD_MUX_REG_MUX_SEL_PATH(v_14, 3) == PAD_MUX_GROUP_MUXED_V_14_SEL_ETHERNET_TXCTL);
+  assign mux_0_eth_txd_0 = (`PAD_MUX_REG_MUX_SEL_PATH(v_15, 3) == PAD_MUX_GROUP_MUXED_V_15_SEL_ETHERNET_TXD_0);
+  assign mux_0_eth_txd_1 = (`PAD_MUX_REG_MUX_SEL_PATH(v_16, 3) == PAD_MUX_GROUP_MUXED_V_16_SEL_ETHERNET_TXD_1);
+  assign mux_0_eth_txd_2 = (`PAD_MUX_REG_MUX_SEL_PATH(v_17, 3) == PAD_MUX_GROUP_MUXED_V_17_SEL_ETHERNET_TXD_2);
+  assign mux_0_eth_txd_3 = (`PAD_MUX_REG_MUX_SEL_PATH(h_00, 3) == PAD_MUX_GROUP_MUXED_H_00_SEL_ETHERNET_TXD_3);
+  assign mux_0_eth_md    = (`PAD_MUX_REG_MUX_SEL_PATH(h_01, 3) == PAD_MUX_GROUP_MUXED_H_01_SEL_ETHERNET_MD);
+  assign mux_0_eth_mdc   = (`PAD_MUX_REG_MUX_SEL_PATH(h_02, 3) == PAD_MUX_GROUP_MUXED_H_02_SEL_ETHERNET_MDC);
+  assign mux_0_eth_rst_n = (`PAD_MUX_REG_MUX_SEL_PATH(h_03, 3) == PAD_MUX_GROUP_MUXED_H_03_SEL_ETHERNET_RST_N);
   tranif1 tran_eth_rxck (w_muxed_v_07, w_eth_rxck, mux_0_eth_rxck);
   tranif1 tran_eth_rxctl (w_muxed_v_08, w_eth_rxctl, mux_0_eth_rxctl);
   tranif1 tran_eth_rxd_0 (w_muxed_v_09, w_eth_rxd[0], mux_0_eth_rxd_0);
@@ -543,29 +557,29 @@ module astral_fixture;
   tranif1 tran_eth_rst_n (w_muxed_h_03, w_eth_rst, mux_0_eth_rst_n);
   assign eth_clk = i_dut.i_dut.eth_clk;
   // CAN
-  assign mux_1_can_rx = (`PAD_MUX_REG_PATH.muxed_v_00_mux_sel.q == PAD_MUX_GROUP_MUXED_V_00_SEL_CAN_RX);
-  assign mux_1_can_tx = (`PAD_MUX_REG_PATH.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_CAN_TX);
+  assign mux_1_can_rx = (`PAD_MUX_REG_MUX_SEL_PATH(v_00, 3) == PAD_MUX_GROUP_MUXED_V_00_SEL_CAN_RX);
+  assign mux_1_can_tx = (`PAD_MUX_REG_MUX_SEL_PATH(v_01, 3) == PAD_MUX_GROUP_MUXED_V_01_SEL_CAN_TX);
   tranif1 tran_can_rx (w_muxed_v_00, w_can_rx, mux_1_can_rx);
   tranif1 tran_can_tx (w_muxed_v_01, w_can_tx, mux_1_can_tx);
   // Serial Link
-  assign mux_1_slink_rcv_clk_i = (`PAD_MUX_REG_PATH.muxed_v_04_mux_sel.q == PAD_MUX_GROUP_MUXED_V_04_SEL_SERIAL_LINK_RCV_CLK_I);
-  assign mux_1_slink_0_i = (`PAD_MUX_REG_PATH.muxed_v_05_mux_sel.q == PAD_MUX_GROUP_MUXED_V_05_SEL_SERIAL_LINK_I_0);
-  assign mux_1_slink_1_i = (`PAD_MUX_REG_PATH.muxed_v_06_mux_sel.q == PAD_MUX_GROUP_MUXED_V_06_SEL_SERIAL_LINK_I_1);
-  assign mux_1_slink_2_i = (`PAD_MUX_REG_PATH.muxed_v_07_mux_sel.q == PAD_MUX_GROUP_MUXED_V_07_SEL_SERIAL_LINK_I_2);
-  assign mux_1_slink_3_i = (`PAD_MUX_REG_PATH.muxed_v_08_mux_sel.q == PAD_MUX_GROUP_MUXED_V_08_SEL_SERIAL_LINK_I_3);
-  assign mux_1_slink_4_i = (`PAD_MUX_REG_PATH.muxed_v_09_mux_sel.q == PAD_MUX_GROUP_MUXED_V_09_SEL_SERIAL_LINK_I_4);
-  assign mux_1_slink_5_i = (`PAD_MUX_REG_PATH.muxed_v_10_mux_sel.q == PAD_MUX_GROUP_MUXED_V_10_SEL_SERIAL_LINK_I_5);
-  assign mux_1_slink_6_i = (`PAD_MUX_REG_PATH.muxed_v_11_mux_sel.q == PAD_MUX_GROUP_MUXED_V_11_SEL_SERIAL_LINK_I_6);
-  assign mux_1_slink_7_i = (`PAD_MUX_REG_PATH.muxed_v_12_mux_sel.q == PAD_MUX_GROUP_MUXED_V_12_SEL_SERIAL_LINK_I_7);
-  assign mux_1_slink_rcv_clk_o = (`PAD_MUX_REG_PATH.muxed_v_13_mux_sel.q == PAD_MUX_GROUP_MUXED_V_13_SEL_SERIAL_LINK_RCV_CLK_O);
-  assign mux_1_slink_0_o = (`PAD_MUX_REG_PATH.muxed_v_14_mux_sel.q == PAD_MUX_GROUP_MUXED_V_14_SEL_SERIAL_LINK_O_V_0);
-  assign mux_1_slink_1_o = (`PAD_MUX_REG_PATH.muxed_v_15_mux_sel.q == PAD_MUX_GROUP_MUXED_V_15_SEL_SERIAL_LINK_O_V_1);
-  assign mux_1_slink_2_o = (`PAD_MUX_REG_PATH.muxed_v_16_mux_sel.q == PAD_MUX_GROUP_MUXED_V_16_SEL_SERIAL_LINK_O_V_2);
-  assign mux_1_slink_3_o = (`PAD_MUX_REG_PATH.muxed_v_17_mux_sel.q == PAD_MUX_GROUP_MUXED_V_17_SEL_SERIAL_LINK_O_V_3);
-  assign mux_1_slink_4_o = (`PAD_MUX_REG_PATH.muxed_h_00_mux_sel.q == PAD_MUX_GROUP_MUXED_H_00_SEL_SERIAL_LINK_O_H_0);
-  assign mux_1_slink_5_o = (`PAD_MUX_REG_PATH.muxed_h_01_mux_sel.q == PAD_MUX_GROUP_MUXED_H_01_SEL_SERIAL_LINK_O_H_1);
-  assign mux_1_slink_6_o = (`PAD_MUX_REG_PATH.muxed_h_02_mux_sel.q == PAD_MUX_GROUP_MUXED_H_02_SEL_SERIAL_LINK_O_H_2);
-  assign mux_1_slink_7_o = (`PAD_MUX_REG_PATH.muxed_h_03_mux_sel.q == PAD_MUX_GROUP_MUXED_H_03_SEL_SERIAL_LINK_O_H_3);
+  assign mux_1_slink_rcv_clk_i = (`PAD_MUX_REG_MUX_SEL_PATH(v_04, 3) == PAD_MUX_GROUP_MUXED_V_04_SEL_SERIAL_LINK_RCV_CLK_I);
+  assign mux_1_slink_0_i = (`PAD_MUX_REG_MUX_SEL_PATH(v_05, 3) == PAD_MUX_GROUP_MUXED_V_05_SEL_SERIAL_LINK_I_0);
+  assign mux_1_slink_1_i = (`PAD_MUX_REG_MUX_SEL_PATH(v_06, 2) == PAD_MUX_GROUP_MUXED_V_06_SEL_SERIAL_LINK_I_1);
+  assign mux_1_slink_2_i = (`PAD_MUX_REG_MUX_SEL_PATH(v_07, 3) == PAD_MUX_GROUP_MUXED_V_07_SEL_SERIAL_LINK_I_2);
+  assign mux_1_slink_3_i = (`PAD_MUX_REG_MUX_SEL_PATH(v_08, 3) == PAD_MUX_GROUP_MUXED_V_08_SEL_SERIAL_LINK_I_3);
+  assign mux_1_slink_4_i = (`PAD_MUX_REG_MUX_SEL_PATH(v_09, 3) == PAD_MUX_GROUP_MUXED_V_09_SEL_SERIAL_LINK_I_4);
+  assign mux_1_slink_5_i = (`PAD_MUX_REG_MUX_SEL_PATH(v_10, 3) == PAD_MUX_GROUP_MUXED_V_10_SEL_SERIAL_LINK_I_5);
+  assign mux_1_slink_6_i = (`PAD_MUX_REG_MUX_SEL_PATH(v_11, 3) == PAD_MUX_GROUP_MUXED_V_11_SEL_SERIAL_LINK_I_6);
+  assign mux_1_slink_7_i = (`PAD_MUX_REG_MUX_SEL_PATH(v_12, 3) == PAD_MUX_GROUP_MUXED_V_12_SEL_SERIAL_LINK_I_7);
+  assign mux_1_slink_rcv_clk_o = (`PAD_MUX_REG_MUX_SEL_PATH(v_13, 3) == PAD_MUX_GROUP_MUXED_V_13_SEL_SERIAL_LINK_RCV_CLK_O);
+  assign mux_1_slink_0_o = (`PAD_MUX_REG_MUX_SEL_PATH(v_14, 3) == PAD_MUX_GROUP_MUXED_V_14_SEL_SERIAL_LINK_O_V_0);
+  assign mux_1_slink_1_o = (`PAD_MUX_REG_MUX_SEL_PATH(v_15, 3) == PAD_MUX_GROUP_MUXED_V_15_SEL_SERIAL_LINK_O_V_1);
+  assign mux_1_slink_2_o = (`PAD_MUX_REG_MUX_SEL_PATH(v_16, 3) == PAD_MUX_GROUP_MUXED_V_16_SEL_SERIAL_LINK_O_V_2);
+  assign mux_1_slink_3_o = (`PAD_MUX_REG_MUX_SEL_PATH(v_17, 3) == PAD_MUX_GROUP_MUXED_V_17_SEL_SERIAL_LINK_O_V_3);
+  assign mux_1_slink_4_o = (`PAD_MUX_REG_MUX_SEL_PATH(h_00, 3) == PAD_MUX_GROUP_MUXED_H_00_SEL_SERIAL_LINK_O_H_0);
+  assign mux_1_slink_5_o = (`PAD_MUX_REG_MUX_SEL_PATH(h_01, 3) == PAD_MUX_GROUP_MUXED_H_01_SEL_SERIAL_LINK_O_H_1);
+  assign mux_1_slink_6_o = (`PAD_MUX_REG_MUX_SEL_PATH(h_02, 3) == PAD_MUX_GROUP_MUXED_H_02_SEL_SERIAL_LINK_O_H_2);
+  assign mux_1_slink_7_o = (`PAD_MUX_REG_MUX_SEL_PATH(h_03, 3) == PAD_MUX_GROUP_MUXED_H_03_SEL_SERIAL_LINK_O_H_3);
   tranif1 tran_slink_rcv_clk_i (w_muxed_v_04, w_slink_hostd_rcv_clk_from_vip, mux_1_slink_rcv_clk_i);
   tranif1 tran_slink_0_i (w_muxed_v_05, w_slink_hostd_from_vip[0], mux_1_slink_0_i);
   tranif1 tran_slink_1_i (w_muxed_v_06, w_slink_hostd_from_vip[1], mux_1_slink_1_i);
@@ -585,54 +599,54 @@ module astral_fixture;
   tranif1 tran_slink_6_o (w_muxed_h_02, w_slink_hostd_to_vip[6], mux_1_slink_6_o);
   tranif1 tran_slink_7_o (w_muxed_h_03, w_slink_hostd_to_vip[7], mux_1_slink_7_o);
   // I2C
-  assign mux_2_i2c_sda = (`PAD_MUX_REG_PATH.muxed_v_00_mux_sel.q == PAD_MUX_GROUP_MUXED_V_00_SEL_I2C_SDA);
-  assign mux_2_i2c_scl = (`PAD_MUX_REG_PATH.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SCL);
+  assign mux_2_i2c_sda = (`PAD_MUX_REG_MUX_SEL_PATH(v_00, 3) == PAD_MUX_GROUP_MUXED_V_00_SEL_I2C_SDA);
+  assign mux_2_i2c_scl = (`PAD_MUX_REG_MUX_SEL_PATH(v_01, 3) == PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SCL);
   tranif1 tran_i2c_sda (w_muxed_v_00, w_i2c_hostd_sda, mux_2_i2c_sda);
   tranif1 tran_i2c_scl (w_muxed_v_01, w_i2c_hostd_scl, mux_2_i2c_scl);
   pullup (w_i2c_hostd_sda);
   pullup (w_i2c_hostd_scl);
   // Telecommand
-  assign mux_2_tc_active = (`PAD_MUX_REG_PATH.muxed_v_07_mux_sel.q == PAD_MUX_GROUP_MUXED_V_07_SEL_TC_ACTIVE);
-  assign mux_2_tc_clk = (`PAD_MUX_REG_PATH.muxed_v_08_mux_sel.q == PAD_MUX_GROUP_MUXED_V_08_SEL_TC_CLK);
-  assign mux_2_tc_data = (`PAD_MUX_REG_PATH.muxed_v_09_mux_sel.q == PAD_MUX_GROUP_MUXED_V_09_SEL_TC_DATA);
+  assign mux_2_tc_active = (`PAD_MUX_REG_MUX_SEL_PATH(v_07, 3) == PAD_MUX_GROUP_MUXED_V_07_SEL_TC_ACTIVE);
+  assign mux_2_tc_clk = (`PAD_MUX_REG_MUX_SEL_PATH(v_08, 3) == PAD_MUX_GROUP_MUXED_V_08_SEL_TC_CLK);
+  assign mux_2_tc_data = (`PAD_MUX_REG_MUX_SEL_PATH(v_09, 3) == PAD_MUX_GROUP_MUXED_V_09_SEL_TC_DATA);
   tranif1 tran_tc_active (w_muxed_v_07, w_tc_active, mux_2_tc_active);
   tranif1 tran_tc_clk (w_muxed_v_08, w_tc_clock, mux_2_tc_clk);
   tranif1 tran_tc_data (w_muxed_v_09, w_tc_data, mux_2_tc_data);
   // PTME
-  assign mux_2_ptme_clk = (`PAD_MUX_REG_PATH.muxed_v_10_mux_sel.q == PAD_MUX_GROUP_MUXED_V_10_SEL_PTME_CLK);
-  assign mux_2_ptme_enc = (`PAD_MUX_REG_PATH.muxed_v_11_mux_sel.q == PAD_MUX_GROUP_MUXED_V_11_SEL_PTME_ENC);
-  assign mux_2_ptme_sync = (`PAD_MUX_REG_PATH.muxed_v_12_mux_sel.q == PAD_MUX_GROUP_MUXED_V_12_SEL_PTME_SYNC);
-  assign mux_2_ptme_ext_clk = (`PAD_MUX_REG_PATH.muxed_v_13_mux_sel.q == PAD_MUX_GROUP_MUXED_V_13_SEL_PTME_EXT_CLK);
+  assign mux_2_ptme_clk = (`PAD_MUX_REG_MUX_SEL_PATH(v_10, 3) == PAD_MUX_GROUP_MUXED_V_10_SEL_PTME_CLK);
+  assign mux_2_ptme_enc = (`PAD_MUX_REG_MUX_SEL_PATH(v_11, 3) == PAD_MUX_GROUP_MUXED_V_11_SEL_PTME_ENC);
+  assign mux_2_ptme_sync = (`PAD_MUX_REG_MUX_SEL_PATH(v_12, 3) == PAD_MUX_GROUP_MUXED_V_12_SEL_PTME_SYNC);
+  assign mux_2_ptme_ext_clk = (`PAD_MUX_REG_MUX_SEL_PATH(v_13, 3) == PAD_MUX_GROUP_MUXED_V_13_SEL_PTME_EXT_CLK);
   tranif1 tran_ptme_active (w_muxed_v_10, w_ptme_clk, mux_2_ptme_clk);
   tranif1 tran_ptme_clk (w_muxed_v_11, w_ptme_enc, mux_2_ptme_enc);
   tranif1 tran_ptme_data (w_muxed_v_12, w_ptme_sync, mux_2_ptme_sync);
   tranif1 tran_ptme_ext_clk (w_muxed_v_13, w_ptme_ext_clk, mux_2_ptme_ext_clk);
   // HPC
-  assign mux_2_hpc_addr[0] = (`PAD_MUX_REG_PATH.muxed_v_14_mux_sel.q == PAD_MUX_GROUP_MUXED_V_14_SEL_HPC_ADDR_0);
-  assign mux_2_hpc_addr[1] = (`PAD_MUX_REG_PATH.muxed_v_15_mux_sel.q == PAD_MUX_GROUP_MUXED_V_15_SEL_HPC_ADDR_1);
-  assign mux_2_hpc_addr[2] = (`PAD_MUX_REG_PATH.muxed_v_16_mux_sel.q == PAD_MUX_GROUP_MUXED_V_16_SEL_HPC_ADDR_2);
-  assign mux_2_hpc_cmd_en = (`PAD_MUX_REG_PATH.muxed_v_17_mux_sel.q == PAD_MUX_GROUP_MUXED_V_17_SEL_HPC_CMD_EN);
-  assign mux_2_hpc_smp = (`PAD_MUX_REG_PATH.muxed_h_00_mux_sel.q == PAD_MUX_GROUP_MUXED_H_00_SEL_HPC_SAMPLE);
+  assign mux_2_hpc_addr[0] = (`PAD_MUX_REG_MUX_SEL_PATH(v_14, 3) == PAD_MUX_GROUP_MUXED_V_14_SEL_HPC_ADDR_0);
+  assign mux_2_hpc_addr[1] = (`PAD_MUX_REG_MUX_SEL_PATH(v_15, 3) == PAD_MUX_GROUP_MUXED_V_15_SEL_HPC_ADDR_1);
+  assign mux_2_hpc_addr[2] = (`PAD_MUX_REG_MUX_SEL_PATH(v_16, 3) == PAD_MUX_GROUP_MUXED_V_16_SEL_HPC_ADDR_2);
+  assign mux_2_hpc_cmd_en = (`PAD_MUX_REG_MUX_SEL_PATH(v_17, 3) == PAD_MUX_GROUP_MUXED_V_17_SEL_HPC_CMD_EN);
+  assign mux_2_hpc_smp = (`PAD_MUX_REG_MUX_SEL_PATH(h_00, 3) == PAD_MUX_GROUP_MUXED_H_00_SEL_HPC_SAMPLE);
   tranif1 tran_hpc_addr_0 (w_muxed_v_14, w_hpc_addr[0], mux_2_hpc_addr[0]);
   tranif1 tran_hpc_addr_1 (w_muxed_v_15, w_hpc_addr[1], mux_2_hpc_addr[1]);
   tranif1 tran_hpc_addr_2 (w_muxed_v_16, w_hpc_addr[2], mux_2_hpc_addr[2]);
   tranif1 tran_hpc_cmd_en (w_muxed_v_17, w_hpc_cmd_en, mux_2_hpc_cmd_en);
   tranif1 tran_hpc_smp (w_muxed_h_00, w_hpc_smp, mux_2_hpc_smp);
   // LLC LINE
-  assign mux_2_llc_line[0] = (`PAD_MUX_REG_PATH.muxed_h_01_mux_sel.q == PAD_MUX_GROUP_MUXED_H_01_SEL_LLC_LINE_0);
-  assign mux_2_llc_line[1] = (`PAD_MUX_REG_PATH.muxed_h_02_mux_sel.q == PAD_MUX_GROUP_MUXED_H_02_SEL_LLC_LINE_1);
+  assign mux_2_llc_line[0] = (`PAD_MUX_REG_MUX_SEL_PATH(h_01, 3) == PAD_MUX_GROUP_MUXED_H_01_SEL_LLC_LINE_0);
+  assign mux_2_llc_line[1] = (`PAD_MUX_REG_MUX_SEL_PATH(h_02, 3) == PAD_MUX_GROUP_MUXED_H_02_SEL_LLC_LINE_1);
   tranif1 tran_llc_line_0 (w_muxed_h_01, w_llc_line[0], mux_2_llc_line[0]);
   tranif1 tran_llc_line_1 (w_muxed_h_02, w_llc_line[1], mux_2_llc_line[1]);
   // OBT
-  assign mux_2_obt_ext_clk = (`PAD_MUX_REG_PATH.muxed_h_03_mux_sel.q == PAD_MUX_GROUP_MUXED_H_03_SEL_OBT_EXT_CLK);
+  assign mux_2_obt_ext_clk = (`PAD_MUX_REG_MUX_SEL_PATH(h_03, 3) == PAD_MUX_GROUP_MUXED_H_03_SEL_OBT_EXT_CLK);
   tranif1 tran_obt_ext_cl (w_muxed_h_03, w_obt_ext_clk, mux_2_obt_ext_clk);
   // SPI OT
-  assign mux_3_spih_ot_sck = (`PAD_MUX_REG_PATH.muxed_v_00_mux_sel.q == PAD_MUX_GROUP_MUXED_V_00_SEL_SPI_OT_SCK);
-  assign mux_3_spih_ot_csb = (`PAD_MUX_REG_PATH.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_SPI_OT_CSB);
-  assign mux_3_spih_ot_sd_0 = (`PAD_MUX_REG_PATH.muxed_v_02_mux_sel.q == PAD_MUX_GROUP_MUXED_V_02_SEL_SPI_OT_SD_0);
-  assign mux_3_spih_ot_sd_1 = (`PAD_MUX_REG_PATH.muxed_v_03_mux_sel.q == PAD_MUX_GROUP_MUXED_V_03_SEL_SPI_OT_SD_1);
-  assign mux_3_spih_ot_sd_2 = (`PAD_MUX_REG_PATH.muxed_v_04_mux_sel.q == PAD_MUX_GROUP_MUXED_V_04_SEL_SPI_OT_SD_2);
-  assign mux_3_spih_ot_sd_3 = (`PAD_MUX_REG_PATH.muxed_v_05_mux_sel.q == PAD_MUX_GROUP_MUXED_V_05_SEL_SPI_OT_SD_3);
+  assign mux_3_spih_ot_sck = (`PAD_MUX_REG_MUX_SEL_PATH(v_00, 3) == PAD_MUX_GROUP_MUXED_V_00_SEL_SPI_OT_SCK);
+  assign mux_3_spih_ot_csb = (`PAD_MUX_REG_MUX_SEL_PATH(v_01, 3) == PAD_MUX_GROUP_MUXED_V_01_SEL_SPI_OT_CSB);
+  assign mux_3_spih_ot_sd_0 = (`PAD_MUX_REG_MUX_SEL_PATH(v_02, 2) == PAD_MUX_GROUP_MUXED_V_02_SEL_SPI_OT_SD_0);
+  assign mux_3_spih_ot_sd_1 = (`PAD_MUX_REG_MUX_SEL_PATH(v_03, 2) == PAD_MUX_GROUP_MUXED_V_03_SEL_SPI_OT_SD_1);
+  assign mux_3_spih_ot_sd_2 = (`PAD_MUX_REG_MUX_SEL_PATH(v_04, 3) == PAD_MUX_GROUP_MUXED_V_04_SEL_SPI_OT_SD_2);
+  assign mux_3_spih_ot_sd_3 = (`PAD_MUX_REG_MUX_SEL_PATH(v_05, 3) == PAD_MUX_GROUP_MUXED_V_05_SEL_SPI_OT_SD_3);
   tranif1 tran_spih_ot_sck (w_muxed_v_00, w_spi_secd_sck, mux_3_spih_ot_sck);
   tranif1 tran_spih_ot_csb (w_muxed_v_01, w_spi_secd_csb[0], mux_3_spih_ot_csb);
   tranif1 tran_spih_ot_sd_0 (w_muxed_v_02, w_spi_secd_sd[0], mux_3_spih_ot_sd_0);
@@ -640,28 +654,28 @@ module astral_fixture;
   tranif1 tran_spih_ot_sd_2 (w_muxed_v_04, w_spi_secd_sd[2], mux_3_spih_ot_sd_2);
   tranif1 tran_spih_ot_sd_3 (w_muxed_v_05, w_spi_secd_sd[3], mux_3_spih_ot_sd_3);
   // GPIO
-  assign mux_4_gpio_0 = (`PAD_MUX_REG_PATH.muxed_v_00_mux_sel.q == PAD_MUX_GROUP_MUXED_V_00_SEL_GPIO_IO_V_0);
-  assign mux_4_gpio_1 = (`PAD_MUX_REG_PATH.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_GPIO_IO_V_1);
-  assign mux_4_gpio_2 = (`PAD_MUX_REG_PATH.muxed_v_02_mux_sel.q == PAD_MUX_GROUP_MUXED_V_02_SEL_GPIO_IO_V_2);
-  assign mux_4_gpio_3 = (`PAD_MUX_REG_PATH.muxed_v_03_mux_sel.q == PAD_MUX_GROUP_MUXED_V_03_SEL_GPIO_IO_V_3);
-  assign mux_4_gpio_4 = (`PAD_MUX_REG_PATH.muxed_v_04_mux_sel.q == PAD_MUX_GROUP_MUXED_V_04_SEL_GPIO_IO_V_4);
-  assign mux_4_gpio_5 = (`PAD_MUX_REG_PATH.muxed_v_05_mux_sel.q == PAD_MUX_GROUP_MUXED_V_05_SEL_GPIO_IO_V_5);
-  assign mux_4_gpio_6 = (`PAD_MUX_REG_PATH.muxed_v_06_mux_sel.q == PAD_MUX_GROUP_MUXED_V_06_SEL_GPIO_IO_V_6);
-  assign mux_4_gpio_7 = (`PAD_MUX_REG_PATH.muxed_v_07_mux_sel.q == PAD_MUX_GROUP_MUXED_V_07_SEL_GPIO_IO_V_7);
-  assign mux_4_gpio_8 = (`PAD_MUX_REG_PATH.muxed_v_08_mux_sel.q == PAD_MUX_GROUP_MUXED_V_08_SEL_GPIO_IO_V_8);
-  assign mux_4_gpio_9 = (`PAD_MUX_REG_PATH.muxed_v_09_mux_sel.q == PAD_MUX_GROUP_MUXED_V_09_SEL_GPIO_IO_V_9);
-  assign mux_4_gpio_10 = (`PAD_MUX_REG_PATH.muxed_v_10_mux_sel.q == PAD_MUX_GROUP_MUXED_V_10_SEL_GPIO_IO_V_10);
-  assign mux_4_gpio_11 = (`PAD_MUX_REG_PATH.muxed_v_11_mux_sel.q == PAD_MUX_GROUP_MUXED_V_11_SEL_GPIO_IO_V_11);
-  assign mux_4_gpio_12 = (`PAD_MUX_REG_PATH.muxed_v_12_mux_sel.q == PAD_MUX_GROUP_MUXED_V_12_SEL_GPIO_IO_V_12);
-  assign mux_4_gpio_13 = (`PAD_MUX_REG_PATH.muxed_v_13_mux_sel.q == PAD_MUX_GROUP_MUXED_V_13_SEL_GPIO_IO_V_13);
-  assign mux_4_gpio_14 = (`PAD_MUX_REG_PATH.muxed_v_14_mux_sel.q == PAD_MUX_GROUP_MUXED_V_14_SEL_GPIO_IO_V_14);
-  assign mux_4_gpio_15 = (`PAD_MUX_REG_PATH.muxed_v_15_mux_sel.q == PAD_MUX_GROUP_MUXED_V_15_SEL_GPIO_IO_V_15);
-  assign mux_4_gpio_16 = (`PAD_MUX_REG_PATH.muxed_v_16_mux_sel.q == PAD_MUX_GROUP_MUXED_V_16_SEL_GPIO_IO_V_16);
-  assign mux_4_gpio_17 = (`PAD_MUX_REG_PATH.muxed_v_17_mux_sel.q == PAD_MUX_GROUP_MUXED_V_17_SEL_GPIO_IO_V_17);
-  assign mux_4_gpio_18 = (`PAD_MUX_REG_PATH.muxed_h_00_mux_sel.q == PAD_MUX_GROUP_MUXED_H_00_SEL_GPIO_IO_H_0);
-  assign mux_4_gpio_19 = (`PAD_MUX_REG_PATH.muxed_h_01_mux_sel.q == PAD_MUX_GROUP_MUXED_H_01_SEL_GPIO_IO_H_1);
-  assign mux_4_gpio_20 = (`PAD_MUX_REG_PATH.muxed_h_02_mux_sel.q == PAD_MUX_GROUP_MUXED_H_02_SEL_GPIO_IO_H_2);
-  assign mux_4_gpio_21 = (`PAD_MUX_REG_PATH.muxed_h_03_mux_sel.q == PAD_MUX_GROUP_MUXED_H_03_SEL_GPIO_IO_H_3);
+  assign mux_4_gpio_0 = (`PAD_MUX_REG_MUX_SEL_PATH(v_00, 3) == PAD_MUX_GROUP_MUXED_V_00_SEL_GPIO_IO_V_0);
+  assign mux_4_gpio_1 = (`PAD_MUX_REG_MUX_SEL_PATH(v_01, 3) == PAD_MUX_GROUP_MUXED_V_01_SEL_GPIO_IO_V_1);
+  assign mux_4_gpio_2 = (`PAD_MUX_REG_MUX_SEL_PATH(v_02, 2) == PAD_MUX_GROUP_MUXED_V_03_SEL_GPIO_IO_V_3);
+  assign mux_4_gpio_3 = (`PAD_MUX_REG_MUX_SEL_PATH(v_03, 2) == PAD_MUX_GROUP_MUXED_V_02_SEL_GPIO_IO_V_2);
+  assign mux_4_gpio_4 = (`PAD_MUX_REG_MUX_SEL_PATH(v_04, 3) == PAD_MUX_GROUP_MUXED_V_04_SEL_GPIO_IO_V_4);
+  assign mux_4_gpio_5 = (`PAD_MUX_REG_MUX_SEL_PATH(v_05, 3) == PAD_MUX_GROUP_MUXED_V_05_SEL_GPIO_IO_V_5);
+  assign mux_4_gpio_6 = (`PAD_MUX_REG_MUX_SEL_PATH(v_06, 2) == PAD_MUX_GROUP_MUXED_V_06_SEL_GPIO_IO_V_6);
+  assign mux_4_gpio_7 = (`PAD_MUX_REG_MUX_SEL_PATH(v_07, 3) == PAD_MUX_GROUP_MUXED_V_07_SEL_GPIO_IO_V_7);
+  assign mux_4_gpio_8 = (`PAD_MUX_REG_MUX_SEL_PATH(v_08, 3) == PAD_MUX_GROUP_MUXED_V_08_SEL_GPIO_IO_V_8);
+  assign mux_4_gpio_9 = (`PAD_MUX_REG_MUX_SEL_PATH(v_09, 3) == PAD_MUX_GROUP_MUXED_V_09_SEL_GPIO_IO_V_9);
+  assign mux_4_gpio_10 = (`PAD_MUX_REG_MUX_SEL_PATH(v_10, 3) == PAD_MUX_GROUP_MUXED_V_10_SEL_GPIO_IO_V_10);
+  assign mux_4_gpio_11 = (`PAD_MUX_REG_MUX_SEL_PATH(v_11, 3) == PAD_MUX_GROUP_MUXED_V_11_SEL_GPIO_IO_V_11);
+  assign mux_4_gpio_12 = (`PAD_MUX_REG_MUX_SEL_PATH(v_12, 3) == PAD_MUX_GROUP_MUXED_V_12_SEL_GPIO_IO_V_12);
+  assign mux_4_gpio_13 = (`PAD_MUX_REG_MUX_SEL_PATH(v_13, 3) == PAD_MUX_GROUP_MUXED_V_13_SEL_GPIO_IO_V_13);
+  assign mux_4_gpio_14 = (`PAD_MUX_REG_MUX_SEL_PATH(v_14, 3) == PAD_MUX_GROUP_MUXED_V_14_SEL_GPIO_IO_V_14);
+  assign mux_4_gpio_15 = (`PAD_MUX_REG_MUX_SEL_PATH(v_15, 3) == PAD_MUX_GROUP_MUXED_V_15_SEL_GPIO_IO_V_15);
+  assign mux_4_gpio_16 = (`PAD_MUX_REG_MUX_SEL_PATH(v_16, 3) == PAD_MUX_GROUP_MUXED_V_16_SEL_GPIO_IO_V_16);
+  assign mux_4_gpio_17 = (`PAD_MUX_REG_MUX_SEL_PATH(v_17, 3) == PAD_MUX_GROUP_MUXED_V_17_SEL_GPIO_IO_V_17);
+  assign mux_4_gpio_18 = (`PAD_MUX_REG_MUX_SEL_PATH(h_00, 3) == PAD_MUX_GROUP_MUXED_H_00_SEL_GPIO_IO_H_0);
+  assign mux_4_gpio_19 = (`PAD_MUX_REG_MUX_SEL_PATH(h_01, 3) == PAD_MUX_GROUP_MUXED_H_01_SEL_GPIO_IO_H_1);
+  assign mux_4_gpio_20 = (`PAD_MUX_REG_MUX_SEL_PATH(h_02, 3) == PAD_MUX_GROUP_MUXED_H_02_SEL_GPIO_IO_H_2);
+  assign mux_4_gpio_21 = (`PAD_MUX_REG_MUX_SEL_PATH(h_03, 3) == PAD_MUX_GROUP_MUXED_H_03_SEL_GPIO_IO_H_3);
   tranif1 tran_gpio_0 (w_muxed_v_00, w_gpio[0], mux_4_gpio_0);
   tranif1 tran_gpio_1 (w_muxed_v_01, w_gpio[1], mux_4_gpio_1);
   tranif1 tran_gpio_2 (w_muxed_v_02, w_gpio[2], mux_4_gpio_2);
@@ -684,7 +698,7 @@ module astral_fixture;
   tranif1 tran_gpio_19 (w_muxed_h_01, w_gpio[19], mux_4_gpio_19);
   tranif1 tran_gpio_20 (w_muxed_h_02, w_gpio[20], mux_4_gpio_20);
   tranif1 tran_gpio_21 (w_muxed_h_03, w_gpio[21], mux_4_gpio_21);
-  
+
   for (genvar i = 0; i < 4; ++i) begin : gen_spih_sd_io
     pullup (w_spi_hostd_sd[i]);
   end
