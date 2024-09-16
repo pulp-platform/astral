@@ -163,7 +163,7 @@ module tb_astral;
 `ifndef ASTRAL_TOP_NETLIST
                 @(posedge fix.i_dut.periph_clk);
 `else
-                #10ns;
+                @(posedge fix.i_dut.clk_fll_out);
 `endif
             end
             $display("[TB] %t - Loading '%s' through JTAG", $realtime, chs_preload_elf);
@@ -480,7 +480,7 @@ module tb_astral;
   `ifndef ASTRAL_TOP_NETLIST
           @(posedge fix.i_dut.periph_clk);
   `else
-          #10ns;
+          @(posedge fix.i_dut.clk_fll_out);
   `endif
 
         wait (pad_configured.triggered);
