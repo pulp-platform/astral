@@ -85,5 +85,11 @@ localparam doub_bt L2EccCfgSize = 'h00001000;
  **************************/
 localparam doub_bt NumHypPhys = 1;
 localparam doub_bt NumHypChips = 2;
+localparam bit     DramEnable = 1;
+localparam doub_bt DramBase = 'h80000000;
+localparam doub_bt DramSize = 'h80000000;
+// Cheshire slave
+localparam doub_bt CheshireBase = 'h00000000;
+localparam doub_bt CheshireSize = PeriphBase;
 
 endpackage
