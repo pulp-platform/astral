@@ -28,7 +28,7 @@ dependencies:
   common_cells:       { git: https://github.com/pulp-platform/common_cells.git,         version: 1.37.0                               } # branch: master        
   pulp-ethernet:      { git: https://github.com/pulp-platform/pulp-ethernet.git,        rev: 2bea11658d2bc368ae2af0a3f71b4253ba4f713f } # branch: handshake
   riscv-dbg:          { git: https://github.com/pulp-platform/riscv-dbg.git,            version: =0.8.0                               }
-  floo_noc:           { git: https://github.com/pulp-platform/FlooNoC.git,              rev: a1241c0bce20c33504e1cffdb89fed630ee6a514 } # branch: yt/test
+  floo_noc:           { git: https://github.com/pulp-platform/FlooNoC.git,              rev: 265a2fcebc3e3b2993a18ccc05a4825729da8b24 } # branch: yt/test
 
 workspace:
   package_links:
