@@ -32,6 +32,7 @@ typedef struct packed {
 } islands_properties_t;
 
 typedef struct packed {
+  islands_properties_t cheshire;
   islands_properties_t l2_port0;
   islands_properties_t l2_port1;
   islands_properties_t safed;
@@ -40,6 +41,7 @@ typedef struct packed {
   islands_properties_t spatz;
   islands_properties_t pulp;
   islands_properties_t secured;
+  islands_properties_t dram;
   islands_properties_t mbox;
 } islands_cfg_t;
 
@@ -62,6 +64,7 @@ typedef struct packed {
   byte_bt periph;
   byte_bt spatz;
   byte_bt pulp;
+  byte_bt dram;
   byte_bt mbox;
 } carfield_slave_idx_t;
 
@@ -87,6 +90,7 @@ function automatic int unsigned gen_num_axi_slave(islands_cfg_t island_cfg);
   if (island_cfg.periph.enable  ) begin ret++; end
   if (island_cfg.spatz.enable   ) begin ret++; end
   if (island_cfg.pulp.enable    ) begin ret++; end
+  if (island_cfg.dram.enable    ) begin ret++; end
   if (island_cfg.mbox.enable    ) begin ret++; end
   return ret;
 endfunction
@@ -110,6 +114,8 @@ function automatic carfield_slave_idx_t carfield_gen_axi_slave_idx(islands_cfg_t
   end else begin ret.spatz = MaxExtAxiSlv + j; j++; end
   if (island_cfg.pulp.enable) begin ret.pulp = i; i++;
   end else begin ret.pulp = MaxExtAxiSlv + j; j++; end
+  if (island_cfg.dram.enable) begin ret.dram = i; i++;
+  end else begin ret.dram = MaxExtAxiSlv + j; j++; end
   if (island_cfg.mbox.enable) begin ret.mbox = i; i++;
   end else begin ret.mbox = MaxExtAxiSlv + j; j++; end
   return ret;
@@ -186,6 +192,12 @@ function automatic axi_struct_t carfield_gen_axi_map(int unsigned NumSlave  ,
     ret.AxiIdx[i] = idx.pulp;
     ret.AxiStart[i] = island_cfg.pulp.base;
     ret.AxiEnd[i] = island_cfg.pulp.base + island_cfg.pulp.size;
+    if (i < NumSlave - 1) i++;
+  end
+  if (island_cfg.dram.enable) begin
+    ret.AxiIdx[i] = idx.dram;
+    ret.AxiStart[i] = island_cfg.dram.base;
+    ret.AxiEnd[i] = island_cfg.dram.base + island_cfg.dram.size;
     if (i < NumSlave - 1) i++;
   end
   if (island_cfg.mbox.enable) begin
@@ -323,6 +335,7 @@ function automatic int unsigned gen_carfield_domains(islands_cfg_t island_cfg);
 endfunction
 
 localparam islands_cfg_t CarfieldIslandsCfg = '{
+  cheshire:      '{1, CheshireBase, CheshireSize},
   l2_port0:      '{L2Port0Enable, L2Port0Base, L2Port0Size},
   l2_port1:      '{L2Port1Enable, L2Port1Base, L2Port1Size},
   safed:         '{SafetyIslandEnable, SafetyIslandBase, SafetyIslandSize},
@@ -331,6 +344,7 @@ localparam islands_cfg_t CarfieldIslandsCfg = '{
   spatz:         '{SpatzClusterEnable, SpatzClusterBase, SpatzClusterSize},
   pulp:          '{PulpClusterEnable, PulpClusterBase, PulpClusterSize},
   secured:       '{SecurityIslandEnable, SecurityIslandBase, SecurityIslandSize},
+  dram:          '{DramEnable, DramBase, DramSize},
   mbox:          '{MailboxEnable, MailboxBase, MailboxSize}
 };
 
@@ -419,6 +433,7 @@ typedef enum byte_bt {
   PeriphsSlvIdx      = CarfieldAxiSlvIdx.periph,
   FPClusterSlvIdx    = CarfieldAxiSlvIdx.spatz,
   IntClusterSlvIdx   = CarfieldAxiSlvIdx.pulp,
+  DramSlvIdx         = CarfieldAxiSlvIdx.dram,
   MailboxSlvIdx      = CarfieldAxiSlvIdx.mbox
 } axi_slv_idx_t;
 
@@ -578,7 +593,7 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   AddrWidth         : 48,
   AxiDataWidth      : 64,
   AxiUserWidth      : 10,  // {CACHE_PARTITIONING(5[9:5]), ECC_ERROR(1[4:4]), ATOPS(4[3:0])}
-  AxiMstIdWidth     : 2,
+  AxiMstIdWidth     : 3,
   TFLenWidth        : 32,
   AxiMaxMstTrans    : 64,
   AxiMaxSlvTrans    : 64,
@@ -593,13 +608,13 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   RegAmoPostCut     : 1,
   RegAdaptMemCut    : 1,
   // External AXI ports (at most 8 ports and rules)
-  AxiExtNumMst      : CarfieldAxiNumMasters,
-  AxiExtNumSlv      : CarfieldAxiNumSlaves,
-  AxiExtNumRules    : CarfieldAxiNumSlaves,
+  AxiExtNumMst      : 1,
+  AxiExtNumSlv      : 1,
+  AxiExtNumRules    : 1,
   // External AXI region map
-  AxiExtRegionIdx   : CarfieldAxiMap.AxiIdx,
-  AxiExtRegionStart : CarfieldAxiMap.AxiStart,
-  AxiExtRegionEnd   : CarfieldAxiMap.AxiEnd,
+  AxiExtRegionIdx   : 'h0,
+  AxiExtRegionStart : CarfieldIslandsCfg.cheshire.base + CarfieldIslandsCfg.cheshire.size,
+  AxiExtRegionEnd   : CarfieldIslandsCfg.dram.base,
   // External reg slaves (at most 8 ports and rules)
   RegExtNumSlv      : NumTotalRegSlv,
   RegExtNumRules    : NumTotalRegSlv,
@@ -649,9 +664,9 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   LlcMaxWriteTxns   : 32,
   LlcAmoNumCuts     : 1,
   LlcAmoPostCut     : 1,
-  LlcOutConnect     : 1,
-  LlcOutRegionStart : 'h8000_0000,
-  LlcOutRegionEnd   : 'h1_0000_0000,
+  LlcOutConnect     : CarfieldIslandsCfg.dram.enable,
+  LlcOutRegionStart : CarfieldIslandsCfg.dram.base,
+  LlcOutRegionEnd   : CarfieldIslandsCfg.dram.base + CarfieldIslandsCfg.dram.size,
   LlcUserMsb        : 9,
   LlcUserLsb        : 5,
   LlcCachePartition : 1,
@@ -709,6 +724,8 @@ localparam int unsigned LogDepth   = 3;
 /* L2 Parameters */
 /*****************/
 localparam int unsigned NumL2Ports = (CarfieldIslandsCfg.l2_port1.enable) ? 2 : 1;
+localparam int unsigned L2PortId = (CarfieldIslandsCfg.l2_port1.enable) ? L2Port1SlvIdx
+                                                                        : L2Port0SlvIdx;
 localparam int unsigned L2MemSize = CarfieldIslandsCfg.l2_port0.size/2;
 localparam int unsigned L2NumRules = 4; // 2 rules per each access mode
                                         // (interleaved, non-interleaved)

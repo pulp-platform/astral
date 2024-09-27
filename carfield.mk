@@ -24,6 +24,7 @@ CAR_TGT_DIR := $(CAR_ROOT)/target/
 CAR_XIL_DIR := $(CAR_TGT_DIR)/xilinx
 CAR_SIM_DIR := $(CAR_TGT_DIR)/sim
 SECD_ROOT ?= $(shell $(BENDER) path opentitan)
+NOC_ROOT ?= $(shell $(BENDER) path floo_noc)
 
 # Questasim
 CAR_VSIM_DIR := $(CAR_TGT_DIR)/sim/vsim
@@ -237,6 +238,15 @@ car-hw-init: $(SPATZD_HW_INIT) chs-hw-init $(SECD_HW_INIT)
 #Build OpenTitan's debug rom with support for coreid != 0x0
 secd-hw-init:
 	$(MAKE) -C $(SECD_ROOT)/hw/vendor/pulp_riscv_dbg/debug_rom clean all FLAGS=-DCARFIELD=1
+
+## @section NoC genration
+FLOOGEN ?= floogen
+.PHONY: regenerate_noc
+install_floogen: | venv
+	source $(VENVDIR)/bin/activate; cd $(NOC_ROOT); pip install .; cd $(ROOT); deactivate
+
+regenerate_noc: install_floogen | venv
+	source $(VENVDIR)/bin/activate; $(FLOOGEN) -c $(NOC_ROOT)/floogen/examples/astral.yml -o $(NOC_ROOT)/hw/astral --no-format; deactivate
 
 ## @section Carfield platform PCRs generation
 .PHONY: regenerate_soc_regs

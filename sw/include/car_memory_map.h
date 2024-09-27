@@ -113,7 +113,7 @@ extern void *__base_l2;
 #define CAR_CLIC_CFG_BASE_ADDR(id)   0x000008000000
 
 // from carfield proper
-#define CAR_PERIPHS_BASE_ADDR        0x20000000
+#define CAR_PERIPHS_BASE_ADDR        0x21000000
 
 #define CAR_ETHERNET_OFFSET          0x0000000
 #define CAR_CAN_OFFSET               0x0001000
@@ -159,7 +159,7 @@ extern void *__base_l2;
 #define MBOX_CAR_LETTER1(id)              (CAR_MBOX_BASE_ADDR + MBOX_LETTER1_OFFSET      + (id*0x100))
 
 // PLL
-#define CAR_PLL_BASE_ADDRESS         0x21003000
+#define CAR_PLL_BASE_ADDRESS         0x20003000
 #define PLL_ADDR_SPACE               0x200
 #define PLL_BASE_ADDRESS(id)         (CAR_PLL_BASE_ADDRESS + (id+1)*PLL_ADDR_SPACE)
 

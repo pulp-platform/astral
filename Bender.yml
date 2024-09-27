@@ -28,6 +28,7 @@ dependencies:
   common_cells:       { git: https://github.com/pulp-platform/common_cells.git,         version: 1.37.0                               } # branch: master        
   pulp-ethernet:      { git: https://github.com/pulp-platform/pulp-ethernet.git,        rev: 2bea11658d2bc368ae2af0a3f71b4253ba4f713f } # branch: handshake
   riscv-dbg:          { git: https://github.com/pulp-platform/riscv-dbg.git,            version: =0.8.0                               }
+  floo_noc:           { git: https://github.com/pulp-platform/FlooNoC.git,              rev: a1241c0bce20c33504e1cffdb89fed630ee6a514 } # branch: yt/test
 
 workspace:
   package_links:
@@ -40,6 +41,10 @@ workspace:
 sources:
   # Configurations
     # "Small" Astral configuration
+  - target: astral_noc
+    files:
+      - hw/configs/astral_noc.sv
+
   - target: carfield_l2dual_secure_pulp_periph_can
     files:
       - hw/configs/carfield_l2dual_secure_pulp_periph_can.sv
@@ -92,6 +97,7 @@ sources:
   - hw/hyperbus_wrap.sv
   - hw/l2_wrap.sv
   - hw/ethernet_wrap.sv
+  - hw/noc_wrap.sv
   - hw/carfield_rstgen.sv
   # Level 2
   - hw/carfield.sv
