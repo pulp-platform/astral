@@ -157,7 +157,7 @@ packages:
     - common_cells
     - register_interface
   cluster_icache:
-    revision: 8114ab36fd446f76cd1e9f139f12a62ab1fb9a6a
+    revision: 09e78fe1a74006e6d3b69cc8a20f36b0a3250c0c
     version: null
     source:
       Git: https://github.com/pulp-platform/cluster_icache.git
@@ -419,7 +419,7 @@ packages:
     - idma
     - register_interface
   pulp_cluster:
-    revision: 2cd26c4923570ae81297c06078a0cfcded1e761c
+    revision: 8057fd244fbd82b92d470ab6597a6ed4b259ad8a
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp_cluster.git
