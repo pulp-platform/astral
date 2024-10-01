@@ -45,10 +45,6 @@ int main(void)
 
   pulp_cluster_set_bootaddress(pulp_boot_default);
 
-  uart_init(&__base_uart, reset_freq, 115200);
-  uart_write_str(&__base_uart, str, sizeof(str));
-  uart_write_flush(&__base_uart);
-
   pulp_cluster_start();
 
   pulp_cluster_wait_eoc();
