@@ -102,7 +102,24 @@ module noc_wrap #(
   input  noc_mst_rsp_t cheshire_mst_rsp_i,
   output noc_mst_req_t mailbox_mst_req_o,
   input  noc_mst_rsp_t mailbox_mst_rsp_i,
+  input  noc_slv_req_t llc_slv_req_i,
+  output noc_slv_rsp_t llc_slv_rsp_o,
   // External async AXI master Ports
+  output logic [LlcArWidth-1:0] llc_ar_data_o,
+  output logic [    LogDepth:0] llc_ar_wptr_o,
+  input  logic [    LogDepth:0] llc_ar_rptr_i,
+  output logic [LlcAwWidth-1:0] llc_aw_data_o,
+  output logic [    LogDepth:0] llc_aw_wptr_o,
+  input  logic [    LogDepth:0] llc_aw_rptr_i,
+  input  logic [ LlcBWidth-1:0] llc_b_data_i ,
+  input  logic [    LogDepth:0] llc_b_wptr_i ,
+  output logic [    LogDepth:0] llc_b_rptr_o ,
+  input  logic [ LlcRWidth-1:0] llc_r_data_i ,
+  input  logic [    LogDepth:0] llc_r_wptr_i ,
+  output logic [    LogDepth:0] llc_r_rptr_o ,
+  output logic [ LlcWWidth-1:0] llc_w_data_o ,
+  output logic [    LogDepth:0] llc_w_wptr_o ,
+  input  logic [    LogDepth:0] llc_w_rptr_i ,
   output logic [NumNocMst-1:0][NocMstArWidth-1:0] noc_ext_mst_ar_data_o,
   output logic [NumNocMst-1:0][       LogDepth:0] noc_ext_mst_ar_wptr_o,
   input  logic [NumNocMst-1:0][       LogDepth:0] noc_ext_mst_ar_rptr_i,
@@ -142,6 +159,8 @@ noc_mst_rsp_t [NumNocMst-1:0] mst_rsp, mst_isolated_rsp;
 noc_slv_req_t [NumNocSlv-1:0] slv_req;
 noc_slv_rsp_t [NumNocSlv-1:0] slv_rsp;
 
+noc_mst_req_t llc_mst_req;
+noc_mst_rsp_t llc_mst_rsp;
 noc_llc_req_t llc_req, llc_isolated_req;
 noc_llc_rsp_t llc_rsp, llc_isolated_rsp;
 
@@ -239,6 +258,64 @@ for (genvar i = 0; i < NumNocSlv; i++) begin: gen_ext_slv_dst_cdc
   );
 end
 
+axi_iw_converter #(
+  .AxiSlvPortIdWidth      ( Cfg.AxiMstIdWidth ),
+  .AxiMstPortIdWidth      ( LlcIdWidth ),
+  .AxiSlvPortMaxUniqIds   ( 1 ),
+  .AxiSlvPortMaxTxnsPerId ( Cfg.AxiMaxMstTrans ),
+  .AxiSlvPortMaxTxns      ( Cfg.AxiMaxMstTrans ),
+  .AxiMstPortMaxUniqIds   ( 1 ),
+  .AxiMstPortMaxTxnsPerId ( Cfg.AxiMaxMstTrans ),
+  .AxiAddrWidth ( Cfg.AddrWidth ),
+  .AxiDataWidth ( Cfg.AxiDataWidth ),
+  .AxiUserWidth ( Cfg.AxiUserWidth ),
+  .slv_req_t  ( noc_mst_req_t ),
+  .slv_resp_t ( noc_mst_rsp_t ),
+  .mst_req_t  ( noc_llc_req_t ),
+  .mst_resp_t ( noc_llc_rsp_t )
+) i_llc_idw_converter (
+  .clk_i,
+  .rst_ni,
+  .slv_req_i  ( llc_mst_req ),
+  .slv_resp_o ( llc_mst_rsp ),
+  .mst_req_o  ( llc_req     ),
+  .mst_resp_i ( llc_rsp     )
+);
+
+axi_cdc_src #(
+  .LogDepth   ( LogDepth          ),
+  .SyncStages ( CdcSyncStages     ),
+  .aw_chan_t  ( noc_llc_aw_chan_t ),
+  .w_chan_t   ( noc_llc_w_chan_t  ),
+  .b_chan_t   ( noc_llc_b_chan_t  ),
+  .ar_chan_t  ( noc_llc_ar_chan_t ),
+  .r_chan_t   ( noc_llc_r_chan_t  ),
+  .axi_req_t  ( noc_llc_req_t     ),
+  .axi_resp_t ( noc_llc_rsp_t     )
+) i_cheshire_ext_llc_cdc_src   (
+  // synchronous slave port
+  .src_clk_i                   ( clk_i   ),
+  .src_rst_ni                  ( rst_ni  ),
+  .src_req_i                   ( llc_req ),
+  .src_resp_o                  ( llc_rsp ),
+  // asynchronous master port
+  .async_data_master_aw_data_o ( llc_aw_data_o ),
+  .async_data_master_aw_wptr_o ( llc_aw_wptr_o ),
+  .async_data_master_aw_rptr_i ( llc_aw_rptr_i ),
+  .async_data_master_w_data_o  ( llc_w_data_o  ),
+  .async_data_master_w_wptr_o  ( llc_w_wptr_o  ),
+  .async_data_master_w_rptr_i  ( llc_w_rptr_i  ),
+  .async_data_master_b_data_i  ( llc_b_data_i  ),
+  .async_data_master_b_wptr_i  ( llc_b_wptr_i  ),
+  .async_data_master_b_rptr_o  ( llc_b_rptr_o  ),
+  .async_data_master_ar_data_o ( llc_ar_data_o ),
+  .async_data_master_ar_wptr_o ( llc_ar_wptr_o ),
+  .async_data_master_ar_rptr_i ( llc_ar_rptr_i ),
+  .async_data_master_r_data_i  ( llc_r_data_i  ),
+  .async_data_master_r_wptr_i  ( llc_r_wptr_i  ),
+  .async_data_master_r_rptr_o  ( llc_r_rptr_o  )
+);
+
 floo_astral_noc i_astral_noc (
   .clk_i,
   .rst_ni,
@@ -265,10 +342,10 @@ floo_astral_noc i_astral_noc (
   .mbox_axi_out_rsp_i ( mailbox_mst_rsp_i ),
   .peripherals_axi_out_req_o ( mst_req [carfield_pkg::PeriphsSlvIdx] ),
   .peripherals_axi_out_rsp_i ( mst_rsp [carfield_pkg::PeriphsSlvIdx] ),
-  .dram_axi_in_req_i ( '0 ),
-  .dram_axi_in_rsp_o (  ),
-  .dram_axi_out_req_o (  ),
-  .dram_axi_out_rsp_i ( '0 )
+  .llc_axi_in_req_i ( llc_slv_req_i ),
+  .llc_axi_in_rsp_o ( llc_slv_rsp_o ),
+  .dram_axi_out_req_o ( llc_mst_req ),
+  .dram_axi_out_rsp_i ( llc_mst_rsp )
 );
 
 endmodule: noc_wrap

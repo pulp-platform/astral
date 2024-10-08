@@ -115,24 +115,9 @@ module cheshire_wrap
   // External AXI LLC (DRAM) port
   input  logic                  axi_llc_isolate_i,
   output logic                  axi_llc_isolated_o,
-  output logic [LlcArWidth-1:0] llc_ar_data_o,
-  output logic [    LogDepth:0] llc_ar_wptr_o,
-  input  logic [    LogDepth:0] llc_ar_rptr_i,
-  output logic [LlcAwWidth-1:0] llc_aw_data_o,
-  output logic [    LogDepth:0] llc_aw_wptr_o,
-  input  logic [    LogDepth:0] llc_aw_rptr_i,
-  input  logic [ LlcBWidth-1:0] llc_b_data_i ,
-  input  logic [    LogDepth:0] llc_b_wptr_i ,
-  output logic [    LogDepth:0] llc_b_rptr_o ,
-  input  logic [ LlcRWidth-1:0] llc_r_data_i ,
-  input  logic [    LogDepth:0] llc_r_wptr_i ,
-  output logic [    LogDepth:0] llc_r_rptr_o ,
-  output logic [ LlcWWidth-1:0] llc_w_data_o ,
-  output logic [    LogDepth:0] llc_w_wptr_o ,
-  input  logic [    LogDepth:0] llc_w_rptr_i ,
   // External async AXI slave Ports (except the Mailbox)
-  output cheshire_axi_ext_slv_req_t axi_ext_slv_req_o,
-  input  cheshire_axi_ext_slv_rsp_t axi_ext_slv_rsp_i,
+  output cheshire_axi_ext_slv_req_t [1:0] axi_ext_slv_req_o,
+  input  cheshire_axi_ext_slv_rsp_t [1:0] axi_ext_slv_rsp_i,
   // External async AXI master Ports
   input  cheshire_axi_ext_mst_req_t axi_ext_mst_req_i,
   output cheshire_axi_ext_mst_rsp_t axi_ext_mst_rsp_o,
@@ -243,8 +228,8 @@ cheshire_soc #(
   // External AXI crossbar ports
   .axi_ext_mst_req_i ( axi_ext_mst_req_i ),
   .axi_ext_mst_rsp_o ( axi_ext_mst_rsp_o ),
-  .axi_ext_slv_req_o ( axi_ext_slv_req_o ),
-  .axi_ext_slv_rsp_i ( axi_ext_slv_rsp_i ),
+  .axi_ext_slv_req_o ( axi_ext_slv_req_o[0] ),
+  .axi_ext_slv_rsp_i ( axi_ext_slv_rsp_i[0] ),
   // External reg demux slaves
   .reg_ext_slv_req_o ( ext_reg_req ),
   .reg_ext_slv_rsp_i ( ext_reg_rsp ),
@@ -329,38 +314,28 @@ axi_isolate              #(
   .isolated_o             ( axi_llc_isolated_o       )
 );
 
-axi_cdc_src #(
-  .LogDepth   ( LogDepth                       ),
-  .SyncStages ( CdcSyncStages                  ),
-  .aw_chan_t  ( cheshire_axi_ext_llc_aw_chan_t ),
-  .w_chan_t   ( cheshire_axi_ext_llc_w_chan_t  ),
-  .b_chan_t   ( cheshire_axi_ext_llc_b_chan_t  ),
-  .ar_chan_t  ( cheshire_axi_ext_llc_ar_chan_t ),
-  .r_chan_t   ( cheshire_axi_ext_llc_r_chan_t  ),
-  .axi_req_t  ( cheshire_axi_ext_llc_req_t     ),
-  .axi_resp_t ( cheshire_axi_ext_llc_rsp_t     )
-) i_cheshire_ext_llc_cdc_src   (
-  // synchronous slave port
-  .src_clk_i                   ( clk_i                    ),
-  .src_rst_ni                  ( rst_ni                   ),
-  .src_req_i                   ( axi_llc_mst_isolated_req ),
-  .src_resp_o                  ( axi_llc_mst_isolated_rsp ),
-  // asynchronous master port
-  .async_data_master_aw_data_o ( llc_aw_data_o ),
-  .async_data_master_aw_wptr_o ( llc_aw_wptr_o ),
-  .async_data_master_aw_rptr_i ( llc_aw_rptr_i ),
-  .async_data_master_w_data_o  ( llc_w_data_o  ),
-  .async_data_master_w_wptr_o  ( llc_w_wptr_o  ),
-  .async_data_master_w_rptr_i  ( llc_w_rptr_i  ),
-  .async_data_master_b_data_i  ( llc_b_data_i  ),
-  .async_data_master_b_wptr_i  ( llc_b_wptr_i  ),
-  .async_data_master_b_rptr_o  ( llc_b_rptr_o  ),
-  .async_data_master_ar_data_o ( llc_ar_data_o ),
-  .async_data_master_ar_wptr_o ( llc_ar_wptr_o ),
-  .async_data_master_ar_rptr_i ( llc_ar_rptr_i ),
-  .async_data_master_r_data_i  ( llc_r_data_i  ),
-  .async_data_master_r_wptr_i  ( llc_r_wptr_i  ),
-  .async_data_master_r_rptr_o  ( llc_r_rptr_o  )
+axi_iw_converter #(
+  .AxiSlvPortIdWidth      ( LlcIdWidth    ),
+  .AxiMstPortIdWidth      ( ExtSlvIdWidth ),
+  .AxiSlvPortMaxUniqIds   ( 1 ),
+  .AxiSlvPortMaxTxnsPerId ( Cfg.AxiMaxMstTrans ),
+  .AxiSlvPortMaxTxns      ( Cfg.AxiMaxMstTrans ),
+  .AxiMstPortMaxUniqIds   ( 1 ),
+  .AxiMstPortMaxTxnsPerId ( Cfg.AxiMaxMstTrans ),
+  .AxiAddrWidth ( Cfg.AddrWidth ),
+  .AxiDataWidth ( Cfg.AxiDataWidth ),
+  .AxiUserWidth ( Cfg.AxiUserWidth ),
+  .slv_req_t  ( cheshire_axi_ext_llc_req_t ),
+  .slv_resp_t ( cheshire_axi_ext_llc_rsp_t ),
+  .mst_req_t  ( cheshire_axi_ext_slv_req_t ),
+  .mst_resp_t ( cheshire_axi_ext_slv_rsp_t )
+) i_llc_idw_converter (
+  .clk_i,
+  .rst_ni,
+  .slv_req_i  ( axi_llc_mst_isolated_req ),
+  .slv_resp_o ( axi_llc_mst_isolated_rsp ),
+  .mst_req_o  ( axi_ext_slv_req_o[1] ),
+  .mst_resp_i ( axi_ext_slv_rsp_i[1] )
 );
 
 // Async reg interface:

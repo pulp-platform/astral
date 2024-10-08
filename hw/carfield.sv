@@ -732,8 +732,8 @@ assign chs_ext_intrs  = {
   pulpcl_eoc               // from integer cluster
 };
 
-carfield_axi_slv_req_t cheshire_slv_req;
-carfield_axi_slv_rsp_t cheshire_slv_rsp;
+carfield_axi_slv_req_t [1:0] cheshire_slv_req;
+carfield_axi_slv_rsp_t [1:0] cheshire_slv_rsp;
 carfield_axi_mst_req_t cheshire_mst_req;
 carfield_axi_mst_rsp_t cheshire_mst_rsp;
 
@@ -775,14 +775,31 @@ noc_wrap #(
 ) i_noc (
   .clk_i  ( host_clk_i ),
   .rst_ni ( host_pwr_on_rst_n ),
-  .noc_ext_slv_isolate_i  ( slave_isolate_req  ),
-  .noc_ext_slv_isolated_o ( slave_isolated_rsp ),
-  .cheshire_slv_req_i     ( cheshire_slv_req   ),
-  .cheshire_slv_rsp_o     ( cheshire_slv_rsp   ),
-  .cheshire_mst_req_o     ( cheshire_mst_req   ),
-  .cheshire_mst_rsp_i     ( cheshire_mst_rsp   ),
-  .mailbox_mst_req_o      (        ),
-  .mailbox_mst_rsp_i      ( axi_mbox_rsp       ),
+  .noc_ext_slv_isolate_i  ( slave_isolate_req   ),
+  .noc_ext_slv_isolated_o ( slave_isolated_rsp  ),
+  .cheshire_slv_req_i     ( cheshire_slv_req[0] ),
+  .cheshire_slv_rsp_o     ( cheshire_slv_rsp[0] ),
+  .cheshire_mst_req_o     ( cheshire_mst_req    ),
+  .cheshire_mst_rsp_i     ( cheshire_mst_rsp    ),
+  .mailbox_mst_req_o      (                     ),
+  .mailbox_mst_rsp_i      ( axi_mbox_rsp        ),
+  .llc_slv_req_i          ( cheshire_slv_req[1] ),
+  .llc_slv_rsp_o          ( cheshire_slv_rsp[1] ),
+  .llc_ar_data_o ( llc_ar_data ),
+  .llc_ar_wptr_o ( llc_ar_wptr ),
+  .llc_ar_rptr_i ( llc_ar_rptr ),
+  .llc_aw_data_o ( llc_aw_data ),
+  .llc_aw_wptr_o ( llc_aw_wptr ),
+  .llc_aw_rptr_i ( llc_aw_rptr ),
+  .llc_b_data_i  ( llc_b_data  ),
+  .llc_b_wptr_i  ( llc_b_wptr  ),
+  .llc_b_rptr_o  ( llc_b_rptr  ),
+  .llc_r_data_i  ( llc_r_data  ),
+  .llc_r_wptr_i  ( llc_r_wptr  ),
+  .llc_r_rptr_o  ( llc_r_rptr  ),
+  .llc_w_data_o  ( llc_w_data  ),
+  .llc_w_wptr_o  ( llc_w_wptr  ),
+  .llc_w_rptr_i  ( llc_w_rptr  ),
   // External async AXI master Ports
   .noc_ext_mst_ar_data_o  ( axi_mst_ext_ar_data ),
   .noc_ext_mst_ar_wptr_o  ( axi_mst_ext_ar_wptr ),
@@ -868,22 +885,6 @@ cheshire i_cheshire_wrap                 (
   // External AXI LLC (DRAM) port
   .axi_llc_isolate_i  ( hyper_isolate_req  ),
   .axi_llc_isolated_o ( hyper_isolated_rsp ),
-  .llc_ar_data_o ( llc_ar_data ),
-  .llc_ar_wptr_o ( llc_ar_wptr ),
-  .llc_ar_rptr_i ( llc_ar_rptr ),
-  .llc_aw_data_o ( llc_aw_data ),
-  .llc_aw_wptr_o ( llc_aw_wptr ),
-  .llc_aw_rptr_i ( llc_aw_rptr ),
-  .llc_b_data_i  ( llc_b_data  ),
-  .llc_b_wptr_i  ( llc_b_wptr  ),
-  .llc_b_rptr_o  ( llc_b_rptr  ),
-  .llc_r_data_i  ( llc_r_data  ),
-  .llc_r_wptr_i  ( llc_r_wptr  ),
-  .llc_r_rptr_o  ( llc_r_rptr  ),
-  .llc_w_data_o  ( llc_w_data  ),
-  .llc_w_wptr_o  ( llc_w_wptr  ),
-  .llc_w_rptr_i  ( llc_w_rptr  ),
-  // External AXI slave devices
   .axi_ext_slv_req_o  ( cheshire_slv_req ),
   .axi_ext_slv_rsp_i  ( cheshire_slv_rsp ),
   // External AXI master devices
