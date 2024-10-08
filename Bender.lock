@@ -236,7 +236,7 @@ packages:
     dependencies:
     - common_cells
   floo_noc:
-    revision: 39ae668b15847c2412cc7b91fa5e865f4c2a340f
+    revision: 83ebc8a5c7417ac8a8eaa231f0fd11d75c529492
     version: null
     source:
       Git: https://github.com/pulp-platform/FlooNoC.git
