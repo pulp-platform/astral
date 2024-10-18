@@ -32,6 +32,7 @@ module carfield_xilinx
   input  logic         jtag_tms_i,
   input  logic         jtag_tdi_i,
   output logic         jtag_tdo_o,
+  output logic         jtag_ot_tdo_o,
   input  logic         jtag_trst_ni,
   output logic         jtag_vdd_o,
   output logic         jtag_gnd_o,
@@ -716,20 +717,20 @@ module carfield_xilinx
       .jtag_trst_ni              (jtag_trst_ni),
       .jtag_tms_i                (jtag_tms_i),
       .jtag_tdi_i                (jtag_tdi_i),
-      .jtag_tdo_o                (jtag_host_to_safety),
+      .jtag_tdo_o                (jtag_tdo_o),
       .jtag_tdo_oe_o             (),
       // Secure Subsystem JTAG Interface
       .jtag_ot_tck_i             (jtag_tck_i),
       .jtag_ot_trst_ni           (jtag_trst_ni),
       .jtag_ot_tms_i             (jtag_tms_i),
-      .jtag_ot_tdi_i             (jtag_safety_to_ot),
-      .jtag_ot_tdo_o             (jtag_tdo_o), // Take in account when they are unactivated
+      .jtag_ot_tdi_i             (jtag_tdi_i),
+      .jtag_ot_tdo_o             (jtag_ot_tdo_o), // Take in account when they are unactivated
       .jtag_ot_tdo_oe_o          (),
       // Safety Island JTAG Interface
       .jtag_safety_island_tck_i  (jtag_tck_i),
       .jtag_safety_island_trst_ni(jtag_trst_ni),
       .jtag_safety_island_tms_i  (jtag_tms_i),
-      .jtag_safety_island_tdi_i  (jtag_host_to_safety),
+      .jtag_safety_island_tdi_i  (jtag_tdi_i),
       .jtag_safety_island_tdo_o  (jtag_safety_to_ot),
       .bootmode_safe_isln_i      (boot_mode_safety),
       // UART Interface
