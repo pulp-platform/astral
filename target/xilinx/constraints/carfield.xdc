@@ -16,6 +16,8 @@ set_property DONT_TOUCH TRUE [get_cells gen_domain_clock_mux[*].i_clk_mux]
 # TODO Check this
 set_false_path -from [get_pins gen_domain_clock_mux[*].i_clk_mux/gen_input_stages[*].clock_has_been_disabled_q_reg[*]/C] -to [get_pins gen_domain_clock_mux[*].i_clk_mux/gen_input_stages[*].clock_has_been_disabled_q_reg[*]/D]
 set_false_path -from [get_pins gen_domain_clock_mux[*].i_clk_mux/gen_input_stages[*].clock_has_been_disabled_q_reg[*]/C] -to [get_pins gen_domain_clock_mux[*].i_clk_mux/gen_input_stages[*].glitch_filter_q_reg[*][*]/D]
+set_false_path -from [get_pins gen_domain_clock_mux[*].i_clk_mux/gen_input_stages[*].gate_en_q_reg/C]
+set_false_path -from [get_pins gen_domain_clock_mux[*].i_clk_div/gate_en_q_reg/C]
 
 # Enable all clocks (clk_en register)
 set_property DONT_TOUCH TRUE [get_cells i_carfield_reg_top/u_*_clk_sel]
@@ -38,6 +40,8 @@ set_property CLOCK_BUFFER_TYPE NONE $all_in_mux
 # No max delay on sw reset since clock can be gated anyways
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {ORIG_REF_NAME=="rstgen" || REF_NAME=="rstgen"}]
 set_false_path -through [get_pins -of_objects [get_cells -hier i_carfield_rstgen] -filter {DIRECTION==OUT}]
+set_false_path -from [get_pins i_carfield_rstgen/gen_rstgen_for_domains[*].i_rstgen/i_rstgen_bypass/synch_regs_q_reg*/C] 
+set_false_path -through [get_pins i_rstgen_main/i_rstgen_bypass/synch_regs_q_reg[*]/*]
 set_false_path -hold -through [get_pins -filter {DIRECTION==OUT} -of_objects [get_cells -hier -filter {REF_NAME == rstgen || ORIG_REF_NAME == rstgen}]]
 set_false_path -setup -hold -from [get_pins -of_objects [get_cells -hier -filter {NAME=~*i_carfield_reg_top/u_*_rst/*}] -filter {IS_CLOCK}] -to [get_clocks *domain_clk]
 
@@ -59,6 +63,13 @@ set_max_delay -datapath -from [get_pins i_host_rstgen/i_rstgen_bypass/synch_regs
 # Hold and max delay on 2 phases and 2 phases clearable
 set_max_delay -through [get_nets -filter {NAME=~"*async*"} -of_objects [get_cells -hier -filter {REF_NAME =~ cdc_2phase_src* || ORIG_REF_NAME =~ cdc_2phase_src*}]] $SOC_TCK
 set_false_path -hold -through [get_nets -filter {NAME=~"*async*"} -of_objects [get_cells -hier -filter {REF_NAME =~ cdc_2phase_src* || ORIG_REF_NAME =~ cdc_2phase_src*}]]
+set_false_path -from [get_pins i_cheshire_wrap/gen_ext_slv_src_cdc[*].i_cheshire_ext_slv_cdc_src/i_cdc_fifo_gray_src_ar/*/C]
+set_false_path -from [get_pins i_cheshire_wrap/gen_ext_slv_src_cdc[*].i_cheshire_ext_slv_cdc_src/i_cdc_fifo_gray_src_aw/*/C]
+set_false_path -from [get_pins i_cheshire_wrap/gen_ext_slv_src_cdc[*].i_cheshire_ext_slv_cdc_src/i_cdc_fifo_gray_src_w/*/C]
+set_false_path -from [get_pins gen_periph.i_cdc_dst_peripherals/i_cdc_fifo_gray_dst_ar/*/C]
+set_false_path -from [get_pins gen_periph.i_cdc_dst_peripherals/i_cdc_fifo_gray_dst_w/*/C]
+set_false_path -from [get_pins gen_l2.i_reconfigurable_l2/gen_cdc_fifos[*].i_dst_cdc/i_cdc_fifo_gray_dst_w/*/C]
+set_false_path -from [get_pins gen_l2.i_reconfigurable_l2/i_reg_cdc_dst/*/C]
 
 # Hold and max delay on 4 phases
 set_max_delay -through [get_nets -filter {NAME=~"*async*"} -of_objects [get_cells -hier -filter {REF_NAME == cdc_4phase_src || ORIG_REF_NAME == cdc_4phase_src}]] $SOC_TCK
