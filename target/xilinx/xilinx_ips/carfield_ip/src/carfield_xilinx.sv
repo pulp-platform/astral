@@ -222,7 +222,7 @@ module carfield_xilinx
   assign soc_clk = clk_50;
   assign alt_clk = clk_20;
   assign host_clk = soc_clk;
-  assign periph_clk = soc_clk;
+  assign periph_clk = clk_10;
 
   /////////////////////
   // Reset Generator //
