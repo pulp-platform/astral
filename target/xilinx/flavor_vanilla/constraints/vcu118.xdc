@@ -52,18 +52,17 @@ set_property IOSTANDARD  LVCMOS18 [get_ports "uart_tx_o"] ;# Bank  67 VCCO - VCC
 set_property PACKAGE_PIN L19 [get_ports cpu_reset]
 set_property IOSTANDARD LVCMOS12 [get_ports cpu_reset]
 
-set_property PACKAGE_PIN N30     [get_ports jtag_tdo_o] ;# B25 - H17 (FMCP_HSPC_LA11_N) - J1.08 - TDO
-# Todo change invalid lvcmos
-set_property IOSTANDARD LVCMOS12 [get_ports jtag_tdo_o]
+set_property PACKAGE_PIN AW15    [get_ports jtag_tdo_o] ;# AW15 (PMOD0_2_LS) - J52.5 - TDO
+set_property IOSTANDARD LVCMOS18 [get_ports jtag_tdo_o]
 
-set_property PACKAGE_PIN P30     [get_ports jtag_tck_i] ;# B26 - H16 (FMCP_HSPC_LA11_P) - J1.06 - TCK
-set_property IOSTANDARD LVCMOS12 [get_ports jtag_tck_i] ;
+set_property PACKAGE_PIN AV15    [get_ports jtag_tck_i] ;# AV15 (PMOD0_3_LS) - J52.7 - TCK
+set_property IOSTANDARD LVCMOS18 [get_ports jtag_tck_i] ;
 
-set_property PACKAGE_PIN N28     [get_ports jtag_tms_i] ;# H22 - G16 (FMCP_HSPC_LA12_N) - J1.12 - TNS
-set_property IOSTANDARD LVCMOS12 [get_ports jtag_tms_i] ;
+set_property PACKAGE_PIN AY14    [get_ports jtag_tms_i] ;# AY14 (PMOD0_0_LS) - J52.1 - TMS
+set_property IOSTANDARD LVCMOS18 [get_ports jtag_tms_i] ;
 
-set_property PACKAGE_PIN M30     [get_ports jtag_tdi_i] ;# J22 - G15 (FMCP_HSPC_LA12_P) - J1.10 - TDI
-set_property IOSTANDARD LVCMOS12 [get_ports jtag_tdi_i]
+set_property PACKAGE_PIN AY15    [get_ports jtag_tdi_i] ;# AY15 (PMOD0_1_LS) - J52.3 - TDI
+set_property IOSTANDARD LVCMOS18 [get_ports jtag_tdi_i] ;
 
 # Default 250MHz clk1
 set_property PACKAGE_PIN D12      [get_ports "sys_clk_n"] ;# Bank  47 VCCO - VCC1V2_FPGA - IO_L13N_T2L_N1_GC_QBC_47
