@@ -23,13 +23,13 @@ localparam bit     SafetyIslandEnable = 0;
 localparam doub_bt SafetyIslandBase = 'h60000000;
 localparam doub_bt SafetyIslandSize = 'h00800000;
 // Ethernet
-localparam bit     EthernetEnable = 1;
+localparam bit     EthernetEnable = 0;
 localparam doub_bt EthernetBase = 'h20000000;
 localparam doub_bt EthernetSize = 'h00001000;
 // Peripherals
 localparam bit     PeriphEnable = 1;
 localparam doub_bt PeriphBase = 'h20001000;
-localparam doub_bt PeriphSize = 'h01000000;
+localparam doub_bt PeriphSize = 'h00FFF000;
 // Spatz cluster
 localparam bit     SpatzClusterEnable = 0;
 localparam doub_bt SpatzClusterBase = 'h51000000;
