@@ -5,7 +5,7 @@
 # Cyril Koenig <cykoenig@iis.ee.ethz.ch>
 
 # List available IPs
-xilinx_available_ips = xlnx_clk_wiz xlnx_mig_ddr4 xlnx_vio carfield_ip
+xilinx_available_ips = xlnx_clk_wiz xlnx_mig_ddr4 xlnx_vio xilinx_rom_bank_1024x22 xilinx_rom_bank_8192x40 carfield_ip
 
 # Include IP and add top level building rule (%.xci) and enable artifacts management
 define xlnx_ips_vars_and_deps =
