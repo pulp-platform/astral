@@ -13,6 +13,7 @@ set UART_IO_SPEED 200.0
 ###################
 
 # The output of the top level reset synchronizer
+set_false_path -through [get_pins i_rstgen_main/i_rstgen_bypass/synch_regs_q_reg[*]/*]
 set SOC_RST_SRC [get_pins -filter {DIRECTION == OUT} -leaf -of_objects [get_nets rst_n]]
 set_max_delay -through $SOC_RST_SRC $SOC_TCK
 set_false_path -hold -through $SOC_RST_SRC
@@ -54,8 +55,9 @@ set_input_delay  -max -clock clk_jtag [expr 0.20 * $JTAG_TCK] [get_ports {jtag_t
 set_output_delay -min -clock clk_jtag [expr 0.10 * $JTAG_TCK] [get_ports jtag_tdo_o]
 set_output_delay -max -clock clk_jtag [expr 0.20 * $JTAG_TCK] [get_ports jtag_tdo_o]
 
-set_max_delay  -from [get_ports jtag_trst_ni] $JTAG_TCK
-set_false_path -hold -from [get_ports jtag_trst_ni]
+# This port is unused
+# set_max_delay  -from [get_ports jtag_trst_ni] $JTAG_TCK
+# set_false_path -hold -from [get_ports jtag_trst_ni]
 
 ########
 # UART #

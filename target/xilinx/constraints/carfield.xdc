@@ -16,7 +16,6 @@ set_property DONT_TOUCH TRUE [get_cells gen_domain_clock_mux[*].i_clk_mux]
 # TODO Check this
 set_false_path -from [get_pins gen_domain_clock_mux[*].i_clk_mux/gen_input_stages[*].clock_has_been_disabled_q_reg[*]/C] -to [get_pins gen_domain_clock_mux[*].i_clk_mux/gen_input_stages[*].clock_has_been_disabled_q_reg[*]/D]
 set_false_path -from [get_pins gen_domain_clock_mux[*].i_clk_mux/gen_input_stages[*].clock_has_been_disabled_q_reg[*]/C] -to [get_pins gen_domain_clock_mux[*].i_clk_mux/gen_input_stages[*].glitch_filter_q_reg[*][*]/D]
-set_false_path -from [get_pins gen_domain_clock_mux[*].i_clk_mux/gen_input_stages[*].gate_en_q_reg/C]
 set_false_path -from [get_pins gen_domain_clock_mux[*].i_clk_div/gate_en_q_reg/C]
 
 # Enable all clocks (clk_en register)
@@ -40,8 +39,7 @@ set_property CLOCK_BUFFER_TYPE NONE $all_in_mux
 # No max delay on sw reset since clock can be gated anyways
 set_property KEEP_HIERARCHY SOFT [get_cells -hier -filter {ORIG_REF_NAME=="rstgen" || REF_NAME=="rstgen"}]
 set_false_path -through [get_pins -of_objects [get_cells -hier i_carfield_rstgen] -filter {DIRECTION==OUT}]
-set_false_path -from [get_pins i_carfield_rstgen/gen_rstgen_for_domains[*].i_rstgen/i_rstgen_bypass/synch_regs_q_reg*/C] 
-set_false_path -through [get_pins i_rstgen_main/i_rstgen_bypass/synch_regs_q_reg[*]/*]
+set_false_path -from [get_pins i_carfield_rstgen/gen_rstgen_for_domains[*].i_rstgen/i_rstgen_bypass/synch_regs_q_reg*/C]
 set_false_path -hold -through [get_pins -filter {DIRECTION==OUT} -of_objects [get_cells -hier -filter {REF_NAME == rstgen || ORIG_REF_NAME == rstgen}]]
 set_false_path -setup -hold -from [get_pins -of_objects [get_cells -hier -filter {NAME=~*i_carfield_reg_top/u_*_rst/*}] -filter {IS_CLOCK}] -to [get_clocks *domain_clk]
 
