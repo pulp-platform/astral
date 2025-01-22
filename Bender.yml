@@ -46,6 +46,10 @@ sources:
     files:
       - hw/configs/carfield_l2dual_secure_pulp_periph_can.sv
 
+  - target: carfield_l2dual_secure_pulp_periph_can_ethernet
+    files:
+      - hw/configs/carfield_l2dual_secure_pulp_periph_can_ethernet.sv
+
   - target: carfield_l2dual_secure_pulp_periph_can_ethernet_streamer_spw
     files:
       - hw/configs/carfield_l2dual_secure_pulp_periph_can_ethernet_streamer_spw.sv
