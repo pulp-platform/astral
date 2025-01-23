@@ -63,6 +63,15 @@ car-nonfree-init:
 
 -include $(CAR_ROOT)/nonfree/nonfree.mk
 
+CAR_NONFREE_IPS += /usr/scratch2/lagrev5/mciani/astral-project/streamer
+CAR_NONFREE_IPS += /usr/scratch2/lagrev5/mciani/astral-project/spacewire
+
+## Clone the Thales IP for Astral. These IPs are not open-sourced and only available in
+## iis environment.
+car-nonfree-ips-init:
+	mkdir -p $(CAR_ROOT)/nonfreeips
+	cp -rf $(CAR_NONFREE_IPS) $(CAR_ROOT)/nonfreeips/
+
 #####################################
 # Islands' variables initialization #
 #####################################
@@ -103,10 +112,10 @@ SPATZD_BINARY   ?=
 SPATZD_BOOTMODE ?= 0 # default jtag bootmode
 
 # Streamer, implementing telecommand and telemetry protocols
-STREAMER_ROOT ?= $(shell $(BENDER) path streamer)
+STREAMER_ROOT ?= $(CAR_ROOT)/nonfreeips/streamer
 
 # SpaceWire IP
-SPACEWIRE_ROOT ?= $(shell $(BENDER) path spacewire)
+SPACEWIRE_ROOT ?= $(CAR_ROOT)/nonfreeips/spacewire
 
 # PLL/FLL bypass
 BYPASS_PLL ?= 0

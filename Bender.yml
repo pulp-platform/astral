@@ -28,8 +28,6 @@ dependencies:
   common_cells:       { git: https://github.com/pulp-platform/common_cells.git,         version: 1.37.0                               } # branch: master
   pulp-ethernet:      { git: https://github.com/pulp-platform/pulp-ethernet.git,        rev: 2bea11658d2bc368ae2af0a3f71b4253ba4f713f } # branch: handshake
   riscv-dbg:          { git: https://github.com/pulp-platform/riscv-dbg.git,            version: =0.8.0                               }
-  streamer:           { path: /usr/scratch2/lagrev5/mciani/astral-project/streamer  }
-  spacewire:          { path: /usr/scratch2/lagrev5/mciani/astral-project/spacewire }
 
 workspace:
   package_links:
@@ -200,20 +198,6 @@ sources:
       - target/xilinx/xilinx_ips/carfield_ip/src/carfield_xilinx_ip.v
       - target/xilinx/src/overrides/tc_clk_xilinx.sv
 
-  - target: intel16_elab_only
-    files:
-      # - tech/sourcecode/macros/sram_256x32.v
-      # - tech/sourcecode/macros/sram_128x40.v
-      # - tech/sourcecode/macros/sram_256x128.v
-      # - tech/sourcecode/macros/sram_256x44.v
-      # - tech/sourcecode/macros/sram_256x46.v
-      # - tech/sourcecode/tc_clk.sv
-      # - tech/sourcecode/tc_sram.sv
-      - nonfree/intel16/sourcecode/tc_clk.sv
-      - nonfree/intel16/sourcecode/tc_sram.sv
-      - nonfree/intel16/sourcecode/configurable_delay.sv
-      - nonfree/intel16/sourcecode/tc_sram_impl.sv
-      - nonfree/intel16/sourcecode/sync.sv
 
 vendor_package:
   - name: reggen

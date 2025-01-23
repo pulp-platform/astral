@@ -396,25 +396,29 @@ module vip_carfield_soc
   );
   */
 
-  tb_MuSA_compact i_tb_MuSA_compact (
-      .CADUClk    ( ptme_clk_i),
-      .CADUOut    ( ptme_enc_i),
-      .HPC_ADDR   ( hpc_addr_i),
-      .HPC_CMD_EN ( hpc_cmd_en_i),
-      .HPC_SMP    ( hpc_smp_i), 
-      .LLC_LINE   ( llc_line_i),
-      .RST_BOARD  ( rst_n),
-      .TCA        ( tc_active),
-      .TCC        ( tc_clk),
-      .TCS        ( tc_data)
-   );
+  if (carfield_configuration::StreamerEnable) begin: gen_streamer_tb
+    tb_MuSA_compact i_tb_MuSA_compact (
+        .CADUClk    ( ptme_clk_i),
+        .CADUOut    ( ptme_enc_i),
+        .HPC_ADDR   ( hpc_addr_i),
+        .HPC_CMD_EN ( hpc_cmd_en_i),
+        .HPC_SMP    ( hpc_smp_i),
+        .LLC_LINE   ( llc_line_i),
+        .RST_BOARD  ( rst_n),
+        .TCA        ( tc_active),
+        .TCC        ( tc_clk),
+        .TCS        ( tc_data)
+    );
+  end
 
-  spw_codec_tb i_spw_codec_tb (
-      .DATA_IN   (spw_din),
-      .STROBE_IN (spw_sin),
-      .DATA_OUT  (spw_dout),
-      .STROBE_OUT(spw_sout)
-   );
+  if (carfield_configuration::SpaceWireEnable) begin: gen_spw_tb
+    spw_codec_tb i_spw_codec_tb (
+        .DATA_IN   (spw_din),
+        .STROBE_IN (spw_sin),
+        .DATA_OUT  (spw_dout),
+        .STROBE_OUT(spw_sout)
+    );
+  end
 
 
 endmodule
