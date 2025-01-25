@@ -50,7 +50,7 @@ localparam doub_bt MailboxSize = 'h00003000;
  * APB Configuration *
  ********************/
 // Can
-localparam bit CanEnable = 1;
+localparam bit CanEnable = 0;
 localparam doub_bt CanBase = 'h20001000;
 localparam doub_bt CanSize = 'h00001000;
 // System Timer
