@@ -17,6 +17,8 @@
 # Generic variable initialization #
 ###################################
 
+SHELL := /bin/bash
+
 CAR_ROOT    ?= $(shell $(BENDER) path carfield)
 CAR_HW_DIR  := $(CAR_ROOT)/hw
 CAR_SW_DIR  := $(CAR_ROOT)/sw
@@ -374,9 +376,9 @@ $(CAR_SW_DIR)/benchmarks/mibench:
 	git clone https://github.com/alex96295/mibench.git -b carfield $@
 
 # Litmus tests
-LITMUS_WORK_DIR  := work-litmus
-LITMUS_TEST_LIST := $(LITMUS_WORK_DIR)/litmus-tests.list
-LITMUS_TESTS     := $(shell xargs printf '\n%s' < $(LITMUS_TEST_LIST) | cut -b 1-)
+# LITMUS_WORK_DIR  := work-litmus
+# LITMUS_TEST_LIST := $(LITMUS_WORK_DIR)/litmus-tests.list
+# LITMUS_TESTS     := $(shell xargs printf '\n%s' < $(LITMUS_TEST_LIST) | cut -b 1-)
 
 $(LITMUS_WORK_DIR):
 	mkdir -p $(LITMUS_WORK_DIR)

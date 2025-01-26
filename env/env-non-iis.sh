@@ -14,5 +14,17 @@ if [ -z "${BENDER}" ]; then
 fi
 
 if ! which "riscv64-unknown-elf-gcc" >/dev/null 2>&1; then
-  echo "RISCV toolchain is NOT in the PATH."
+  echo "RISCV64 toolchain is NOT in the PATH."
+fi
+
+if ! which "riscv32-unknown-elf-gcc" >/dev/null 2>&1; then
+  echo "RISCV32 toolchain is NOT in the PATH."
+fi
+
+if ! which "vivado" >/dev/null 2>&1; then
+  echo "Vivado is NOT in the PATH."
+fi
+
+if ! which "vsim" >/dev/null 2>&1; then
+  echo "QuestaSim is NOT in the PATH."
 fi
