@@ -304,6 +304,11 @@ update_plic: $(CHS_ROOT)/hw/rv_plic.cfg.hjson
 update_serial_link: $(CHS_ROOT)/hw/serial_link.hjson
 	sed -i 's/\(default: "\)8/\116/' $<
 
+## Install basic python packages used to build Cheshire HW.
+.PHONY: python_requirements
+python_requirements:
+	pip install tabulate hjson
+
 ## Generate Spatz HW starting from a configuration file. This includes register file, memory map,
 ## interconnect parametrization.
 .PHONY: spatzd-hw-init

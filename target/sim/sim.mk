@@ -6,7 +6,7 @@
 
 ## @section Carfield platform simulation
 
-QUESTA ?= questa-2023.4
+QUESTA ?=
 TBENCH ?= tb_astral
 
 ## Get HyperRAM verification IP (VIP) for simulation

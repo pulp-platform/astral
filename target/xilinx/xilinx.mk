@@ -10,13 +10,13 @@
 # Makefile variables (user inputs are in capital letters)
 #
 
-VIVADO   ?= vitis-2020.2 vivado
+VIVADO ?= vivado
 
 XILINX_PROJECT ?= carfield
 # XILINX_FLAVOR in {vanilla,bd} see carfield_bd.mk
-XILINX_FLAVOR  ?= bd
+XILINX_FLAVOR  ?= vanilla
 # XILINX_BOARD in {vcu128, vcu118}
-XILINX_BOARD   ?= vcu128
+XILINX_BOARD   ?= vcu118
 
 ifeq ($(XILINX_BOARD),vcu128)
 	xilinx_part       := xcvu37p-fsvh2892-2L-e
