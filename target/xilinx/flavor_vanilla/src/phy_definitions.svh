@@ -16,6 +16,7 @@
   `ifdef GEN_NO_HYPERBUS
     `define USE_DDR4
   `endif
+  `define USE_LED
 `endif
 
 `ifdef TARGET_VCU128

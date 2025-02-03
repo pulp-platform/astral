@@ -105,6 +105,11 @@ module carfield_top_xilinx
   inout  [`HypNumPhys-1:0][7:0]              pad_hyper_dq,
 `endif
 
+`ifdef USE_LED
+  output logic        led0_o,
+  output logic        led1_o,
+`endif
+
   output logic        uart_tx_o,
   input logic         uart_rx_i
 
@@ -131,6 +136,41 @@ module carfield_top_xilinx
   ///////////////////
   // GPIOs         //
   ///////////////////
+
+
+  ///////////////////
+  // GPIOs LEDs    //
+  ///////////////////
+
+`ifdef USE_LED
+  assign led0_o      = '1;  // active-high
+
+  assign led1_o      = led1_q;  // active-high
+
+  localparam LED_CYCLE_COUNT = 10000000;
+  logic led1_d, led1_q;
+  logic [23:0] led_counter_d, led_counter_q;
+
+  always_comb begin
+    led_counter_d = led_counter_q + 1;
+    led1_d = led1_q;
+
+    if(led_counter_q == LED_CYCLE_COUNT-1) begin
+      led_counter_d = 24'b0;
+      led1_d = ~led1_q;
+    end
+  end
+
+  always_ff @(posedge clk_10, negedge rst_n) begin
+    if(~rst_n) begin
+      led_counter_q <= 24'b0;
+      led1_q <= 0;
+    end else begin
+      led_counter_q <= led_counter_d;
+      led1_q <= led1_d;
+    end
+  end
+`endif
 
   // Tie off signals if no switches on the board
 `ifndef USE_SWITCHES
@@ -492,6 +532,7 @@ module carfield_top_xilinx
       .host_clk_i    (host_clk),
       .periph_clk_i  (periph_clk),
       .alt_clk_i     (alt_clk),
+    //  .secd_clk_i,  FIXME
       .rt_clk_i      (rtc_clk_q),
       .pwr_on_rst_ni (rst_n),
       .test_mode_i   (testmode_i),

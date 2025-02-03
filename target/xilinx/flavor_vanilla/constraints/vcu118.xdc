@@ -34,7 +34,7 @@ set_max_delay -through [get_nets -of_objects [get_cells i_dram_wrapper/gen_cdc.i
 #-------------- MCS Generation ----------------------
 #set_property BITSTREAM.CONFIG.EXTMASTERCCLK_EN div-1  [current_design]
 #set_property BITSTREAM.CONFIG.SPI_FALL_EDGE YES       [current_design]
-#set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 8          [current_design]
+set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4          [current_design]
 #set_property BITSTREAM.GENERAL.COMPRESS TRUE          [current_design]
 #set_property BITSTREAM.CONFIG.UNUSEDPIN Pullnone      [current_design]
 #set_property CFGBVS GND                               [current_design]
@@ -63,6 +63,11 @@ set_property IOSTANDARD LVCMOS18 [get_ports jtag_tms_i] ;
 
 set_property PACKAGE_PIN AY15    [get_ports jtag_tdi_i] ;# AY15 (PMOD0_1_LS) - J52.3 - TDI
 set_property IOSTANDARD LVCMOS18 [get_ports jtag_tdi_i] ;
+
+set_property PACKAGE_PIN AT32     [get_ports "led0_o"] ; # Bank 40
+set_property IOSTANDARD  LVCMOS12 [get_ports "led0_o"] ; # Bank 40
+set_property PACKAGE_PIN AV34     [get_ports "led1_o"] ; # Bank 40
+set_property IOSTANDARD  LVCMOS12 [get_ports "led1_o"] ; # Bank 40
 
 # Default 250MHz clk1
 set_property PACKAGE_PIN D12      [get_ports "sys_clk_n"] ;# Bank  47 VCCO - VCC1V2_FPGA - IO_L13N_T2L_N1_GC_QBC_47
