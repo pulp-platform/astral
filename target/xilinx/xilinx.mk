@@ -95,6 +95,15 @@ car-xil-program:
 	@echo "Programming board $(XILINX_BOARD) ($(xilinx_part))"
 	$(vivado_env) $(VIVADO) $(VIVADO_FLAGS) -source $(CAR_XIL_DIR)/scripts/program.tcl
 
+## Generate a memory configuration file from last bitstream for Carfield
+## @param VIVADO The Vivado version in use
+## @param XILINX_BOARD The target Xilinx board to be programmed
+## @param VIVADO_FLAGS Some flags for Vivado, such as batch or gui mode
+car-xil-flash-spi:
+	@echo "Generating memory configuration for $(XILINX_BOARD) ($(xilinx_part))"
+	$(vivado_env) FILE=$(xilinx_bit) OFFSET=0 IMAGE=$(XILINX_PROJECT)_$(XILINX_FLAVOR)_$(XILINX_BOARD)_$(CARFIELD_CONFIG) \
+	$(VIVADO) $(VIVADO_FLAGS) -source $(CAR_XIL_DIR)/scripts/write_cfgmem.tcl
+
 ## Flash Linux image on Cheshire
 ## @param VIVADO The Vivado version in use
 ## @param XILINX_BOARD The target Xilinx board to be programmed
