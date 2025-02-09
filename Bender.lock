@@ -64,15 +64,6 @@ packages:
     - redundancy_cells
     - register_interface
     - tech_cells_generic
-  axi_obi:
-    revision: null
-    version: null
-    source:
-      Path: .bender/git/checkouts/safety_island-f408198401cf8b88/future/axi_obi
-    dependencies:
-    - axi
-    - common_cells
-    - obi
   axi_riscv_atomics:
     revision: 062bc36cbcca25629384e7f12efa6693273b3e07
     version: null
@@ -509,27 +500,6 @@ packages:
     - axi
     - common_cells
     - register_interface
-  safety_island:
-    revision: aaef55c798ab53560faaf451a86668fa1e6d0f3b
-    version: null
-    source:
-      Git: https://github.com/pulp-platform/safety_island.git
-    dependencies:
-    - apb
-    - axi
-    - axi_obi
-    - axi_riscv_atomics
-    - clic
-    - common_cells
-    - cv32e40p
-    - fpnew
-    - obi
-    - redundancy_cells
-    - register_interface
-    - riscv-dbg
-    - tech_cells_generic
-    - timer_unit
-    - unbent
   scm:
     revision: 74426dee36f28ae1c02f7635cf844a0156145320
     version: null
@@ -558,32 +528,6 @@ packages:
     - hwpe-ctrl
     - hwpe-stream
     - ibex
-  spacewire:
-    revision: null
-    version: null
-    source:
-      Path: /usr/scratch2/lagrev5/mciani/astral-project/spacewire
-    dependencies: []
-  spatz:
-    revision: 98de97f24fe42675c9b4a8cc08354a03af57400a
-    version: null
-    source:
-      Git: https://github.com/pulp-platform/spatz.git
-    dependencies:
-    - axi
-    - axi_riscv_atomics
-    - common_cells
-    - fpnew
-    - idma
-    - register_interface
-    - riscv-dbg
-    - tech_cells_generic
-  streamer:
-    revision: null
-    version: null
-    source:
-      Path: /usr/scratch2/lagrev5/mciani/astral-project/streamer
-    dependencies: []
   tagger:
     revision: b288376b65b6bbd5feea196bb3c220f783d96e29
     version: null

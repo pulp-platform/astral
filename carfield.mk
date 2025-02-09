@@ -45,7 +45,6 @@ include $(CAR_ROOT)/bender-common.mk
 include $(CAR_ROOT)/bender-sim.mk
 include $(CAR_ROOT)/bender-synth.mk
 include $(CAR_ROOT)/bender-xilinx.mk
-include $(CAR_ROOT)/bender-safed.mk
 
 ######################
 # Nonfree components #
@@ -59,7 +58,7 @@ CAR_NONFREE_COMMIT ?= d56cd406c657d0ac1338af269f42ed10edae85cd
 ## implementations with tech-specific resources are not open-sourced and contained in a `nonfree`
 ## folder cloned from a remote location, whose access is restricted. If you do not have access, this
 ## step will be skipped and the usage of the repository will **not** be compromised.
-car-nonfree-init:
+isolde-nonfree-init:
 	git clone $(CAR_NONFREE_REMOTE) $(CAR_ROOT)/nonfree
 	cd $(CAR_ROOT)/nonfree && git checkout $(CAR_NONFREE_COMMIT)
 
@@ -70,7 +69,7 @@ CAR_NONFREE_IPS += /usr/scratch2/lagrev5/mciani/astral-project/spacewire
 
 ## Clone the Thales IP for Astral. These IPs are not open-sourced and only available in
 ## iis environment.
-car-nonfree-ips-init:
+isolde-nonfree-ips-init:
 	mkdir -p $(CAR_ROOT)/nonfreeips
 	cp -rf $(CAR_NONFREE_IPS) $(CAR_ROOT)/nonfreeips/
 
@@ -87,12 +86,6 @@ CHS_PRELMODE ?= 1 # default serial link preload
 CHS_BINARY   ?=
 CHS_IMAGE    ?=
 
-# Safety Island, reliabililty and fault-tolerance
-SAFED_ROOT     ?= $(shell $(BENDER) path safety_island)
-SAFED_SW_DIR   := $(SAFED_ROOT)/sw
-SAFED_BOOTMODE ?= 0
-SAFED_BINARY   ?=
-
 # Security island, security and secure boot
 SECD_ROOT     ?= $(shell $(BENDER) path opentitan)
 SECD_BINARY   ?=
@@ -106,18 +99,6 @@ PULPD_ROOT      ?= $(shell $(BENDER) path pulp_cluster)
 PULPD_BINARY    ?=
 PULPD_TEST_NAME ?=
 PULPD_BOOTMODE  ?=
-
-# Spatz cluster, efficient vector co-processor
-SPATZD_ROOT     ?= $(shell $(BENDER) path spatz)
-SPATZD_MAKEDIR  := $(SPATZD_ROOT)/hw/system/spatz_cluster
-SPATZD_BINARY   ?=
-SPATZD_BOOTMODE ?= 0 # default jtag bootmode
-
-# Streamer, implementing telecommand and telemetry protocols
-STREAMER_ROOT ?= $(CAR_ROOT)/nonfreeips/streamer
-
-# SpaceWire IP
-SPACEWIRE_ROOT ?= $(CAR_ROOT)/nonfreeips/spacewire
 
 # PLL/FLL bypass
 BYPASS_PLL ?= 0
@@ -154,26 +135,26 @@ include $(CAR_ROOT)/utils/venv.mk
 ##########################
 
 ## @section Carfield platform dependency management
-.PHONY: car-update-deps
+.PHONY: isolde-update-deps
 ## Update and re-resove all IP dependencies. Bender will try to resolve dependency conflicts with
 ## semantic versioning and the Bender.local file that contains overrides. You should run this target
 ## only if you changed the Bender.yml file and updated the version of some sub-IP. This will
 ## regenerate the Bender.lock. Once you resolved all remaining dependency conflicts you must commit
 ## the udpated Bender.lock file to keep the pinned IP versions in line with the Bender.yml file.
-car-update-deps:
+isolde-update-deps:
 	$(BENDER) update
 
-.PHONY: car-checkout-deps
+.PHONY: isolde-checkout-deps
 ## Checkout all IP dependencies that are currently pinned in the Bender.lock file. This command will
 ## not re-resolve dependencies but use the exact versions checked into the repository through the
-## lock file. Use the car-update-deps target to update all IPs to the latest version and to
+## lock file. Use the isolde-update-deps target to update all IPs to the latest version and to
 ## regenerate the lock file.
-car-checkout-deps:
+isolde-checkout-deps:
 	$(BENDER) checkout
 	touch Bender.lock
 
-.PHONY: car-checkout
-car-checkout: car-checkout-deps
+.PHONY: isolde-checkout
+isolde-checkout: isolde-checkout-deps
 
 ############
 # Build SW #
@@ -184,15 +165,6 @@ PULPD_SW_BUILD := pulpd-sw-build
 PULPD_SW_INIT := pulpd-sw-init
 endif
 
-ifeq ($(shell echo $(SAFED_PRESENT)), 1)
-SAFED_SW_BUILD := safed-sw-build
-SAFED_SW_INIT := safed-sw-init
-endif
-
-ifeq ($(shell echo $(SPATZD_PRESENT)), 1)
-SPATZD_HW_INIT := spatzd-hw-init
-endif
-
 ## @section Carfield platform SW build
 include $(CAR_SW_DIR)/sw.mk
 .PHONY: chs-sw-build
@@ -200,18 +172,11 @@ include $(CAR_SW_DIR)/sw.mk
 ## available for Carfield as static library at link time.
 chs-sw-build: chs-sw-all
 
-.PHONY: car-sw-build
+.PHONY: isolde-sw-build
 ## Builds carfield application SW and specific libraries. It links against `libcheshire.a`.
-car-sw-build: chs-sw-build $(SAFED_SW_BUILD) $(PULPD_SW_BUILD) car-sw-all
+isolde-sw-build: chs-sw-build $(PULPD_SW_BUILD) isolde-sw-all
 
-.PHONY: safed-sw-init pulpd-sw-init
-## Clone safe domain's SW stack in the dedicated repository.
-safed-sw-init: $(SAFED_ROOT) $(SAFED_SW_DIR)/pulp-runtime $(SAFED_SW_DIR)/pulp-freertos
-
-$(SAFED_SW_DIR)/pulp-runtime: $(SAFED_ROOT)
-	$(MAKE) -C $(SAFED_ROOT) pulp-runtime BENDER="$(BENDER)"
-$(SAFED_SW_DIR)/pulp-freertos: $(SAFED_ROOT)
-	$(MAKE) -C $(SAFED_ROOT) pulp-freertos BENDER="$(BENDER)"
+.PHONY: pulpd-sw-init
 
 ## Clone integer PMCA domain's SW stack in the dedicated repository.
 pulpd-sw-init: $(PULPD_ROOT) $(PULPD_ROOT)/pulp-runtime $(PULPD_ROOT)/regression-tests
@@ -221,36 +186,22 @@ $(PULPD_ROOT)/pulp-runtime: $(PULPD_ROOT)
 $(PULPD_ROOT)/regression-tests: $(PULPD_ROOT)
 	$(MAKE) -C $(PULPD_ROOT) regression-tests
 
-## Build safe domain SW
-.PHONY: safed-sw-build
-safed-sw-build: safed-sw-init
-	. $(CAR_ROOT)/env/safed-env.sh; \
-	$(MAKE) safed-sw-all
-
 ## Build integer PMCA domain SW
 .PHONY: pulpd-sw-build
 pulpd-sw-build: pulpd-sw-init
 	. $(CAR_ROOT)/env/pulpd-env.sh; \
 	$(MAKE) pulpd-sw-all
 
-## Build vectorial PMCA domain SW
-# TODO: properly compile spatz tests from carfield. For now, we symlink to existing tests. If you
-#are a user external to ETH, the symlink will not work. We will integrate the compilation flow ASAP.
-
-#.PHONY: spatzd-sw-build spatzd-sw-build: $(MAKE) -C $(SPATZD_MAKEDIR) BENDER=$(BENDER_PATH)
-#LLVM_INSTALL_DIR=$(LLVM_SPATZ_DIR) GCC_INSTALL_DIR=$(GCC_SPATZ_DIR) -B
-#SPATZ_CLUSTER_CFG=$(SPATZD_MAKEDIR)/cfg/carfield.hjson HTIF_SERVER=NO sw.vsim
-
 ###############
 # Generate HW #
 ###############
 
 ## @section Carfield platform HW generation
-.PHONY: car-hw-init
+.PHONY: isolde-hw-init
 ## Initialize Carfield HW. This step takes care of the generation of the missing hardware or the
 ## update of default HW configurations in some of the domains. See the two prerequisite's comment
 ## for more information.
-car-hw-init: $(SPATZD_HW_INIT) chs-hw-init $(SECD_HW_INIT)
+isolde-hw-init: chs-hw-init $(SECD_HW_INIT)
 
 ## @section Carfield platform PCRs generation
 .PHONY: regenerate_soc_regs
@@ -309,14 +260,6 @@ update_serial_link: $(CHS_ROOT)/hw/serial_link.hjson
 python_requirements:
 	pip install tabulate hjson
 
-## Generate Spatz HW starting from a configuration file. This includes register file, memory map,
-## interconnect parametrization.
-.PHONY: spatzd-hw-init
-spatzd-hw-init:
-	$(MAKE) -C $(SPATZD_ROOT) hw/ip/snitch/src/riscv_instr.sv
-	$(MAKE) -C $(SPATZD_MAKEDIR) -B SPATZ_CLUSTER_CFG=$(SPATZD_MAKEDIR)/cfg/carfield.hjson bootrom
-	cp  $(SPATZD_ROOT)/sw/snRuntime/include/spatz_cluster_peripheral.h  $(CAR_SW_DIR)/include/regs/
-
 ## Generate Cheshire HW. This target has a prerequisite, i.e. the PLIC and serial link
 ## configurations must be chosen before generating the hardware.
 .PHONY: chs-hw-init
@@ -336,13 +279,13 @@ include $(CAR_SIM_DIR)/sim.mk
 
 ## @section Carfield global targets
 
-.PHONY: car-init-all
+.PHONY: isolde-init-all
 ## Shortcut to initialize carfield with all the targets described above.
-car-init-all: car-checkout car-hw-init car-sim-init $(SAFED_SW_INIT) $(PULPD_SW_INIT) mibench
+isolde-init-all: isolde-checkout isolde-hw-init isolde-sim-init $(PULPD_SW_INIT) mibench
 
 ## Initialize Carfield and build SW
-.PHONY: car-all
-car-all: car-init-all car-sw-build
+.PHONY: isolde-all
+isolde-all: isolde-init-all isolde-sw-build
 
 #########
 # Utils #
@@ -392,7 +335,7 @@ $(LITMUS_TEST_LIST): $(LITMUS_WORK_DIR)
 	basename -a `find $(LITMUS_DIR)/binaries/ -name "*.elf" | sed 's/\[/\\\[/g'` > $@
 
 $(LITMUS_TESTS):
-	$(MAKE) car-vsim-sim-run CHS_BOOTMODE=0 CHS_PRELMODE=1 CHS_BINARY=$(LITMUS_DIR)/binaries/$@ | tee $(LITMUS_WORK_DIR)/$@.log
+	$(MAKE) isolde-vsim-sim-run CHS_BOOTMODE=0 CHS_PRELMODE=1 CHS_BINARY=$(LITMUS_DIR)/binaries/$@ | tee $(LITMUS_WORK_DIR)/$@.log
 
 $(LITMUS_WORK_DIR)/%.uart.log: %
 	sed -n 's/^# \[UART\] \(.*\S\)\s*$$/\1/p' $(LITMUS_WORK_DIR)/$<.log > $@
@@ -404,35 +347,21 @@ $(LITMUS_WORK_DIR)/%.litmus.log: $(LITMUS_WORK_DIR)/%.uart.log
 	echo "" >> $@
 
 ## Clone Litmus tests for the RISC-V concurrency architecture and run them
-car-run-litmus-tests: $(LITMUS_TEST_LIST) $(addprefix $(LITMUS_WORK_DIR)/, $(addsuffix .litmus.log,$(LITMUS_TESTS)))
+isolde-run-litmus-tests: $(LITMUS_TEST_LIST) $(addprefix $(LITMUS_WORK_DIR)/, $(addsuffix .litmus.log,$(LITMUS_TESTS)))
 	cat $^ > $(LITMUS_WORK_DIR)/litmus.log
 
 ## Check Litmus tests results against golden model
-car-check-litmus-tests: $(LITMUS_WORK_DIR)/litmus.log
+isolde-check-litmus-tests: $(LITMUS_WORK_DIR)/litmus.log
 	cd $(LITMUS_DIR) && LITMUS_LOG=$(CURDIR)/$(LITMUS_WORK_DIR)/litmus.log ci/compare_model.sh > $(CURDIR)/$(LITMUS_WORK_DIR)/compare.log
 	grep "Warning positive differences" $(LITMUS_WORK_DIR)/compare.log
 	! grep "Warning negative differences" $(LITMUS_WORK_DIR)/compare.log
-
-##############
-# Technology #
-##############
-tech-repo := git@iis-git.ee.ethz.ch:Astral/gf12.git
-# no commit by default, change during development
-tech-commit := 4616ba511dd791bf96a9b34a404c93593e1dd94d # branch: yt/thales
-
-tech-clone:
-	git clone $(tech-repo) tech
-
-tech-init: tech-clone
-	cd $(TECH_ROOT) && git checkout $(tech-commit) && cd $(CAR_ROOT)
-	$(MAKE) -C $(TECH_ROOT) init
 
 ########
 # Help #
 ########
 
 # Setup Autodocumentation of the Makefile
-HELP_TITLE="Carfield Open-Source RTL"
-HELP_DESCRIPTION="Hardware generation and simulation targets for Carfield"
+HELP_TITLE="ISOLDE Space platform Open-Source RTL"
+HELP_DESCRIPTION="Hardware generation and simulation targets for ISOLDE space platform"
 include $(CAR_ROOT)/utils/help.mk
 .DEFAULT_GOAL := help
