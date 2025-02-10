@@ -130,7 +130,7 @@ module carfield_top_xilinx
 
   wire clk_100, clk_50, clk_20;
   (* dont_touch = "yes" *) wire clk_10;
-  wire soc_clk, host_clk, alt_clk, periph_clk;
+  wire soc_clk, host_clk, alt_clk, secd_clk, periph_clk;
   (* dont_touch = "yes" *) wire rst_n;
 
   ///////////////////
@@ -222,9 +222,10 @@ module carfield_top_xilinx
   );
   localparam rtc_clk_divider = 4;
   assign soc_clk = clk_50;
-  assign alt_clk = clk_20;
   assign host_clk = soc_clk;
-  assign periph_clk = soc_clk;
+  assign alt_clk = clk_20;
+  assign secd_clk = clk_20;
+  assign periph_clk = clk_10;
 
   /////////////////////
   // Reset Generator //
@@ -532,7 +533,7 @@ module carfield_top_xilinx
       .host_clk_i    (host_clk),
       .periph_clk_i  (periph_clk),
       .alt_clk_i     (alt_clk),
-    //  .secd_clk_i,  FIXME
+      .secd_clk_i    (secd_clk),
       .rt_clk_i      (rtc_clk_q),
       .pwr_on_rst_ni (rst_n),
       .test_mode_i   (testmode_i),
