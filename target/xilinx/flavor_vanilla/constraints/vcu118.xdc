@@ -16,8 +16,8 @@ set_clock_groups -name sys_clk_async -asynchronous -group {sys_clk}
 # Mig clock #
 #############
 
-# Dram axi clock : 833ps * 4
-set MIG_TCK 3.332
+# Dram axi clock : 1600ps * 4
+set MIG_TCK 6.4
 set MIG_RST [get_pins i_dram_wrapper/i_dram/c0_ddr4_ui_clk_sync_rst]
 create_clock -period $MIG_TCK -name dram_axi_clk [get_pins i_dram_wrapper/i_dram/c0_ddr4_ui_clk]
 set_clock_groups -name dram_async -asynchronous -group {dram_axi_clk}

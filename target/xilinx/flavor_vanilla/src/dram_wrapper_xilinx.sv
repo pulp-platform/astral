@@ -64,7 +64,7 @@ module dram_wrapper_xilinx #(
   localparam dram_cfg_t cfg = '{
     EnCDC         : 1, // 300 MHz axi (attention CDC logdepth)
     IdWidth       : 4,
-    AddrWidth     : 32, // TODO: in the original patch this was 31, why?
+    AddrWidth     : 31,
     DataWidth     : 512,
     StrobeWidth   : 64
   };
@@ -272,7 +272,7 @@ module dram_wrapper_xilinx #(
     .c0_ddr4_s_axi_rvalid      (cdc_dram_rsp.r_valid),
     // Others
     .c0_init_calib_complete    (),  // keep open
-    .addn_ui_clkout1           (dram_clk_o),
+    // .addn_ui_clkout1           (dram_clk_o),
     .dbg_clk                   (),
     .dbg_bus                   (),
     // Phy

@@ -29,6 +29,11 @@ switch $::env(XILINX_BOARD) {
   }
 }
 
+# Add the DDR4 interface pins
+if {[info exists ::env(GEN_NO_HYPERBUS)] && ($::env(GEN_NO_HYPERBUS)==1) && ($::env(XILINX_BOARD)=="vcu118")} {
+    import_files -fileset constrs_1 -norecurse constraints/$::env(XILINX_BOARD)_ddr4.xdc
+}
+
 # Ips selection
 set ips $::env(XILINX_IP_PATHS)
 read_ip $ips
