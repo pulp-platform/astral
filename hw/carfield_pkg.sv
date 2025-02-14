@@ -406,7 +406,7 @@ localparam carfield_domain_idx_t CarfieldDomainIdx = gen_domain_idx(CarfieldIsla
 /*******************************
 * Carfield package starts here *
 *******************************/
-localparam int unsigned CheshireNumInternalHarts = 2;
+localparam int unsigned CheshireNumInternalHarts = 1;
 localparam bit CheshireSerialLinkEnable = 1;
 localparam int unsigned CarfieldNumExtIntrs           = 32; // Number of external interrupts
 localparam int unsigned CarfieldNumInterruptibleHarts = 2;  // Spatz (2 Snitch cores)
@@ -584,18 +584,12 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   NumExtOutIntrTgts : CarfieldNumRouterTargets,
   NumExtOutIntrs    : CarfieldNumExtIntrs+$bits(cheshire_int_intr_t),
   ClicIntCtlBits    : 8,
-  ClicUseSMode      : 1,
-  ClicUseUMode      : 0,
-  ClicUseVsMode     : 1,
-  ClicUseVsModePrio : 1,
-  ClicNumVsCtxts    : 2, // TODO: choose appropriately
   NumExtIntrSyncs   : SyncStages,
   // Interconnect
   AddrWidth         : 48,
   AxiDataWidth      : 64,
   AxiUserWidth      : 10,  // {CACHE_PARTITIONING(5[9:5]), ECC_ERROR(1[4:4]), ATOPS(4[3:0])}
   AxiMstIdWidth     : 2,
-  TFLenWidth        : 32,
   AxiMaxMstTrans    : 64,
   AxiMaxSlvTrans    : 64,
   AxiUserAmoMsb     : AxiUserAmoMsb, // A0:0001, A1:0011, SF:0101, FP:0111, SL:1XXX, none: '0
@@ -604,7 +598,6 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   AxiUserErrLsb     : 4,
   RegMaxReadTxns    : 8,
   RegMaxWriteTxns   : 8,
-  CorePostCut       : 1,
   RegAmoNumCuts     : 1,
   RegAmoPostCut     : 1,
   RegAdaptMemCut    : 1,
@@ -633,17 +626,12 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   SpiHost           : 1,
   Gpio              : 1,
   Dma               : 1,
-  IOMMU             : 1,
   SerialLink        : CheshireSerialLinkEnable,
   Vga               : 0,
   AxiRt             : 1,
   Clic              : 1,
   IrqRouter         : 1,
   BusErr            : 1,
-  HmrUnit           : 1,
-  Cva6DMR           : 1,
-  Cva6DMRFixed      : 0,
-  RapidRecovery     : 0,
   // Debug
   DbgIdCode         : '{
     version: 4'h1,
@@ -668,11 +656,6 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   LlcOutConnect     : 1,
   LlcOutRegionStart : 'h8000_0000,
   LlcOutRegionEnd   : 'h1_0000_0000,
-  LlcUserMsb        : 9,
-  LlcUserLsb        : 5,
-  LlcCachePartition : 1,
-  LlcMaxPartition   : 16,
-  LlcRemapHash      : axi_llc_pkg::Modulo,
   // VGA: RGB332; carfield doesn't have a vga, but widths are required for top-level pins anyway.
   VgaRedWidth       : 3,
   VgaGreenWidth     : 3,

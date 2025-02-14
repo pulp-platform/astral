@@ -281,7 +281,7 @@ include $(CAR_SIM_DIR)/sim.mk
 
 .PHONY: isolde-init-all
 ## Shortcut to initialize carfield with all the targets described above.
-isolde-init-all: isolde-checkout isolde-hw-init isolde-sim-init $(PULPD_SW_INIT) mibench
+isolde-init-all: isolde-checkout isolde-hw-init isolde-sim-init $(PULPD_SW_INIT)
 
 ## Initialize Carfield and build SW
 .PHONY: isolde-all
@@ -314,14 +314,6 @@ include $(CAR_XIL_DIR)/xilinx.mk
 #######################
 # External benchmarks #
 #######################
-
-## @section External SW benchmarks
-## Clone Mibench Embedded Suite benchmark
-.PHONY: mibench
-mibench: $(CAR_SW_DIR)/benchmarks/mibench
-
-$(CAR_SW_DIR)/benchmarks/mibench:
-	git clone https://github.com/alex96295/mibench.git -b carfield $@
 
 # Litmus tests
 # LITMUS_WORK_DIR  := work-litmus

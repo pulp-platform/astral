@@ -18,7 +18,6 @@
 int main(void) {
 
     // Put SMP Hart to sleep
-    if (hart_id() != 0) wfi();
 
     // Stand-alone mode
 

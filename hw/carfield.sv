@@ -17,6 +17,7 @@ module carfield
   import carfield_pkg::*;
   import carfield_reg_pkg::*;
   import cheshire_pkg::*;
+  import cheshire_pkg::iomsb;
 #(
   parameter cheshire_pkg::cheshire_cfg_t Cfg = carfield_pkg::CarfieldCfgDefault,
   parameter int unsigned HypNumPhys  = carfield_configuration::NumHypPhys,

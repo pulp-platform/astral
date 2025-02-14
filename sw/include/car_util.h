@@ -379,9 +379,4 @@ uint32_t pulp_cluster_get_return(){
   return readw(pulp_return_addr);
 }
 
-// Write synchronization request in Cheshire's dedicated register
-static inline void sync_req(){
-  writew(readw(CHESHIRE_HARTS_SYNC) | (0x1 << hart_id()), CHESHIRE_HARTS_SYNC);
-}
-
 #endif

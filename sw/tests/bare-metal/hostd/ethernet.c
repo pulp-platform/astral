@@ -53,7 +53,6 @@ static dif_rv_plic_t plic0;
 int main(void) {
 
   // Put SMP Hart to sleep
-  if (hart_id() != 0) wfi();
 
   // Configure padframe for ethernet use.
   padframe_ethernet_cfg();

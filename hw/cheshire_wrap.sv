@@ -14,6 +14,7 @@ module cheshire_wrap
   import axi_pkg::*;
   import carfield_pkg::*;
   import cheshire_pkg::*;
+  import cheshire_pkg::iomsb;
 #(
   parameter cheshire_cfg_t Cfg = '0,
   parameter dm::hartinfo_t [iomsb(Cfg.NumExtDbgHarts)-1:0] ExtHartinfo = '0,
@@ -183,8 +184,9 @@ module cheshire_wrap
   output logic                  [NumAsyncRegSlv-1:0] ext_reg_async_slv_ack_o,
   input  cheshire_reg_ext_rsp_t [NumAsyncRegSlv-1:0] ext_reg_async_slv_data_i,
   // Interrupts from external devices
-  input  logic [iomsb(Cfg.NumExtInIntrs):0]                                  intr_ext_i,
-  output logic [iomsb(Cfg.NumExtOutIntrTgts):0][iomsb(Cfg.NumExtOutIntrs):0] intr_ext_o,
+  input  logic [iomsb(Cfg.NumExtInIntrs):0]   intr_ext_i,
+  output logic [iomsb(Cfg.NumExtOutIntrTgts):0]
+                [iomsb(Cfg.NumExtOutIntrs):0] intr_ext_o,
   // Interrupts to external harts
   output logic [iomsb(NumIrqCtxts*Cfg.NumExtIrqHarts):0] xeip_ext_o,
   output logic [iomsb(Cfg.NumExtIrqHarts):0]             mtip_ext_o,
