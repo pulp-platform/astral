@@ -14,20 +14,15 @@
 CAR_LD_DIR     ?= $(CAR_SW_DIR)/link
 CAR_SW_LDFLAGS ?= $(CHS_SW_LDFLAGS) -L$(CAR_LD_DIR)
 
-car-sw-all: car-sw-libs car-sw-tests
+isolde-sw-all: car-sw-libs car-sw-tests
 
 .PRECIOUS: %.elf %.dtb
-.PHONY: car-sw-all car-sw-libs car-sw-headers car-sw-tests
+.PHONY: isolde-sw-all car-sw-libs car-sw-headers car-sw-tests
 
 # Libraries
 ifeq ($(shell echo $(PULPD_PRESENT)), 1)
 CAR_PULPD_BARE ?= -I$(CAR_SW_DIR)/tests/bare-metal/pulpd
 CAR_PULPD_SW_OFFLOAD_TESTS := car-pulpd-sw-offload-tests
-endif
-
-ifeq ($(shell echo $(SAFED_PRESENT)), 1)
-CAR_SAFED_BARE ?= -I$(CAR_SW_DIR)/tests/bare-metal/safed
-CAR_SAFED_SW_OFFLOAD_TESTS := car-safed-sw-offload-tests
 endif
 
 CAR_SW_INCLUDES    = -I$(CAR_SW_DIR)/include $(CAR_SAFED_BARE) $(CAR_PULPD_BARE) -I$(CHS_SW_DIR)/include $(CHS_SW_DEPS_INCS)
@@ -66,15 +61,13 @@ $(foreach link,$(patsubst $(CAR_LD_DIR)/%.ld,%,$(wildcard $(CAR_LD_DIR)/*.ld)),$
 
 # Tests
 
-CAR_ELFLOAD_BLOCKING_SAFED_SRC_C := $(CAR_SW_DIR)/tests/bare-metal/hostd/safed_offloader_blocking.c
-CAR_ELFLOAD_BLOCKING_SAFED_PATH := $(basename $(CAR_ELFLOAD_BLOCKING_SAFED_SRC_C))
 CAR_ELFLOAD_BLOCKING_PULPD_SRC_C := $(CAR_SW_DIR)/tests/bare-metal/hostd/pulpd_offloader_blocking.c
 CAR_ELFLOAD_BLOCKING_PULPD_PATH := $(basename $(CAR_ELFLOAD_BLOCKING_PULPD_SRC_C))
 CAR_ELFLOAD_PULPD_INTF_SRC_C := $(CAR_SW_DIR)/tests/bare-metal/hostd/pulp-offload-intf.c
 CAR_ELFLOAD_PULPD_INTF_PATH := $(basename $(CAR_ELFLOAD_PULPD_INTF_SRC_C))
 
 CAR_SW_TEST_SRCS_S	= $(wildcard $(CAR_SW_DIR)/tests/bare-metal/hostd/*.S)
-CAR_SW_TEST_SRCS_C	= $(filter-out $(CAR_ELFLOAD_BLOCKING_SAFED_SRC_C) $(CAR_ELFLOAD_BLOCKING_PULPD_SRC_C) $(CAR_ELFLOAD_PULPD_INTF_SRC_C), $(wildcard $(CAR_SW_DIR)/tests/bare-metal/hostd/*.c))
+CAR_SW_TEST_SRCS_C	= $(filter-out $(CAR_ELFLOAD_BLOCKING_PULPD_SRC_C) $(CAR_ELFLOAD_PULPD_INTF_SRC_C), $(wildcard $(CAR_SW_DIR)/tests/bare-metal/hostd/*.c))
 
 CAR_SW_TEST_DRAM_DUMP	= $(CAR_SW_TEST_SRCS_S:.S=.car.dram.dump) $(CAR_SW_TEST_SRCS_C:.c=.car.dram.dump)
 CAR_SW_TEST_DRAM_SLM	= $(CAR_SW_TEST_SRCS_S:.S=.car.dram.slm)  $(CAR_SW_TEST_SRCS_C:.c=.car.dram.slm)
@@ -83,7 +76,7 @@ CAR_SW_TEST_L2_DUMP	= $(CAR_SW_TEST_SRCS_S:.S=.car.l2.dump)   $(CAR_SW_TEST_SRCS
 CAR_SW_TEST_SPM_ROMH	= $(CAR_SW_TEST_SRCS_S:.S=.car.rom.memh)  $(CAR_SW_TEST_SRCS_C:.c=.car.rom.memh)
 CAR_SW_TEST_SPM_GPTH	= $(CAR_SW_TEST_SRCS_S:.S=.car.gpt.memh)  $(CAR_SW_TEST_SRCS_C:.c=.car.gpt.memh)
 
-car-sw-tests: $(CAR_SW_TEST_DRAM_DUMP) $(CAR_SW_TEST_SPM_DUMP) $(CAR_SW_TEST_L2_DUMP) $(CAR_SW_TEST_DRAM_SLM) $(CAR_SW_TEST_SPM_ROMH) $(CAR_SW_TEST_SPM_GPTH) $(CAR_PULPD_SW_OFFLOAD_TESTS) $(CAR_SAFED_SW_OFFLOAD_TESTS) mibench-automotive
+car-sw-tests: $(CAR_SW_TEST_DRAM_DUMP) $(CAR_SW_TEST_SPM_DUMP) $(CAR_SW_TEST_L2_DUMP) $(CAR_SW_TEST_DRAM_SLM) $(CAR_SW_TEST_SPM_ROMH) $(CAR_SW_TEST_SPM_GPTH) $(CAR_PULPD_SW_OFFLOAD_TESTS) mibench-automotive
 
 # Generate .slm files from elf binaries. Only used when linking against external dram
 %.car.dram.slm: %.car.dram.elf
@@ -105,14 +98,6 @@ define offload_tests_template
 		$(RM) $(4).$(basename $(notdir $(header))).car.o; \
 	)
 endef
-
-# Safety Island offload tests
-ifeq ($(shell echo $(SAFED_PRESENT)), 1)
-include $(CAR_SW_DIR)/tests/bare-metal/safed/sw.mk
-
-car-safed-sw-offload-tests:
-	$(call offload_tests_template,$(SAFED_HEADER_TARGETS),safed,$(CAR_ELFLOAD_BLOCKING_SAFED_SRC_C),$(CAR_ELFLOAD_BLOCKING_SAFED_PATH))
-endif
 
 # Integer Cluster offload tests
 ifeq ($(shell echo $(PULPD_PRESENT)), 1)

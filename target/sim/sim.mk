@@ -4,7 +4,7 @@
 #
 # Alessandro Ottaviano <aottaviano@iis.ee.ethz.ch>
 
-## @section Carfield platform simulation
+## @section isolde platform simulation
 
 QUESTA ?=
 TBENCH ?= tb_astral
@@ -69,8 +69,8 @@ else
 	RUN_AND_EXIT := run -all; exit
 endif
 
-.PHONY: $(CAR_VSIM_DIR)/compile.carfield_soc.tcl
-$(CAR_VSIM_DIR)/compile.carfield_soc.tcl:
+.PHONY: $(CAR_VSIM_DIR)/compile.isolde_soc.tcl
+$(CAR_VSIM_DIR)/compile.isolde_soc.tcl:
 	$(BENDER) script vsim $(common_targs) $(sim_targs) $(sim_defs) $(common_defs) $(safed_defs) --vlog-arg="$(RUNTIME_DEFINES)" --compilation-mode separate > $@
 	echo 'vlog "$(CHS_ROOT)/target/sim/src/elfloader.cpp" -ccflags "-std=c++11"' >> $@
 	echo 'vopt $(VOPT_FLAGS) $(TBENCH) -o $(TBENCH)_opt' >> $@
@@ -84,25 +84,25 @@ ifeq ($(shell echo $(THALES_IPS)), 1)
 endif
 
 CAR_VSIM_ALL += $(CAR_SIM_ALL)
-CAR_VSIM_ALL += $(CAR_VSIM_DIR)/compile.carfield_soc.tcl
+CAR_VSIM_ALL += $(CAR_VSIM_DIR)/compile.isolde_soc.tcl
 
 ## Generate all required VIPs (SPI flash, I2c EEPROm, HyperRAM, etc) and compilation scripts for Questasim
-.PHONY: car-vsim-sim-init
-car-vsim-sim-init: $(CAR_VSIM_ALL) 
+.PHONY: isolde-vsim-sim-init
+isolde-vsim-sim-init: $(CAR_VSIM_ALL)
 
-## Compile Carfield HW using Questasim. Run `make car-sim-init` from the root directory to prepare
+## Compile isolde HW using Questasim. Run `make isolde-sim-init` from the root directory to prepare
 ## the simulation environment before running this command.
-.PHONY: car-vsim-sim-build
-car-vsim-sim-build: $(CAR_VSIM_DIR)/compile.carfield_soc.tcl
+.PHONY: isolde-vsim-sim-build
+isolde-vsim-sim-build: $(CAR_VSIM_DIR)/compile.isolde_soc.tcl
 	cd $(CAR_VSIM_DIR); $(QUESTA) vsim -c -do "quit -code [source $<]"
 
-.PHONY: car-vsim-sim-clean
+.PHONY: isolde-vsim-sim-clean
 ## Remove all Questasim simulation build artifacts
-car-vsim-sim-clean:
+isolde-vsim-sim-clean:
 	rm -rf $(CAR_VSIM_DIR)/uart $(CAR_VSIM_DIR)/FETCH* $(CAR_VSIM_DIR)/logs $(CAR_VSIM_DIR)/*.ini $(CAR_VSIM_DIR)/trace* $(CAR_VSIM_DIR)/*.wlf $(CAR_VSIM_DIR)/transcript $(CAR_VSIM_DIR)/work $(CAR_VSIM_DIR)/*lib $(CAR_VSIM_DIR)/*Lib $(CAR_VSIM_DIR)/*.vstf $(CAR_VSIM_DIR)/*.log $(CAR_VSIM_DIR)/*.txt
 
-.PHONY: car-vsim-sim-run
-## Run simulation of the carfield RTL.
+.PHONY: isolde-vsim-sim-run
+## Run simulation of the isolde RTL.
 ## @param HYP_USER_PRELOAD=0 Whether to preload code in the HyperRAM model.
 ## @param CHS_BOOTMODE=0 The bootmode of host domain <0 JTAG|1 Serial Link>
 ## @param CHS_PRELMODE=1 If 1, use the serial link for host domain memory preloading, otherwise JTAG.
@@ -119,7 +119,7 @@ car-vsim-sim-clean:
 ## @param SPATZD_BOOTMODE=0 The bootmode of safe domain <0 JTAG|1 Serial Link>
 ## @param TESTBENCH=tb_astral_opt The optimised toplevel testbench to use. Defaults to 'tb_astral_opt'.
 ## @param VSIM_FLAGS The flags for the vsim invocation
-car-vsim-sim-run:
+isolde-vsim-sim-run:
 	$(eval CHS_BINARY_ABS := $(realpath $(CHS_BINARY)))
 	$(eval CHS_IMAGE_ABS := $(realpath $(CHS_IMAGE)))
 	$(eval SECD_BINARY_ABS := $(realpath $(SECD_BINARY)))
@@ -146,7 +146,7 @@ car-vsim-sim-run:
 		 set SPATZD_BOOTMODE $(SPATZD_BOOTMODE);\
 		 set TESTBENCH $(TBENCH); \
 		 set VSIM_FLAGS \"$(VSIM_FLAGS)\"; \
-		 source $(CAR_VSIM_DIR)/start.carfield_soc.tcl ; \
+		 source $(CAR_VSIM_DIR)/start.isolde_soc.tcl ; \
 		 $(RUN_AND_EXIT)"
 
 #######
@@ -167,7 +167,7 @@ CAR_XCELIUM_ALL += $(CAR_XCELIUM_ALL)
 # TODO
 
 ## @section Global targets
-.PHONY: car-sim-init
+.PHONY: isolde-sim-init
 
 ## Generate all required VIPs and compilation scripts for all supported simulators
-car-sim-init: car-vsim-sim-init
+isolde-sim-init: isolde-vsim-sim-init

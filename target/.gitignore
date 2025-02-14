@@ -1,5 +1,5 @@
 sim/vsim/modelsim.ini
-sim/vsim/compile.carfield_soc.tcl
+sim/vsim/compile.isolde_soc.tcl
 sim/vsim/transcript
 sim/vsim/work/
 sim/vsim/uart/
