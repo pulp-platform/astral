@@ -1380,7 +1380,7 @@ if (CarfieldIslandsCfg.pulp.enable) begin : gen_pulp_cluster
                                             master_isolated_rsp[IntClusterMstIdx];
 
 localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
-  CoreType: pulp_cluster_package::RISCY,
+  CoreType: pulp_cluster_package::RI5CY,
   NumCores: IntClusterNumCores,
   DmaNumPlugs: 4,
   DmaNumOutstandingBursts: 8,
@@ -1397,6 +1397,10 @@ localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
   HwpeCfg: '{NumHwpes: 1,
              HwpeList: {pulp_cluster_package::REDMULE}
             },
+  HMRPresent: 0,
+  HMRTmrEnabled: 0,
+  EnableECC: 0,
+  ECCInterco: 0,
   HwpeNumPorts: 9,
   iCacheNumBanks: 2,
   iCacheNumLines: 1,

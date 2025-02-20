@@ -145,7 +145,7 @@ packages:
     - common_cells
     - register_interface
   cluster_icache:
-    revision: 8114ab36fd446f76cd1e9f139f12a62ab1fb9a6a
+    revision: dd0e8f3497903a9ca99fc9f349d5a4f688ceb3ae
     version: null
     source:
       Git: https://github.com/pulp-platform/cluster_icache.git
@@ -245,7 +245,7 @@ packages:
     dependencies:
     - common_cells
   hci:
-    revision: 38fc2a7eea7978df52434e66ee04a40788fd86b7
+    revision: aed9005c761827c6cbff2ea9a15f9cc37acd1169
     version: null
     source:
       Git: https://github.com/pulp-platform/hci.git
@@ -349,7 +349,7 @@ packages:
     dependencies:
     - common_cells
   neureka:
-    revision: f23d22a2d630cf8e4d524c919bfd943ab9e4998d
+    revision: 94528df2bc6d5eedc0439bd403c2ad005f0a7519
     version: null
     source:
       Git: https://github.com/pulp-platform/neureka.git
@@ -406,7 +406,7 @@ packages:
     - idma
     - register_interface
   pulp_cluster:
-    revision: e2a18e108651b9e2286cbf1e5097fc996d5cf12e
+    revision: 9436507234e3807b4af7ebc3f6db1a0d76e0390f
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp_cluster.git
@@ -502,8 +502,8 @@ packages:
     - common_cells
     - register_interface
   softex:
-    revision: 23faeccaf204817bc9e6649e469072e5726be561
-    version: 1.0.0
+    revision: 11dd29e85d40e29fea0481b471f1c0cc967df1a4
+    version: null
     source:
       Git: https://github.com/belanoa/softex.git
     dependencies:

@@ -722,7 +722,7 @@ localparam doub_bt L2Port1NonInterlBase = CarfieldIslandsCfg.l2_port1.base + L2M
 localparam bit[CarfieldCfgDefault.AddrWidth-1:0] PulpClustPeriphOffs = 'h00200000;
 localparam bit[CarfieldCfgDefault.AddrWidth-1:0] PulpClustExtOffs    = 'h00400000;
 localparam int unsigned IntClusterNumEoc = 1;
-localparam logic [ 5:0] IntClusterIndex = (PulpHartIdOffs >> 5);
+localparam logic [ 5:0] IntClusterIndex = 0;
 
 /****************************/
 /* Spatz Cluster Parameters */

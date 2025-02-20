@@ -179,12 +179,12 @@ isolde-sw-build: chs-sw-build $(PULPD_SW_BUILD) isolde-sw-all
 .PHONY: pulpd-sw-init
 
 ## Clone integer PMCA domain's SW stack in the dedicated repository.
-pulpd-sw-init: $(PULPD_ROOT) $(PULPD_ROOT)/pulp-runtime $(PULPD_ROOT)/regression-tests
+pulpd-sw-init: $(PULPD_ROOT) $(PULPD_ROOT)/pulp-runtime $(PULPD_ROOT)/regression_tests
 
 $(PULPD_ROOT)/pulp-runtime: $(PULPD_ROOT)
 	$(MAKE) -C $(PULPD_ROOT) pulp-runtime
-$(PULPD_ROOT)/regression-tests: $(PULPD_ROOT)
-	$(MAKE) -C $(PULPD_ROOT) regression-tests
+$(PULPD_ROOT)/regression_tests: $(PULPD_ROOT)
+	$(MAKE) -C $(PULPD_ROOT) regression_tests
 
 ## Build integer PMCA domain SW
 .PHONY: pulpd-sw-build
