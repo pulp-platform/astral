@@ -54,7 +54,7 @@ $(CAR_XIL_DIR)/flavor_bd/out/%.bit: $(xilinx_ips_paths_bd) $(CAR_XIL_DIR)/flavor
 $(CAR_XIL_DIR)/flavor_bd/scripts/send_dtb_%.tcl: $(CAR_SW_DIR)/boot/%.dtb
 	$(PYTHON) $(CAR_XIL_DIR)/scripts/bin2jtag.py -c32 -b 80000000 -d hw_axi_1 $< > $@
 
-car-xil-clean-bd:
+isolde-xil-clean-bd:
 	cd $(CAR_XIL_DIR)/flavor_bd && rm -rf scripts/add_includes.tcl* *.log *.jou *.str *.mif carfield_$(XILINX_BOARD) .Xil/
 
-.PHONY: car-xil-clean-bd
+.PHONY: isolde-xil-clean-bd

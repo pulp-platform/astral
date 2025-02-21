@@ -52,9 +52,9 @@ $(CAR_XIL_DIR)/flavor_vanilla/out/%.bit: $(xilinx_ips_paths_vanilla) $(CAR_XIL_D
 	find $(CAR_XIL_DIR)/flavor_vanilla -name "*.ltx" -o -name "*.bit" -o -name "*routed.rpt" | xargs -I {} cp {} $(CAR_XIL_DIR)/flavor_vanilla/out
 .PRECIOUS: $(CAR_XIL_DIR)/flavor_vanilla/out/%.bit
 
-car-xil-clean-vanilla:
+isolde-xil-clean-vanilla:
 	cd $(CAR_XIL_DIR)/flavor_vanilla && rm -rf scripts/add_sources.tcl* *.log *.jou *.str *.mif carfield.* .Xil/
 
-.PHONY: car-xil-clean-vanilla
+.PHONY: isolde-xil-clean-vanilla
 
 include $(CAR_XIL_DIR)/flavor_vanilla/sim/sim.mk

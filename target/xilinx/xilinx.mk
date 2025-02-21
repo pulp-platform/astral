@@ -85,13 +85,13 @@ $(CAR_XIL_DIR)/out/%.bit: $(xilinx_bit_$(XILINX_FLAVOR))
 ## @param XILINX_FLAVOR=<vanilla|bd> The flavor of the implementation
 ## @param XILINX_BOARD The target Xilinx board
 ## @param CARFIELD_CONFIG The SoC configuration to be used
-car-xil-all: $(xilinx_bit)
+isolde-xil-all: $(xilinx_bit)
 
 ## Program last bitstream for Carfield
 ## @param VIVADO The Vivado version in use
 ## @param XILINX_BOARD The target Xilinx board to be programmed
 ## @param VIVADO_FLAGS Some flags for Vivado, such as batch or gui mode
-car-xil-program:
+isolde-xil-program:
 	@echo "Programming board $(XILINX_BOARD) ($(xilinx_part))"
 	$(vivado_env) $(VIVADO) $(VIVADO_FLAGS) -source $(CAR_XIL_DIR)/scripts/program.tcl
 
@@ -99,7 +99,7 @@ car-xil-program:
 ## @param VIVADO The Vivado version in use
 ## @param XILINX_BOARD The target Xilinx board to be programmed
 ## @param VIVADO_FLAGS Some flags for Vivado, such as batch or gui mode
-car-xil-flash-spi:
+isolde-xil-flash-spi:
 	@echo "Generating memory configuration for $(XILINX_BOARD) ($(xilinx_part))"
 	$(vivado_env) FILE=$(xilinx_bit) OFFSET=0 IMAGE=$(XILINX_PROJECT)_$(XILINX_FLAVOR)_$(XILINX_BOARD)_$(CARFIELD_CONFIG) \
 	$(VIVADO) $(VIVADO_FLAGS) -source $(CAR_XIL_DIR)/scripts/write_cfgmem.tcl
@@ -109,14 +109,14 @@ car-xil-flash-spi:
 ## @param XILINX_BOARD The target Xilinx board to be programmed
 ## @param XILINX_FLAVOR=<vanilla|bd> The flavor of the implementation.
 ## @param VIVADO_FLAGS Some flags for Vivado, such as batch or gui mode
-car-xil-flash: $(CAR_SW_DIR)/boot/linux_carfield_$(XILINX_FLAVOR)_$(XILINX_BOARD).gpt.bin
+isolde-xil-flash: $(CAR_SW_DIR)/boot/linux_carfield_$(XILINX_FLAVOR)_$(XILINX_BOARD).gpt.bin
 	$(vivado_env) FILE=$< OFFSET=0 $(VIVADO) $(VIVADO_FLAGS) -source $(CAR_XIL_DIR)/scripts/flash_spi.tcl
 
 # Flash uboot image
-car-xil-flash-uboot: $(CAR_SW_DIR)/boot/uboot_carfield_$(XILINX_FLAVOR)_$(XILINX_BOARD).gpt.bin
+isolde-xil-flash-uboot: $(CAR_SW_DIR)/boot/uboot_carfield_$(XILINX_FLAVOR)_$(XILINX_BOARD).gpt.bin
 	$(vivado_env) FILE=$< OFFSET=0 $(VIVADO) $(VIVADO_FLAGS) -source $(CAR_XIL_DIR)/scripts/flash_spi.tcl
 
 ## Clean Xilinx artifacts for all implementations
-car-xil-clean: car-xil-clean-vanilla car-xil-clean-bd xilinx-ip-clean-all
+isolde-xil-clean: isolde-xil-clean-vanilla isolde-xil-clean-bd xilinx-ip-clean-all
 
-.PHONY: car-xil-program car-xil-clean car-xil-all
+.PHONY: isolde-xil-program isolde-xil-clean isolde-xil-all

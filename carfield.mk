@@ -64,15 +64,6 @@ isolde-nonfree-init:
 
 -include $(CAR_ROOT)/nonfree/nonfree.mk
 
-CAR_NONFREE_IPS += /usr/scratch2/lagrev5/mciani/astral-project/streamer
-CAR_NONFREE_IPS += /usr/scratch2/lagrev5/mciani/astral-project/spacewire
-
-## Clone the Thales IP for Astral. These IPs are not open-sourced and only available in
-## iis environment.
-isolde-nonfree-ips-init:
-	mkdir -p $(CAR_ROOT)/nonfreeips
-	cp -rf $(CAR_NONFREE_IPS) $(CAR_ROOT)/nonfreeips/
-
 #####################################
 # Islands' variables initialization #
 #####################################

@@ -74,14 +74,6 @@ $(CAR_VSIM_DIR)/compile.isolde_soc.tcl:
 	$(BENDER) script vsim $(common_targs) $(sim_targs) $(sim_defs) $(common_defs) $(safed_defs) --vlog-arg="$(RUNTIME_DEFINES)" --compilation-mode separate > $@
 	echo 'vlog "$(CHS_ROOT)/target/sim/src/elfloader.cpp" -ccflags "-std=c++11"' >> $@
 	echo 'vopt $(VOPT_FLAGS) $(TBENCH) -o $(TBENCH)_opt' >> $@
-ifeq ($(shell echo $(THALES_IPS)), 1)
-	sed -i '2a\
-	set VsimDir "$(CAR_VSIM_DIR)"\
-	set TCTMPATH "$(STREAMER_ROOT)"\
-	set SPWPATH "$(SPACEWIRE_ROOT)"\
-	source $(STREAMER_ROOT)/astral.compile.tcl \
-	source $(SPACEWIRE_ROOT)/astr_compile.tcl' $@
-endif
 
 CAR_VSIM_ALL += $(CAR_SIM_ALL)
 CAR_VSIM_ALL += $(CAR_VSIM_DIR)/compile.isolde_soc.tcl
