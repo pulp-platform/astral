@@ -1,58 +1,19 @@
-# Carfield
+# Astral
 
-Carfield is an open-research heterogeneous platform for safety, resilient and time-predictable systems. Originally conceived as automotive-oriented SoC, the high configurability of the platform makes it tunable to target a broader class of mixed-criticality applications' domains, such as automotive, space or industry.
+Astral is an open-source heterogeneous mixed-criticality RISC-V-based platform.
 
-Carfield is developed as part of the PULP project, a joint effort between ETH Zurich and the
+Astral is developed as part of the PULP project, a joint effort between ETH Zurich and the
 University of Bologna.
 
-## Motivation
+To learn basic information about Astral's architecture, software stack and available simulation
+and FPGA targets please refer to this [`guide`](doc/mini_doc.md).
 
-The rapid evolution of AI algorithms and the massive amount of sensed data across
-application-domains such as Automotive, Space and Cyber-Physical embedded systems (CPSs), call for a
-*paradigm shift* in the design of **next generation of mixed-criticality systems (MCSs)**, from
-simple micro-controllers towards powerful and heterogeneous edge computers.
-
-These must not only deliver outstanding performance and energy efficiency but also ensure steadfast
-safety, resilience, and security.
-
-The Carfield platform aims to tackle these architectural challenges establishing itself as a
-pre-competitive heterogeneous platform for MCSs, underpinned by **fully open-source Intellectual
-Properties (IPs)**.
-
-Carfield showcases pioneering hardware solutions, addressing challenges related to time-predictable
-on/off-chip communication, robust fault recovery mechanisms, secure boot processes, cryptographic
-acceleration services, hardware-assisted virtualization, and accelerated computation for both
-floating-point and integer workloads.
-
-## Quick Start
-
-* To learn how to build and use Carfield, see [Getting
-  Started](https://pulp-platform.github.io/carfield/gs/).
-* To learn about available simulation, FPGA, and ASIC targets, see
-  [Targets](https://pulp-platform.github.io/carfield/tg).
-* For detailed information on Carfield's inner workings, consult the [User
-  Manual](https://pulp-platform.github.io/carfield/um/).
-  
-
-If you are impatient and have all needed
-[dependencies](https://pulp-platform.github.io/carfield/gs/#dependencies), type:
-
-```
-source env/env-iis.sh
-bender update
-make car-all PYTHON=python3
-make tech-init
-```
-
-and then run a [simulation](https://pulp-platform.github.io/carfield/tg/sim) with Questasim by
-typing:
-
-```tcl
-make car-vsim-sim-build DEBUG=1 TECH_SIM=1
-make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/helloworld.car.l2.elf DEBUG=1 TECH_SIM=1
-```
+This mini-guide intended specifically to guide you through the deployment of the architecture on
+AMD/Xilinx VCU118 Evaluation Kit, but also provides additional generic information.
 
 ---
+
+All Astral flows are Makefile-based and all commands must be invoked from the root directory.
 
 To display the main *Make* build targets and their usage, from the root repository type:
 
@@ -61,10 +22,6 @@ make help
 ```
 
 The Make files are autodocumented.
-
-### Technology
-
-It is possible to initialize an available technology design flow by running `make tech-init` after cloning the repo.
 
 ## License
 
