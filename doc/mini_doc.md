@@ -128,11 +128,9 @@ See the argument list below:
 
 | Configuration| Status | Active Island | Duration |
 |--------------|--------| --------------| ----|
-| carfield_l2dual_pulp_periph |  OK | Pulp Cluster | ~9h
-| carfield_l2dual_secure_periph          |  OK    | Security Island | ~9h |
-| carfield_l2dual_secure_pulp_periph_can | NOT OK | Pulp Cluster + Security Island | |
-
-The last one is flagged as NOT OK because the VCU118 does not have enough LUTs to hold this configuration .
+| carfield_l2dual_pulp_periph |  OK | Pulp Cluster |
+| carfield_l2dual_secure_periph          |  OK    | Security Island | |
+| carfield_l2dual_secure_pulp_periph |  OK | Pulp Cluster + Security Island | |
 
 Recommended (and so far tested) options:
 
