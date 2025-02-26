@@ -365,6 +365,15 @@ void pulp_cluster_start() {
 	writew(1, fetchen_addr);
 }
 
+void pulp_cluster_stop() {
+
+    volatile uint32_t *booten_addr = (uint32_t*)(CAR_INT_CLUSTER_BOOTEN_ADDR(car_soc_ctrl));
+    writew(0, booten_addr);
+
+    volatile uint32_t *fetchen_addr = (uint32_t*)(CAR_INT_CLUSTER_FETCHEN_ADDR(car_soc_ctrl));
+      writew(0, fetchen_addr);
+}
+
 void pulp_cluster_wait_eoc() {
 
   volatile uint32_t *pulp_eoc_addr = (uint32_t*)(CAR_INT_CLUSTER_EOC_ADDR(car_soc_ctrl));
