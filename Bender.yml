@@ -36,9 +36,9 @@ workspace:
 sources:
   # Configurations
     # "Small" Astral configuration
-  - target: carfield_l2dual_secure_pulp_periph_can
+  - target: carfield_l2dual_secure_pulp_periph
     files:
-      - hw/configs/carfield_l2dual_secure_pulp_periph_can.sv
+      - hw/configs/carfield_l2dual_secure_pulp_periph.sv
 
   - target: carfield_l2dual_secure_pulp_periph_can_ethernet
     files:
