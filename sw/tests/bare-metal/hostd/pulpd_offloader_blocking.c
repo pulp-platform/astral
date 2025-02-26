@@ -54,6 +54,10 @@ int main(void)
 
   pulp_ret_val = pulp_cluster_get_return();
 
+  pulp_cluster_stop();
+
+  car_reset_domain(CAR_PULP_RST);
+
   return pulp_ret_val;
 
 }
