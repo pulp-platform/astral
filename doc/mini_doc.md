@@ -145,6 +145,11 @@ Where:
 
 \* The VCU118 development board only provides one JTAG chain, used by Vivado to program the bitstream, and interact with certain Xilinx IPs (ILAs, VIOs, ...). The RV64 requires access to a JTAG chain to connect GDB to the debug-module in the bitstream. When using `EXT_JTAG=0` it is possible to connect the debug module to the internal FPGA's JTAG by using the Xilinx BSCANE macro. With this, you will only need the normal Xilinx USB cable to interact with CVA6. Note that it means that Vivado and OpenOCD can not use the same cable at the same time. This setup (with `EXT_JTAG=0`) will only work for designs containing the host only, as it is not possible to chain multiple devices on the BSCANE macro. If you need to use `EXT_JTAG=0` consider modifying the RTL to remove the debug modules of the IPs.
 
+#### Additional resources
+
+_[Here](https://github.com/LuigiGhionda/astral-fpga) you can find a collection of scripts designed to simplify the process of loading binaries into an FPGA setup like the one described above, using `openocd` and `gdb`._
+
+
 ## Software Stack
 
 This section provides basic info about Astral's software stack.
