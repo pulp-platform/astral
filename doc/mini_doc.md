@@ -98,7 +98,7 @@ The Astral bitstream generation is divided in two flavors at the moment. The `fl
 
 _So far, only the vanilla flavor has been tested._
 
-Ensure that Vivado is in the `$PATH`. By default, the `VIVADO` variable is left empty. If the Vivado binaries directory is included in your `$PATH`, no further configuration is required. Otherwise, adjust it according to your setup.
+Ensure that Vivado is in the `$PATH`. By default, the `VIVADO` variable is left empty, but a submodule overrides it when invoking Vivado-related Makefile targets. If the Vivado binaries directory is included in your `$PATH`, it is required to explicitly do `export VIVADO=`. Otherwise, adjust it according to your setup.
 
 #### Vanilla bitstream
 
