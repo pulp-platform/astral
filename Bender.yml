@@ -14,7 +14,7 @@ dependencies:
   register_interface: { git: https://github.com/pulp-platform/register_interface.git,   version: 0.4.3                                }
   axi:                { git: https://github.com/pulp-platform/axi.git,                  version: 0.39.6                               }
   cheshire:           { git: https://github.com/pulp-platform/cheshire.git,             version: 0.2.0                                }
-  hyperbus:           { git: https://github.com/pulp-platform/hyperbus.git,             rev: f039e601c8b6590181734e6d26ff8b77aa380412 } # branch: chi/add_fsm_with_Tcsh
+  hyperbus:           { git: https://github.com/pulp-platform/hyperbus.git,             version: 0.0.8                                }
   dyn_mem:            { git: https://github.com/pulp-platform/dyn_spm.git,              rev: 6753d2046da6dfc8efbef5e6f22053a621f111d9 } # branch: astral
   pulp_cluster:       { git: https://github.com/pulp-platform/pulp_cluster.git,         rev: 2bf8d78bedbd91d2fc11119fc455c17a2a984944 } # branch: lg/isolde
   opentitan:          { git: https://github.com/pulp-platform/opentitan.git,            rev: 42df2697ad3d07608df942cb7e1928c05558af26 } # branch: mc/astral

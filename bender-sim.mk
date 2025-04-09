@@ -9,6 +9,7 @@
 sim_targs += -t sim
 sim_targs += -t test
 sim_targs += -t simulation
+sim_targs += -t hyper_test
 ifeq ($(TECH_SIM), 1)
 	sim_targs += -t tech_sim
 	sim_defs  += -D INITIALIZE_MEMORY
