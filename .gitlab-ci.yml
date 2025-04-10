@@ -6,17 +6,12 @@
 
 # We initialize the nonfree repo, then spawn a sub-pipeline from it
 
-workflow:
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "lg/isolde"'
-      when: never
-
 stages:
   - nonfree
 
 init:
   stage: nonfree
-  script: make car-nonfree-init
+  script: make isolde-nonfree-init
   artifacts:
     paths: [ nonfree/ci.yml ]
 
