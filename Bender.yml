@@ -117,7 +117,6 @@ sources:
 
   - target: all(test, not(fpga))
     files:
-      - target/sim/src/hyp_vip/s27ks0641.v
       - target/sim/src/vip_carfield_soc.sv
       - target/sim/src/astral_fix.sv
       - target/sim/src/astral_tb.sv
