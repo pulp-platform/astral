@@ -17,7 +17,7 @@ dependencies:
   hyperbus:           { git: https://github.com/pulp-platform/hyperbus.git,             rev: f039e601c8b6590181734e6d26ff8b77aa380412 } # branch: chi/add_fsm_with_Tcsh
   dyn_mem:            { git: https://github.com/pulp-platform/dyn_spm.git,              rev: 6753d2046da6dfc8efbef5e6f22053a621f111d9 } # branch: astral
   safety_island:      { git: https://github.com/pulp-platform/safety_island.git,        rev: aaef55c798ab53560faaf451a86668fa1e6d0f3b } # branch: carfield
-  pulp_cluster:       { git: https://github.com/pulp-platform/pulp_cluster.git,         rev: e2a18e108651b9e2286cbf1e5097fc996d5cf12e } # branch: lg/astral
+  pulp_cluster:       { git: https://github.com/pulp-platform/pulp_cluster.git,         rev: f4aacf260864d17d17c8e55ffa9add6d20af4eea } # branch: lg/astral_v2
   opentitan:          { git: https://github.com/pulp-platform/opentitan.git,            rev: 42df2697ad3d07608df942cb7e1928c05558af26 } # branch: mc/astral
   mailbox_unit:       { git: https://github.com/pulp-platform/mailbox_unit.git,         version: 1.1.0                                }
   apb:                { git: https://github.com/pulp-platform/apb.git,                  version: 0.2.3                                }
@@ -25,7 +25,7 @@ dependencies:
   apb_adv_timer:      { git: https://github.com/pulp-platform/apb_adv_timer.git,        version: 1.0.4                                }
   can_bus:            { git: https://github.com/AlSaqr-platform/can_bus.git,            rev: 0ec0bf8b7dab6d5e4b3f7ec58338a8efee066379 } # branch: pulp
   spatz:              { git: https://github.com/pulp-platform/spatz.git,                rev: 98de97f24fe42675c9b4a8cc08354a03af57400a } # branch: yt/astral
-  common_cells:       { git: https://github.com/pulp-platform/common_cells.git,         version: 1.37.0                               } # branch: master
+  common_cells:       { git: https://github.com/pulp-platform/common_cells.git,         version: 1.38.0                               } # branch: master
   pulp-ethernet:      { git: https://github.com/pulp-platform/pulp-ethernet.git,        rev: 2bea11658d2bc368ae2af0a3f71b4253ba4f713f } # branch: handshake
   riscv-dbg:          { git: https://github.com/pulp-platform/riscv-dbg.git,            version: =0.8.0                               }
 
