@@ -370,7 +370,7 @@ packages:
     dependencies:
     - common_cells
   neureka:
-    revision: 6ed5334a8d683bdabe7b58c79e765133d459bb49
+    revision: f4e131c86205d37882cf02ea4dd3bd141ef32d86
     version: null
     source:
       Git: https://github.com/pulp-platform/neureka.git
@@ -427,7 +427,7 @@ packages:
     - idma
     - register_interface
   pulp_cluster:
-    revision: f4aacf260864d17d17c8e55ffa9add6d20af4eea
+    revision: fff0b76900cd537e97ffb8c4d62b913d02856b8e
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp_cluster.git
