@@ -198,8 +198,8 @@ packages:
     - common_verification
     - tech_cells_generic
   common_verification:
-    revision: 9c07fa860593b2caabd9b5681740c25fac04b878
-    version: 0.2.3
+    revision: fb1885f48ea46164a10568aeff51884389f67ae3
+    version: 0.2.5
     source:
       Git: https://github.com/pulp-platform/common_verification.git
     dependencies: []
@@ -291,7 +291,7 @@ packages:
     - tech_cells_generic
   hwpe-ctrl:
     revision: 3690a3c648f120546d8de2bc583d5170c36d2f20
-    version: null
+    version: 2.0.0
     source:
       Git: https://github.com/pulp-platform/hwpe-ctrl.git
     dependencies:
@@ -427,7 +427,7 @@ packages:
     - idma
     - register_interface
   pulp_cluster:
-    revision: f7a42d42fbb77f2b3e1fa301d5921c49e5b08976
+    revision: 82177b1d0a1ba7530902f27d592311844efa32a0
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp_cluster.git
@@ -457,7 +457,7 @@ packages:
     - tech_cells_generic
     - timer_unit
   redmule:
-    revision: 5dfeb61c060c9c5744b2c9c95e3bb51e3525cff2
+    revision: 81acf33df0caef1760cb71fc5218855bdd12179d
     version: null
     source:
       Git: https://github.com/pulp-platform/redmule.git
@@ -471,8 +471,8 @@ packages:
     - hwpe-stream
     - ibex
     - obi
-    - tech_cells_generic
     - register_interface
+    - tech_cells_generic
   redundancy_cells:
     revision: 9e31f7c6c24877eaf58279903e7a162b16c9a721
     version: null
@@ -484,8 +484,8 @@ packages:
     - register_interface
     - tech_cells_generic
   register_interface:
-    revision: ae616e5a1ec2b41e72d200e5ab09c65e94aebd3d
-    version: 0.4.4
+    revision: 5daa85d164cf6b54ad061ea1e4c6f3624556e467
+    version: 0.4.5
     source:
       Git: https://github.com/pulp-platform/register_interface.git
     dependencies:
@@ -540,8 +540,8 @@ packages:
     - timer_unit
     - unbent
   scm:
-    revision: 74426dee36f28ae1c02f7635cf844a0156145320
-    version: null
+    revision: 472f99affe44ff7b282b519c047a3cfeb35b16c6
+    version: 1.2.0
     source:
       Git: https://github.com/pulp-platform/scm.git
     dependencies:
@@ -556,8 +556,8 @@ packages:
     - common_cells
     - register_interface
   softex:
-    revision: 23faeccaf204817bc9e6649e469072e5726be561
-    version: 1.0.0
+    revision: 77f219db2d0591afd18c191e5f4c6b112d7aac0c
+    version: 1.1.0
     source:
       Git: https://github.com/belanoa/softex.git
     dependencies:
