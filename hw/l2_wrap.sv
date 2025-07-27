@@ -156,16 +156,16 @@ typedef struct packed {
 localparam map_rule_t [NumRules-1:0] MappingRules = '{
   '{idx       : dyn_mem_pkg::INTERLEAVE,
     start_addr: L2Port0InterlBase,
-    end_addr  : L2Port0InterlBase + L2MemSize},
+    end_addr  : L2Port0InterlBase + L2MemSize/2},
   '{idx       : dyn_mem_pkg::NONE_INTER,
     start_addr: L2Port0NonInterlBase,
-    end_addr  : L2Port0NonInterlBase + L2MemSize},
+    end_addr  : L2Port0NonInterlBase + L2MemSize/2},
   '{idx       : dyn_mem_pkg::INTERLEAVE,
     start_addr: L2Port1InterlBase,
-    end_addr  : L2Port1InterlBase + L2MemSize},
+    end_addr  : L2Port1InterlBase + L2MemSize/2},
   '{idx       : dyn_mem_pkg::NONE_INTER,
     start_addr: L2Port1NonInterlBase,
-    end_addr  : L2Port1NonInterlBase + L2MemSize}
+    end_addr  : L2Port1NonInterlBase + L2MemSize/2}
 };
 
 dyn_mem_top #(
