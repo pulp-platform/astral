@@ -14,16 +14,18 @@ packages:
     dependencies:
     - tech_cells_generic
   apb_uart:
-    revision: 6c7dde3d749ac8274377745c105da8c8b8cd27c6
-    version: 0.2.1
+    revision: 8182a85d234417db46fe833533f8536644d3bee3
+    version: 0.2.3
     source:
       Git: https://github.com/pulp-platform/apb_uart.git
     dependencies:
     - apb
+    - obi
+    - obi_peripherals
     - register_interface
   axi:
-    revision: 39f5f2d51c5e524f6fc5cf8b6e901f7dcc5622d7
-    version: 0.39.6
+    revision: 78831b6feba265d5ee2683bbf42b4150f8a35c43
+    version: 0.39.8
     source:
       Git: https://github.com/pulp-platform/axi.git
     dependencies:
@@ -66,8 +68,8 @@ packages:
     - common_cells
     - common_verification
   axi_rt:
-    revision: 641ea950e24722af747033f2ab85f0e48ea8d7f8
-    version: 0.0.0-alpha.9
+    revision: 50153a346b753dc2bc7723c446656a43db35d02d
+    version: 0.0.0-alpha.10
     source:
       Git: https://github.com/pulp-platform/axi_rt.git
     dependencies:
@@ -104,8 +106,8 @@ packages:
       Git: https://github.com/AlSaqr-platform/can_bus.git
     dependencies: []
   cheshire:
-    revision: 68a7836c0f8998581808efb561bd2fc275a95323
-    version: 0.2.0
+    revision: b3bb66bc3d4ca2b691061e060d93f0231aa132f0
+    version: null
     source:
       Git: https://github.com/pulp-platform/cheshire.git
     dependencies:
@@ -170,8 +172,8 @@ packages:
     dependencies:
     - hci
   common_cells:
-    revision: c27bce39ebb2e6bae52f60960814a2afca7bd4cb
-    version: 1.37.0
+    revision: 9afda9abb565971649c2aa0985639c096f351171
+    version: 1.38.0
     source:
       Git: https://github.com/pulp-platform/common_cells.git
     dependencies:
@@ -306,10 +308,10 @@ packages:
       Git: https://github.com/pulp-platform/icache-intc.git
     dependencies: []
   idma:
-    revision: c12caf59bb482fe44b27361f6924ad346b2d22fe
-    version: 0.6.3
+    revision: ff5d56fffb3767814db88d6bf8f381974ea33aa5
+    version: 0.6.4
     source:
-      Git: https://github.com/pulp-platform/idma.git
+      Git: https://github.com/pulp-platform/iDMA.git
     dependencies:
     - axi
     - axi_stream
@@ -360,13 +362,21 @@ packages:
     - register_interface
     - zeroriscy
   obi:
-    revision: 5321106817e177d6c16ecc4daa922b96b1bc946b
-    version: 0.1.5
+    revision: 0155fc34e900c7c884e081c0a1114a247937ff69
+    version: 0.1.7
     source:
       Git: https://github.com/pulp-platform/obi.git
     dependencies:
     - common_cells
     - common_verification
+  obi_peripherals:
+    revision: 079894a6cbd4e544c477643d184a4c340bd4e391
+    version: 0.1.1
+    source:
+      Git: https://github.com/pulp-platform/obi_peripherals.git
+    dependencies:
+    - common_cells
+    - obi
   opentitan:
     revision: 42df2697ad3d07608df942cb7e1928c05558af26
     version: null
