@@ -357,7 +357,7 @@ module astral_fixture;
   assign w_jtag_secd_trstn  = jtag_secd_trst_n;
   assign jtag_secd_tdo      = w_jtag_secd_tdo;
   // GPIOs (hostd)
-  assign w_gpio             = '0;
+  // assign w_gpio             = '0; // TODO: why assigned to 0?
   // Serial Link (hostd)
   assign w_slink_hostd_rcv_clk_from_vip = slink_hostd_rcv_clk_from_vip;
   assign w_slink_hostd_from_vip         = slink_hostd_from_vip;
