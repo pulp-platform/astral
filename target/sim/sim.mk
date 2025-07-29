@@ -13,14 +13,7 @@ TBENCH ?= tb_astral
 $(CAR_TGT_DIR)/sim/src/hyp_vip:
 	rm -rf $@
 	mkdir $@
-	rm -rf model_tmp && mkdir model_tmp
-	cd model_tmp; wget --no-check-certificate https://www.infineon.com/dgdl/Infineon-S27KL0641_S27KS0641_VERILOG-SimulationModels-v05_00-EN.zip?fileId=8ac78c8c7d0d8da4017d0f6349a14f68
-	cd model_tmp; mv 'Infineon-S27KL0641_S27KS0641_VERILOG-SimulationModels-v05_00-EN.zip?fileId=8ac78c8c7d0d8da4017d0f6349a14f68' model.zip
-	cd model_tmp; unzip model.zip
-	cd model_tmp; mv 'S27KL0641 S27KS0641' exe_folder
-	cd model_tmp/exe_folder; unzip S27ks0641.exe
-	cp model_tmp/exe_folder/S27ks0641/model/s27ks0641.v model_tmp/exe_folder/S27ks0641/model/s27ks0641_verilog.sdf $@
-	rm -rf model_tmp
+  git clone https://iis-git.ee.ethz.ch/carfield/hyp_vip.git $@
 
 CAR_SIM_ALL += $(CHS_ROOT)/target/sim/models/s25fs512s.v
 CAR_SIM_ALL += $(CHS_ROOT)/target/sim/models/24FC1025.v
