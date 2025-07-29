@@ -15,11 +15,16 @@
 #define FLL_CLK_DIV_MASK  (0x3C000000)
 #define FLL_CLK_MUL_MASK  (0x0000FFFF)
 #define FLL_MODE_MASK     (0x80000000)
+#define FLL_LOCK_MASK     (0x40000000)
 
 #define FLL_DCO_CODE_OFFSET (16)
 #define FLL_CLK_DIV_OFFSET  (26)
 #define FLL_CLK_MUL_OFFSET  (0)
 #define FLL_MODE_OFFSET     (31)
+#define FLL_LOCK_OFFSET     (30)
+
+// Current ref clock in the testbench is 1 MHz
+#define REF_CLOCK_FREQ 1000000
 
 inline uint32_t set_bitfield(uint32_t val, uint32_t src_reg, uint32_t bitfield_mask, uint32_t bitfield_offset){
   return (src_reg & ~bitfield_mask) | ((val << bitfield_offset) & bitfield_mask);
@@ -52,9 +57,13 @@ void set_fll_dco_code(uint32_t dco_code, uint8_t fll_id){
   write_fll_bitfield(dco_code, fll_id, FLL_CONFIG_REG_I, FLL_DCO_CODE_MASK, FLL_DCO_CODE_OFFSET);
 }
 
+void set_fll_lock_gate(_Bool gate, uint8_t fll_id){
+  write_fll_bitfield(gate, fll_id, FLL_CONFIG_REG_I, FLL_LOCK_MASK, FLL_LOCK_OFFSET);
+}
+
 // When programmed in normal mode, the FLL computes the final frequency as:
-// freq = (clk_mul + 1)/clk_div. For example, to set up the FLL for 500 MHz, one option is to
-// set clk_mul = 999, and clk_div = 2.
+// freq = fref*(clk_mul + 1)/clk_div. For example, with a 1 MHz reference clock,
+// to set up the FLL for 500 MHz, one option is to set clk_mul = 999, and clk_div = 2.
 void set_fll_clk_div(uint32_t clk_div, uint8_t fll_id){
   write_fll_bitfield(clk_div, fll_id, FLL_CONFIG_REG_I, FLL_CLK_DIV_MASK, FLL_CLK_DIV_OFFSET);
 }
@@ -66,14 +75,14 @@ void set_fll_clk_mul(uint32_t clk_mul, uint8_t fll_id){
 // The following API uses a default divider by 2 to program the peripheral FLL
 void set_periph_fll_div2(uint32_t clk_freq){
   unsigned int divdier = 2;
-  set_fll_clk_mul((divdier*clk_freq) - 1, FLL_PERIPH_ID);
+  set_fll_clk_mul((divdier*clk_freq/REF_CLOCK_FREQ) - 1, FLL_PERIPH_ID);
   set_fll_clk_div(divdier, FLL_PERIPH_ID);
   fll_normal(FLL_PERIPH_ID);
 }
 
 void set_host_fll_div2(uint32_t clk_freq){
   unsigned int divdier = 2;
-  set_fll_clk_mul((divdier*clk_freq) - 1, FLL_HOST_ID);
+  set_fll_clk_mul((divdier*clk_freq/REF_CLOCK_FREQ) - 1, FLL_HOST_ID);
   set_fll_clk_div(divdier, FLL_HOST_ID);
   fll_normal(FLL_HOST_ID);
 }
