@@ -158,7 +158,7 @@ packages:
     - scm
     - tech_cells_generic
   cluster_interconnect:
-    revision: 89e1019d64a86425211be6200770576cbdf3e8b3
+    revision: 1284def6c0b7f7e9355eb093d00883ad9dead1b7
     version: null
     source:
       Git: https://github.com/pulp-platform/cluster_interconnect.git
@@ -194,6 +194,12 @@ packages:
     - common_cells
     - fpnew
     - tech_cells_generic
+  cv32e40x:
+    revision: 96b933ac2f723351872da55e7d2e9a82abd5df34
+    version: null
+    source:
+      Git: https://github.com/pulp-platform/cv32e40x.git
+    dependencies: []
   cva6:
     revision: 9338c2ca7cf1a47aef54322f89ce867825c3c8d5
     version: null
@@ -231,6 +237,14 @@ packages:
       Git: https://github.com/pulp-platform/event_unit_flex.git
     dependencies:
     - common_cells
+  flex-v:
+    revision: e9355c2f6ec4c105abdff39489e5d1be93bc4374
+    version: null
+    source:
+      Git: https://github.com/pulp-platform/flex-v.git
+    dependencies:
+    - fpnew
+    - tech_cells_generic
   fpnew:
     revision: a8e0cba6dd50f357ece73c2c955d96efc3c6c315
     version: null
@@ -247,7 +261,7 @@ packages:
     dependencies:
     - common_cells
   hci:
-    revision: aed9005c761827c6cbff2ea9a15f9cc37acd1169
+    revision: 2a5a5081a2b32f1a04e7e28c00d3762d92602b84
     version: null
     source:
       Git: https://github.com/pulp-platform/hci.git
@@ -271,15 +285,15 @@ packages:
     - scm
     - tech_cells_generic
   hwpe-ctrl:
-    revision: a5966201aeeb988d607accdc55da933a53c6a56e
-    version: null
+    revision: 3690a3c648f120546d8de2bc583d5170c36d2f20
+    version: 2.0.0
     source:
       Git: https://github.com/pulp-platform/hwpe-ctrl.git
     dependencies:
     - tech_cells_generic
   hwpe-stream:
-    revision: 65c99a4a2f37a79acee800ab0151f67dfb1edef1
-    version: 1.8.0
+    revision: b3d33afdd27e79bcda1348d0ab5f4afd52c03106
+    version: 1.9.0
     source:
       Git: https://github.com/pulp-platform/hwpe-stream.git
     dependencies:
@@ -351,7 +365,7 @@ packages:
     dependencies:
     - common_cells
   neureka:
-    revision: 94528df2bc6d5eedc0439bd403c2ad005f0a7519
+    revision: f4e131c86205d37882cf02ea4dd3bd141ef32d86
     version: null
     source:
       Git: https://github.com/pulp-platform/neureka.git
@@ -416,7 +430,7 @@ packages:
     - idma
     - register_interface
   pulp_cluster:
-    revision: 2bf8d78bedbd91d2fc11119fc455c17a2a984944
+    revision: 45031632baa155e6b41441ea2f8a0b4ca240e8e0
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp_cluster.git
@@ -440,23 +454,26 @@ packages:
     - redmule
     - redundancy_cells
     - register_interface
-    - riscv
+    - flex-v
     - scm
     - softex
     - tech_cells_generic
     - timer_unit
   redmule:
-    revision: 9223ccc932e21d0667e9c2d30831db41eec9299e
+    revision: 78696fb0d6d429bdad2e38740792648d44095605
     version: null
     source:
       Git: https://github.com/pulp-platform/redmule.git
     dependencies:
     - common_cells
     - cv32e40p
+    - cv32e40x
     - fpnew
     - hci
     - hwpe-ctrl
     - hwpe-stream
+    - ibex
+    - obi
     - register_interface
     - tech_cells_generic
   redundancy_cells:
@@ -479,14 +496,6 @@ packages:
     - axi
     - common_cells
     - common_verification
-  riscv:
-    revision: c760db14dbd6cc3ec3b8ae8274df2eac7225bcac
-    version: null
-    source:
-      Git: https://github.com/AlSaqr-platform/riscv_nn.git
-    dependencies:
-    - fpnew
-    - tech_cells_generic
   riscv-dbg:
     revision: 358f90110220adf7a083f8b65d157e836d706236
     version: 0.8.1
