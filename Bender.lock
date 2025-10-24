@@ -1,11 +1,4 @@
 packages:
-  ace:
-    revision: ea2fc9ced5be964b47cfcbcd6eb6518771a9e85d
-    version: null
-    source:
-      Git: https://github.com/pulp-platform/ace.git
-    dependencies:
-    - axi
   apb:
     revision: 77ddf073f194d44b9119949d2421be59789e69ae
     version: 0.2.4
@@ -31,8 +24,8 @@ packages:
     - obi_peripherals
     - register_interface
   axi:
-    revision: 78831b6feba265d5ee2683bbf42b4150f8a35c43
-    version: 0.39.8
+    revision: fccffb5953ec8564218ba05e20adbedec845e014
+    version: 0.39.1
     source:
       Git: https://github.com/pulp-platform/axi.git
     dependencies:
@@ -55,22 +48,21 @@ packages:
     dependencies:
     - axi_slice
   axi_llc:
-    revision: 2f23e6fc40ac7256f177a44c1f106c70c05c6cca
-    version: null
+    revision: 59bb8a681347e1133f11a82190fbf4bc11900d9e
+    version: 0.2.2
     source:
-      Git: https://github.com/pulp-platform/axi_llc
+      Git: https://github.com/pulp-platform/axi_llc.git
     dependencies:
     - axi
     - common_cells
     - common_verification
-    - redundancy_cells
     - register_interface
     - tech_cells_generic
   axi_obi:
-    revision: null
+    revision: f8605eadbb15b8de7a0833843403e991be04a15b
     version: null
     source:
-      Path: .bender/git/checkouts/safety_island-f408198401cf8b88/future/axi_obi
+      Git: git@iis-git.ee.ethz.ch:carfield/axi_obi.git
     dependencies:
     - axi
     - common_cells
@@ -123,12 +115,11 @@ packages:
       Git: https://github.com/AlSaqr-platform/can_bus.git
     dependencies: []
   cheshire:
-    revision: 2a141413e9ed1c85b41ffe03297633a394be6a42
+    revision: d8684b41a375e33e92c21eb2075d232c0ea44438
     version: null
     source:
-      Git: https://github.com/pulp-platform/cheshire.git
+      Git: https://github.com/FondazioneChipsIT/cheshire.git
     dependencies:
-    - ace
     - apb_uart
     - axi
     - axi_llc
@@ -140,19 +131,17 @@ packages:
     - common_cells
     - common_verification
     - cva6
+    - dram_rtl_sim
     - idma
     - irq_router
     - opentitan_peripherals
-    - redundancy_cells
     - register_interface
     - riscv-dbg
-    - riscv-iommu
     - serial_link
-    - tagger
     - unbent
   clic:
-    revision: 40ae266dab5768f63ca8dabe70e7474feb403bab
-    version: null
+    revision: 6515a71eb4ae3b143ab912d265e79832b3179a76
+    version: 3.0.0
     source:
       Git: https://github.com/pulp-platform/clic.git
     dependencies:
@@ -191,8 +180,8 @@ packages:
     dependencies:
     - hci
   common_cells:
-    revision: 9afda9abb565971649c2aa0985639c096f351171
-    version: 1.38.0
+    revision: 9ca8a7655f741e7dd5736669a20a301325194c28
+    version: 1.39.0
     source:
       Git: https://github.com/pulp-platform/common_cells.git
     dependencies:
@@ -220,17 +209,22 @@ packages:
       Git: https://github.com/pulp-platform/cv32e40x.git
     dependencies: []
   cva6:
-    revision: 125c68eeb1a64c20db652be15491c19e03730b70
+    revision: 9ff9791eb7b54540c0f03660149ab9a6ac76e022
     version: null
     source:
-      Git: https://github.com/pulp-platform/cva6.git
+      Git: https://github.com/FondazioneChipsIT/cva6.git
     dependencies:
-    - ace
     - axi
     - common_cells
     - fpnew
-    - redundancy_cells
     - tech_cells_generic
+  dram_rtl_sim:
+    revision: 2cac4a9e12a60537567276b539ab6c919c87b5dc
+    version: 0.1.1
+    source:
+      Git: https://github.com/pulp-platform/dram_rtl_sim.git
+    dependencies:
+    - axi
   dyn_mem:
     revision: 480590062742230dc9bd4050358a15b4747bdf34
     version: null
@@ -260,10 +254,10 @@ packages:
     - fpnew
     - tech_cells_generic
   fpnew:
-    revision: a8e0cba6dd50f357ece73c2c955d96efc3c6c315
+    revision: 49b1cb4d50893a9d23f8329d857527ebe5bc8529
     version: null
     source:
-      Git: https://github.com/pulp-platform/cvfpu.git
+      Git: https://github.com/FondazioneChipsIT/cvfpu.git
     dependencies:
     - common_cells
     - fpu_div_sqrt_mvp
@@ -501,8 +495,8 @@ packages:
     - register_interface
     - tech_cells_generic
   register_interface:
-    revision: 8e8c209ea559d3b54f45cf30fcce95ce70ff5e49
-    version: 0.4.6
+    revision: d6e1d4cdaab7870f4faf3f88a1c788eaf5ac129d
+    version: 0.4.7
     source:
       Git: https://github.com/pulp-platform/register_interface.git
     dependencies:
@@ -518,17 +512,8 @@ packages:
     dependencies:
     - common_cells
     - tech_cells_generic
-  riscv-iommu:
-    revision: c1dea3732d0d05e5659b31773e43f3364bc866fc
-    version: null
-    source:
-      Git: https://github.com/zero-day-labs/riscv-iommu.git
-    dependencies:
-    - axi
-    - common_cells
-    - register_interface
   safety_island:
-    revision: aaef55c798ab53560faaf451a86668fa1e6d0f3b
+    revision: 3e9d4882cafff3580af5130dd94fea91a5c28d9b
     version: null
     source:
       Git: https://github.com/pulp-platform/safety_island.git
@@ -589,17 +574,6 @@ packages:
     - idma
     - register_interface
     - riscv-dbg
-    - tech_cells_generic
-  tagger:
-    revision: b288376b65b6bbd5feea196bb3c220f783d96e29
-    version: null
-    source:
-      Git: https://github.com/pulp-platform/transaction-tagger.git
-    dependencies:
-    - axi
-    - common_cells
-    - common_verification
-    - register_interface
     - tech_cells_generic
   tech_cells_generic:
     revision: 7968dd6e6180df2c644636bc6d2908a49f2190cf
