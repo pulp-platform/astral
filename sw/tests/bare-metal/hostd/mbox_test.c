@@ -23,7 +23,7 @@ static dif_rv_plic_t plic0;
 int main(int argc, char const *argv[]) {
 
     // Put SMP Hart to sleep
-    if (hart_id() != 0) wfi();
+    // if (hart_id() != 0) wfi();
 
     int prio = 0x1;
     int a,b,c,d,e;

@@ -14,7 +14,7 @@ common_targs += -t mchan
 # common_targs += -t integer_cluster
 common_targs += -t cv32e40p_use_ff_regfile
 common_targs += -t scm_use_fpga_scm
-common_targs += -t cv64a6_imafdc_sv39_hpdcache_wb
+common_targs += -t cv64a6splus_imafdc_sv39_hpdcache_wb
 common_targs += -t rtl
 # The `snitch_cluster` target is needed for iDMA backend generation
 common_targs += -t snitch_cluster
@@ -33,23 +33,27 @@ common_targs += -t $(CARFIELD_CONFIG)
 # common_defs += -D SNITCH_ICACHE
 
 # Island exclusion
-# ifeq ($(shell echo $(PULPD_PRESENT)), 0)
-# common_targs += -e pulp_cluster
-# endif
-# 
-# ifeq ($(shell echo $(SAFED_PRESENT)), 0)
-# common_targs += -e safety_island
-# else
-# common_defs += -D SAFED_ENABLE
-# endif
-# 
-# ifeq ($(shell echo $(SPATZD_PRESENT)), 0)
-# common_targs += -e spatz
-# else
-# common_targs += -t spatz
-# common_defs += -D SPATZ_ENABLE
-# endif
-# 
-# ifeq ($(shell echo $(SECURED_PRESENT)), 0)
-# common_targs += -e opentitan
-# endif
+ifeq ($(shell echo $(PULPD_PRESENT)), 0)
+common_targs += -e pulp_cluster
+else
+common_defs += -D PULPD_ENABLE
+endif
+
+ifeq ($(shell echo $(SAFED_PRESENT)), 0)
+common_targs += -e safety_island
+else
+common_defs += -D SAFED_ENABLE
+endif
+
+ifeq ($(shell echo $(SPATZD_PRESENT)), 0)
+common_targs += -e spatz
+else
+common_targs += -t spatz
+common_defs += -D SPATZ_ENABLE
+endif
+
+ifeq ($(shell echo $(SECURED_PRESENT)), 0)
+common_targs += -e opentitan
+else
+common_defs += -D SECURED_ENABLE
+endif
