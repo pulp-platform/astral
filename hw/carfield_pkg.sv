@@ -407,7 +407,7 @@ localparam carfield_domain_idx_t CarfieldDomainIdx = gen_domain_idx(CarfieldIsla
 * Carfield package starts here *
 *******************************/
 localparam int unsigned CheshireNumInternalHarts = 1;
-localparam bit CheshireSerialLinkEnable = 1;
+localparam bit CheshireSerialLinkEnable = 0;
 localparam int unsigned CarfieldNumExtIntrs           = 32; // Number of external interrupts
 localparam int unsigned CarfieldNumInterruptibleHarts = 2;  // Spatz (2 Snitch cores)
 localparam int unsigned CarfieldNumRouterTargets      = 1;  // Safety Island
@@ -636,10 +636,10 @@ localparam cheshire_pkg::cheshire_cfg_t CarfieldCfgDefault = '{
   // IOMMU             : 1,
   SerialLink        : CheshireSerialLinkEnable,
   Vga               : 0,
-  AxiRt             : 1,
-  Clic              : 1,
+  AxiRt             : 0,
+  Clic              : 0,
   IrqRouter         : 1,
-  BusErr            : 1,
+  BusErr            : 0,
   // HmrUnit           : 1,
   // Cva6DMR           : 1,
   // Cva6DMRFixed      : 0,

@@ -541,12 +541,12 @@ for (genvar i = 0; i < NumDomains; i++) begin : gen_domain_clock_mux
   clk_mux_glitch_free #(
     .NUM_INPUTS(carfield_pkg::NumFll-1)
   ) i_clk_mux (
-    .clks_i       ( {secd_clk_i, periph_clk_i, alt_clk_i, host_clk_i} ),
-    .test_clk_i   ( 1'b0                                              ),
-    .test_en_i    ( 1'b0                                              ),
-    .async_rstn_i ( host_pwr_on_rst_n                                 ),
-    .async_sel_i  ( domain_clk_sel[i]                                 ),
-    .clk_o        ( domain_clk[i]                                     )
+    .clks_i       ( {secd_clk_i, periph_clk_i, host_clk_i} ),
+    .test_clk_i   ( 1'b0                                   ),
+    .test_en_i    ( 1'b0                                   ),
+    .async_rstn_i ( host_pwr_on_rst_n                      ),
+    .async_sel_i  ( domain_clk_sel[i]                      ),
+    .clk_o        ( domain_clk[i]                          )
   );
 
   // The register file does not support back pressure directly. I.e the hardware side cannot tell

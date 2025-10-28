@@ -1,5 +1,5 @@
 # Set environment variables to choose of which island we have to compile the sw
-export PULPD_PRESENT=1
+export PULPD_PRESENT=0
 export SAFED_PRESENT=0
 export SECURED_PRESENT=1
 export SPATZD_PRESENT=0

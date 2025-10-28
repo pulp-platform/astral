@@ -77,10 +77,14 @@ CHS_BINARY   ?=
 CHS_IMAGE    ?=
 
 # Safety Island, reliabililty and fault-tolerance
+ifeq ($(shell echo $(SAFED_PRESENT)), 1)
 SAFED_ROOT     ?= $(shell $(BENDER) path safety_island)
 SAFED_SW_DIR   := $(SAFED_ROOT)/sw
 SAFED_BOOTMODE ?= 0
 SAFED_BINARY   ?=
+SAFED_SW_BUILD := safed-sw-build
+SAFED_SW_INIT := safed-sw-init
+endif
 
 # Security island, security and secure boot
 SECD_ROOT     ?= $(shell $(BENDER) path opentitan)
@@ -91,16 +95,23 @@ SECD_IMAGE    ?=
 SECURE_BOOT   ?= 0
 
 # PULP cluster, reliability and general-purpose accelerator
+ifeq ($(shell echo $(PULPD_PRESENT)), 1)
 PULPD_ROOT      ?= $(shell $(BENDER) path pulp_cluster)
 PULPD_BINARY    ?=
 PULPD_TEST_NAME ?=
 PULPD_BOOTMODE  ?=
+PULPD_SW_BUILD := pulpd-sw-build
+PULPD_SW_INIT := pulpd-sw-init
+endif
 
 # Spatz cluster, efficient vector co-processor
+ifeq ($(shell echo $(SPATZD_PRESENT)), 1)
 SPATZD_ROOT     ?= $(shell $(BENDER) path spatz)
 SPATZD_MAKEDIR  := $(SPATZD_ROOT)/hw/system/spatz_cluster
 SPATZD_BINARY   ?=
 SPATZD_BOOTMODE ?= 0 # default jtag bootmode
+SPATZD_HW_INIT := spatzd-hw-init
+endif
 
 # PLL/FLL bypass
 BYPASS_PLL ?= 0
@@ -111,9 +122,9 @@ BYPASS_PLL ?= 0
 
 # Interrupt configuration in cheshire
 # CLINT interruptible harts
-CLINTCORES     := 4
+CLINTCORES     := 3
 # PLIC interruptible harts
-PLICCORES      := 8
+PLICCORES      := 6
 # PLIC number of input interrupts
 PLIC_NUM_INTRS := 89
 
@@ -161,21 +172,6 @@ car-checkout: car-checkout-deps
 ############
 # Build SW #
 ############
-## @section Islands compile exclusion
-ifeq ($(shell echo $(PULPD_PRESENT)), 1)
-PULPD_SW_BUILD := pulpd-sw-build
-PULPD_SW_INIT := pulpd-sw-init
-endif
-
-ifeq ($(shell echo $(SAFED_PRESENT)), 1)
-SAFED_SW_BUILD := safed-sw-build
-SAFED_SW_INIT := safed-sw-init
-endif
-
-ifeq ($(shell echo $(SPATZD_PRESENT)), 1)
-SPATZD_HW_INIT := spatzd-hw-init
-endif
-
 ## @section Carfield platform SW build
 include $(CAR_SW_DIR)/sw.mk
 .PHONY: chs-sw-build
@@ -221,7 +217,8 @@ pulpd-sw-build: pulpd-sw-init
 # TODO: properly compile spatz tests from carfield. For now, we symlink to existing tests. If you
 #are a user external to ETH, the symlink will not work. We will integrate the compilation flow ASAP.
 
-#.PHONY: spatzd-sw-build spatzd-sw-build: $(MAKE) -C $(SPATZD_MAKEDIR) BENDER=$(BENDER_PATH)
+#.PHONY: spatzd-sw-build
+# spatzd-sw-build: $(MAKE) -C $(SPATZD_MAKEDIR) BENDER=$(BENDER_PATH)
 #LLVM_INSTALL_DIR=$(LLVM_SPATZ_DIR) GCC_INSTALL_DIR=$(GCC_SPATZ_DIR) -B
 #SPATZ_CLUSTER_CFG=$(SPATZD_MAKEDIR)/cfg/carfield.hjson HTIF_SERVER=NO sw.vsim
 

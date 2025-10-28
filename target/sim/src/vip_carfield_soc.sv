@@ -105,171 +105,171 @@ module vip_carfield_soc
   //   Ethernet     //
   ///////////////////
 
-  if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet_tb
-    import idma_pkg::*;
-    localparam RegAw              = 32;
-    localparam RegDw              = 32;
-
-    logic reg_error;
-    logic [RegDw-1:0] rx_rsp_valid;
-    logic dma_rx_en;
-
-    typedef reg_test::reg_driver #(
-      .AW(RegAw),
-      .DW(RegDw),
-      .TT(ClkPeriodPeriph * TTest),
-      .TA(ClkPeriodPeriph * TAppl)
-    ) reg_bus_drv_t;
-
-    REG_BUS #(
-      .DATA_WIDTH(RegDw),
-      .ADDR_WIDTH(RegAw)
-    ) reg_bus_rx (
-      .clk_i(periph_clk)
-    );
-
-    reg_bus_drv_t reg_drv_rx  = new(reg_bus_rx);
-
-    reg_req_t reg_bus_rx_req;
-    reg_rsp_t reg_bus_rx_rsp;
-
-    `REG_BUS_ASSIGN_TO_REQ (reg_bus_rx_req, reg_bus_rx)
-    `REG_BUS_ASSIGN_FROM_RSP (reg_bus_rx, reg_bus_rx_rsp)
-
-    axi_mst_req_t axi_req_mem;
-    axi_mst_rsp_t axi_rsp_mem;
-    logic eth_rx_irq;
-    idma_pkg::idma_busy_t idma_busy_o;
-
-    eth_idma_wrap #(
-      .DataWidth           ( DutCfg.AxiDataWidth  ),
-      .AddrWidth           ( DutCfg.AddrWidth     ),
-      .UserWidth           ( DutCfg.AxiUserWidth  ),
-      .AxiIdWidth          ( DutCfg.AxiMstIdWidth ),
-      .NumAxInFlight       ( 32'd9                ),
-      .BufferDepth         ( 32'd2                ),
-      .TFLenWidth          ( 32'd20               ),
-      .MemSysDepth         ( 32'd0                ),
-      .TxFifoLogDepth      ( 32'd2                ),
-      .RxFifoLogDepth      ( 32'd1                ),
-      .axi_req_t           ( axi_mst_req_t        ),
-      .axi_rsp_t           ( axi_mst_rsp_t        ),
-      .reg_req_t           ( reg_req_t            ),
-      .reg_rsp_t           ( reg_rsp_t            )
-    ) i_rx_eth_idma_wrap (
-      .clk_i               ( periph_clk      ),
-      .rst_ni              ( rst_n           ),
-      .eth_clk_i           ( eth_clk         ),
-      .phy_rx_clk_i        ( eth_txck        ),
-      .phy_rxd_i           ( eth_txd         ),
-      .phy_rx_ctl_i        ( eth_txctl       ),
-      .phy_tx_clk_o        ( eth_rxck        ),
-      .phy_txd_o           ( eth_rxd         ),
-      .phy_tx_ctl_o        ( eth_rxctl       ),
-      .phy_resetn_o        ( eth_rstn        ),
-      .phy_intn_i          ( 1'b1            ),
-      .phy_pme_i           ( 1'b1            ),
-      .phy_mdio_i          ( 1'b0            ),
-      .phy_mdio_o          ( eth_mdio_o      ),
-      .phy_mdio_oe         ( eth_mdio_en     ),
-      .phy_mdc_o           ( eth_mdc         ),
-      .reg_req_i           ( reg_bus_rx_req  ),
-      .reg_rsp_o           ( reg_bus_rx_rsp  ),
-      .testmode_i          ( 1'b0            ),
-      .axi_req_o           ( axi_req_mem     ),
-      .axi_rsp_i           ( axi_rsp_mem     ),
-      .eth_rx_irq_o        ( eth_rx_irq      )
-    );
-
-    axi_sim_mem #(
-      .AddrWidth         ( DutCfg.AddrWidth     ),
-      .DataWidth         ( DutCfg.AxiDataWidth  ),
-      .IdWidth           ( DutCfg.AxiMstIdWidth ),
-      .UserWidth         ( DutCfg.AxiUserWidth  ),
-      .axi_req_t         ( axi_mst_req_t        ),
-      .axi_rsp_t         ( axi_mst_rsp_t        ),
-      .WarnUninitialized ( 1'b0                 ),
-      .ClearErrOnAccess  ( 1'b1                 ),
-      .ApplDelay         ( ClkPeriodPeriph * TAppl ),
-      .AcqDelay          ( ClkPeriodPeriph * TTest ),
-      .UninitializedData ( "zeros" )
-    ) i_rx_axi_sim_mem (
-      .clk_i              ( periph_clk        ),
-      .rst_ni             ( rst_n             ),
-      .axi_req_i          ( axi_req_mem       ),
-      .axi_rsp_o          ( axi_rsp_mem       )
-    );
-
-    initial begin
-
-      @(posedge eth_rx_irq);
-      @(posedge periph_clk);
-
-      @(posedge periph_clk);
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_LOW_ADDR_OFFSET, 32'h00890702, 'hf, reg_error); //lower 32bits of MAC address
-      @(posedge periph_clk);
-
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_MACHI_OFFSET, 32'h00002301, 'hf, reg_error); //upper 16bits of MAC address + other configuration set to false/0
-      @(posedge periph_clk);
-
-      while(1) begin
-        reg_drv_rx.send_read( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DMA_RX_EN_OFFSET, dma_rx_en, reg_error);   // req ready 
-        if( dma_rx_en )
-          break;
-        @(posedge periph_clk);
-      end
-
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_SRC_ADDR_OFFSET, 32'h0, 'hf, reg_error ); // SRC_ADDR
-      @(posedge periph_clk);
-
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DST_ADDR_OFFSET, 32'h0, 'hf, reg_error); // DST_ADDR
-      @(posedge periph_clk);
-
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_SRC_PROTOCOL_OFFSET, 32'h5, 'hf , reg_error); // src protocol
-      @(posedge periph_clk);
-
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DST_PROTOCOL_OFFSET, 32'h0,'hf , reg_error); // dst protocol
-      @(posedge periph_clk);
-
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_REQ_VALID_OFFSET, 'h1, 'hf , reg_error);   // req valid
-      @(posedge periph_clk);
-
-      //wait till all data written into rx_axi_sim_mem
-      while(1) begin
-        reg_drv_rx.send_read( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_RSP_VALID_OFFSET, rx_rsp_valid, reg_error);
-        if( rx_rsp_valid ) begin
-          break;
-        end
-        @(posedge periph_clk);
-      end
-
-      // Tx test starts here: external back to core
-      @(posedge periph_clk);
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_LOW_ADDR_OFFSET, 32'h00890702, 'hf, reg_error); //lower 32bits of MAC address
-      @(posedge periph_clk);
-
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_MACHI_OFFSET, 32'h00002301, 'hf, reg_error); //upper 16bits of MAC address + other configuration set to false/0
-      @(posedge periph_clk);
-
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_SRC_ADDR_OFFSET, 32'h0, 'hf, reg_error ); // SRC_ADDR
-      @(posedge periph_clk);
-
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DST_ADDR_OFFSET, 32'h0, 'hf, reg_error); // DST_ADDR
-      @(posedge periph_clk);
-
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_LENGTH_OFFSET, 32'h40,'hf , reg_error); // Size in bytes
-      @(posedge periph_clk);
-
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_SRC_PROTOCOL_OFFSET, 32'h0, 'hf , reg_error); // src protocol
-      @(posedge periph_clk);
-
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DST_PROTOCOL_OFFSET, 32'h5,'hf , reg_error); // dst protocol
-      @(posedge periph_clk);
-
-      reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_REQ_VALID_OFFSET, 'h1, 'hf , reg_error);   // req valid
-      @(posedge periph_clk);
-    end
-  end
+  // if (CarfieldIslandsCfg.ethernet.enable) begin : gen_ethernet_tb
+  //   import idma_pkg::*;
+  //   localparam RegAw              = 32;
+  //   localparam RegDw              = 32;
+  // 
+  //   logic reg_error;
+  //   logic [RegDw-1:0] rx_rsp_valid;
+  //   logic dma_rx_en;
+  // 
+  //   typedef reg_test::reg_driver #(
+  //     .AW(RegAw),
+  //     .DW(RegDw),
+  //     .TT(ClkPeriodPeriph * TTest),
+  //     .TA(ClkPeriodPeriph * TAppl)
+  //   ) reg_bus_drv_t;
+  // 
+  //   REG_BUS #(
+  //     .DATA_WIDTH(RegDw),
+  //     .ADDR_WIDTH(RegAw)
+  //   ) reg_bus_rx (
+  //     .clk_i(periph_clk)
+  //   );
+  // 
+  //   reg_bus_drv_t reg_drv_rx  = new(reg_bus_rx);
+  // 
+  //   reg_req_t reg_bus_rx_req;
+  //   reg_rsp_t reg_bus_rx_rsp;
+  // 
+  //   `REG_BUS_ASSIGN_TO_REQ (reg_bus_rx_req, reg_bus_rx)
+  //   `REG_BUS_ASSIGN_FROM_RSP (reg_bus_rx, reg_bus_rx_rsp)
+  // 
+  //   axi_mst_req_t axi_req_mem;
+  //   axi_mst_rsp_t axi_rsp_mem;
+  //   logic eth_rx_irq;
+  //   idma_pkg::idma_busy_t idma_busy_o;
+  // 
+  //   eth_idma_wrap #(
+  //     .DataWidth           ( DutCfg.AxiDataWidth  ),
+  //     .AddrWidth           ( DutCfg.AddrWidth     ),
+  //     .UserWidth           ( DutCfg.AxiUserWidth  ),
+  //     .AxiIdWidth          ( DutCfg.AxiMstIdWidth ),
+  //     .NumAxInFlight       ( 32'd9                ),
+  //     .BufferDepth         ( 32'd2                ),
+  //     .TFLenWidth          ( 32'd20               ),
+  //     .MemSysDepth         ( 32'd0                ),
+  //     .TxFifoLogDepth      ( 32'd2                ),
+  //     .RxFifoLogDepth      ( 32'd1                ),
+  //     .axi_req_t           ( axi_mst_req_t        ),
+  //     .axi_rsp_t           ( axi_mst_rsp_t        ),
+  //     .reg_req_t           ( reg_req_t            ),
+  //     .reg_rsp_t           ( reg_rsp_t            )
+  //   ) i_rx_eth_idma_wrap (
+  //     .clk_i               ( periph_clk      ),
+  //     .rst_ni              ( rst_n           ),
+  //     .eth_clk_i           ( eth_clk         ),
+  //     .phy_rx_clk_i        ( eth_txck        ),
+  //     .phy_rxd_i           ( eth_txd         ),
+  //     .phy_rx_ctl_i        ( eth_txctl       ),
+  //     .phy_tx_clk_o        ( eth_rxck        ),
+  //     .phy_txd_o           ( eth_rxd         ),
+  //     .phy_tx_ctl_o        ( eth_rxctl       ),
+  //     .phy_resetn_o        ( eth_rstn        ),
+  //     .phy_intn_i          ( 1'b1            ),
+  //     .phy_pme_i           ( 1'b1            ),
+  //     .phy_mdio_i          ( 1'b0            ),
+  //     .phy_mdio_o          ( eth_mdio_o      ),
+  //     .phy_mdio_oe         ( eth_mdio_en     ),
+  //     .phy_mdc_o           ( eth_mdc         ),
+  //     .reg_req_i           ( reg_bus_rx_req  ),
+  //     .reg_rsp_o           ( reg_bus_rx_rsp  ),
+  //     .testmode_i          ( 1'b0            ),
+  //     .axi_req_o           ( axi_req_mem     ),
+  //     .axi_rsp_i           ( axi_rsp_mem     ),
+  //     .eth_rx_irq_o        ( eth_rx_irq      )
+  //   );
+  // 
+  //   axi_sim_mem #(
+  //     .AddrWidth         ( DutCfg.AddrWidth     ),
+  //     .DataWidth         ( DutCfg.AxiDataWidth  ),
+  //     .IdWidth           ( DutCfg.AxiMstIdWidth ),
+  //     .UserWidth         ( DutCfg.AxiUserWidth  ),
+  //     .axi_req_t         ( axi_mst_req_t        ),
+  //     .axi_rsp_t         ( axi_mst_rsp_t        ),
+  //     .WarnUninitialized ( 1'b0                 ),
+  //     .ClearErrOnAccess  ( 1'b1                 ),
+  //     .ApplDelay         ( ClkPeriodPeriph * TAppl ),
+  //     .AcqDelay          ( ClkPeriodPeriph * TTest ),
+  //     .UninitializedData ( "zeros" )
+  //   ) i_rx_axi_sim_mem (
+  //     .clk_i              ( periph_clk        ),
+  //     .rst_ni             ( rst_n             ),
+  //     .axi_req_i          ( axi_req_mem       ),
+  //     .axi_rsp_o          ( axi_rsp_mem       )
+  //   );
+  // 
+  //   initial begin
+  // 
+  //     @(posedge eth_rx_irq);
+  //     @(posedge periph_clk);
+  // 
+  //     @(posedge periph_clk);
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_LOW_ADDR_OFFSET, 32'h00890702, 'hf, reg_error); //lower 32bits of MAC address
+  //     @(posedge periph_clk);
+  // 
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_MACHI_OFFSET, 32'h00002301, 'hf, reg_error); //upper 16bits of MAC address + other configuration set to false/0
+  //     @(posedge periph_clk);
+  // 
+  //     while(1) begin
+  //       reg_drv_rx.send_read( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DMA_RX_EN_OFFSET, dma_rx_en, reg_error);   // req ready 
+  //       if( dma_rx_en )
+  //         break;
+  //       @(posedge periph_clk);
+  //     end
+  // 
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_SRC_ADDR_OFFSET, 32'h0, 'hf, reg_error ); // SRC_ADDR
+  //     @(posedge periph_clk);
+  // 
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DST_ADDR_OFFSET, 32'h0, 'hf, reg_error); // DST_ADDR
+  //     @(posedge periph_clk);
+  // 
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_SRC_PROTOCOL_OFFSET, 32'h5, 'hf , reg_error); // src protocol
+  //     @(posedge periph_clk);
+  // 
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DST_PROTOCOL_OFFSET, 32'h0,'hf , reg_error); // dst protocol
+  //     @(posedge periph_clk);
+  // 
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_REQ_VALID_OFFSET, 'h1, 'hf , reg_error);   // req valid
+  //     @(posedge periph_clk);
+  // 
+  //     //wait till all data written into rx_axi_sim_mem
+  //     while(1) begin
+  //       reg_drv_rx.send_read( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_RSP_VALID_OFFSET, rx_rsp_valid, reg_error);
+  //       if( rx_rsp_valid ) begin
+  //         break;
+  //       end
+  //       @(posedge periph_clk);
+  //     end
+  // 
+  //     // Tx test starts here: external back to core
+  //     @(posedge periph_clk);
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_LOW_ADDR_OFFSET, 32'h00890702, 'hf, reg_error); //lower 32bits of MAC address
+  //     @(posedge periph_clk);
+  // 
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_MACHI_OFFSET, 32'h00002301, 'hf, reg_error); //upper 16bits of MAC address + other configuration set to false/0
+  //     @(posedge periph_clk);
+  // 
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_SRC_ADDR_OFFSET, 32'h0, 'hf, reg_error ); // SRC_ADDR
+  //     @(posedge periph_clk);
+  // 
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DST_ADDR_OFFSET, 32'h0, 'hf, reg_error); // DST_ADDR
+  //     @(posedge periph_clk);
+  // 
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_LENGTH_OFFSET, 32'h40,'hf , reg_error); // Size in bytes
+  //     @(posedge periph_clk);
+  // 
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_SRC_PROTOCOL_OFFSET, 32'h0, 'hf , reg_error); // src protocol
+  //     @(posedge periph_clk);
+  // 
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_DST_PROTOCOL_OFFSET, 32'h5,'hf , reg_error); // dst protocol
+  //     @(posedge periph_clk);
+  // 
+  //     reg_drv_rx.send_write( CarfieldIslandsCfg.ethernet.base + eth_idma_reg_pkg::ETH_IDMA_REQ_VALID_OFFSET, 'h1, 'hf , reg_error);   // req valid
+  //     @(posedge periph_clk);
+  //   end
+  // end
 
   //////////////
   // Hyperbus //
