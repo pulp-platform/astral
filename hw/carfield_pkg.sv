@@ -322,14 +322,48 @@ function automatic int unsigned gen_carfield_domains(islands_cfg_t island_cfg);
   return ret;
 endfunction
 
+// Possible clock domains are:
+// - RT (fixed)
+// - Host (fixed)
+// - Alt (PULP Cluster, L2 Memory, Safety Island)
+// - Fast (Snitch/Spatz/MAGIA)
+// - Secure
+// - Periph
 // Generate number of clock sources
 function automatic int unsigned gen_carfield_clock_srcs(islands_cfg_t island_cfg);
   int unsigned ret = 2; // Number of clock sources starts from 2 (Host + rt clock)
-  if (island_cfg.safed.enable   ) begin ret++; end
+  if (island_cfg.safed.enable  ||
+      island_cfg.pulp.enable   ||
+      island_cfg.l2_port0.enable) begin ret++; end
   if (island_cfg.periph.enable  ) begin ret++; end
-  if (island_cfg.spatz.enable   ) begin ret++; end
-  if (island_cfg.pulp.enable    ) begin ret++; end
   if (island_cfg.secured.enable ) begin ret++; end
+  if (island_cfg.spatz.enable   ) begin ret++; end
+  return ret;
+endfunction
+
+localparam byte_bt RtClockIdx = 0;
+localparam byte_bt HostClockIdx = 1;
+typedef struct packed {
+  byte_bt AltClockIdx;
+  byte_bt PeriphClockIdx;
+  byte_bt SecureClockIdx;
+  byte_bt SpatzClockIdx;
+} carfield_clock_idx_t;
+
+function automatic int unsigned gen_carfield_clock_idx(islands_cfg_t island_cfg);
+  carfield_clock_idx_t ret = '{default: '0};
+  byte_bt i = 2;
+  byte_bt j = 0;
+  if (island_cfg.safed.enable  ||
+      island_cfg.pulp.enable   ||
+      island_cfg.l2_port0.enable) begin ret.AltClockIdx = i; i++; end
+  else begin ret.AltClockIdx = RtClockIdx; end
+  if (island_cfg.periph.enable  ) begin ret.PeriphClockIdx = i; i++; end
+  else begin ret.PeriphClockIdx = RtClockIdx; end
+  if (island_cfg.secured.enable ) begin ret.SecureClockIdx = i; i++; end
+  else begin ret.SecureClockIdx = RtClockIdx; end
+  if (island_cfg.spatz.enable   ) begin ret.SpatzClockIdx = i; i++; end
+  else begin ret.SpatzClockIdx = RtClockIdx; end
   return ret;
 endfunction
 
@@ -364,6 +398,7 @@ localparam regbus_struct_t CarfieldRegBusMap = carfield_gen_regbus_map(NumTotalR
 localparam int unsigned CarfieldNumDomains = gen_carfield_domains(CarfieldIslandsCfg);
 
 localparam int unsigned NumFll = gen_carfield_clock_srcs(CarfieldIslandsCfg);
+localparam carfield_clock_idx_t CarfieldClockIdx = gen_carfield_clock_idx(CarfieldIslandsCfg);
 
 typedef struct {
   int unsigned clock_div_value[CarfieldNumDomains];

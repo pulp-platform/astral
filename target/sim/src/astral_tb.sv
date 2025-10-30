@@ -156,7 +156,7 @@ module tb_astral;
               $display("[TB] %t - Wait for HyperRAM", $realtime);
               repeat(HyperRstCycles)
 `ifndef ASTRAL_TOP_NETLIST
-                @(posedge fix.i_dut.periph_clk);
+                @(posedge fix.i_dut.clk_fll_out[carfield_pkg::CarfieldClockIdx.PeriphClockIdx]);
 `else
                 #10ns;
 `endif
