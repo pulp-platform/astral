@@ -12,6 +12,8 @@
 #include "car_memory_map.h"
 #include "car_params.h"
 #include "car_properties.h"
+#include "dif/clint.h"
+#include "dif/uart.h"
 #include "regs/cheshire.h"
 #include "regs/soc_ctrl.h"
 #include "regs/irq_router.h"
@@ -180,6 +182,12 @@ void car_set_rst(enum car_rst rst, enum car_rst_status status)
     fence();
 }
 
+void car_init_uart() {
+  uint32_t rtc_freq = *reg32(&__base_regs, CHESHIRE_RTC_FREQ_REG_OFFSET);
+  uint64_t reset_freq = clint_get_core_freq(rtc_freq, 2500);
+  uart_init(&__base_uart, reset_freq, __BOOT_BAUDRATE);
+}
+
 // SW reset cycle without changing the selected clock source
 void car_reset_domain(enum car_rst rst)
 {
@@ -231,6 +239,7 @@ void car_enable_all_domains()
 
 void car_init_start()
 {
+    car_init_uart();
     car_enable_all_domains();
 }
 
