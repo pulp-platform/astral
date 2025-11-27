@@ -21,3 +21,4 @@ overrides:
   register_interface:   { git: "https://github.com/pulp-platform/register_interface.git"  , version: 0.4.4                                  }
   common_cells:         { git: "https://github.com/pulp-platform/common_cells.git"        , version: 1.37.0                                 } # branch: master
   riscv-iommu:          { git: "https://github.com/zero-day-labs/riscv-iommu.git"         , rev: c1dea3732d0d05e5659b31773e43f3364bc866fc   } # branch: pulp
+  opentitan:          { git: https://github.com/pulp-platform/opentitan.git,            rev: c071c975882ceab9ba69f7c81c5e64c5c17e29b5 } # branch: astral
