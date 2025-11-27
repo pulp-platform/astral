@@ -12,6 +12,8 @@
 #include "car_memory_map.h"
 #include "car_params.h"
 #include "car_properties.h"
+#include "dif/clint.h"
+#include "dif/uart.h"
 #include "regs/cheshire.h"
 #include "regs/soc_ctrl.h"
 #include "regs/irq_router.h"
@@ -53,8 +55,8 @@ enum car_src_clk {
 enum car_clk {
     CAR_HOST_CLK     = 0,
     CAR_PERIPH_CLK   = 1,
-    CAR_SAFETY_CLK   = 2,
-    CAR_SECURITY_CLK = 3,
+    CAR_SAFETY_CLK   = 3,
+    CAR_SECURITY_CLK = 2,
     CAR_PULP_CLK     = 4,
     CAR_SPATZ_CLK    = 5,
     CAR_L2_CLK       = 6,
@@ -62,8 +64,8 @@ enum car_clk {
 
 enum car_rst {
     CAR_PERIPH_RST   = 0,
-    CAR_SAFETY_RST   = 1,
-    CAR_SECURITY_RST = 2,
+    CAR_SAFETY_RST   = 2,
+    CAR_SECURITY_RST = 1,
     CAR_PULP_RST     = 3,
     CAR_SPATZ_RST    = 4,
     CAR_L2_RST       = 5,
@@ -180,6 +182,12 @@ void car_set_rst(enum car_rst rst, enum car_rst_status status)
     fence();
 }
 
+void car_init_uart() {
+  uint32_t rtc_freq = *reg32(&__base_regs, CHESHIRE_RTC_FREQ_REG_OFFSET);
+  uint64_t reset_freq = clint_get_core_freq(rtc_freq, 2500);
+  uart_init(&__base_uart, reset_freq, __BOOT_BAUDRATE);
+}
+
 // SW reset cycle without changing the selected clock source
 void car_reset_domain(enum car_rst rst)
 {
@@ -197,6 +205,7 @@ void car_reset_domain(enum car_rst rst)
 
 void car_enable_domain(enum car_rst rst)
 {
+    car_select_clk(car_clkd_from_rstd(rst), car_clkd_from_rstd(rst));
     car_enable_clk(car_clkd_from_rstd(rst));
     car_set_isolate(rst, CAR_ISOLATE_DISABLE);
 }
@@ -213,21 +222,24 @@ void car_disable_domain(enum car_rst rst)
 // after POR.
 void car_enable_all_domains()
 {
+    car_select_clk(car_clkd_from_rstd(CAR_PERIPH_RST), car_clkd_from_rstd(CAR_PERIPH_RST));
+    car_enable_clk(car_clkd_from_rstd(CAR_PERIPH_RST));
     // Safety Island
-    car_enable_domain(CAR_SAFETY_RST);
+    // car_enable_domain(CAR_SAFETY_RST);
 
     // Security Island
     car_enable_domain(CAR_SECURITY_RST);
 
     // PULP Island
-    car_enable_domain(CAR_PULP_RST);
+    // car_enable_domain(CAR_PULP_RST);
 
     // Spatz Island
-    car_enable_domain(CAR_SPATZ_RST);
+    // car_enable_domain(CAR_SPATZ_RST);
 }
 
 void car_init_start()
 {
+    car_init_uart();
     car_enable_all_domains();
 }
 
@@ -380,8 +392,8 @@ uint32_t pulp_cluster_get_return(){
 }
 
 // Write synchronization request in Cheshire's dedicated register
-static inline void sync_req(){
-  writew(readw(CHESHIRE_HARTS_SYNC) | (0x1 << hart_id()), CHESHIRE_HARTS_SYNC);
-}
+// static inline void sync_req(){
+//   writew(readw(CHESHIRE_HARTS_SYNC) | (0x1 << hart_id()), CHESHIRE_HARTS_SYNC);
+// }
 
 #endif

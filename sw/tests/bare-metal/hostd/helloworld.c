@@ -7,22 +7,18 @@
 //
 // Simple payload to test bootmodes
 
-#include "regs/cheshire.h"
-#include "dif/clint.h"
-#include "dif/uart.h"
-#include "params.h"
-#include "util.h"
 #include "car_util.h"
 #include "printf.h"
 
 int main(void) {
 
     // Put SMP Hart to sleep
-    if (hart_id() != 0) wfi();
+    // if (hart_id() != 0) wfi();
 
-    // Init the HW
+    // Init the HW (this also includes UART)
     car_init_start();
 
-    printf("Hi\n");
+    printf("Hi!\n");
+
     return 0;
 }

@@ -13,10 +13,10 @@ package:
 dependencies:
   register_interface: { git: https://github.com/pulp-platform/register_interface.git,   version: 0.4.3                                }
   axi:                { git: https://github.com/pulp-platform/axi.git,                  version: 0.39.1                               }
-  cheshire:           { git: https://github.com/pulp-platform/cheshire.git,             rev: 2a141413e9ed1c85b41ffe03297633a394be6a42 } # branch: astral-v0
+  cheshire:           { git: https://github.com/FondazioneChipsIT/cheshire.git,         rev: d8684b41a375e33e92c21eb2075d232c0ea44438 } # branch: yt/cvfpu
   hyperbus:           { git: https://github.com/pulp-platform/hyperbus.git,             version: 0.0.9}
   dyn_mem:            { git: https://github.com/pulp-platform/dyn_spm.git,              rev: 480590062742230dc9bd4050358a15b4747bdf34 } # branch: main
-  safety_island:      { git: https://github.com/pulp-platform/safety_island.git,        rev: aaef55c798ab53560faaf451a86668fa1e6d0f3b } # branch: carfield
+  safety_island:      { git: https://github.com/pulp-platform/safety_island.git,        rev: 584eb697195c44ef1b1cbd1f4b7accdf5192200a } # branch: main
   pulp_cluster:       { git: https://github.com/pulp-platform/pulp_cluster.git,         rev: caaa9735346bee71b51d1fe6ba526743bc41e135 } # branch: master
   opentitan:          { git: https://github.com/pulp-platform/opentitan.git,            rev: 42df2697ad3d07608df942cb7e1928c05558af26 } # branch: mc/astral
   mailbox_unit:       { git: https://github.com/pulp-platform/mailbox_unit.git,         version: 1.1.0                                }
@@ -87,6 +87,10 @@ sources:
   - target: carfield_l2dual_secure_pulp_periph_can
     files:
       - hw/configs/carfield_l2dual_secure_pulp_periph_can.sv
+
+  - target: carfield_secure_periph
+    files:
+      - hw/configs/carfield_secure_periph.sv
 
   # Source files grouped in levels. Files in level 0 have no dependencies on files in this
   # package. Files in level 1 only depend on files in level 0, files in level 2 on files in

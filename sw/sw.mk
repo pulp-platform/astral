@@ -87,7 +87,7 @@ car-sw-tests: $(CAR_SW_TEST_DRAM_DUMP) $(CAR_SW_TEST_SPM_DUMP) $(CAR_SW_TEST_L2_
 
 # Generate .slm files from elf binaries. Only used when linking against external dram
 %.car.dram.slm: %.car.dram.elf
-	$(VENV)/python $(CAR_ROOT)/scripts/elf2slm.py --binary=$< --vectors=$*.car.hyperram
+	$(VENV)/$(PYTHON) $(CAR_ROOT)/scripts/elf2slm.py --binary=$< --vectors=$*.car.hyperram
 
 # Generate ELFs for blocking offload from cheshire. We execute from L2 or dram.
 # Template function for offload tests

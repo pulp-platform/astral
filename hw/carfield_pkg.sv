@@ -322,14 +322,48 @@ function automatic int unsigned gen_carfield_domains(islands_cfg_t island_cfg);
   return ret;
 endfunction
 
+// Possible clock domains are:
+// - RT (fixed)
+// - Host (fixed)
+// - Alt (PULP Cluster, L2 Memory, Safety Island)
+// - Fast (Snitch/Spatz/MAGIA)
+// - Secure
+// - Periph
 // Generate number of clock sources
 function automatic int unsigned gen_carfield_clock_srcs(islands_cfg_t island_cfg);
   int unsigned ret = 2; // Number of clock sources starts from 2 (Host + rt clock)
-  if (island_cfg.safed.enable   ) begin ret++; end
+  if (island_cfg.safed.enable  ||
+      island_cfg.pulp.enable   ||
+      island_cfg.l2_port0.enable) begin ret++; end
   if (island_cfg.periph.enable  ) begin ret++; end
-  if (island_cfg.spatz.enable   ) begin ret++; end
-  if (island_cfg.pulp.enable    ) begin ret++; end
   if (island_cfg.secured.enable ) begin ret++; end
+  if (island_cfg.spatz.enable   ) begin ret++; end
+  return ret;
+endfunction
+
+localparam byte_bt RtClockIdx = 0;
+localparam byte_bt HostClockIdx = 1;
+typedef struct packed {
+  byte_bt AltClockIdx;
+  byte_bt PeriphClockIdx;
+  byte_bt SecureClockIdx;
+  byte_bt SpatzClockIdx;
+} carfield_clock_idx_t;
+
+function automatic int unsigned gen_carfield_clock_idx(islands_cfg_t island_cfg);
+  carfield_clock_idx_t ret = '{default: '0};
+  byte_bt i = 2;
+  byte_bt j = 0;
+  if (island_cfg.safed.enable  ||
+      island_cfg.pulp.enable   ||
+      island_cfg.l2_port0.enable) begin ret.AltClockIdx = i; i++; end
+  else begin ret.AltClockIdx = RtClockIdx; end
+  if (island_cfg.periph.enable  ) begin ret.PeriphClockIdx = i; i++; end
+  else begin ret.PeriphClockIdx = RtClockIdx; end
+  if (island_cfg.secured.enable ) begin ret.SecureClockIdx = i; i++; end
+  else begin ret.SecureClockIdx = RtClockIdx; end
+  if (island_cfg.spatz.enable   ) begin ret.SpatzClockIdx = i; i++; end
+  else begin ret.SpatzClockIdx = RtClockIdx; end
   return ret;
 endfunction
 
@@ -364,6 +398,7 @@ localparam regbus_struct_t CarfieldRegBusMap = carfield_gen_regbus_map(NumTotalR
 localparam int unsigned CarfieldNumDomains = gen_carfield_domains(CarfieldIslandsCfg);
 
 localparam int unsigned NumFll = gen_carfield_clock_srcs(CarfieldIslandsCfg);
+localparam carfield_clock_idx_t CarfieldClockIdx = gen_carfield_clock_idx(CarfieldIslandsCfg);
 
 typedef struct {
   int unsigned clock_div_value[CarfieldNumDomains];
@@ -406,8 +441,8 @@ localparam carfield_domain_idx_t CarfieldDomainIdx = gen_domain_idx(CarfieldIsla
 /*******************************
 * Carfield package starts here *
 *******************************/
-localparam int unsigned CheshireNumInternalHarts = 2;
-localparam bit CheshireSerialLinkEnable = 1;
+localparam int unsigned CheshireNumInternalHarts = 1;
+localparam bit CheshireSerialLinkEnable = 0;
 localparam int unsigned CarfieldNumExtIntrs           = 32; // Number of external interrupts
 localparam int unsigned CarfieldNumInterruptibleHarts = 2;  // Spatz (2 Snitch cores)
 localparam int unsigned CarfieldNumRouterTargets      = 1;  // Safety Island
@@ -563,7 +598,7 @@ localparam dw_bt AxiUserAmoMsb = carfield_get_axi_user_amo_msb(CarfieldIslandsCf
 
 // verilog_lint: waive-start line-length
 // Cheshire configuration
-localparam cheshire_cfg_t CarfieldCfgDefault = '{
+localparam cheshire_pkg::cheshire_cfg_t CarfieldCfgDefault = '{
   // CVA6 parameters
   Cva6RASDepth      : cva6_config_pkg::cva6_cfg.RASDepth,
   Cva6BTBEntries    : cva6_config_pkg::cva6_cfg.BTBEntries,
@@ -584,18 +619,18 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   NumExtOutIntrTgts : CarfieldNumRouterTargets,
   NumExtOutIntrs    : CarfieldNumExtIntrs+$bits(cheshire_int_intr_t),
   ClicIntCtlBits    : 8,
-  ClicUseSMode      : 1,
-  ClicUseUMode      : 0,
-  ClicUseVsMode     : 1,
-  ClicUseVsModePrio : 1,
-  ClicNumVsCtxts    : 2, // TODO: choose appropriately
+  // ClicUseSMode      : 1,
+  // ClicUseUMode      : 0,
+  // ClicUseVsMode     : 1,
+  // ClicUseVsModePrio : 1,
+  // ClicNumVsCtxts    : 2, // TODO: choose appropriately
   NumExtIntrSyncs   : SyncStages,
   // Interconnect
   AddrWidth         : 48,
   AxiDataWidth      : 64,
   AxiUserWidth      : 10,  // {CACHE_PARTITIONING(5[9:5]), ECC_ERROR(1[4:4]), ATOPS(4[3:0])}
   AxiMstIdWidth     : 2,
-  TFLenWidth        : 32,
+  // TFLenWidth        : 32, // ?
   AxiMaxMstTrans    : 64,
   AxiMaxSlvTrans    : 64,
   AxiUserAmoMsb     : AxiUserAmoMsb, // A0:0001, A1:0011, SF:0101, FP:0111, SL:1XXX, none: '0
@@ -604,7 +639,7 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   AxiUserErrLsb     : 4,
   RegMaxReadTxns    : 8,
   RegMaxWriteTxns   : 8,
-  CorePostCut       : 1,
+  // CorePostCut       : 1, // ?
   RegAmoNumCuts     : 1,
   RegAmoPostCut     : 1,
   RegAdaptMemCut    : 1,
@@ -625,7 +660,7 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   RegExtRegionStart : CarfieldRegBusMap.RegBusStart,
   RegExtRegionEnd   : CarfieldRegBusMap.RegBusEnd,
   // RTC
-  RtcFreq           : 1000000,
+  RtcFreq           : 1000000, // FIXME
   // Features
   Bootrom           : 1,
   Uart              : 1,
@@ -633,17 +668,17 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   SpiHost           : 1,
   Gpio              : 1,
   Dma               : 1,
-  IOMMU             : 1,
+  // IOMMU             : 1,
   SerialLink        : CheshireSerialLinkEnable,
   Vga               : 0,
-  AxiRt             : 1,
-  Clic              : 1,
+  AxiRt             : 0,
+  Clic              : 0,
   IrqRouter         : 1,
-  BusErr            : 1,
-  HmrUnit           : 1,
-  Cva6DMR           : 1,
-  Cva6DMRFixed      : 0,
-  RapidRecovery     : 0,
+  BusErr            : 0,
+  // HmrUnit           : 1,
+  // Cva6DMR           : 1,
+  // Cva6DMRFixed      : 0,
+  // RapidRecovery     : 0,
   // Debug
   DbgIdCode         : '{
     version: 4'h1,
@@ -668,11 +703,11 @@ localparam cheshire_cfg_t CarfieldCfgDefault = '{
   LlcOutConnect     : 1,
   LlcOutRegionStart : 'h8000_0000,
   LlcOutRegionEnd   : 'h1_0000_0000,
-  LlcUserMsb        : 9,
-  LlcUserLsb        : 5,
-  LlcCachePartition : 1,
-  LlcMaxPartition   : 16,
-  LlcRemapHash      : axi_llc_pkg::Modulo,
+  // LlcUserMsb        : 9,
+  // LlcUserLsb        : 5,
+  // LlcCachePartition : 1,
+  // LlcMaxPartition   : 16,
+  // LlcRemapHash      : axi_llc_pkg::Modulo,
   // VGA: RGB332; carfield doesn't have a vga, but widths are required for top-level pins anyway.
   VgaRedWidth       : 3,
   VgaGreenWidth     : 3,
@@ -740,6 +775,80 @@ localparam bit[CarfieldCfgDefault.AddrWidth-1:0] PulpClustPeriphOffs = 'h0020000
 localparam bit[CarfieldCfgDefault.AddrWidth-1:0] PulpClustExtOffs    = 'h00400000;
 localparam int unsigned IntClusterNumEoc = 1;
 localparam logic [ 5:0] IntClusterIndex = (PulpHartIdOffs >> 5);
+`ifdef PULPD_ENABLE
+localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
+  CoreType: pulp_cluster_package::RI5CY,
+  NumCores: IntClusterNumCores,
+  DmaNumPlugs: 4,
+  DmaNumOutstandingBursts: 8,
+  DmaBurstLength: 256,
+  NumMstPeriphs: 1,
+  NumSlvPeriphs: 12,
+  ClusterAlias: 1,
+  ClusterAliasBase: 'h0,
+  NumSyncStages: 3,
+  UseHci: 1,
+  TcdmSize: 128*1024,
+  TcdmNumBank: 16,
+  HwpePresent: 1,
+  HwpeCfg: '{NumHwpes: 3,
+             HwpeList: {pulp_cluster_package::SOFTEX,
+                        pulp_cluster_package::NEUREKA,
+                        pulp_cluster_package::REDMULE}
+            },
+  HwpeNumPorts: 9,
+  HMRPresent: 1,
+  HMRDmrEnabled: 1,
+  HMRTmrEnabled: 1,
+  HMRDmrFIxed: 0,
+  HMRTmrFIxed: 0,
+  HMRInterleaveGrps: 1,
+  HMREnableRapidRecovery: 1,
+  HMRSeparateDataVoters: 1,
+  HMRSeparateAxiBus: 0,
+  HMRNumBusVoters: 1,
+  EnableECC: 1,
+  ECCInterco: 1,
+  iCacheNumBanks: 2,
+  iCacheNumLines: 1,
+  iCacheNumWays: 4,
+  iCacheSharedSize: 4*1024,
+  iCachePrivateSize: 512,
+  iCachePrivateDataWidth: 32,
+  EnableReducedTag: 1,
+  L2Size: L2MemSize,
+  DmBaseAddr: carfield_pkg::CarfieldIslandsCfg.safed.base+
+              carfield_pkg::SafetyIslandPerOffset +
+              carfield_pkg::SafedDebugOffs,
+  BootRomBaseAddr: carfield_pkg::CarfieldIslandsCfg.l2_port0.base + 'h8080,
+  BootAddr: carfield_pkg::CarfieldIslandsCfg.l2_port0.base + 'h8080,
+  EnablePrivateFpu: 1,
+  EnablePrivateFpDivSqrt: 0,
+  EnableSharedFpu: 0,
+  EnableSharedFpDivSqrt: 0,
+  NumSharedFpu: 0,
+  NumAxiIn: 4,
+  NumAxiOut: 3,
+  AxiIdInWidth: AxiSlvIdWidth,
+  AxiIdOutWidth: Cfg.AxiMstIdWidth,
+  AxiAddrWidth: Cfg.AddrWidth,
+  AxiDataInWidth:  Cfg.AxiDataWidth,
+  AxiDataOutWidth: Cfg.AxiDataWidth,
+  AxiUserWidth: Cfg.AxiUserWidth,
+  AxiMaxInTrans: Cfg.AxiMaxSlvTrans,
+  AxiMaxOutTrans: Cfg.AxiMaxMstTrans,
+  AxiCdcLogDepth: 3,
+  AxiCdcSyncStages: carfield_pkg::SyncStages,
+  SyncStages: carfield_pkg::SyncStages,
+  ClusterBaseAddr: carfield_pkg::CarfieldAxiMap.AxiStart[CarfieldAxiSlvIdx.pulp]
+                   - (carfield_pkg::IntClusterIndex << 22),
+  ClusterPeriphOffs: carfield_pkg::PulpClustPeriphOffs,
+  ClusterExternalOffs: carfield_pkg::PulpClustExtOffs,
+  EnableRemapAddress: 0,
+  SnitchICache: 0,
+  default: '0
+};
+`endif
 
 /****************************/
 /* Spatz Cluster Parameters */

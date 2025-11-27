@@ -101,8 +101,6 @@ module astral_wrap
 
   // clock signals
   logic ref_clk;
-  // generated clocks
-  logic host_clk, periph_clk, alt_clk, rt_clk;
 
   // secure boot mode signal
   logic secure_boot;
@@ -299,14 +297,6 @@ module astral_wrap
   assign gpio_in_s[31:22] = '0;
 
   // soc2pad
-  // clocks
-  assign st_soc2pad_signals.periph.fll_host_clk_o   = host_clk;
-  assign st_soc2pad_signals.periph.fll_periph_clk_o = periph_clk;
-  assign st_soc2pad_signals.periph.fll_alt_clk_o    = alt_clk;
-  assign st_soc2pad_signals.periph.fll_rt_clk_o     = rt_clk;
-
-
-  // soc2pad
   // uart-- carfield itf
   // spi
   logic                                        spih_sck_o_s;
@@ -361,7 +351,6 @@ module astral_wrap
   //////////////////////
   // Clock generation //
   //////////////////////
-
   logic[carfield_pkg::NumFll-1:0] clk_fll_out;
   logic[carfield_pkg::NumFll-1:0] clk_fll_e;
   logic[carfield_pkg::NumFll-1:0] fll_lock;
@@ -372,28 +361,28 @@ module astral_wrap
   logic[carfield_pkg::NumFll-1:0] fll_scan_out;
   logic[carfield_pkg::NumFll-1:0] fll_scan_jtag_in;
   logic[carfield_pkg::NumFll-1:0] fll_scan_jtag_out;
+  logic[carfield_pkg::NumFll-1:0] domain_clk;
 
   // ref_clk
   assign ref_clk      = st_pad2soc_signals.periph.ref_clk_i;
   // power on reset
   assign pwr_on_rst_n = st_pad2soc_signals.periph.pwr_on_rst_ni;
 
-  assign host_clk    = clk_fll_out[0];
-  assign periph_clk  = clk_fll_out[1];
-  assign alt_clk     = clk_fll_out[2];
-  assign secd_clk    = clk_fll_out[3];
   assign clk_fll_e   = '{default: 1'b1};
 
   clk_int_div_static #(
     .DIV_VALUE            ( 100  ),
     .ENABLE_CLOCK_IN_RESET( 1'b1 )
   ) i_rt_clk_div (
-    .clk_i          ( clk_fll_out[4] ),
-    .rst_ni         ( pwr_on_rst_n   ),
-    .en_i           ( 1'b1           ),
-    .test_mode_en_i ( 1'b0           ),
-    .clk_o          ( rt_clk         )
+    .clk_i          ( clk_fll_out[carfield_pkg::RtClockIdx]),
+    .rst_ni         ( pwr_on_rst_n                         ),
+    .en_i           ( 1'b1                                 ),
+    .test_mode_en_i ( 1'b0                                 ),
+    .clk_o          ( domain_clk[carfield_pkg::RtClockIdx] )
   );
+
+  for (genvar i = 1; i < carfield_pkg::NumFll; i++)
+    assign domain_clk[i] = clk_fll_out[i];
 
   assign fll_pwd          = '{default: 1'b0};
   assign fll_test_mode    = '{default: 1'b0};
@@ -477,6 +466,13 @@ module astral_wrap
    assign dummy_rsp.rdata = 'hCACABABE;
 `endif
 
+  // soc2pad
+  // clocks
+  assign st_soc2pad_signals.periph.fll_rt_clk_o     = clk_fll_out[carfield_pkg::RtClockIdx];
+  assign st_soc2pad_signals.periph.fll_host_clk_o   = clk_fll_out[carfield_pkg::HostClockIdx];
+  assign st_soc2pad_signals.periph.fll_alt_clk_o    = clk_fll_out[carfield_pkg::CarfieldClockIdx.AltClockIdx];
+  assign st_soc2pad_signals.periph.fll_periph_clk_o = clk_fll_out[carfield_pkg::CarfieldClockIdx.PeriphClockIdx];
+
   //////////////////
   // Carfield SoC //
   //////////////////
@@ -488,11 +484,7 @@ module astral_wrap
     .reg_req_t   ( carfield_reg_req_t ),
     .reg_rsp_t   ( carfield_reg_rsp_t )
   ) i_dut (
-    .host_clk_i                 ( host_clk                                          ),
-    .periph_clk_i               ( periph_clk                                        ),
-    .alt_clk_i                  ( alt_clk                                           ),
-    .secd_clk_i                 ( secd_clk                                          ),
-    .rt_clk_i                   ( rt_clk                                            ),
+    .domain_clk_i               ( domain_clk[carfield_pkg::NumFll-1:0]              ),
     .pwr_on_rst_ni              ( pwr_on_rst_n                                      ),
     .test_mode_i                ( '0                                                ),
     .boot_mode_i                ( bootmode_host_s[1:0]                              ),
