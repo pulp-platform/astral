@@ -470,8 +470,8 @@ module astral_wrap
   // clocks
   assign st_soc2pad_signals.periph.fll_rt_clk_o     = clk_fll_out[carfield_pkg::RtClockIdx];
   assign st_soc2pad_signals.periph.fll_host_clk_o   = clk_fll_out[carfield_pkg::HostClockIdx];
-  assign st_soc2pad_signals.periph.fll_alt_clk_o    = clk_fll_out [carfield_pkg::CarfieldClockIdx.AltClockIdx];
-  assign st_soc2pad_signals.periph.fll_periph_clk_o = clk_fll_out [carfield_pkg::CarfieldClockIdx.PeriphClockIdx];
+  assign st_soc2pad_signals.periph.fll_alt_clk_o    = clk_fll_out[carfield_pkg::CarfieldClockIdx.AltClockIdx];
+  assign st_soc2pad_signals.periph.fll_periph_clk_o = clk_fll_out[carfield_pkg::CarfieldClockIdx.PeriphClockIdx];
 
   //////////////////
   // Carfield SoC //

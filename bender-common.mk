@@ -11,7 +11,6 @@ CARFIELD_CONFIG ?= carfield_secure_periph
 # bender targets
 common_targs += -t cva6
 common_targs += -t mchan
-# common_targs += -t integer_cluster
 common_targs += -t cv32e40p_use_ff_regfile
 common_targs += -t scm_use_fpga_scm
 common_targs += -t cv64a6splus_imafdc_sv39_hpdcache_wb
