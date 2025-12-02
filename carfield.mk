@@ -80,11 +80,11 @@ CHS_IMAGE    ?=
 ifeq ($(shell echo $(SAFED_PRESENT)), 1)
 SAFED_ROOT     ?= $(shell $(BENDER) path safety_island)
 SAFED_SW_DIR   := $(SAFED_ROOT)/sw
-SAFED_BOOTMODE ?= 0
 SAFED_BINARY   ?=
 SAFED_SW_BUILD := safed-sw-build
 SAFED_SW_INIT := safed-sw-init
 endif
+SAFED_BOOTMODE ?= 0
 
 # Security island, security and secure boot
 SECD_ROOT     ?= $(shell $(BENDER) path opentitan)
@@ -99,19 +99,19 @@ ifeq ($(shell echo $(PULPD_PRESENT)), 1)
 PULPD_ROOT      ?= $(shell $(BENDER) path pulp_cluster)
 PULPD_BINARY    ?=
 PULPD_TEST_NAME ?=
-PULPD_BOOTMODE  ?=
 PULPD_SW_BUILD := pulpd-sw-build
 PULPD_SW_INIT := pulpd-sw-init
 endif
+PULPD_BOOTMODE  ?= 0
 
 # Spatz cluster, efficient vector co-processor
 ifeq ($(shell echo $(SPATZD_PRESENT)), 1)
 SPATZD_ROOT     ?= $(shell $(BENDER) path spatz)
 SPATZD_MAKEDIR  := $(SPATZD_ROOT)/hw/system/spatz_cluster
 SPATZD_BINARY   ?=
-SPATZD_BOOTMODE ?= 0 # default jtag bootmode
 SPATZD_HW_INIT := spatzd-hw-init
 endif
+SPATZD_BOOTMODE ?= 0 # default jtag bootmode
 
 # PLL/FLL bypass
 BYPASS_PLL ?= 0
