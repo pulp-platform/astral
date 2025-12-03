@@ -1,3 +1,8 @@
+# Copyright 2022 ETH Zurich and University of Bologna.
+# Solderpad Hardware License, Version 0.51, see LICENSE for details.
+# SPDX-License-Identifier: SHL-0.51
+#
+
 # Set environment variables to choose of which island we have to compile the sw
 export PULPD_PRESENT=0
 export SAFED_PRESENT=0
