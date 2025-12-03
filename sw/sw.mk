@@ -83,7 +83,8 @@ CAR_SW_TEST_L2_DUMP	= $(CAR_SW_TEST_SRCS_S:.S=.car.l2.dump)   $(CAR_SW_TEST_SRCS
 CAR_SW_TEST_SPM_ROMH	= $(CAR_SW_TEST_SRCS_S:.S=.car.rom.memh)  $(CAR_SW_TEST_SRCS_C:.c=.car.rom.memh)
 CAR_SW_TEST_SPM_GPTH	= $(CAR_SW_TEST_SRCS_S:.S=.car.gpt.memh)  $(CAR_SW_TEST_SRCS_C:.c=.car.gpt.memh)
 
-car-sw-tests: $(CAR_SW_TEST_DRAM_DUMP) $(CAR_SW_TEST_SPM_DUMP) $(CAR_SW_TEST_L2_DUMP) $(CAR_SW_TEST_DRAM_SLM) $(CAR_SW_TEST_SPM_ROMH) $(CAR_SW_TEST_SPM_GPTH) $(CAR_PULPD_SW_OFFLOAD_TESTS) $(CAR_SAFED_SW_OFFLOAD_TESTS) mibench-automotive
+car-sw-tests: $(CAR_SW_TEST_DRAM_DUMP) $(CAR_SW_TEST_SPM_DUMP) $(CAR_SW_TEST_L2_DUMP) $(CAR_SW_TEST_SPM_ROMH) $(CAR_SW_TEST_SPM_GPTH) $(CAR_PULPD_SW_OFFLOAD_TESTS) $(CAR_SAFED_SW_OFFLOAD_TESTS) mibench-automotive
+car-sw-slm-dump: $(CAR_SW_TEST_DRAM_SLM)
 
 # Generate .slm files from elf binaries. Only used when linking against external dram
 %.car.dram.slm: %.car.dram.elf

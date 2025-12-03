@@ -1,10 +1,10 @@
-// // Copyright 2023 ETH Zurich and University of Bologna.
-// // Licensed under the Apache License, Version 2.0, see LICENSE for details.
-// // SPDX-License-Identifier: Apache-2.0
-// //
-// // Robert Balas <balasr@iis.ee.ethz.ch>
-// 
-// // Basic testing of the cache partitioning's configuration registers
+// Copyright 2023 ETH Zurich and University of Bologna.
+// Licensed under the Apache License, Version 2.0, see LICENSE for details.
+// SPDX-License-Identifier: Apache-2.0
+//
+// Robert Balas <balasr@iis.ee.ethz.ch>
+
+// Basic testing of the cache partitioning's configuration registers
 // 
 // #include <stdint.h>
 // #include <inttypes.h>

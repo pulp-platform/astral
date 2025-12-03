@@ -26,6 +26,7 @@ HYP1_PRELOAD_MEM_FILE ?= ""
 RUNTIME_DEFINES := +define+HYP_USER_PRELOAD="$(HYP_USER_PRELOAD)"
 RUNTIME_DEFINES += +define+HYP0_PRELOAD_MEM_FILE=\"$(HYP0_PRELOAD_MEM_FILE)\"
 RUNTIME_DEFINES += +define+HYP1_PRELOAD_MEM_FILE=\"$(HYP1_PRELOAD_MEM_FILE)\"
+RUNTIME_DEFINES += -timescale \"1 ns / 1 ps\"
 
 #############
 # Questasim #
@@ -33,44 +34,48 @@ RUNTIME_DEFINES += +define+HYP1_PRELOAD_MEM_FILE=\"$(HYP1_PRELOAD_MEM_FILE)\"
 
 ## @section Questasim simulator target
 
-QUESTA_FLAGS := -permissive -suppress 3009 -suppress 8386 -error 7 +UVM_NO_RELNOTES
-
-## TODO: this is a workaround to enable simulations with Thales IP! Fix this!
-QUESTA_FLAGS += +nospecify -sdfnoerror -suppress 1565 -suppress 13271
+QUESTA_FLAGS += -suppress 3999 -suppress 12088 +UVM_NO_RELNOTES
 
 ifdef DEBUG
-	VOPT_FLAGS := $(QUESTA_FLAGS) +acc
-	VSIM_FLAGS := $(QUESTA_FLAGS)
-	RUN_AND_EXIT := log -r /*; run -all
+	VOPT_FLAGS := -debug +designfile $(QUESTA_FLAGS)
+ifeq ($(DEBUG),live)
+	VSIM_FLAGS := -qwavedb=+signal+memory $(QUESTA_FLAGS)
+	RUN_AND_EXIT := run -all
 else
-	VOPT_FLAGS := $(QUESTA_FLAGS) -O5 +acc=p+$(TBENCH).
+	VSIM_FLAGS := -qwavedb=+signal+memory $(QUESTA_FLAGS) -c
+	RUN_AND_EXIT := run -all; exit;
+	POST_SIM := qsim $(CAR_TGT_DIR)/sim/vsim/qwave.db $(CAR_TGT_DIR)/sim/vsim/design.bin
+endif
+else
+	VOPT_FLAGS := $(QUESTA_FLAGS)
 	VSIM_FLAGS := $(QUESTA_FLAGS) -c
-	RUN_AND_EXIT := run -all; exit
+	RUN_AND_EXIT := run -all; exit;
 endif
 
 .PHONY: $(CAR_VSIM_DIR)/compile.carfield_soc.tcl
 $(CAR_VSIM_DIR)/compile.carfield_soc.tcl:
+	mkdir -p $(CAR_VSIM_DIR)
 	$(BENDER) script vsim $(common_targs) $(sim_targs) $(sim_defs) $(common_defs) $(safed_defs) --vlog-arg="$(RUNTIME_DEFINES)" --compilation-mode separate > $@
 	echo 'vlog "$(CHS_ROOT)/target/sim/src/elfloader.cpp" -ccflags "-std=c++11"' >> $@
-	echo 'vopt $(VOPT_FLAGS) $(TBENCH) -o $(TBENCH)_opt' >> $@
+	echo 'qopt $(VOPT_FLAGS) $(TBENCH) -o $(TBENCH)_opt' >> $@
 
 CAR_VSIM_ALL += $(CAR_SIM_ALL)
 CAR_VSIM_ALL += $(CAR_VSIM_DIR)/compile.carfield_soc.tcl
 
 ## Generate all required VIPs (SPI flash, I2c EEPROm, HyperRAM, etc) and compilation scripts for Questasim
 .PHONY: car-vsim-sim-init
-car-vsim-sim-init: $(CAR_VSIM_ALL) 
+car-vsim-sim-init: $(CAR_VSIM_ALL)
 
 ## Compile Carfield HW using Questasim. Run `make car-sim-init` from the root directory to prepare
 ## the simulation environment before running this command.
 .PHONY: car-vsim-sim-build
 car-vsim-sim-build: $(CAR_VSIM_DIR)/compile.carfield_soc.tcl
-	cd $(CAR_VSIM_DIR); $(QUESTA) vsim -c -do "quit -code [source $<]"
+	cd $(CAR_VSIM_DIR); $(QUESTA) qsim -c -do "quit -code [source $<]"
 
 .PHONY: car-vsim-sim-clean
 ## Remove all Questasim simulation build artifacts
 car-vsim-sim-clean:
-	rm -rf $(CAR_VSIM_DIR)/uart $(CAR_VSIM_DIR)/FETCH* $(CAR_VSIM_DIR)/logs $(CAR_VSIM_DIR)/*.ini $(CAR_VSIM_DIR)/trace* $(CAR_VSIM_DIR)/*.wlf $(CAR_VSIM_DIR)/transcript $(CAR_VSIM_DIR)/work $(CAR_VSIM_DIR)/*lib $(CAR_VSIM_DIR)/*Lib $(CAR_VSIM_DIR)/*.vstf $(CAR_VSIM_DIR)/*.log $(CAR_VSIM_DIR)/*.txt
+	rm -rf $(CAR_VSIM_DIR)/uart $(CAR_VSIM_DIR)/FETCH* $(CAR_VSIM_DIR)/logs $(CAR_VSIM_DIR)/*.ini $(CAR_VSIM_DIR)/trace* $(CAR_VSIM_DIR)/*.wlf $(CAR_VSIM_DIR)/transcript $(CAR_VSIM_DIR)/work $(CAR_VSIM_DIR)/*lib $(CAR_VSIM_DIR)/*Lib $(CAR_VSIM_DIR)/*.vstf $(CAR_VSIM_DIR)/*.log $(CAR_VSIM_DIR)/*.txt $(CAR_TGT_DIR)/sim/vsim/qwave.db $(CAR_TGT_DIR)/sim/vsim/design.bin
 
 .PHONY: car-vsim-sim-run
 ## Run simulation of the carfield RTL.
@@ -90,35 +95,49 @@ car-vsim-sim-clean:
 ## @param SPATZD_BOOTMODE=0 The bootmode of safe domain <0 JTAG|1 Serial Link>
 ## @param TESTBENCH=tb_astral_opt The optimised toplevel testbench to use. Defaults to 'tb_astral_opt'.
 ## @param VSIM_FLAGS The flags for the vsim invocation
+
+pargs+=+HYP_USER_PRELOAD=$(HYP_USER_PRELOAD)
+pargs+=+BYPASS_PLL=$(BYPASS_PLL)
+pargs+=+SECURE_BOOT=$(SECURE_BOOT)
+pargs+=+CHS_BOOTMODE=$(CHS_BOOTMODE)
+pargs+=+CHS_PRELMODE=$(CHS_PRELMODE)
+pargs+=+CHS_BINARY=$(CHS_BINARY_ABS)
+pargs+=+CHS_IMAGE=$(CHS_IMAGE_ABS)
+pargs+=+SECD_BINARY=$(SECD_BINARY_ABS)
+pargs+=+SECD_BOOTMODE=$(SECD_BOOTMODE)
+pargs+=+SECD_IMAGE=$(SECD_IMAGE_ABS)
+pargs+=+SAFED_BINARY=$(SAFED_BINARY_ABS)
+pargs+=+SAFED_BOOTMODE=$(SAFED_BOOTMODE)
+pargs+=+PULPD_BINARY=$(PULPD_BINARY_ABS)
+pargs+=+PULPD_BOOTMODE=$(PULPD_BOOTMODE)
+pargs+=+SPATZD_BINARY=$(SPATZD_BINARY_ABS)
+pargs+=+SPATZD_BOOTMODE=$(SPATZD_BOOTMODE)
+
 car-vsim-sim-run:
+ifneq ($(CHS_BINARY),)
 	$(eval CHS_BINARY_ABS := $(realpath $(CHS_BINARY)))
+endif
+ifneq ($(CHS_IMAGE),)
 	$(eval CHS_IMAGE_ABS := $(realpath $(CHS_IMAGE)))
+endif
+ifneq ($(SECD_BINARY),)
 	$(eval SECD_BINARY_ABS := $(realpath $(SECD_BINARY)))
+endif
+ifneq ($(SECD_IMAGE),)
 	$(eval SECD_IMAGE_ABS := $(realpath $(SECD_IMAGE)))
+endif
+ifneq ($(SAFED_BINARY),)
 	$(eval SAFED_BINARY_ABS := $(realpath $(SAFED_BINARY)))
+endif
+ifneq ($(PULPD_BINARY),)
 	$(eval PULPD_BINARY_ABS := $(realpath $(PULPD_BINARY)))
+endif
+ifneq ($(SPATZD_BINARY),)
 	$(eval SPATZD_BINARY_ABS := $(realpath $(SPATZD_BINARY)))
-	cd $(CAR_VSIM_DIR); $(QUESTA) vsim $(VSIM_FLAGS) -do \
-		"set HYP_USER_PRELOAD $(HYP_USER_PRELOAD); \
-		 set BYPASS_PLL $(BYPASS_PLL); \
-		 set SECURE_BOOT $(SECURE_BOOT); \
-		 set CHS_BOOTMODE $(CHS_BOOTMODE); \
-		 set CHS_PRELMODE $(CHS_PRELMODE); \
-		 set CHS_BINARY $(CHS_BINARY_ABS); \
-		 set CHS_IMAGE  $(CHS_IMAGE_ABS); \
-		 set SECD_BINARY $(SECD_BINARY_ABS); \
-		 set SECD_BOOTMODE $(SECD_BOOTMODE); \
-		 set SECD_IMAGE $(SECD_IMAGE_ABS); \
-		 set SAFED_BINARY $(SAFED_BINARY_ABS); \
-		 set SAFED_BOOTMODE $(SAFED_BOOTMODE); \
-		 set PULPD_BINARY $(PULPD_BINARY_ABS); \
-		 set PULPD_BOOTMODE $(PULPD_BOOTMODE); \
-		 set SPATZD_BINARY $(SPATZD_BINARY_ABS); \
-		 set SPATZD_BOOTMODE $(SPATZD_BOOTMODE);\
-		 set TESTBENCH $(TBENCH); \
-		 set VSIM_FLAGS \"$(VSIM_FLAGS)\"; \
-		 source $(CAR_VSIM_DIR)/start.carfield_soc.tcl ; \
-		 $(RUN_AND_EXIT)"
+endif
+	cd $(CAR_VSIM_DIR); \
+  qsim $(pargs) +designfile +permissive $(VSIM_FLAGS) +notimingchecks +nospecify -t 1ps $(TBENCH)_opt -do "$(RUN_AND_EXIT)"; \
+	$(POST_SIM)
 
 #######
 # VCS #
