@@ -24,8 +24,8 @@ packages:
     - obi_peripherals
     - register_interface
   axi:
-    revision: fccffb5953ec8564218ba05e20adbedec845e014
-    version: 0.39.1
+    revision: 78831b6feba265d5ee2683bbf42b4150f8a35c43
+    version: 0.39.8
     source:
       Git: https://github.com/pulp-platform/axi.git
     dependencies:
@@ -77,8 +77,8 @@ packages:
     - common_cells
     - common_verification
   axi_rt:
-    revision: d5f857e74d0a5db4e4a2cc3652ca4f40f29a1484
-    version: 0.0.0-alpha.8
+    revision: 50153a346b753dc2bc7723c446656a43db35d02d
+    version: 0.0.0-alpha.10
     source:
       Git: https://github.com/pulp-platform/axi_rt.git
     dependencies:
@@ -115,7 +115,7 @@ packages:
       Git: https://github.com/AlSaqr-platform/can_bus.git
     dependencies: []
   cheshire:
-    revision: d8684b41a375e33e92c21eb2075d232c0ea44438
+    revision: b975fe3b71358c95205f53f86e27512ac37729c1
     version: null
     source:
       Git: https://github.com/FondazioneChipsIT/cheshire.git
@@ -138,6 +138,7 @@ packages:
     - register_interface
     - riscv-dbg
     - serial_link
+    - snooper
     - unbent
   clic:
     revision: 6515a71eb4ae3b143ab912d265e79832b3179a76
@@ -180,8 +181,8 @@ packages:
     dependencies:
     - hci
   common_cells:
-    revision: 9ca8a7655f741e7dd5736669a20a301325194c28
-    version: 1.39.0
+    revision: 9afda9abb565971649c2aa0985639c096f351171
+    version: 1.38.0
     source:
       Git: https://github.com/pulp-platform/common_cells.git
     dependencies:
@@ -209,7 +210,7 @@ packages:
       Git: https://github.com/pulp-platform/cv32e40x.git
     dependencies: []
   cva6:
-    revision: 9ff9791eb7b54540c0f03660149ab9a6ac76e022
+    revision: 67464fc118a8da941478584e55751b69f4a6823c
     version: null
     source:
       Git: https://github.com/FondazioneChipsIT/cva6.git
@@ -505,8 +506,8 @@ packages:
     - common_cells
     - common_verification
   riscv-dbg:
-    revision: 138d74bcaa90c70180c12215db3776813d2a95f2
-    version: 0.8.0
+    revision: 358f90110220adf7a083f8b65d157e836d706236
+    version: 0.8.1
     source:
       Git: https://github.com/pulp-platform/riscv-dbg.git
     dependencies:
@@ -549,6 +550,16 @@ packages:
     - axi
     - common_cells
     - register_interface
+  snooper:
+    revision: 9acbfe6b0e29148100aea08a9f052486d5e74033
+    version: null
+    source:
+      Git: https://github.com/FondazioneChipsIT/cfi-snooper.git
+    dependencies:
+    - axi
+    - common_cells
+    - register_interface
+    - tcdm_interconnect
   softex:
     revision: 11dd29e85d40e29fea0481b471f1c0cc967df1a4
     version: null
@@ -575,6 +586,13 @@ packages:
     - register_interface
     - riscv-dbg
     - tech_cells_generic
+  tcdm_interconnect:
+    revision: 7d0a4f8acae71a583a6713cab5554e60b9bb8d27
+    version: 1.2.1
+    source:
+      Git: https://github.com/pulp-platform/cluster_interconnect.git
+    dependencies:
+    - common_cells
   tech_cells_generic:
     revision: 7968dd6e6180df2c644636bc6d2908a49f2190cf
     version: 0.2.13
