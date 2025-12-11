@@ -115,7 +115,7 @@ packages:
       Git: https://github.com/AlSaqr-platform/can_bus.git
     dependencies: []
   cheshire:
-    revision: d8684b41a375e33e92c21eb2075d232c0ea44438
+    revision: b975fe3b71358c95205f53f86e27512ac37729c1
     version: null
     source:
       Git: https://github.com/FondazioneChipsIT/cheshire.git
@@ -138,6 +138,7 @@ packages:
     - register_interface
     - riscv-dbg
     - serial_link
+    - snooper
     - unbent
   clic:
     revision: 6515a71eb4ae3b143ab912d265e79832b3179a76
@@ -209,7 +210,7 @@ packages:
       Git: https://github.com/pulp-platform/cv32e40x.git
     dependencies: []
   cva6:
-    revision: 9ff9791eb7b54540c0f03660149ab9a6ac76e022
+    revision: 67464fc118a8da941478584e55751b69f4a6823c
     version: null
     source:
       Git: https://github.com/FondazioneChipsIT/cva6.git
@@ -549,6 +550,16 @@ packages:
     - axi
     - common_cells
     - register_interface
+  snooper:
+    revision: 9acbfe6b0e29148100aea08a9f052486d5e74033
+    version: null
+    source:
+      Git: https://github.com/FondazioneChipsIT/cfi-snooper.git
+    dependencies:
+    - axi
+    - common_cells
+    - register_interface
+    - tcdm_interconnect
   softex:
     revision: 11dd29e85d40e29fea0481b471f1c0cc967df1a4
     version: null
@@ -575,6 +586,13 @@ packages:
     - register_interface
     - riscv-dbg
     - tech_cells_generic
+  tcdm_interconnect:
+    revision: 7d0a4f8acae71a583a6713cab5554e60b9bb8d27
+    version: 1.2.1
+    source:
+      Git: https://github.com/pulp-platform/cluster_interconnect.git
+    dependencies:
+    - common_cells
   tech_cells_generic:
     revision: 7968dd6e6180df2c644636bc6d2908a49f2190cf
     version: 0.2.13

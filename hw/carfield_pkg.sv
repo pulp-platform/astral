@@ -675,6 +675,7 @@ localparam cheshire_pkg::cheshire_cfg_t CarfieldCfgDefault = '{
   Clic              : 0,
   IrqRouter         : 1,
   BusErr            : 0,
+  Snooper           : 1,
   // HmrUnit           : 1,
   // Cva6DMR           : 1,
   // Cva6DMRFixed      : 0,
