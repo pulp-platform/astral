@@ -466,12 +466,12 @@ logic [cheshire_pkg::iomsb(Cfg.AxiExtNumMst):0][               LogDepth:0] axi_m
 carfield_reg2hw_t car_regs_reg2hw;
 carfield_hw2reg_t car_regs_hw2reg;
 
-logic     [NumAsyncRegSlv-1:0] ext_reg_async_slv_req_out;
-logic     [NumAsyncRegSlv-1:0] ext_reg_async_slv_ack_in;
-reg_req_t [NumAsyncRegSlv-1:0] ext_reg_async_slv_data_out;
-logic     [NumAsyncRegSlv-1:0] ext_reg_async_slv_req_in;
-logic     [NumAsyncRegSlv-1:0] ext_reg_async_slv_ack_out;
-reg_rsp_t [NumAsyncRegSlv-1:0] ext_reg_async_slv_data_in;
+logic     [carfield_pkg::NumAsyncRegSlv-1:0] ext_reg_async_slv_req_out;
+logic     [carfield_pkg::NumAsyncRegSlv-1:0] ext_reg_async_slv_ack_in;
+reg_req_t [carfield_pkg::NumAsyncRegSlv-1:0] ext_reg_async_slv_data_out;
+logic     [carfield_pkg::NumAsyncRegSlv-1:0] ext_reg_async_slv_req_in;
+logic     [carfield_pkg::NumAsyncRegSlv-1:0] ext_reg_async_slv_ack_out;
+reg_rsp_t [carfield_pkg::NumAsyncRegSlv-1:0] ext_reg_async_slv_data_in;
 
 // External reg interface slaves (async)
 // Currently for PLL and Padframe
@@ -1357,7 +1357,7 @@ if (CarfieldIslandsCfg.pulp.enable) begin : gen_pulp_cluster
 
 `ifndef INT_CLUSTER_NETLIST
   pulp_cluster #(
-   .Cfg( PulpClusterCfg )
+   .Cfg( carfield_pkg::PulpClusterCfg )
   ) i_integer_cluster               (
 `else
   pulp_cluster i_integer_cluster     (
