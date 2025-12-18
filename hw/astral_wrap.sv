@@ -15,9 +15,7 @@ module astral_wrap
   import cheshire_pkg::*;
   import pkg_astral_padframe::*;
 #(
-  parameter cheshire_cfg_t Cfg = carfield_pkg::CarfieldCfgDefault,
-  parameter type           reg_req_t   = logic,
-  parameter type           reg_rsp_t   = logic
+  parameter cheshire_cfg_t Cfg = carfield_pkg::CarfieldCfgDefault
 ) (
   inout wire logic pad_periph_ref_clk_pad,
   inout wire logic pad_periph_fll_host_pad,
