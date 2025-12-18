@@ -438,6 +438,10 @@ endfunction
 
 localparam carfield_domain_idx_t CarfieldDomainIdx = gen_domain_idx(CarfieldIslandsCfg);
 
+// Hyperbus parameters
+localparam int unsigned NumHyperBusPhys  = carfield_configuration::NumHypPhys;
+localparam int unsigned NumHyperBusChips = carfield_configuration::NumHypChips;
+
 /*******************************
 * Carfield package starts here *
 *******************************/

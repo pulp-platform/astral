@@ -45,8 +45,8 @@ module astral_fixture;
   localparam real         TAppl         = 0.1;
   localparam real         TTest         = 0.9;
 
-  localparam int NumPhys  = 1;
-  localparam int NumChips = 2;
+  localparam int NumPhys  = carfield_configuration::NumHypPhys;
+  localparam int NumChips = carfield_configuration::NumHypChips;
 
   ////////////////////////
   // IN/OUT declaration //
@@ -407,14 +407,7 @@ module astral_fixture;
   `CHESHIRE_TYPEDEF_ALL(, DutCfg)
 
 
-`ifndef ASTRAL_TOP_NETLIST
-  astral_wrap #(
-    .HypNumPhys  ( NumPhys  ),
-    .HypNumChips ( NumChips )
-  ) i_dut (
-`else
   astral_wrap i_dut (
-`endif
     // Reference clock
     .pad_periph_ref_clk_pad         ( w_ext_clk ),
     .pad_periph_fll_bypass_pad      ( w_bypass_pll ),
