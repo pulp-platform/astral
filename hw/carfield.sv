@@ -29,8 +29,18 @@ module carfield
   parameter int unsigned LlcRWidth,
   parameter int unsigned LlcWWidth,
 `endif
-  parameter type reg_req_t           = logic,
-  parameter type reg_rsp_t           = logic,
+  parameter type reg_req_t = struct packed {
+    logic [Cfg.AddrWidth-1:0] addr;
+    logic                     write;
+    logic [31:0]              wdata;
+    logic [3:0]               wstrb;
+    logic                     valid;
+  },
+  parameter type reg_rsp_t = struct packed {
+    logic [31:0] rdata;
+    logic        error;
+    logic        ready;
+  },
   // Having a dedicated synchronous port, the mailbox is not taken into account
   localparam int unsigned NumSlaveCDCs = Cfg.AxiExtNumSlv - 1,
   localparam int unsigned SpihNumCs = cheshire_pkg::SpihNumCs,
