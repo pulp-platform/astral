@@ -305,12 +305,11 @@ module vip_carfield_soc
      for (genvar l=0; l<HypNumChips; l++) begin : sdf_annotation
         initial begin
 `ifndef PATH_TO_HYP_SDF
-           automatic string sdf_file_path = "../src/hyp_vip/s27ks0641.sdf";
+          $sdf_annotate("../src/hyp_vip/s27ks0641.sdf", hyperrams[p].chips[l].dut);
 `else
-           automatic string sdf_file_path = `PATH_TO_HYP_SDF;
+          $sdf_annotate(`PATH_TO_HYP_SDF, hyperrams[p].chips[l].dut);
 `endif
-           $sdf_annotate(sdf_file_path, hyperrams[p].chips[l].dut);
-           $display("Mem (%d,%d)",p,l);
+          $display("Mem (%d,%d)",p,l);
         end
     end
   end

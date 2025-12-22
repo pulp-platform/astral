@@ -351,6 +351,7 @@ module astral_wrap
   logic[carfield_pkg::NumFll-1:0] clk_fll_e;
   logic[carfield_pkg::NumFll-1:0] fll_lock;
   logic[carfield_pkg::NumFll-1:0] fll_pwd;
+  logic[carfield_pkg::NumFll-1:0] fll_ret;
   logic[carfield_pkg::NumFll-1:0] fll_test_mode;
   logic[carfield_pkg::NumFll-1:0] fll_scan_e;
   logic[carfield_pkg::NumFll-1:0] fll_scan_in;
@@ -381,6 +382,7 @@ module astral_wrap
     assign domain_clk[i] = clk_fll_out[i];
 
   assign fll_pwd          = '{default: 1'b0};
+  assign fll_ret          = '{default: 1'b0};
   assign fll_test_mode    = '{default: 1'b0};
   assign fll_scan_e       = '{default: 1'b0};
   assign fll_scan_in      = '{default: 1'b0};
@@ -395,8 +397,8 @@ module astral_wrap
     .init_no ()
   );
 
-`ifdef GF12_FLL
-  gf12_fll_wrap #(
+`ifdef GF22_FLL
+  fll_wrap #(
     .NUM_FLL        ( carfield_pkg::NumFll ),
     // Addresses are double-word aligned (0x2002_0000, 0x2002_0008, ...)
     .FLL_REG_OFFSET ( 3                    ),
@@ -417,6 +419,7 @@ module astral_wrap
     .clk_fll_e_i         ( clk_fll_e                              ),
     .fll_lock_o          ( fll_lock                               ),
     .fll_pwd_i           ( fll_pwd                                ),
+    .fll_ret_i           ( fll_ret                                ),
     .fll_test_mode_i     ( fll_test_mode                          ),
     .fll_scan_e_i        ( fll_scan_e                             ),
     .fll_scan_in_i       ( fll_scan_in                            ),

@@ -14,7 +14,3 @@ synth_targs += -t cluster_standalone
 
 # bender defines
 synth_defs += -D SYNTHESIS
-synth_defs += -D EXCLUDE_PADFRAME
-synth_defs += -D TARGET_INTEL16_SIMPLE_DPM_RF
-synth_defs += -D NO_SYNOPSYS_FF
-synth_defs += -D GF12_FLL

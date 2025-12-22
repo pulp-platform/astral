@@ -23,12 +23,11 @@ CAR_SW_DIR  := $(CAR_ROOT)/sw
 CAR_TGT_DIR := $(CAR_ROOT)/target
 CAR_XIL_DIR := $(CAR_TGT_DIR)/xilinx
 CAR_SIM_DIR := $(CAR_TGT_DIR)/sim
+CAR_TECH_DIR := $(CAR_TGT_DIR)/gf22
 SECD_ROOT ?= $(shell $(BENDER) path opentitan)
 
 # Questasim
 CAR_VSIM_DIR := $(CAR_TGT_DIR)/sim/vsim
-
-TECH_ROOT   := $(CAR_ROOT)/tech
 
 BENDER      ?= bender
 BENDER_ROOT ?= $(CAR_ROOT)/.bender
@@ -402,16 +401,18 @@ car-check-litmus-tests: $(LITMUS_WORK_DIR)/litmus.log
 ##############
 # Technology #
 ##############
-tech-repo := git@iis-git.ee.ethz.ch:Astral/gf12.git
+tech-repo := git@gitlab.chips.it:digitalresearchline/scar-v/gf22.git
 # no commit by default, change during development
-tech-commit := e58cb2997247e74c3d258788c4c1dbce9cbda838 # branch: yt/astral-resume
+tech-commit := b71d233655c2d26c3fefe89a6e7ad16af5e289f5 # branch: yt/security_island
 
 tech-clone:
-	git clone $(tech-repo) tech
+	git clone $(tech-repo) $(CAR_TECH_DIR)
+	cd $(CAR_TECH_DIR) && git checkout $(tech-commit) && \
+	git submodule update --init --recursive && \
+	cd $(CAR_ROOT)
 
 tech-init: tech-clone
-	cd $(TECH_ROOT) && git checkout $(tech-commit) && cd $(CAR_ROOT)
-	$(MAKE) -C $(TECH_ROOT) init
+	$(MAKE) -C $(CAR_TECH_DIR) init
 
 ########
 # Help #

@@ -57,7 +57,9 @@ $(CAR_VSIM_DIR)/compile.carfield_soc.tcl:
 	mkdir -p $(CAR_VSIM_DIR)
 	$(BENDER) script vsim $(common_targs) $(sim_targs) $(sim_defs) $(common_defs) $(safed_defs) --vlog-arg="$(RUNTIME_DEFINES)" --compilation-mode separate > $@
 	echo 'vlog "$(CHS_ROOT)/target/sim/src/elfloader.cpp" -ccflags "-std=c++11"' >> $@
-	echo 'qopt $(VOPT_FLAGS) $(TBENCH) -o $(TBENCH)_opt' >> $@
+  # Need to add a wrapper to qopt to show log end exit gracefully
+	echo 'if {[catch { echo [qopt $(VOPT_FLAGS) $(TBENCH) -o $(TBENCH)_opt] } message]} {echo $$message; return 1}' >> $@
+	echo 'return 0' >> $@
 
 CAR_VSIM_ALL += $(CAR_SIM_ALL)
 CAR_VSIM_ALL += $(CAR_VSIM_DIR)/compile.carfield_soc.tcl
