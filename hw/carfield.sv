@@ -435,7 +435,7 @@ logic hyper_isolate_req, hyper_isolated_rsp;
 logic security_island_isolate_req;
 logic ethernet_isolate_req, ethernet_isolated_rsp;
 
-logic [cheshire_pkg::iomsb(Cfg.AxiExtNumSlv):0] slave_isolate_req, slave_isolated_rsp, slave_isolated;
+logic [cheshire_pkg::iomsb(NumSlaveCDCs):0] slave_isolate_req, slave_isolated_rsp, slave_isolated;
 logic [cheshire_pkg::iomsb(Cfg.AxiExtNumMst):0] master_isolated_rsp;
 
 // All AXI Slaves (except the Mailbox)

@@ -136,8 +136,8 @@ module cheshire_wrap
   output logic [    LogDepth:0] llc_mst_w_wptr_o ,
   input  logic [    LogDepth:0] llc_mst_w_rptr_i ,
   // External AXI isolate slave Ports (except the Mailbox)
-  input  logic [cheshire_pkg::iomsb(Cfg.AxiExtNumSlv):0]                axi_ext_slv_isolate_i,
-  output logic [cheshire_pkg::iomsb(Cfg.AxiExtNumSlv):0]                axi_ext_slv_isolated_o,
+  input  logic [cheshire_pkg::iomsb(NumSlaveCDCs):0]                    axi_ext_slv_isolate_i,
+  output logic [cheshire_pkg::iomsb(NumSlaveCDCs):0]                    axi_ext_slv_isolated_o,
   // External async AXI slave Ports (except the Mailbox)
   output logic [cheshire_pkg::iomsb(NumSlaveCDCs):0][ExtSlvArWidth-1:0] axi_ext_slv_ar_data_o,
   output logic [cheshire_pkg::iomsb(NumSlaveCDCs):0][       LogDepth:0] axi_ext_slv_ar_wptr_o,
