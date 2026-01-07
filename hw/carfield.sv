@@ -137,6 +137,7 @@ module carfield
   input  logic [SlinkNumChan-1:0][SlinkNumLanes-1:0]  slink_i,
   output logic [SlinkNumChan-1:0][SlinkNumLanes-1:0]  slink_o,
   // HyperBus interface
+  // verilog_lint: waive-start line-length
   output logic [carfield_configuration::NumHypPhys-1:0][carfield_configuration::NumHypChips-1:0] hyper_cs_no,
   output logic [carfield_configuration::NumHypPhys-1:0]                                          hyper_ck_o,
   output logic [carfield_configuration::NumHypPhys-1:0]                                          hyper_ck_no,
@@ -147,6 +148,7 @@ module carfield
   output logic [carfield_configuration::NumHypPhys-1:0][7:0]                                     hyper_dq_o,
   output logic [carfield_configuration::NumHypPhys-1:0]                                          hyper_dq_oe_o,
   output logic [carfield_configuration::NumHypPhys-1:0]                                          hyper_reset_no,
+  // verilog_lint: waive-stop line-length
 `ifdef GEN_NO_HYPERBUS
   // LLC interface
   output logic [LlcArWidth-1:0] llc_ar_data,
