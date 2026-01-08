@@ -1669,8 +1669,7 @@ if (CarfieldIslandsCfg.secured.enable) begin : gen_secure_subsystem
   assign security_island_isolate_req  = car_regs_reg2hw.security_island_isolate.q &&
                                         !secure_boot_i;
   assign car_regs_hw2reg.security_island_isolate_status.d =
-         master_isolated_rsp[SecurityIslandTlulMstIdx]
-         & master_isolated_rsp[SecurityIslandiDMAMstIdx];
+         master_isolated_rsp[SecurityIslandTlulMstIdx];
   assign car_regs_hw2reg.security_island_isolate_status.de = 1'b1;
 
   typedef logic [Cfg.AddrWidth-1:0]        narrow_axi_addr_t;
@@ -1685,33 +1684,22 @@ if (CarfieldIslandsCfg.secured.enable) begin : gen_secure_subsystem
   `ifndef SECD_NETLIST
   security_island #(
     .HartIdOffs            ( OpnTitHartIdOffs                  ),
+    // Shared AXI parameters
     .AxiAddrWidth          ( Cfg.AddrWidth                     ),
     .AxiDataWidth          ( Cfg.AxiDataWidth                  ),
     .AxiUserWidth          ( Cfg.AxiUserWidth                  ),
-    .AxiOutIdWidth         ( Cfg.AxiMstIdWidth                 ),
-    .AxiOtAddrWidth        ( Cfg.AddrWidth                     ),
-    .AxiOtDataWidth        ( AxiNarrowDataWidth                ), // TODO: why is this exposed?
-    .AxiOtUserWidth        ( Cfg.AxiUserWidth                  ),
-    .AxiOtOutIdWidth       ( Cfg.AxiMstIdWidth                 ),
-    .AsyncAxiOutAwWidth    ( CarfieldAxiMstAwWidth             ),
-    .AsyncAxiOutWWidth     ( CarfieldAxiMstWWidth              ),
-    .AsyncAxiOutBWidth     ( CarfieldAxiMstBWidth              ),
-    .AsyncAxiOutArWidth    ( CarfieldAxiMstArWidth             ),
-    .AsyncAxiOutRWidth     ( CarfieldAxiMstRWidth              ),
-    .axi_out_aw_chan_t     ( carfield_axi_mst_aw_chan_t        ),
-    .axi_out_w_chan_t      ( carfield_axi_mst_w_chan_t         ),
-    .axi_out_b_chan_t      ( carfield_axi_mst_b_chan_t         ),
-    .axi_out_ar_chan_t     ( carfield_axi_mst_ar_chan_t        ),
-    .axi_out_r_chan_t      ( carfield_axi_mst_r_chan_t         ),
-    .axi_out_req_t         ( carfield_axi_mst_req_t            ),
-    .axi_out_resp_t        ( carfield_axi_mst_rsp_t            ),
-    .axi_ot_out_aw_chan_t  ( carfield_axi_mst_narrow_aw_chan_t ),
-    .axi_ot_out_w_chan_t   ( carfield_axi_mst_narrow_w_chan_t  ),
-    .axi_ot_out_b_chan_t   ( carfield_axi_mst_narrow_b_chan_t  ),
-    .axi_ot_out_ar_chan_t  ( carfield_axi_mst_narrow_ar_chan_t ),
-    .axi_ot_out_r_chan_t   ( carfield_axi_mst_narrow_r_chan_t  ),
-    .axi_ot_out_req_t      ( carfield_axi_mst_narrow_req_t     ),
-    .axi_ot_out_resp_t     ( carfield_axi_mst_narrow_resp_t    ),
+    // External AXI master port ID Width
+    .AxiExtIdWidth         ( Cfg.AxiMstIdWidth                 ),
+    // External AXI Out structs (must be coherent with parameters above)
+    .axi_ext_aw_chan_t ( carfield_axi_mst_aw_chan_t ),
+    .axi_ext_w_chan_t  ( carfield_axi_mst_w_chan_t ),
+    .axi_ext_b_chan_t  ( carfield_axi_mst_b_chan_t ),
+    .axi_ext_ar_chan_t ( carfield_axi_mst_ar_chan_t ),
+    .axi_ext_r_chan_t  ( carfield_axi_mst_r_chan_t ),
+    .axi_ext_req_t     ( carfield_axi_mst_req_t ),
+    .axi_ext_resp_t    ( carfield_axi_mst_rsp_t ),
+    // Synchronizaton parameters
+    .LogDepth              ( LogDepth                          ),
     .CdcSyncStages         ( SyncStages                        ),
     .SyncStages            ( SyncStages                        )
   ) i_security_island (
@@ -1719,13 +1707,17 @@ if (CarfieldIslandsCfg.secured.enable) begin : gen_secure_subsystem
   security_island i_security_island (
   `endif
     .clk_i            ( security_clk    ),
+    .clk_cluster_i    ( security_clk    ),
     .clk_ref_i        ( rt_clk          ),
     .rst_ni           ( security_rst_n  ),
     .pwr_on_rst_ni    ( security_pwr_on_rst_n ),
     .fetch_en_i       ( car_regs_reg2hw.security_island_fetch_enable ),
     .bootmode_i       ( bootmode_ot_i   ),
     .test_enable_i    ( test_mode_i     ),
+    // Interrupt signals
     .irq_ibex_i       ( secd_mbox_intr  ), // from hostd or safed
+    .cfi_req_irq_i    ( '0 ), // TODO: FIXME and connect to Cheshire
+    .cfi_watermark_irq_i ( '0 ), // TODO: FIXME and connect to Cheshire
      // JTAG port
     .jtag_tck_i       ( jtag_ot_tck_i   ),
     .jtag_tms_i       ( jtag_ot_tms_i   ),
@@ -1734,40 +1726,24 @@ if (CarfieldIslandsCfg.secured.enable) begin : gen_secure_subsystem
     .jtag_tdo_o       ( jtag_ot_tdo_o   ),
     .jtag_tdo_oe_o    ( jtag_ot_tdo_oe_o),
      // Asynch axi port
-    .async_axi_out_aw_data_o ( axi_mst_ext_aw_data [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_aw_wptr_o ( axi_mst_ext_aw_wptr [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_aw_rptr_i ( axi_mst_ext_aw_rptr [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_w_data_o  ( axi_mst_ext_w_data  [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_w_wptr_o  ( axi_mst_ext_w_wptr  [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_w_rptr_i  ( axi_mst_ext_w_rptr  [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_b_data_i  ( axi_mst_ext_b_data  [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_b_wptr_i  ( axi_mst_ext_b_wptr  [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_b_rptr_o  ( axi_mst_ext_b_rptr  [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_ar_data_o ( axi_mst_ext_ar_data [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_ar_wptr_o ( axi_mst_ext_ar_wptr [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_ar_rptr_i ( axi_mst_ext_ar_rptr [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_r_data_i  ( axi_mst_ext_r_data  [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_r_wptr_i  ( axi_mst_ext_r_wptr  [SecurityIslandTlulMstIdx] ),
-    .async_axi_out_r_rptr_o  ( axi_mst_ext_r_rptr  [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_aw_data_o ( axi_mst_ext_aw_data [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_aw_wptr_o ( axi_mst_ext_aw_wptr [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_aw_rptr_i ( axi_mst_ext_aw_rptr [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_w_data_o  ( axi_mst_ext_w_data  [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_w_wptr_o  ( axi_mst_ext_w_wptr  [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_w_rptr_i  ( axi_mst_ext_w_rptr  [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_b_data_i  ( axi_mst_ext_b_data  [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_b_wptr_i  ( axi_mst_ext_b_wptr  [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_b_rptr_o  ( axi_mst_ext_b_rptr  [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_ar_data_o ( axi_mst_ext_ar_data [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_ar_wptr_o ( axi_mst_ext_ar_wptr [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_ar_rptr_i ( axi_mst_ext_ar_rptr [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_r_data_i  ( axi_mst_ext_r_data  [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_r_wptr_i  ( axi_mst_ext_r_wptr  [SecurityIslandTlulMstIdx] ),
+    .async_axi_ext_r_rptr_o  ( axi_mst_ext_r_rptr  [SecurityIslandTlulMstIdx] ),
 
-    .async_idma_axi_out_aw_data_o ( axi_mst_ext_aw_data [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_aw_wptr_o ( axi_mst_ext_aw_wptr [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_aw_rptr_i ( axi_mst_ext_aw_rptr [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_w_data_o  ( axi_mst_ext_w_data  [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_w_wptr_o  ( axi_mst_ext_w_wptr  [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_w_rptr_i  ( axi_mst_ext_w_rptr  [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_b_data_i  ( axi_mst_ext_b_data  [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_b_wptr_i  ( axi_mst_ext_b_wptr  [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_b_rptr_o  ( axi_mst_ext_b_rptr  [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_ar_data_o ( axi_mst_ext_ar_data [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_ar_wptr_o ( axi_mst_ext_ar_wptr [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_ar_rptr_i ( axi_mst_ext_ar_rptr [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_r_data_i  ( axi_mst_ext_r_data  [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_r_wptr_i  ( axi_mst_ext_r_wptr  [SecurityIslandiDMAMstIdx] ),
-    .async_idma_axi_out_r_rptr_o  ( axi_mst_ext_r_rptr  [SecurityIslandiDMAMstIdx] ),
-    .axi_isolate_i    ( security_island_isolate_req                                ),
-    .axi_isolated_o   ( { master_isolated_rsp[SecurityIslandiDMAMstIdx],
-                          master_isolated_rsp[SecurityIslandTlulMstIdx] }          ),
+    .axi_isolate_i    ( security_island_isolate_req ),
+    .axi_isolated_o   ( master_isolated_rsp[SecurityIslandTlulMstIdx] ),
      // Uart
     .ibex_uart_rx_i   ( uart_ot_rx_i  ),
     .ibex_uart_tx_o   ( uart_ot_tx_o  ),

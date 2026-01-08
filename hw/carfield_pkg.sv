@@ -69,7 +69,6 @@ typedef struct packed {
   byte_bt safed;
   byte_bt spatz;
   byte_bt secured;
-  byte_bt secured_idma;
   byte_bt pulp;
   byte_bt ethernet;
 } carfield_master_idx_t;
@@ -123,7 +122,7 @@ function automatic int unsigned gen_num_axi_master(islands_cfg_t island_cfg);
   if (island_cfg.spatz.enable  ) begin ret++; end
   if (island_cfg.pulp.enable   ) begin ret++; end
   if (island_cfg.ethernet.enable) begin ret++; end
-  if (island_cfg.secured.enable) begin ret+=2; end
+  if (island_cfg.secured.enable) begin ret++; end
   return ret;
 endfunction
 
@@ -135,8 +134,8 @@ function automatic carfield_master_idx_t carfield_gen_axi_master_idx(islands_cfg
   byte_bt j = 0;
   if (island_cfg.safed.enable) begin ret.safed = i; i++;
   end else begin ret.safed = MaxExtAxiMst + j; j++; end
-  if (island_cfg.secured.enable) begin ret.secured = i; ret.secured_idma = i+1; i+=2;
-  end else begin ret.secured = MaxExtAxiMst + j; ret.secured_idma = MaxExtAxiMst + j + 1; j+=2; end
+  if (island_cfg.secured.enable) begin ret.secured = i; i++;
+  end else begin ret.secured = MaxExtAxiMst + j;  j++; end
   if (island_cfg.spatz.enable) begin ret.spatz = i; i++;
   end else begin ret.spatz = MaxExtAxiMst + j; j++; end
   if (island_cfg.pulp.enable) begin ret.pulp = i; i++;
@@ -478,7 +477,6 @@ typedef enum byte_bt {
 typedef enum byte_bt {
   SafetyIslandMstIdx       = CarfieldMstIdx.safed,
   SecurityIslandTlulMstIdx = CarfieldMstIdx.secured,
-  SecurityIslandiDMAMstIdx = CarfieldMstIdx.secured_idma,
   FPClusterMstIdx          = CarfieldMstIdx.spatz,
   IntClusterMstIdx         = CarfieldMstIdx.pulp,
   EthernetMstIdx           = CarfieldMstIdx.ethernet
