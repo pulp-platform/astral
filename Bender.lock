@@ -411,8 +411,8 @@ packages:
     - common_cells
     - obi
   opentitan:
-    revision: 97742e7f4e21199df18bf7abd08cf92c7f9fc8c5
-    version: null
+    revision: 9c653dd92a4ff21395df9ddf3a89ccd07d909d8c
+    version: 0.0.0
     source:
       Git: https://github.com/AlSaqr-platform/opentitan.git
     dependencies:
@@ -451,8 +451,8 @@ packages:
     - idma
     - register_interface
   pulp_cluster:
-    revision: 2bc513ef90ffb684a27d24cf271b93ce357e7236
-    version: null
+    revision: 4ca1653a56d56e3e7b5c6469eb7e5f706271b92a
+    version: 0.0.0
     source:
       Git: https://github.com/FondazioneChipsIT/pulp_cluster.git
     dependencies:
