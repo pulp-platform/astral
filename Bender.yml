@@ -21,7 +21,7 @@ dependencies:
   opentitan:          { git: https://github.com/AlSaqr-platform/opentitan.git,          version: =0.0.0 }
   mailbox_unit:       { git: https://github.com/pulp-platform/mailbox_unit.git,         version: 1.1.0                                }
   apb:                { git: https://github.com/pulp-platform/apb.git,                  version: 0.2.3                                }
-  timer_unit:         { git: https://github.com/pulp-platform/timer_unit.git,           version: 1.0.2                                }
+  timer_unit:         { git: https://github.com/pulp-platform/timer_unit.git,           version: =1.0.3                               }
   apb_adv_timer:      { git: https://github.com/pulp-platform/apb_adv_timer.git,        version: 1.0.4                                }
   can_bus:            { git: https://github.com/AlSaqr-platform/can_bus.git,            rev: 0ec0bf8b7dab6d5e4b3f7ec58338a8efee066379 } # branch: pulp
   spatz:              { git: https://github.com/pulp-platform/spatz.git,                rev: 98de97f24fe42675c9b4a8cc08354a03af57400a } # branch: yt/astral

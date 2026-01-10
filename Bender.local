@@ -24,3 +24,4 @@ overrides:
   hci:                  { git: "https://github.com/FondazioneChipsIT/hci.git"             , rev: 3e63936991569d0b1e315d6914478937b37bb338 }
   hwpe-stream:          { git: "https://github.com/pulp-platform/hwpe-stream.git"         , version: =1.9.0 }
   hwpe-ctrl:            { git: "https://github.com/pulp-platform/hwpe-ctrl.git"           , version: =2.0.0 }
+  timer_unit:         { git: https://github.com/pulp-platform/timer_unit.git              , version: =1.0.3 }
