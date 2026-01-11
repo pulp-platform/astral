@@ -13,15 +13,15 @@ package:
 dependencies:
   register_interface: { git: https://github.com/pulp-platform/register_interface.git,   version: 0.4.3                                }
   axi:                { git: https://github.com/pulp-platform/axi.git,                  version: 0.39.1                               }
-  cheshire:           { git: https://github.com/FondazioneChipsIT/cheshire.git,         rev: b975fe3b71358c95205f53f86e27512ac37729c1 } # branch: devel/scarv
+  cheshire:           { git: https://github.com/FondazioneChipsIT/cheshire.git,         rev: scarv-v0.0.0 }
   hyperbus:           { git: https://github.com/pulp-platform/hyperbus.git,             version: 0.0.9}
   dyn_mem:            { git: https://github.com/pulp-platform/dyn_spm.git,              rev: 480590062742230dc9bd4050358a15b4747bdf34 } # branch: main
   safety_island:      { git: https://github.com/pulp-platform/safety_island.git,        rev: 584eb697195c44ef1b1cbd1f4b7accdf5192200a } # branch: main
-  pulp_cluster:       { git: https://github.com/pulp-platform/pulp_cluster.git,         rev: caaa9735346bee71b51d1fe6ba526743bc41e135 } # branch: master
-  opentitan:          { git: https://github.com/pulp-platform/opentitan.git,            rev: 42df2697ad3d07608df942cb7e1928c05558af26 } # branch: mc/astral
+  pulp_cluster:       { git: https://github.com/FondazioneChipsIT/pulp_cluster.git,     version: =0.0.0 }
+  opentitan:          { git: https://github.com/AlSaqr-platform/opentitan.git,          version: =0.0.0 }
   mailbox_unit:       { git: https://github.com/pulp-platform/mailbox_unit.git,         version: 1.1.0                                }
   apb:                { git: https://github.com/pulp-platform/apb.git,                  version: 0.2.3                                }
-  timer_unit:         { git: https://github.com/pulp-platform/timer_unit.git,           version: 1.0.2                                }
+  timer_unit:         { git: https://github.com/pulp-platform/timer_unit.git,           version: =1.0.3                               }
   apb_adv_timer:      { git: https://github.com/pulp-platform/apb_adv_timer.git,        version: 1.0.4                                }
   can_bus:            { git: https://github.com/AlSaqr-platform/can_bus.git,            rev: 0ec0bf8b7dab6d5e4b3f7ec58338a8efee066379 } # branch: pulp
   spatz:              { git: https://github.com/pulp-platform/spatz.git,                rev: 98de97f24fe42675c9b4a8cc08354a03af57400a } # branch: yt/astral
@@ -136,56 +136,53 @@ sources:
 
   - target: all(synthesis, not(fpga))
     files:
-      - tech/sourcecode/tc_clk.sv
-      - tech/sourcecode/tc_sram.sv
-      - tech/sourcecode/ptme_ram.sv
-      - tech/sourcecode/configurable_delay.sv
-      - tech/sourcecode/gf12_fll_wrap.sv
+      - target/gf22/sourcecode/tc_clk.sv
+      - target/gf22/sourcecode/tc_sram.sv
+      - target/gf22/sourcecode/fll_wrap.sv
+      - target/gf22/sourcecode/configurable_delay.sv
 
   - target: tech_sim
     files:
       # TODO: add technology dependent memory cells
-      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_128x40m2b1w0.v
-      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x32m2b1w1.v
-      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x39m4b1w0.v
-      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x44m2b1w1.v
-      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x46m2b1w1.v
-      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x64m2b1w1.v
-      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x128m2b1w1.v
-      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_512x39m4b1w0.v
-      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_1024x64m4b1w1.v
-      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_128x264m1b1w0.v
-      - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_1024x39m4b1w0.v
-      - tech/sourcecode/macros/sram_dp_hse_rvt_mvt_16384x8m16b8w1.v
-      - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_2560x76m4b4w0.v
-      - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_4096x76m4b4w0.v
-      - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_16384x39m8b8w0.v
-      - tech/sourcecode/tc_sram.sv
+      # - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_128x40m2b1w0.v
+      # - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x32m2b1w1.v
+      # - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x39m4b1w0.v
+      # - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x44m2b1w1.v
+      # - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x46m2b1w1.v
+      # - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x64m2b1w1.v
+      # - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_256x128m2b1w1.v
+      # - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_512x39m4b1w0.v
+      # - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_1024x64m4b1w1.v
+      # - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_128x264m1b1w0.v
+      # - tech/sourcecode/macros/rf_sp_uhse_rvt_mvt_1024x39m4b1w0.v
+      # - tech/sourcecode/macros/sram_dp_hse_rvt_mvt_16384x8m16b8w1.v
+      # - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_2560x76m4b4w0.v
+      # - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_4096x76m4b4w0.v
+      # - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_16384x39m8b8w0.v
+      # - tech/sourcecode/tc_sram.sv
       # FLL Model
-      - tech/sourcecode/fll/rtl/FLL_digital/FLLPkg.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_clk_divider.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_clk_period_quantizer.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_clock_gated.gf12.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_clock_gated.rtl.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_dither_pattern_gen.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_glitchfree_clkdiv.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_glitchfree_clkmux.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_loop_filter.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_mux.gf12.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_mux.rtl.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_reg.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_settling_monitor.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_synchroedge.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_zerodelta.vhd
-      - tech/sourcecode/fll/rtl/FLL_digital/FLL_digital.vhd
-      - tech/sourcecode/fll/rtl/behavioral/gf12_FLL_DCO_model.tc.vhd
-      #- tech/sourcecode/fll/rtl/behavioral/gf12_FLL_DCO_model.vhd
-      - tech/sourcecode/fll/rtl/behavioral/gf12_FLL_model.vhd
-      - tech/sourcecode/fll/rtl/behavioral/gf12_FLL.v
-      - tech/sourcecode/gf12_fll_wrap.sv
+      - target/gf22/fll/FLL_digital/FLLPkg.vhd
+      - target/gf22/fll/FLL_digital/FLL_clk_divider.vhd
+      - target/gf22/fll/FLL_digital/FLL_clk_period_quantizer.vhd
+#      - target/gf22/fll/FLL_digital/FLL_clock_gated.gf22.vhd
+      - target/gf22/fll/FLL_digital/FLL_clock_gated.rtl.vhd
+      - target/gf22/fll/FLL_digital/FLL_dither_pattern_gen.vhd
+      - target/gf22/fll/FLL_digital/FLL_glitchfree_clkdiv.vhd
+      - target/gf22/fll/FLL_digital/FLL_glitchfree_clkmux.vhd
+      - target/gf22/fll/FLL_digital/FLL_loop_filter.vhd
+#      - target/gf22/fll/FLL_digital/FLL_mux.gf22.vhd
+      - target/gf22/fll/FLL_digital/FLL_mux.rtl.vhd
+      - target/gf22/fll/FLL_digital/FLL_reg.vhd
+      - target/gf22/fll/FLL_digital/FLL_settling_monitor.vhd
+      - target/gf22/fll/FLL_digital/FLL_synchroedge.vhd
+      - target/gf22/fll/FLL_digital/FLL_zerodelta.vhd
+      - target/gf22/fll/FLL_digital/FLL_digital.vhd
+      - target/gf22/fll/behavioral/gf22_DCO_model.tc.vhd
+      - target/gf22/fll/behavioral/gf22_FLL_model.vhd
+      - target/gf22/fll_wrap.sv
       # PAD Model
-      - tech/sourcecode/pad/io_gppr_12lpplus_t18_mv08_mv18_fs18_rvt_dr.v
-      - tech/sourcecode/ptme_ram.sv
+      # - tech/sourcecode/pad/io_gppr_12lpplus_t18_mv08_mv18_fs18_rvt_dr.v
+      # - tech/sourcecode/ptme_ram.sv
 
   - target: all(xilinx, fpga, xilinx_vanilla)
     files:

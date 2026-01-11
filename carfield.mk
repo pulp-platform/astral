@@ -23,12 +23,11 @@ CAR_SW_DIR  := $(CAR_ROOT)/sw
 CAR_TGT_DIR := $(CAR_ROOT)/target
 CAR_XIL_DIR := $(CAR_TGT_DIR)/xilinx
 CAR_SIM_DIR := $(CAR_TGT_DIR)/sim
+CAR_TECH_DIR := $(CAR_TGT_DIR)/gf22
 SECD_ROOT ?= $(shell $(BENDER) path opentitan)
 
 # Questasim
 CAR_VSIM_DIR := $(CAR_TGT_DIR)/sim/vsim
-
-TECH_ROOT   := $(CAR_ROOT)/tech
 
 BENDER      ?= bender
 BENDER_ROOT ?= $(CAR_ROOT)/.bender
@@ -231,7 +230,7 @@ pulpd-sw-build: pulpd-sw-init
 ## Initialize Carfield HW. This step takes care of the generation of the missing hardware or the
 ## update of default HW configurations in some of the domains. See the two prerequisite's comment
 ## for more information.
-car-hw-init: $(SPATZD_HW_INIT) chs-hw-init $(SECD_HW_INIT)
+car-hw-init: idma-hw-init $(SPATZD_HW_INIT) chs-hw-init $(SECD_HW_INIT)
 
 ## @section Carfield platform PCRs generation
 .PHONY: regenerate_soc_regs
@@ -308,6 +307,10 @@ spatzd-hw-init:
 .PHONY: chs-hw-init
 chs-hw-init: update_plic update_serial_link
 	$(MAKE) -B chs-hw-all
+
+.PHONY: idma-hw-init
+idma-hw-init:
+	$(MAKE) -C $(shell bender path idma) idma_hw_all
 
 ##############
 # Simulation #
@@ -402,16 +405,18 @@ car-check-litmus-tests: $(LITMUS_WORK_DIR)/litmus.log
 ##############
 # Technology #
 ##############
-tech-repo := git@iis-git.ee.ethz.ch:Astral/gf12.git
+tech-repo := git@gitlab.chips.it:digitalresearchline/scar-v/gf22.git
 # no commit by default, change during development
-tech-commit := e58cb2997247e74c3d258788c4c1dbce9cbda838 # branch: yt/astral-resume
+tech-commit := b67afb868d46e4142fdf10a741e49b61c1b485c5 # branch: main
 
 tech-clone:
-	git clone $(tech-repo) tech
+	git clone $(tech-repo) $(CAR_TECH_DIR)
+	cd $(CAR_TECH_DIR) && git checkout $(tech-commit) && \
+	git submodule update --init --recursive && \
+	cd $(CAR_ROOT)
 
 tech-init: tech-clone
-	cd $(TECH_ROOT) && git checkout $(tech-commit) && cd $(CAR_ROOT)
-	$(MAKE) -C $(TECH_ROOT) init
+	$(MAKE) -C $(CAR_TECH_DIR) init
 
 ########
 # Help #

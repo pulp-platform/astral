@@ -69,7 +69,6 @@ typedef struct packed {
   byte_bt safed;
   byte_bt spatz;
   byte_bt secured;
-  byte_bt secured_idma;
   byte_bt pulp;
   byte_bt ethernet;
 } carfield_master_idx_t;
@@ -123,7 +122,7 @@ function automatic int unsigned gen_num_axi_master(islands_cfg_t island_cfg);
   if (island_cfg.spatz.enable  ) begin ret++; end
   if (island_cfg.pulp.enable   ) begin ret++; end
   if (island_cfg.ethernet.enable) begin ret++; end
-  if (island_cfg.secured.enable) begin ret+=2; end
+  if (island_cfg.secured.enable) begin ret++; end
   return ret;
 endfunction
 
@@ -135,8 +134,8 @@ function automatic carfield_master_idx_t carfield_gen_axi_master_idx(islands_cfg
   byte_bt j = 0;
   if (island_cfg.safed.enable) begin ret.safed = i; i++;
   end else begin ret.safed = MaxExtAxiMst + j; j++; end
-  if (island_cfg.secured.enable) begin ret.secured = i; ret.secured_idma = i+1; i+=2;
-  end else begin ret.secured = MaxExtAxiMst + j; ret.secured_idma = MaxExtAxiMst + j + 1; j+=2; end
+  if (island_cfg.secured.enable) begin ret.secured = i; i++;
+  end else begin ret.secured = MaxExtAxiMst + j;  j++; end
   if (island_cfg.spatz.enable) begin ret.spatz = i; i++;
   end else begin ret.spatz = MaxExtAxiMst + j; j++; end
   if (island_cfg.pulp.enable) begin ret.pulp = i; i++;
@@ -438,6 +437,10 @@ endfunction
 
 localparam carfield_domain_idx_t CarfieldDomainIdx = gen_domain_idx(CarfieldIslandsCfg);
 
+// Hyperbus parameters
+localparam int unsigned NumHyperBusPhys  = carfield_configuration::NumHypPhys;
+localparam int unsigned NumHyperBusChips = carfield_configuration::NumHypChips;
+
 /*******************************
 * Carfield package starts here *
 *******************************/
@@ -474,7 +477,6 @@ typedef enum byte_bt {
 typedef enum byte_bt {
   SafetyIslandMstIdx       = CarfieldMstIdx.safed,
   SecurityIslandTlulMstIdx = CarfieldMstIdx.secured,
-  SecurityIslandiDMAMstIdx = CarfieldMstIdx.secured_idma,
   FPClusterMstIdx          = CarfieldMstIdx.spatz,
   IntClusterMstIdx         = CarfieldMstIdx.pulp,
   EthernetMstIdx           = CarfieldMstIdx.ethernet
@@ -598,151 +600,153 @@ localparam dw_bt AxiUserAmoMsb = carfield_get_axi_user_amo_msb(CarfieldIslandsCf
 
 // verilog_lint: waive-start line-length
 // Cheshire configuration
-localparam cheshire_pkg::cheshire_cfg_t CarfieldCfgDefault = '{
+function automatic cheshire_pkg::cheshire_cfg_t gen_carfield_cfg();
+  cheshire_pkg::cheshire_cfg_t ret = cheshire_pkg::DefaultCfg;
   // CVA6 parameters
-  Cva6RASDepth      : cva6_config_pkg::cva6_cfg.RASDepth,
-  Cva6BTBEntries    : cva6_config_pkg::cva6_cfg.BTBEntries,
-  Cva6BHTEntries    : cva6_config_pkg::cva6_cfg.BHTEntries,
-  Cva6NrPMPEntries  : 0,
-  Cva6ExtCieLength  : 'h1000_0000, // [0x2000_0000, 0x7000_0000) is non-CIE,
+  ret.Cva6RASDepth      = cva6_config_pkg::cva6_cfg.RASDepth;
+  ret.Cva6BTBEntries    = cva6_config_pkg::cva6_cfg.BTBEntries;
+  ret.Cva6BHTEntries    = cva6_config_pkg::cva6_cfg.BHTEntries;
+  ret.Cva6NrPMPEntries  = 0;
+  ret.Cva6ExtCieLength  = 'h1000_0000; // [0x2000_0000, 0x7000_0000) is non-CIE,
                                    // [0x7000_0000, 0x8000_0000) is CIE
-  Cva6ExtCieOnTop   : 1,
+  ret.Cva6ExtCieOnTop   = 1;
   // Harts
-  NumCores          : CheshireNumInternalHarts,
-  CoreMaxTxns       : 8,
-  CoreMaxTxnsPerId  : 4,
-  CoreUserAmoOffs   : 0, // Convention: lower AMO bits for cores, MSB for serial link
+  ret.NumCores          = CheshireNumInternalHarts;
+  ret.CoreMaxTxns       = 8;
+  ret.CoreMaxTxnsPerId  = 4;
+  ret.CoreUserAmoOffs   = 0; // Convention: lower AMO bits for cores, MSB for serial link
   // Interrupt parameters
-  NumExtIrqHarts    : CarfieldNumInterruptibleHarts,
-  NumExtInIntrs     : CarfieldNumExtIntrs,
-  NumExtClicIntrs   : CarfieldNumExtIntrs,
-  NumExtOutIntrTgts : CarfieldNumRouterTargets,
-  NumExtOutIntrs    : CarfieldNumExtIntrs+$bits(cheshire_int_intr_t),
-  ClicIntCtlBits    : 8,
+  ret.NumExtIrqHarts    = CarfieldNumInterruptibleHarts;
+  ret.NumExtInIntrs     = CarfieldNumExtIntrs;
+  ret.NumExtClicIntrs   = CarfieldNumExtIntrs;
+  ret.NumExtOutIntrTgts = CarfieldNumRouterTargets;
+  ret.NumExtOutIntrs    = CarfieldNumExtIntrs+$bits(cheshire_int_intr_t);
+  ret.ClicIntCtlBits    = 8;
   // ClicUseSMode      : 1,
   // ClicUseUMode      : 0,
   // ClicUseVsMode     : 1,
   // ClicUseVsModePrio : 1,
   // ClicNumVsCtxts    : 2, // TODO: choose appropriately
-  NumExtIntrSyncs   : SyncStages,
+  ret.NumExtIntrSyncs   = SyncStages;
   // Interconnect
-  AddrWidth         : 48,
-  AxiDataWidth      : 64,
-  AxiUserWidth      : 10,  // {CACHE_PARTITIONING(5[9:5]), ECC_ERROR(1[4:4]), ATOPS(4[3:0])}
-  AxiMstIdWidth     : 2,
+  ret.AddrWidth         = 48;
+  ret.AxiDataWidth      = 64;
+  ret.AxiUserWidth      = 10;  // {CACHE_PARTITIONING(5[9:5]), ECC_ERROR(1[4:4]), ATOPS(4[3:0])}
+  ret.AxiMstIdWidth     = 2;
   // TFLenWidth        : 32, // ?
-  AxiMaxMstTrans    : 64,
-  AxiMaxSlvTrans    : 64,
-  AxiUserAmoMsb     : AxiUserAmoMsb, // A0:0001, A1:0011, SF:0101, FP:0111, SL:1XXX, none: '0
-  AxiUserAmoLsb     : 0,             // A0:0001, A1:0011, SF:0101, FP:0111, SL:1XXX, none: '0
-  AxiUserErrBits    : 1,
-  AxiUserErrLsb     : 4,
-  RegMaxReadTxns    : 8,
-  RegMaxWriteTxns   : 8,
+  ret.AxiMaxMstTrans    = 64;
+  ret.AxiMaxSlvTrans    = 64;
+  ret.AxiUserAmoMsb     = AxiUserAmoMsb; // A0:0001, A1:0011, SF:0101, FP:0111, SL:1XXX, none: '0
+  ret.AxiUserAmoLsb     = 0;             // A0:0001, A1:0011, SF:0101, FP:0111, SL:1XXX, none: '0
+  ret.AxiUserErrBits    = 1;
+  ret.AxiUserErrLsb     = 4;
+  ret.RegMaxReadTxns    = 8;
+  ret.RegMaxWriteTxns   = 8;
   // CorePostCut       : 1, // ?
-  RegAmoNumCuts     : 1,
-  RegAmoPostCut     : 1,
-  RegAdaptMemCut    : 1,
+  ret.RegAmoNumCuts     = 1;
+  ret.RegAmoPostCut     = 1;
+  ret.RegAdaptMemCut    = 1;
   // External AXI ports (at most 8 ports and rules)
-  AxiExtNumMst      : CarfieldAxiNumMasters,
-  AxiExtNumSlv      : CarfieldAxiNumSlaves,
-  AxiExtNumRules    : CarfieldAxiNumSlaves,
+  ret.AxiExtNumMst      = CarfieldAxiNumMasters;
+  ret.AxiExtNumSlv      = CarfieldAxiNumSlaves;
+  ret.AxiExtNumRules    = CarfieldAxiNumSlaves;
   // External AXI region map
-  AxiExtRegionIdx   : CarfieldAxiMap.AxiIdx,
-  AxiExtRegionStart : CarfieldAxiMap.AxiStart,
-  AxiExtRegionEnd   : CarfieldAxiMap.AxiEnd,
+  ret.AxiExtRegionIdx   = CarfieldAxiMap.AxiIdx;
+  ret.AxiExtRegionStart = CarfieldAxiMap.AxiStart;
+  ret.AxiExtRegionEnd   = CarfieldAxiMap.AxiEnd;
   // External reg slaves (at most 8 ports and rules)
-  RegExtNumSlv      : NumTotalRegSlv,
-  RegExtNumRules    : NumTotalRegSlv,
+  ret.RegExtNumSlv      = NumTotalRegSlv;
+  ret.RegExtNumRules    = NumTotalRegSlv;
   // For carfield, PllIdx is the first index of the async reg interfaces. Please add async reg
   // interfaces indices to the left of PllIdx, and sync reg interface indices to its right.
-  RegExtRegionIdx   : CarfieldRegBusMap.RegBusIdx,
-  RegExtRegionStart : CarfieldRegBusMap.RegBusStart,
-  RegExtRegionEnd   : CarfieldRegBusMap.RegBusEnd,
+  ret.RegExtRegionIdx   = CarfieldRegBusMap.RegBusIdx;
+  ret.RegExtRegionStart = CarfieldRegBusMap.RegBusStart;
+  ret.RegExtRegionEnd   = CarfieldRegBusMap.RegBusEnd;
   // RTC
-  RtcFreq           : 1000000, // FIXME
+  ret.RtcFreq           = 1000000; // FIXME
   // Features
-  Bootrom           : 1,
-  Uart              : 1,
-  I2c               : 1,
-  SpiHost           : 1,
-  Gpio              : 1,
-  Dma               : 1,
+  ret.Bootrom           = 1;
+  ret.Uart              = 1;
+  ret.I2c               = 1;
+  ret.SpiHost           = 1;
+  ret.Gpio              = 1;
+  ret.Dma               = 1;
   // IOMMU             : 1,
-  SerialLink        : CheshireSerialLinkEnable,
-  Vga               : 0,
-  AxiRt             : 0,
-  Clic              : 0,
-  IrqRouter         : 1,
-  BusErr            : 0,
-  Snooper           : 1,
+  ret.SerialLink        = CheshireSerialLinkEnable;
+  ret.Vga               = 0;
+  ret.AxiRt             = 0;
+  ret.Clic              = 0;
+  ret.IrqRouter         = 1;
+  ret.BusErr            = 0;
+  ret.Snooper           = 1;
   // HmrUnit           : 1,
   // Cva6DMR           : 1,
   // Cva6DMRFixed      : 0,
   // RapidRecovery     : 0,
   // Debug
-  DbgIdCode         : '{
-    version: 4'h1,
-    part_num: 16'hca70,
-    manufacturer: JtagPulpManufacturer,
-    _one: 1
-  },
-  DbgMaxReqs        : 4,
-  DbgMaxReadTxns    : 4,
-  DbgMaxWriteTxns   : 4,
-  DbgAmoNumCuts     : 1,
-  DbgAmoPostCut     : 1,
+  ret.DbgIdCode         = '{
+      version: 4'h1,
+      part_num: 16'hca70,
+      manufacturer: JtagPulpManufacturer,
+      _one: 1
+    };
+  ret.DbgMaxReqs        = 4;
+  ret.DbgMaxReadTxns    = 4;
+  ret.DbgMaxWriteTxns   = 4;
+  ret.DbgAmoNumCuts     = 1;
+  ret.DbgAmoPostCut     = 1;
   // LLC: 128 KiB, up to 2 GiB DRAM
-  LlcNotBypass      : 1,
-  LlcSetAssoc       : 8,
-  LlcNumLines       : 256,
-  LlcNumBlocks      : 8,
-  LlcMaxReadTxns    : 32,
-  LlcMaxWriteTxns   : 32,
-  LlcAmoNumCuts     : 1,
-  LlcAmoPostCut     : 1,
-  LlcOutConnect     : 1,
-  LlcOutRegionStart : 'h8000_0000,
-  LlcOutRegionEnd   : 'h1_0000_0000,
+  ret.LlcNotBypass      = 1;
+  ret.LlcSetAssoc       = 8;
+  ret.LlcNumLines       = 256;
+  ret.LlcNumBlocks      = 8;
+  ret.LlcMaxReadTxns    = 32;
+  ret.LlcMaxWriteTxns   = 32;
+  ret.LlcAmoNumCuts     = 1;
+  ret.LlcAmoPostCut     = 1;
+  ret.LlcOutConnect     = 1;
+  ret.LlcOutRegionStart = 'h8000_0000;
+  ret.LlcOutRegionEnd   = 'h1_0000_0000;
   // LlcUserMsb        : 9,
   // LlcUserLsb        : 5,
   // LlcCachePartition : 1,
   // LlcMaxPartition   : 16,
   // LlcRemapHash      : axi_llc_pkg::Modulo,
   // VGA: RGB332; carfield doesn't have a vga, but widths are required for top-level pins anyway.
-  VgaRedWidth       : 3,
-  VgaGreenWidth     : 3,
-  VgaBlueWidth      : 2,
+  ret.VgaRedWidth       = 3;
+  ret.VgaGreenWidth     = 3;
+  ret.VgaBlueWidth      = 2;
   // Serial Link: map other chip's lower 32bit to 'h1_000_0000
-  SlinkMaxTxnsPerId : 4,
-  SlinkMaxUniqIds   : 4,
-  SlinkMaxClkDiv    : 1024,
-  SlinkRegionStart  : 'h1_0000_0000,
-  SlinkRegionEnd    : 'h2_0000_0000,
-  SlinkTxAddrMask   : 'hFFFF_FFFF,
-  SlinkTxAddrDomain : 'h0000_0000,
-  SlinkUserAmoBit   : 3,  // Convention: lower AMO bits for cores, MSB for serial link
+  ret.SlinkMaxTxnsPerId = 4;
+  ret.SlinkMaxUniqIds   = 4;
+  ret.SlinkMaxClkDiv    = 1024;
+  ret.SlinkRegionStart  = 'h1_0000_0000;
+  ret.SlinkRegionEnd    = 'h2_0000_0000;
+  ret.SlinkTxAddrMask   = 'hFFFF_FFFF;
+  ret.SlinkTxAddrDomain = 'h0000_0000;
+  ret.SlinkUserAmoBit   = 3;  // Convention: lower AMO bits for cores, MSB for serial link
   // DMA config
-  DmaConfMaxReadTxns  : 4,
-  DmaConfMaxWriteTxns : 4,
-  DmaConfAmoNumCuts   : 1,
-  DmaNumAxInFlight    : 24,
-  DmaMemSysDepth      : 16,
-  DmaJobFifoDepth     : 4,
-  DmaRAWCouplingAvail : 1,
-  DmaConfAmoPostCut   : 1,
-  DmaConfEnableTwoD   : 1,
+  ret.DmaConfMaxReadTxns  = 4;
+  ret.DmaConfMaxWriteTxns = 4;
+  ret.DmaConfAmoNumCuts   = 1;
+  ret.DmaNumAxInFlight    = 24;
+  ret.DmaMemSysDepth      = 16;
+  ret.DmaJobFifoDepth     = 4;
+  ret.DmaRAWCouplingAvail = 1;
+  ret.DmaConfAmoPostCut   = 1;
+  ret.DmaConfEnableTwoD   = 1;
   // GPIOs
-  GpioInputSyncs      : 1,
+  ret.GpioInputSyncs      = 1;
   // AXI RT
-  AxiRtNumPending     : 32,
-  AxiRtWBufferDepth   : 32,
-  AxiRtNumAddrRegions : 2,
-  AxiRtCutPaths       : 1,
-  AxiRtEnableChecks   : 0,
-  // All non-set values should be zero
-  default: '0
-};
+  ret.AxiRtNumPending     = 32;
+  ret.AxiRtWBufferDepth   = 32;
+  ret.AxiRtNumAddrRegions = 2;
+  ret.AxiRtCutPaths       = 1;
+  ret.AxiRtEnableChecks   = 0;
+
+  return ret;
+endfunction // gen_carfield_cfg
+localparam cheshire_cfg_t CarfieldCfgDefault = gen_carfield_cfg();
 // verilog_lint: waive-stop line-length
 /***********************/
 /* Ethernet Parameters */
@@ -777,78 +781,80 @@ localparam bit[CarfieldCfgDefault.AddrWidth-1:0] PulpClustExtOffs    = 'h0040000
 localparam int unsigned IntClusterNumEoc = 1;
 localparam logic [ 5:0] IntClusterIndex = (PulpHartIdOffs >> 5);
 `ifdef PULPD_ENABLE
-localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
-  CoreType: pulp_cluster_package::RI5CY,
-  NumCores: IntClusterNumCores,
-  DmaNumPlugs: 4,
-  DmaNumOutstandingBursts: 8,
-  DmaBurstLength: 256,
-  NumMstPeriphs: 1,
-  NumSlvPeriphs: 12,
-  ClusterAlias: 1,
-  ClusterAliasBase: 'h0,
-  NumSyncStages: 3,
-  UseHci: 1,
-  TcdmSize: 128*1024,
-  TcdmNumBank: 16,
-  HwpePresent: 1,
-  HwpeCfg: '{NumHwpes: 3,
-             HwpeList: {pulp_cluster_package::SOFTEX,
-                        pulp_cluster_package::NEUREKA,
-                        pulp_cluster_package::REDMULE}
-            },
-  HwpeNumPorts: 9,
-  HMRPresent: 1,
-  HMRDmrEnabled: 1,
-  HMRTmrEnabled: 1,
-  HMRDmrFIxed: 0,
-  HMRTmrFIxed: 0,
-  HMRInterleaveGrps: 1,
-  HMREnableRapidRecovery: 1,
-  HMRSeparateDataVoters: 1,
-  HMRSeparateAxiBus: 0,
-  HMRNumBusVoters: 1,
-  EnableECC: 1,
-  ECCInterco: 1,
-  iCacheNumBanks: 2,
-  iCacheNumLines: 1,
-  iCacheNumWays: 4,
-  iCacheSharedSize: 4*1024,
-  iCachePrivateSize: 512,
-  iCachePrivateDataWidth: 32,
-  EnableReducedTag: 1,
-  L2Size: L2MemSize,
-  DmBaseAddr: carfield_pkg::CarfieldIslandsCfg.safed.base+
-              carfield_pkg::SafetyIslandPerOffset +
-              carfield_pkg::SafedDebugOffs,
-  BootRomBaseAddr: carfield_pkg::CarfieldIslandsCfg.l2_port0.base + 'h8080,
-  BootAddr: carfield_pkg::CarfieldIslandsCfg.l2_port0.base + 'h8080,
-  EnablePrivateFpu: 1,
-  EnablePrivateFpDivSqrt: 0,
-  EnableSharedFpu: 0,
-  EnableSharedFpDivSqrt: 0,
-  NumSharedFpu: 0,
-  NumAxiIn: 4,
-  NumAxiOut: 3,
-  AxiIdInWidth: AxiSlvIdWidth,
-  AxiIdOutWidth: Cfg.AxiMstIdWidth,
-  AxiAddrWidth: Cfg.AddrWidth,
-  AxiDataInWidth:  Cfg.AxiDataWidth,
-  AxiDataOutWidth: Cfg.AxiDataWidth,
-  AxiUserWidth: Cfg.AxiUserWidth,
-  AxiMaxInTrans: Cfg.AxiMaxSlvTrans,
-  AxiMaxOutTrans: Cfg.AxiMaxMstTrans,
-  AxiCdcLogDepth: 3,
-  AxiCdcSyncStages: carfield_pkg::SyncStages,
-  SyncStages: carfield_pkg::SyncStages,
-  ClusterBaseAddr: carfield_pkg::CarfieldAxiMap.AxiStart[CarfieldAxiSlvIdx.pulp]
-                   - (carfield_pkg::IntClusterIndex << 22),
-  ClusterPeriphOffs: carfield_pkg::PulpClustPeriphOffs,
-  ClusterExternalOffs: carfield_pkg::PulpClustExtOffs,
-  EnableRemapAddress: 0,
-  SnitchICache: 0,
-  default: '0
-};
+  localparam pulp_cluster_package::pulp_cluster_cfg_t PulpClusterCfg = '{
+    CoreType: pulp_cluster_package::RI5CY,
+    NumCores: IntClusterNumCores,
+    DmaNumPlugs: 4,
+    DmaNumOutstandingBursts: 8,
+    DmaBurstLength: 256,
+    NumMstPeriphs: 1,
+    NumSlvPeriphs: 12,
+    ClusterAlias: 1,
+    ClusterAliasBase: 'h0,
+    NumSyncStages: 3,
+    UseHci: 1,
+    TcdmSize: 128*1024,
+    TcdmNumBank: 16,
+    HwpePresent: 1,
+    HwpeCfg: '{NumHwpes: 3,
+               HwpeList: {pulp_cluster_package::SOFTEX,
+                          pulp_cluster_package::NEUREKA,
+                          pulp_cluster_package::REDMULE}
+              },
+    HwpeNumPorts: 9,
+    HMRPresent: 1,
+    HMRDmrEnabled: 1,
+    HMRTmrEnabled: 1,
+    HMRDmrFIxed: 0,
+    HMRTmrFIxed: 0,
+    HMRInterleaveGrps: 1,
+    HMREnableRapidRecovery: 1,
+    HMRSeparateDataVoters: 1,
+    HMRSeparateAxiBus: 0,
+    HMRNumBusVoters: 1,
+    EnableECC: 1,
+    ECCInterco: 1,
+    iCacheNumBanks: 2,
+    iCacheNumLines: 1,
+    iCacheNumWays: 4,
+    iCacheSharedSize: 4*1024,
+    iCachePrivateSize: 512,
+    iCachePrivateDataWidth: 32,
+    EnableReducedTag: 1,
+    L2Size: L2MemSize,
+    DmBaseAddr: carfield_pkg::CarfieldIslandsCfg.safed.base+
+                carfield_pkg::SafetyIslandPerOffset +
+                carfield_pkg::SafedDebugOffs,
+    BootRomBaseAddr: carfield_pkg::CarfieldIslandsCfg.l2_port0.base + 'h8080,
+    BootAddr: carfield_pkg::CarfieldIslandsCfg.l2_port0.base + 'h8080,
+    EnablePrivateFpu: 1,
+    EnablePrivateFpDivSqrt: 0,
+    EnableSharedFpu: 0,
+    EnableSharedFpDivSqrt: 0,
+    NumSharedFpu: 0,
+    NumAxiIn: 4,
+    NumAxiOut: 3,
+    AxiIdInWidth: AxiSlvIdWidth,
+    AxiIdOutWidth: Cfg.AxiMstIdWidth,
+    AxiAddrWidth: Cfg.AddrWidth,
+    AxiDataInWidth:  Cfg.AxiDataWidth,
+    AxiDataOutWidth: Cfg.AxiDataWidth,
+    AxiUserWidth: Cfg.AxiUserWidth,
+    AxiMaxInTrans: Cfg.AxiMaxSlvTrans,
+    AxiMaxOutTrans: Cfg.AxiMaxMstTrans,
+    AxiCdcLogDepth: 3,
+    AxiCdcSyncStages: carfield_pkg::SyncStages,
+    SyncStages: carfield_pkg::SyncStages,
+    ClusterBaseAddr: carfield_pkg::CarfieldAxiMap.AxiStart[CarfieldAxiSlvIdx.pulp]
+                     - (carfield_pkg::IntClusterIndex << 22),
+    ClusterPeriphOffs: carfield_pkg::PulpClustPeriphOffs,
+    ClusterExternalOffs: carfield_pkg::PulpClustExtOffs,
+    EnableRemapAddress: 0,
+    SnitchICache: 0,
+    default: '0
+  };
+`else
+  localparam int unsigned PulpClusterCfg = 0;
 `endif
 
 /****************************/

@@ -15,11 +15,7 @@ module astral_wrap
   import cheshire_pkg::*;
   import pkg_astral_padframe::*;
 #(
-  parameter cheshire_cfg_t Cfg = carfield_pkg::CarfieldCfgDefault,
-  parameter int unsigned   HypNumPhys  = 1,
-  parameter int unsigned   HypNumChips = 1,
-  parameter type           reg_req_t   = logic,
-  parameter type           reg_rsp_t   = logic
+  parameter cheshire_cfg_t Cfg = carfield_pkg::CarfieldCfgDefault
 ) (
   inout wire logic pad_periph_ref_clk_pad,
   inout wire logic pad_periph_fll_host_pad,
@@ -147,8 +143,8 @@ module astral_wrap
   assign serial_link_data_in_s[0][6] = pad2soc_port_signals.periph.serial_link.slink_6_i;
   assign serial_link_data_in_s[0][7] = pad2soc_port_signals.periph.serial_link.slink_7_i;
   // hyperbus signals
-  logic [HypNumPhys-1:0]      hyperbus_rwds_in_s;
-  logic [HypNumPhys-1:0][7:0] hyperbus_data_in_s;
+  logic [carfield_pkg::NumHyperBusPhys-1:0] hyperbus_rwds_in_s;
+  logic [carfield_pkg::NumHyperBusPhys-1:0][7:0] hyperbus_data_in_s;
   // hyperbus 0
   assign hyperbus_data_in_s[0][0] = st_pad2soc_signals.periph.hyper_dq_0_i;
   assign hyperbus_data_in_s[0][1] = st_pad2soc_signals.periph.hyper_dq_1_i;
@@ -173,14 +169,14 @@ module astral_wrap
   assign soc2pad_port_signals.periph.serial_link.slink_h_2_o = serial_link_data_out_s[0][6];
   assign soc2pad_port_signals.periph.serial_link.slink_h_3_o = serial_link_data_out_s[0][7];
   //hyperbus
-  logic [HypNumPhys-1:0]                  hyperbus_rwds_out_s;
-  logic [HypNumPhys-1:0]                  hyperbus_rwds_oe_s;
-  logic [HypNumPhys-1:0]                  hyperbus_clk_o_s;
-  logic [HypNumPhys-1:0]                  hyperbus_clk_no_s;
-  logic [HypNumPhys-1:0]                  hyperbus_rst_no_s;
-  logic [HypNumPhys-1:0][HypNumChips-1:0] hyperbus_cs_no_s;
-  logic [HypNumPhys-1:0][7:0]             hyperbus_data_out_s;
-  logic [HypNumPhys-1:0]                  hyperbus_data_oe_s;
+  logic [carfield_pkg::NumHyperBusPhys-1:0]                                     hyperbus_rwds_out_s;
+  logic [carfield_pkg::NumHyperBusPhys-1:0]                                     hyperbus_rwds_oe_s;
+  logic [carfield_pkg::NumHyperBusPhys-1:0]                                     hyperbus_clk_o_s;
+  logic [carfield_pkg::NumHyperBusPhys-1:0]                                     hyperbus_clk_no_s;
+  logic [carfield_pkg::NumHyperBusPhys-1:0]                                     hyperbus_rst_no_s;
+  logic [carfield_pkg::NumHyperBusPhys-1:0][carfield_pkg::NumHyperBusChips-1:0] hyperbus_cs_no_s;
+  logic [carfield_pkg::NumHyperBusPhys-1:0][7:0]                                hyperbus_data_out_s;
+  logic [carfield_pkg::NumHyperBusPhys-1:0]                                     hyperbus_data_oe_s;
   // hyper bus 0
   assign st_soc2pad_signals.periph.hyper_ck_no      = hyperbus_clk_no_s[0];
   assign st_soc2pad_signals.periph.hyper_ck_o       = hyperbus_clk_o_s[0];
@@ -355,6 +351,7 @@ module astral_wrap
   logic[carfield_pkg::NumFll-1:0] clk_fll_e;
   logic[carfield_pkg::NumFll-1:0] fll_lock;
   logic[carfield_pkg::NumFll-1:0] fll_pwd;
+  logic[carfield_pkg::NumFll-1:0] fll_ret;
   logic[carfield_pkg::NumFll-1:0] fll_test_mode;
   logic[carfield_pkg::NumFll-1:0] fll_scan_e;
   logic[carfield_pkg::NumFll-1:0] fll_scan_in;
@@ -385,6 +382,7 @@ module astral_wrap
     assign domain_clk[i] = clk_fll_out[i];
 
   assign fll_pwd          = '{default: 1'b0};
+  assign fll_ret          = '{default: 1'b0};
   assign fll_test_mode    = '{default: 1'b0};
   assign fll_scan_e       = '{default: 1'b0};
   assign fll_scan_in      = '{default: 1'b0};
@@ -399,8 +397,8 @@ module astral_wrap
     .init_no ()
   );
 
-`ifdef GF12_FLL
-  gf12_fll_wrap #(
+`ifdef GF22_FLL
+  fll_wrap #(
     .NUM_FLL        ( carfield_pkg::NumFll ),
     // Addresses are double-word aligned (0x2002_0000, 0x2002_0008, ...)
     .FLL_REG_OFFSET ( 3                    ),
@@ -421,6 +419,7 @@ module astral_wrap
     .clk_fll_e_i         ( clk_fll_e                              ),
     .fll_lock_o          ( fll_lock                               ),
     .fll_pwd_i           ( fll_pwd                                ),
+    .fll_ret_i           ( fll_ret                                ),
     .fll_test_mode_i     ( fll_test_mode                          ),
     .fll_scan_e_i        ( fll_scan_e                             ),
     .fll_scan_in_i       ( fll_scan_in                            ),
@@ -478,9 +477,7 @@ module astral_wrap
   //////////////////
 
   carfield      #(
-    .Cfg         ( Cfg         ),
-    .HypNumPhys  ( HypNumPhys  ),
-    .HypNumChips ( HypNumChips ),
+    .Cfg         ( Cfg ),
     .reg_req_t   ( carfield_reg_req_t ),
     .reg_rsp_t   ( carfield_reg_rsp_t )
   ) i_dut (
