@@ -124,7 +124,7 @@ packages:
       Git: https://github.com/AlSaqr-platform/can_bus.git
     dependencies: []
   cheshire:
-    revision: b975fe3b71358c95205f53f86e27512ac37729c1
+    revision: 389d6636b92115dc4cc5cc8ba49f31a079cb7d7a
     version: null
     source:
       Git: https://github.com/FondazioneChipsIT/cheshire.git
@@ -220,7 +220,7 @@ packages:
       Git: https://github.com/pulp-platform/cv32e40x.git
     dependencies: []
   cva6:
-    revision: 67464fc118a8da941478584e55751b69f4a6823c
+    revision: 37530c7419fd0526120bdd8c71eb21f94700864c
     version: null
     source:
       Git: https://github.com/FondazioneChipsIT/cva6.git
