@@ -6,7 +6,7 @@
 
 name: gitlab-ci
 
-on: [ ]
+on: [push, pull_request, workflow_dispatch]
 
 jobs:
   gitlab-ci:
@@ -15,7 +15,7 @@ jobs:
       - name: Check Gitlab CI
         uses: pulp-platform/pulp-actions/gitlab-ci@v1
         with:
-          domain: iis-git.ee.ethz.ch
-          repo: github-mirror/astral
+          domain: gitlab.chips.it
+          repo: digitalresearchline/githubmirrors/astral
           token: ${{ secrets.GITLAB_TOKEN }}
           poll-count: 2160
