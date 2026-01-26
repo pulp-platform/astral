@@ -12,7 +12,7 @@ TBENCH ?= tb_astral
 ## Get HyperRAM verification IP (VIP) for simulation
 $(CAR_TGT_DIR)/sim/src/hyp_vip:
 	rm -rf $@
-	cp -r /scratch/share/hyp_vip $@
+	git clone git@gitlab.chips.it:digitalresearchline/vips/hyp_vip.git $@
 
 CAR_SIM_ALL += $(CHS_ROOT)/target/sim/models/s25fs512s.v
 CAR_SIM_ALL += $(CHS_ROOT)/target/sim/models/24FC1025.v
