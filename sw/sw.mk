@@ -19,6 +19,13 @@ car-sw-all: car-sw-libs car-sw-tests
 .PRECIOUS: %.elf %.dtb
 .PHONY: car-sw-all car-sw-libs car-sw-headers car-sw-tests
 
+# ---- Simulation seed (override with `make FORCE_SEED=0x1234`) ----
+# default: seconds since epoch in hex (changes ad ogni invocazione di make)
+FORCE_SEED ?= $(shell printf "0x%016x" $(shell date +%s))
+
+# pass the define to the C compiler flags (CHS_SW_CCFLAGS is used in the rules)
+CHS_SW_CCFLAGS += -DFORCE_SEED=$(FORCE_SEED)
+
 # Libraries
 ifeq ($(shell echo $(PULPD_PRESENT)), 1)
 CAR_PULPD_BARE ?= -I$(CAR_SW_DIR)/tests/bare-metal/pulpd
