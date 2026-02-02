@@ -13,7 +13,7 @@ import cheshire_pkg::*;
 //L2, port 0
 localparam bit     L2Port0Enable = 1;
 localparam doub_bt L2Port0Base = 'h78000000;
-localparam doub_bt L2Port0Size = 'h00020000;
+localparam doub_bt L2Port0Size = 'h00080000;
 // L2, port 1
 localparam bit     L2Port1Enable = 1;
 localparam doub_bt L2Port1Base = L2Port0Base + L2Port0Size;
