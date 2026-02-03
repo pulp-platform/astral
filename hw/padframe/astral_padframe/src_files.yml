@@ -3,12 +3,12 @@
 astral_padframe:
   files:
     - src/pkg_astral_padframe.sv
-    - src/pkg_internal_astral_padframe_periph.sv
-    - src/astral_padframe_periph_config_reg_pkg.sv
-    - src/astral_padframe_periph_config_reg_top.sv
-    - src/astral_padframe_periph_pads.sv
-    - src/astral_padframe_periph_muxer.sv
-    - src/astral_padframe_periph.sv
+    - src/pkg_internal_astral_padframe_botl.sv
+    - src/astral_padframe_botl_config_reg_pkg.sv
+    - src/astral_padframe_botl_config_reg_top.sv
+    - src/astral_padframe_botl_pads.sv
+    - src/astral_padframe_botl_muxer.sv
+    - src/astral_padframe_botl.sv
     - src/astral_padframe.sv
   vlog_opts:
     - -L axi_lib

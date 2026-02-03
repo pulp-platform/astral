@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: SHL-0.51
 
 overrides:
+  hyperbus:             { git: "https://github.com/FondazioneChipsIt/hyperbus.git"        , rev: 1606b2b927c7c5e17356e006e00f755ebef9a2da } # branch: adr/scarv
   axi:                  { git: "https://github.com/pulp-platform/axi.git"                 , version: =0.39.8 }
   axi_riscv_atomics:    { git: "https://github.com/pulp-platform/axi_riscv_atomics.git"   , rev: 062bc36cbcca25629384e7f12efa6693273b3e07 } # branch: main
   apb:                  { git: "https://github.com/pulp-platform/apb.git"                 , version: =0.2.4 }

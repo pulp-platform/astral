@@ -1,0 +1,618 @@
+#####################################################
+#                                                   #
+#  ****** BOTTOM/LEFT: south and west sides ******  #
+#                                                   #
+#####################################################
+
+- name: config_tc_pad
+  description: "Config and internal signals instantation"
+  pad_type: CONFIG_TC_PAD_DEF
+  is_static: true
+
+- name: corner_{i}
+  multiple: 2
+  description: "Corner pad"
+  pad_type: PAD_CORNER
+  is_static: true
+
+
+
+#########################
+#                       #
+#  ****** SOUTH ******  #
+#                       #
+#########################
+
+########################################
+# POWER MANAGEMENT PADS - South
+########################################
+
+- name: pwr_mng_south
+  description: "Power management vertical pad cell"
+  pad_type: PAD_PWR_MNG_V
+  is_static: true
+
+########################################
+# I/O POWER - South
+########################################
+
+- name: vdd_io_{i}_v
+  multiple: 2
+  description: "I/O power domain vertical VDD pad"
+  pad_type: PAD_VDD_IO_V
+  is_static: true
+
+- name: vss_io_{i}_v
+  multiple: 2
+  description: "I/O power domain vertical VSS pad"
+  pad_type: PAD_VSS_IO_V
+  is_static: true
+
+########################################
+# CORE POWER - South
+########################################
+
+- name: vdd_core_{i}_v
+  multiple: 3
+  description: "Core power domain vertical VDD pad"
+  pad_type: PAD_VDD_CORE_V
+  is_static: true
+
+- name: vss_core_{i}_v
+  multiple: 2
+  description: "Core power domain vertical VSS pad"
+  pad_type: PAD_VSS_CORE_V
+  is_static: true
+
+########################################
+# SIGNALS - South
+########################################
+
+- name: ot_boot_mode
+  description: "OT boot mode"
+  pad_type: PAD_INPUT_V
+  is_static: true
+  connections:
+    pad2chip: ot_boot_mode_i
+    input_en: 1'b1
+
+- name: jtag_ot_tclk
+  description: "JTAG OT tclk"
+  pad_type: PAD_INPUT_V
+  is_static: true
+  connections:
+    pad2chip: jtag_ot_tclk_i
+    input_en: 1'b1
+    
+- name: jtag_ot_trst_n
+  description: "JTAG OT trst, active-low"
+  pad_type: PAD_INPUT_V
+  is_static: true
+  connections:
+    pad2chip: jtag_ot_trst_ni
+    input_en: 1'b1
+
+- name: jtag_ot_tms
+  description: "JTAG OT tms"
+  pad_type: PAD_INPUT_V
+  is_static: true
+  connections:
+    pad2chip: jtag_ot_tms_i
+    input_en: 1'b1
+    
+- name: jtag_ot_tdi
+  description: "JTAG OT tdi"
+  pad_type: PAD_INPUT_V
+  is_static: true
+  connections:
+    pad2chip: jtag_ot_tdi_i
+    input_en: 1'b1
+
+- name: jtag_ot_tdo
+  description: "JTAG OT tdo"
+  pad_type: PAD_OUTPUT_V
+  is_static: true
+  connections:
+    chip2pad: jtag_ot_tdo_o
+    output_en: 1'b1
+
+- name: ot_uart_tx
+  description: "UART OT tx"
+  pad_type: PAD_OUTPUT_V
+  is_static: true
+  connections:
+    chip2pad: ot_uart_tx_o
+    output_en: 1'b1
+
+- name: ot_uart_rx
+  description: "UART OT rx"
+  pad_type: PAD_INPUT_V
+  is_static: true
+  connections:
+    pad2chip: ot_uart_rx_i
+    input_en: 1'b1
+
+- name: spih_sck
+  description: "SPI sck"
+  pad_type: PAD_OUTPUT_V
+  is_static: true
+  connections:
+    chip2pad: spih_sck_o
+    output_en: 1'b1
+
+- name: spih_csb
+  description: "SPI csb"
+  pad_type: PAD_OUTPUT_V
+  is_static: true
+  connections:
+    chip2pad: spih_csb_o_1
+    output_en: 1'b1
+
+- name: spih_sd_{i}
+  multiple: 4
+  description: "SPI sd in/out"
+  pad_type: PAD_BIDIR_V
+  is_static: true
+  connections:
+    chip2pad: spih_sd_o_{i}
+    pad2chip: spih_sd_i_{i}
+    input_en: ~spih_sd_oen_i_{i}
+    output_en: spih_sd_oen_i_{i}
+
+- name: gpio_{2+i}
+  multiple: 2
+  description: "gpio in/out"
+  pad_type: PAD_BIDIR_V
+  is_static: true
+  connections:
+    chip2pad: gpio_v_o_{2+i}
+    pad2chip: gpio_v_i_{2+i}
+    input_en: ~gpio_v_oen_i_{2+i}
+    output_en: gpio_v_oen_i_{2+i}
+
+- name: spih_ot_sd_{1+i}
+  multiple: 3
+  description: "SPI OT sd in/out"
+  pad_type: PAD_BIDIR_V
+  is_static: true
+  connections:
+    chip2pad: spih_ot_sd_o_{1+i}
+    pad2chip: spih_ot_sd_i_{1+i}
+    input_en: ~spih_ot_sd_oen_i_{1+i}
+    output_en: spih_ot_sd_oen_i_{1+i}
+
+
+
+########################
+#                      #
+#  ****** WEST ******  #
+#                      #
+########################
+
+########################################
+# POWER MANAGEMENT PADS - West
+########################################
+
+- name: pwr_mng_west
+  description: "Power management horizontal pad cell"
+  pad_type: PAD_PWR_MNG_H
+  is_static: true
+
+########################################
+# I/O POWER - West
+########################################
+
+- name: vdd_io_{i}_h
+  multiple: 2
+  description: "I/O power domain horizontal VDD pad"
+  pad_type: PAD_VDD_IO_H
+  is_static: true
+
+- name: vss_io_{i}_h
+  multiple: 2
+  description: "I/O power domain horizontal VSS pad"
+  pad_type: PAD_VSS_IO_H
+  is_static: true
+
+########################################
+# CORE POWER - West
+########################################
+
+- name: vdd_core_{i}_h
+  multiple: 2
+  description: "Core power domain horizontal VDD pad"
+  pad_type: PAD_VDD_CORE_H
+  is_static: true
+
+- name: vss_core_{i}_h
+  multiple: 2
+  description: "Core power domain horizontal VSS pad"
+  pad_type: PAD_VSS_CORE_H
+  is_static: true
+
+########################################
+# SIGNALS - West
+########################################
+
+- name: ref_clk
+  description: "Reference clock"
+  pad_type: PAD_INPUT_H
+  is_static: true
+  connections:
+    pad2chip: ref_clk_i
+    input_en: 1'b1
+
+- name: fll_host
+  description: "FLL host clock"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: fll_host_clk_o
+    output_en: 1'b1
+
+- name: fll_secd
+  description: "FLL secd clock"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: fll_secd_clk_o
+    output_en: 1'b1
+
+- name: fll_bypass
+  description: "FLL bypass"
+  pad_type: PAD_INPUT_H
+  is_static: true
+  connections:
+    pad2chip: fll_bypass_i
+    input_en: 1'b1
+
+- name: pwr_on_rst_n
+  description: "Power on reset, active-low"
+  pad_type: PAD_INPUT_H
+  is_static: true
+  connections:
+    pad2chip: pwr_on_rst_ni
+    input_en: 1'b1
+
+- name: boot_mode_{i}
+  multiple: 2
+  description: "Boot mode"
+  pad_type: PAD_INPUT_H
+  is_static: true
+  connections:
+    pad2chip: boot_mode_i_{i}
+    input_en: 1'b1
+
+- name: secure_boot
+  description: "Secure boot"
+  pad_type: PAD_INPUT_H
+  is_static: true
+  connections:
+    pad2chip: secure_boot_i
+    input_en: 1'b1
+
+- name: jtag_tclk
+  description: "JTAG tclk"
+  pad_type: PAD_INPUT_H
+  is_static: true
+  connections:
+    pad2chip: jtag_tclk_i
+    input_en: 1'b1
+    
+- name: jtag_trst_n
+  description: "JTAG trst, active-low"
+  pad_type: PAD_INPUT_H
+  is_static: true
+  connections:
+    pad2chip: jtag_trst_ni
+    input_en: 1'b1
+
+- name: jtag_tms
+  description: "JTAG tms"
+  pad_type: PAD_INPUT_H
+  is_static: true
+  connections:
+    pad2chip: jtag_tms_i
+    input_en: 1'b1
+    
+- name: jtag_tdi
+  description: "JTAG tdi"
+  pad_type: PAD_INPUT_H
+  is_static: true
+  connections:
+    pad2chip: jtag_tdi_i
+    input_en: 1'b1
+
+- name: jtag_tdo
+  description: "JTAG tdo"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: jtag_tdo_o
+    output_en: 1'b1
+
+- name: uart_tx
+  description: "UART tx"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: uart_tx_o
+    output_en: 1'b1
+
+- name: uart_rx
+  description: "UART rx"
+  pad_type: PAD_INPUT_H
+  is_static: true
+  connections:
+    pad2chip: uart_rx_i
+    input_en: 1'b1
+
+- name: gpio_{i}
+  multiple: 2
+  description: "gpio in/out"
+  pad_type: PAD_BIDIR_H
+  is_static: true
+  connections:
+    chip2pad: gpio_v_o_{i}
+    pad2chip: gpio_v_i_{i}
+    input_en: ~gpio_v_oen_i_{i}
+    output_en: gpio_v_oen_i_{i}
+
+- name: spih_ot_sck
+  description: "SPI OT sck"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: spih_ot_sck_o
+    output_en: 1'b1
+
+- name: spih_ot_csb
+  description: "SPI OT csb"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: spih_ot_csb_o
+    output_en: 1'b1
+
+- name: spih_ot_sd_0
+  description: "SPI OT sd in/out"
+  pad_type: PAD_BIDIR_H
+  is_static: true
+  connections:
+    chip2pad: spih_ot_sd_o_0
+    pad2chip: spih_ot_sd_i_0
+    input_en: ~spih_ot_sd_oen_i_0
+    output_en: spih_ot_sd_oen_i_0
+
+
+
+###################################################
+#                                                 #
+#  ****** TOP/RIGHT: north and east sides ******  #
+#                                                 #
+###################################################
+
+# - name: config_tc_pad
+#   description: "Config and internal signals instantation"
+#   pad_type: CONFIG_TC_PAD_DEF
+#   is_static: true
+#   # connections:
+#   #   retcin: retcin_i
+
+- name: corner_{2+i}
+  multiple: 2
+  description: "Corner pad"
+  pad_type: PAD_CORNER
+  is_static: true
+
+#########################
+#                       #
+#  ****** NORTH ******  #
+#                       #
+#########################
+
+########################################
+# POWER MANAGEMENT PADS - North
+########################################
+
+- name: pwr_mng_north
+  description: "Power management vertical pad cell"
+  pad_type: PAD_PWR_MNG_V
+  is_static: true
+
+########################################
+# I/O POWER - North
+########################################
+
+- name: vdd_io_{2+i}_v
+  multiple: 3
+  description: "I/O power domain vertical VDD pad"
+  pad_type: PAD_VDD_IO_V
+  is_static: true
+
+- name: vss_io_{2+i}_v
+  multiple: 3
+  description: "I/O power domain vertical VSS pad"
+  pad_type: PAD_VSS_IO_V
+  is_static: true
+
+########################################
+# CORE POWER - North
+########################################
+
+- name: vdd_core_{3+i}_v
+  multiple: 3
+  description: "Core power domain vertical VDD pad"
+  pad_type: PAD_VDD_CORE_V
+  is_static: true
+
+- name: vss_core_{2+i}_v
+  multiple: 2
+  description: "Core power domain vertical VSS pad"
+  pad_type: PAD_VSS_CORE_V
+  is_static: true
+
+########################################
+# HYPERBUS - North
+########################################
+
+- name: hyper_1_cs_{i}_n
+  multiple: 2
+  description: "Hyperbus cs out, active-low"
+  pad_type: PAD_OUTPUT_V
+  is_static: true
+  connections:
+    chip2pad: hyper_cs_no_1_{i}
+    output_en: 1'b1
+
+- name: hyper_1_ck
+  description: "Hyperbus ck out"
+  pad_type: PAD_OUTPUT_V
+  is_static: true
+  connections:
+    chip2pad: hyper_ck_o_1
+    output_en: 1'b1
+
+- name: hyper_1_ck_n
+  description: "Hyperbus ck out, active-low"
+  pad_type: PAD_OUTPUT_V
+  is_static: true
+  connections:
+    chip2pad: hyper_ck_no_1
+    output_en: 1'b1
+
+- name: hyper_1_rwds
+  description: "Hyperbus rwds in/out"
+  pad_type: PAD_BIDIR_V
+  is_static: true
+  connections:
+    chip2pad: hyper_rwds_o_1
+    pad2chip: hyper_rwds_i_1
+    input_en: ~hyper_rwds_oen_i_1
+    output_en: hyper_rwds_oen_i_1
+
+- name: hyper_1_reset_n
+  description: "Hyperbus reset out, active-low"
+  pad_type: PAD_OUTPUT_V
+  is_static: true
+  connections:
+    chip2pad: hyper_reset_no_1
+    output_en: 1'b1
+
+- name: hyper_1_dq_{i}
+  multiple: 8
+  description: "Hyperbus dq in/out"
+  pad_type: PAD_BIDIR_V
+  is_static: true
+  connections:
+    chip2pad: hyper_dq_o_1_{i}
+    pad2chip: hyper_dq_i_1_{i}
+    input_en: ~hyper_dq_oen_i_1
+    output_en: hyper_dq_oen_i_1
+
+
+
+########################
+#                      #
+#  ****** EAST ******  #
+#                      #
+########################
+
+########################################
+# POWER MANAGEMENT PADS - East
+########################################
+
+- name: pwr_mng_east
+  description: "Power management horizontal pad cell"
+  pad_type: PAD_PWR_MNG_H
+  is_static: true
+
+########################################
+# I/O POWER - East
+########################################
+
+- name: vdd_io_{2+i}_h
+  multiple: 3
+  description: "I/O power domain horizontal VDD pad"
+  pad_type: PAD_VDD_IO_H
+  is_static: true
+
+- name: vss_io_{2+i}_h
+  multiple: 3
+  description: "I/O power domain horizontal VSS pad"
+  pad_type: PAD_VSS_IO_H
+  is_static: true
+
+########################################
+# CORE POWER - East
+########################################
+
+- name: vdd_core_{2+i}_h
+  multiple: 3
+  description: "Core power domain horizontal VDD pad"
+  pad_type: PAD_VDD_CORE_H
+  is_static: true
+
+- name: vss_core_{2+i}_h
+  multiple: 2
+  description: "Core power domain horizontal VSS pad"
+  pad_type: PAD_VSS_CORE_H
+  is_static: true
+
+########################################
+# HYPERBUS - East
+########################################
+
+- name: hyper_0_cs_{i}_n
+  multiple: 2
+  description: "Hyperbus cs out, active-low"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: hyper_cs_no_0_{i}
+    output_en: 1'b1
+
+- name: hyper_0_ck
+  description: "Hyperbus ck out"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: hyper_ck_o_0
+    output_en: 1'b1
+
+- name: hyper_0_ck_n
+  description: "Hyperbus ck out, active-low"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: hyper_ck_no_0
+    output_en: 1'b1
+
+- name: hyper_0_rwds
+  description: "Hyperbus rwds in/out"
+  pad_type: PAD_BIDIR_H
+  is_static: true
+  connections:
+    chip2pad: hyper_rwds_o_0
+    pad2chip: hyper_rwds_i_0
+    input_en: ~hyper_rwds_oen_i_0
+    output_en: hyper_rwds_oen_i_0
+
+- name: hyper_0_reset_n
+  description: "Hyperbus reset out, active-low"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: hyper_reset_no_0
+    output_en: 1'b1
+
+- name: hyper_0_dq_{i}
+  multiple: 8
+  description: "Hyperbus dq in/out"
+  pad_type: PAD_BIDIR_H
+  is_static: true
+  connections:
+    chip2pad: hyper_dq_o_0_{i}
+    pad2chip: hyper_dq_i_0_{i}
+    input_en: ~hyper_dq_oen_i_0
+    output_en: hyper_dq_oen_i_0

@@ -17,8 +17,8 @@ module astral_fixture;
 `ifdef SAFED_ENABLE
   import safety_island_pkg::*;
 `endif
-  import astral_padframe_periph_config_reg_pkg::*;
-  import pkg_internal_astral_padframe_periph::*;
+  import astral_padframe_botl_config_reg_pkg::*;
+  import pkg_internal_astral_padframe_botl::*;
 
   ///////////
   //  DPI  //
@@ -407,77 +407,99 @@ module astral_fixture;
   `CHESHIRE_TYPEDEF_ALL(, DutCfg)
 
 
-  astral_wrap i_dut (
+astral_wrap i_dut (
     // Reference clock
-    .pad_periph_ref_clk_pad         ( w_ext_clk ),
-    .pad_periph_fll_bypass_pad      ( w_bypass_pll ),
+    .pad_botl_ref_clk_pad          ( w_ext_clk ),
+    .pad_botl_fll_bypass_pad       ( w_bypass_pll ),
+    .pad_botl_fll_host_pad         ( ),
+    .pad_botl_fll_secd_pad         ( ),
+
     // POR
-    .pad_periph_pwr_on_rst_n_pad    ( w_pwr_on_rst_n ),
+    .pad_botl_pwr_on_rst_n_pad     ( w_pwr_on_rst_n ),
+
     // Bootmode
-    .pad_periph_test_mode_pad       ( pd_testmode_net ),
-    .pad_periph_boot_mode_0_pad     ( w_bootmode_hostd[0] ),
-    .pad_periph_boot_mode_1_pad     ( w_bootmode_hostd[1] ),
-    .pad_periph_ot_boot_mode_pad    ( bootmode_secd[0] ),
-    .pad_periph_secure_boot_pad     ( w_secure_boot ),
+    //.pad_periph_test_mode_pad     ( pd_testmode_net ),
+    .pad_botl_boot_mode_0_pad     ( w_bootmode_hostd[0] ),
+    .pad_botl_boot_mode_1_pad     ( w_bootmode_hostd[1] ),
+    .pad_botl_ot_boot_mode_pad    ( w_bootmode_secd ),
+    .pad_botl_secure_boot_pad     ( w_secure_boot ),
+
     // JTAG
-    .pad_periph_jtag_tclk_pad       ( w_jtag_hostd_tck ),
-    .pad_periph_jtag_trst_n_pad     ( w_jtag_hostd_trstn ),
-    .pad_periph_jtag_tms_pad        ( w_jtag_hostd_tms ),
-    .pad_periph_jtag_tdi_pad        ( w_jtag_hostd_tdi ),
-    .pad_periph_jtag_tdo_pad        ( w_jtag_hostd_tdo ),
+    .pad_botl_jtag_tclk_pad        ( w_jtag_hostd_tck ),
+    .pad_botl_jtag_trst_n_pad      ( w_jtag_hostd_trstn ),
+    .pad_botl_jtag_tms_pad         ( w_jtag_hostd_tms ),
+    .pad_botl_jtag_tdi_pad         ( w_jtag_hostd_tdi ),
+    .pad_botl_jtag_tdo_pad         ( w_jtag_hostd_tdo ),
+
     // JTAG OT
-    .pad_periph_jtag_ot_tclk_pad    ( w_jtag_secd_tck ),
-    .pad_periph_jtag_ot_trst_ni_pad ( w_jtag_secd_trstn ),
-    .pad_periph_jtag_ot_tms_pad     ( w_jtag_secd_tms ),
-    .pad_periph_jtag_ot_tdi_pad     ( w_jtag_secd_tdi ),
-    .pad_periph_jtag_ot_tdo_pad     ( w_jtag_secd_tdo ),
+    .pad_botl_jtag_ot_tclk_pad     ( w_jtag_secd_tck ),
+    .pad_botl_jtag_ot_trst_n_pad   ( w_jtag_secd_trstn ),
+    .pad_botl_jtag_ot_tms_pad      ( w_jtag_secd_tms ),
+    .pad_botl_jtag_ot_tdi_pad      ( w_jtag_secd_tdi ),
+    .pad_botl_jtag_ot_tdo_pad      ( w_jtag_secd_tdo ),
+
     // Hyper
-    .pad_periph_hyper_cs_0_n_pad    ( w_hyper_csn[0][0] ),
-    .pad_periph_hyper_cs_1_n_pad    ( w_hyper_csn[0][1] ),
-    .pad_periph_hyper_ck_pad        ( w_hyper_ck[0] ),
-    .pad_periph_hyper_ck_n_pad      ( w_hyper_ckn[0] ),
-    .pad_periph_hyper_rwds_pad      ( w_hyper_rwds[0] ),
-    .pad_periph_hyper_dq_0_pad      ( w_hyper_dq[0][0] ),
-    .pad_periph_hyper_dq_1_pad      ( w_hyper_dq[0][1] ),
-    .pad_periph_hyper_dq_2_pad      ( w_hyper_dq[0][2] ),
-    .pad_periph_hyper_dq_3_pad      ( w_hyper_dq[0][3] ),
-    .pad_periph_hyper_dq_4_pad      ( w_hyper_dq[0][4] ),
-    .pad_periph_hyper_dq_5_pad      ( w_hyper_dq[0][5] ),
-    .pad_periph_hyper_dq_6_pad      ( w_hyper_dq[0][6] ),
-    .pad_periph_hyper_dq_7_pad      ( w_hyper_dq[0][7] ),
-    .pad_periph_hyper_reset_n_pad   ( w_hyper_resetn[0] ),
-    // SPW
-    // .pad_periph_spw_data_in_pad     ( w_spw_data_in    ),
-    // .pad_periph_spw_strb_in_pad     ( w_spw_strobe_in  ),
-    // .pad_periph_spw_data_out_pad    ( w_spw_data_out   ),
-    // .pad_periph_spw_strb_out_pad    ( w_spw_strobe_out ),
+    .pad_botl_hyper_0_cs_0_n_pad    ( w_hyper_csn[0][0] ),
+    .pad_botl_hyper_0_cs_1_n_pad    ( w_hyper_csn[0][1] ),
+    .pad_botl_hyper_0_ck_pad        ( w_hyper_ck[0] ),
+    .pad_botl_hyper_0_ck_n_pad      ( w_hyper_ckn[0] ),
+    .pad_botl_hyper_0_rwds_pad      ( w_hyper_rwds[0] ),
+    .pad_botl_hyper_0_reset_n_pad   ( w_hyper_resetn[0] ),
+    .pad_botl_hyper_0_dq_0_pad      ( w_hyper_dq[0][0] ),
+    .pad_botl_hyper_0_dq_1_pad      ( w_hyper_dq[0][1] ),
+    .pad_botl_hyper_0_dq_2_pad      ( w_hyper_dq[0][2] ),
+    .pad_botl_hyper_0_dq_3_pad      ( w_hyper_dq[0][3] ),
+    .pad_botl_hyper_0_dq_4_pad      ( w_hyper_dq[0][4] ),
+    .pad_botl_hyper_0_dq_5_pad      ( w_hyper_dq[0][5] ),
+    .pad_botl_hyper_0_dq_6_pad      ( w_hyper_dq[0][6] ),
+    .pad_botl_hyper_0_dq_7_pad      ( w_hyper_dq[0][7] ),
+
+    .pad_botl_hyper_1_cs_0_n_pad    ( w_hyper_csn[1][0] ),
+    .pad_botl_hyper_1_cs_1_n_pad    ( w_hyper_csn[1][1] ),
+    .pad_botl_hyper_1_ck_pad        ( w_hyper_ck[1] ),
+    .pad_botl_hyper_1_ck_n_pad      ( w_hyper_ckn[1] ),
+    .pad_botl_hyper_1_rwds_pad      ( w_hyper_rwds[1] ),
+    .pad_botl_hyper_1_reset_n_pad   ( w_hyper_resetn[1] ),
+    .pad_botl_hyper_1_dq_0_pad      ( w_hyper_dq[1][0] ),
+    .pad_botl_hyper_1_dq_1_pad      ( w_hyper_dq[1][1] ),
+    .pad_botl_hyper_1_dq_2_pad      ( w_hyper_dq[1][2] ),
+    .pad_botl_hyper_1_dq_3_pad      ( w_hyper_dq[1][3] ),
+    .pad_botl_hyper_1_dq_4_pad      ( w_hyper_dq[1][4] ),
+    .pad_botl_hyper_1_dq_5_pad      ( w_hyper_dq[1][5] ),
+    .pad_botl_hyper_1_dq_6_pad      ( w_hyper_dq[1][6] ),
+    .pad_botl_hyper_1_dq_7_pad      ( w_hyper_dq[1][7] ),
+
     // UART
-    .pad_periph_uart_tx_out_pad     ( w_uart_hostd_tx ),
-    .pad_periph_uart_rx_in_pad      ( w_uart_hostd_rx ),
-    // Muxed pads
-    .pad_periph_muxed_v_00_pad      ( w_muxed_v_00 ),
-    .pad_periph_muxed_v_01_pad      ( w_muxed_v_01 ),
-    .pad_periph_muxed_v_02_pad      ( w_muxed_v_02 ),
-    .pad_periph_muxed_v_03_pad      ( w_muxed_v_03 ),
-    .pad_periph_muxed_v_04_pad      ( w_muxed_v_04 ),
-    .pad_periph_muxed_v_05_pad      ( w_muxed_v_05 ),
-    .pad_periph_muxed_v_06_pad      ( w_muxed_v_06 ),
-    .pad_periph_muxed_v_07_pad      ( w_muxed_v_07 ),
-    .pad_periph_muxed_v_08_pad      ( w_muxed_v_08 ),
-    .pad_periph_muxed_v_09_pad      ( w_muxed_v_09 ),
-    .pad_periph_muxed_v_10_pad      ( w_muxed_v_10 ),
-    .pad_periph_muxed_v_11_pad      ( w_muxed_v_11 ),
-    .pad_periph_muxed_v_12_pad      ( w_muxed_v_12 ),
-    .pad_periph_muxed_v_13_pad      ( w_muxed_v_13 ),
-    .pad_periph_muxed_v_14_pad      ( w_muxed_v_14 ),
-    .pad_periph_muxed_v_15_pad      ( w_muxed_v_15 ),
-    .pad_periph_muxed_v_16_pad      ( w_muxed_v_16 ),
-    .pad_periph_muxed_v_17_pad      ( w_muxed_v_17 ),
-    .pad_periph_muxed_h_00_pad      ( w_muxed_h_00 ),
-    .pad_periph_muxed_h_01_pad      ( w_muxed_h_01 ),
-    .pad_periph_muxed_h_02_pad      ( w_muxed_h_02 ),
-    .pad_periph_muxed_h_03_pad      ( w_muxed_h_03 )
-  );
+    .pad_botl_uart_tx_pad          ( w_uart_hostd_tx ),
+    .pad_botl_uart_rx_pad          ( w_uart_hostd_rx ),
+
+    // UART OT
+    .pad_botl_ot_uart_tx_pad       ( ),
+    .pad_botl_ot_uart_rx_pad       ( ),
+
+    // SPI
+    .pad_botl_spih_sck_pad          ( w_spi_hostd_sck ),
+    .pad_botl_spih_csb_pad          ( w_spi_hostd_csb ),
+    .pad_botl_spih_sd_0_pad         ( w_spi_hostd_sd[0] ),
+    .pad_botl_spih_sd_1_pad         ( w_spi_hostd_sd[1] ),
+    .pad_botl_spih_sd_2_pad         ( w_spi_hostd_sd[2] ),
+    .pad_botl_spih_sd_3_pad         ( w_spi_hostd_sd[3] ),
+
+    // SPI OT
+    .pad_botl_spih_ot_sck_pad       ( w_spi_secd_sck ),
+    .pad_botl_spih_ot_csb_pad       ( w_spi_secd_csb ),
+    .pad_botl_spih_ot_sd_0_pad      ( w_spi_secd_sd[0] ),
+    .pad_botl_spih_ot_sd_1_pad      ( w_spi_secd_sd[1] ),
+    .pad_botl_spih_ot_sd_2_pad      ( w_spi_secd_sd[2] ),
+    .pad_botl_spih_ot_sd_3_pad      ( w_spi_secd_sd[3] ),
+
+    // GPIO
+    .pad_botl_gpio_0_pad            ( w_gpio[0] ),
+    .pad_botl_gpio_1_pad            ( w_gpio[1] ),
+    .pad_botl_gpio_2_pad            ( w_gpio[2] ),
+    .pad_botl_gpio_3_pad            ( w_gpio[3] )
+);
+
 
   pulldown (pd_testmode_net);
 
@@ -487,7 +509,9 @@ module astral_fixture;
 
   `define PAD_MUX_REG_PATH i_dut.i_astral_padframe.i_periph.i_periph_muxer.s_reg2hw
 
+
   // SPI
+  /*
   assign mux_0_spih_sck = (`PAD_MUX_REG_PATH.muxed_v_00_mux_sel.q == PAD_MUX_GROUP_MUXED_V_00_SEL_SPI_SCK);
   assign mux_0_spih_csb_0 = (`PAD_MUX_REG_PATH.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_SPI_CSB_0);
   assign mux_0_spih_csb_1 = (`PAD_MUX_REG_PATH.muxed_v_02_mux_sel.q == PAD_MUX_GROUP_MUXED_V_02_SEL_SPI_CSB_1);
@@ -502,12 +526,15 @@ module astral_fixture;
   tranif1 tran_spih_sd_1 (w_muxed_v_04, w_spi_hostd_sd[1], mux_0_spih_sd_1);
   tranif1 tran_spih_sd_2 (w_muxed_v_05, w_spi_hostd_sd[2], mux_0_spih_sd_2);
   tranif1 tran_spih_sd_3 (w_muxed_v_06, w_spi_hostd_sd[3], mux_0_spih_sd_3);
+  */
+  
   pullup (w_spi_hostd_sck);
   pullup (w_spi_hostd_sd[0]);
   pullup (w_spi_hostd_sd[1]);
   pullup (w_spi_hostd_sd[2]);
   pullup (w_spi_hostd_sd[3]);
   // Ethernet
+  /*
   assign mux_0_eth_rxck = (`PAD_MUX_REG_PATH.muxed_v_07_mux_sel.q == PAD_MUX_GROUP_MUXED_V_07_SEL_ETHERNET_RXCK);
   assign mux_0_eth_rxctl = (`PAD_MUX_REG_PATH.muxed_v_08_mux_sel.q == PAD_MUX_GROUP_MUXED_V_08_SEL_ETHERNET_RXCTL);
   assign mux_0_eth_rxd_0 = (`PAD_MUX_REG_PATH.muxed_v_09_mux_sel.q == PAD_MUX_GROUP_MUXED_V_09_SEL_ETHERNET_RXD_0);
@@ -539,12 +566,16 @@ module astral_fixture;
   tranif1 tran_eth_mdc (w_muxed_h_02, w_eth_mdc, mux_0_eth_mdc);
   tranif1 tran_eth_rst_n (w_muxed_h_03, w_eth_rst, mux_0_eth_rst_n);
   assign eth_clk = i_dut.i_dut.eth_clk;
+  */
   // CAN
+  /*
   assign mux_1_can_rx = (`PAD_MUX_REG_PATH.muxed_v_00_mux_sel.q == PAD_MUX_GROUP_MUXED_V_00_SEL_CAN_RX);
   assign mux_1_can_tx = (`PAD_MUX_REG_PATH.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_CAN_TX);
   tranif1 tran_can_rx (w_muxed_v_00, w_can_rx, mux_1_can_rx);
   tranif1 tran_can_tx (w_muxed_v_01, w_can_tx, mux_1_can_tx);
+  */
   // Serial Link
+  /*
   assign mux_1_slink_rcv_clk_i = (`PAD_MUX_REG_PATH.muxed_v_04_mux_sel.q == PAD_MUX_GROUP_MUXED_V_04_SEL_SERIAL_LINK_RCV_CLK_I);
   assign mux_1_slink_0_i = (`PAD_MUX_REG_PATH.muxed_v_05_mux_sel.q == PAD_MUX_GROUP_MUXED_V_05_SEL_SERIAL_LINK_I_0);
   assign mux_1_slink_1_i = (`PAD_MUX_REG_PATH.muxed_v_06_mux_sel.q == PAD_MUX_GROUP_MUXED_V_06_SEL_SERIAL_LINK_I_1);
@@ -581,11 +612,14 @@ module astral_fixture;
   tranif1 tran_slink_5_o (w_muxed_h_01, w_slink_hostd_to_vip[5], mux_1_slink_5_o);
   tranif1 tran_slink_6_o (w_muxed_h_02, w_slink_hostd_to_vip[6], mux_1_slink_6_o);
   tranif1 tran_slink_7_o (w_muxed_h_03, w_slink_hostd_to_vip[7], mux_1_slink_7_o);
+  */
   // I2C
+  /*
   assign mux_2_i2c_sda = (`PAD_MUX_REG_PATH.muxed_v_00_mux_sel.q == PAD_MUX_GROUP_MUXED_V_00_SEL_I2C_SDA);
   assign mux_2_i2c_scl = (`PAD_MUX_REG_PATH.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SCL);
   tranif1 tran_i2c_sda (w_muxed_v_00, w_i2c_hostd_sda, mux_2_i2c_sda);
   tranif1 tran_i2c_scl (w_muxed_v_01, w_i2c_hostd_scl, mux_2_i2c_scl);
+  */
   pullup (w_i2c_hostd_sda);
   pullup (w_i2c_hostd_scl);
   // Telecommand
@@ -624,6 +658,7 @@ module astral_fixture;
   // assign mux_2_obt_ext_clk = (`PAD_MUX_REG_PATH.muxed_h_03_mux_sel.q == PAD_MUX_GROUP_MUXED_H_03_SEL_OBT_EXT_CLK);
   // tranif1 tran_obt_ext_cl (w_muxed_h_03, w_obt_ext_clk, mux_2_obt_ext_clk);
   // SPI OT
+  /*
   assign mux_3_spih_ot_sck = (`PAD_MUX_REG_PATH.muxed_v_00_mux_sel.q == PAD_MUX_GROUP_MUXED_V_00_SEL_SPI_OT_SCK);
   assign mux_3_spih_ot_csb = (`PAD_MUX_REG_PATH.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_SPI_OT_CSB);
   assign mux_3_spih_ot_sd_0 = (`PAD_MUX_REG_PATH.muxed_v_02_mux_sel.q == PAD_MUX_GROUP_MUXED_V_02_SEL_SPI_OT_SD_0);
@@ -636,7 +671,9 @@ module astral_fixture;
   tranif1 tran_spih_ot_sd_1 (w_muxed_v_03, w_spi_secd_sd[1], mux_3_spih_ot_sd_1);
   tranif1 tran_spih_ot_sd_2 (w_muxed_v_04, w_spi_secd_sd[2], mux_3_spih_ot_sd_2);
   tranif1 tran_spih_ot_sd_3 (w_muxed_v_05, w_spi_secd_sd[3], mux_3_spih_ot_sd_3);
+  */
   // GPIO
+  /*
   assign mux_4_gpio_0 = (`PAD_MUX_REG_PATH.muxed_v_00_mux_sel.q == PAD_MUX_GROUP_MUXED_V_00_SEL_GPIO_IO_V_0);
   assign mux_4_gpio_1 = (`PAD_MUX_REG_PATH.muxed_v_01_mux_sel.q == PAD_MUX_GROUP_MUXED_V_01_SEL_GPIO_IO_V_1);
   assign mux_4_gpio_2 = (`PAD_MUX_REG_PATH.muxed_v_02_mux_sel.q == PAD_MUX_GROUP_MUXED_V_02_SEL_GPIO_IO_V_2);
@@ -681,6 +718,7 @@ module astral_fixture;
   tranif1 tran_gpio_19 (w_muxed_h_01, w_gpio[19], mux_4_gpio_19);
   tranif1 tran_gpio_20 (w_muxed_h_02, w_gpio[20], mux_4_gpio_20);
   tranif1 tran_gpio_21 (w_muxed_h_03, w_gpio[21], mux_4_gpio_21);
+  */
   
   for (genvar i = 0; i < 4; ++i) begin : gen_spih_sd_io
     pullup (w_spi_hostd_sd[i]);
@@ -945,7 +983,7 @@ module astral_fixture;
     @(posedge i_dut.fll_lock);
     @(posedge i_dut.clk_fll_out);
   endtask: wait_fll_lock
-
+  /*
   task automatic configure_sl_pad(ref bit jtag_check_write);
     chs_vip.jtag_write_reg32(PAD_CFG_ADDR + ASTRAL_PADFRAME_PERIPH_CONFIG_MUXED_V_04_MUX_SEL_OFFSET, PAD_MUX_GROUP_MUXED_V_04_SEL_SERIAL_LINK_RCV_CLK_I, jtag_check_write);
     chs_vip.jtag_write_reg32(PAD_CFG_ADDR + ASTRAL_PADFRAME_PERIPH_CONFIG_MUXED_V_05_MUX_SEL_OFFSET, PAD_MUX_GROUP_MUXED_V_05_SEL_SERIAL_LINK_I_0, jtag_check_write);
@@ -981,5 +1019,19 @@ module astral_fixture;
     chs_vip.jtag_write_reg32(PAD_CFG_ADDR + ASTRAL_PADFRAME_PERIPH_CONFIG_MUXED_V_00_MUX_SEL_OFFSET, PAD_MUX_GROUP_MUXED_V_00_SEL_I2C_SDA, jtag_check_write);
     chs_vip.jtag_write_reg32(PAD_CFG_ADDR + ASTRAL_PADFRAME_PERIPH_CONFIG_MUXED_V_01_MUX_SEL_OFFSET, PAD_MUX_GROUP_MUXED_V_01_SEL_I2C_SCL, jtag_check_write);
   endtask: configure_i2c_pad
+  */
+  /*
+  task automatic configure_sl_pad(ref bit jtag_check_write);
+    $display("[TB] configure_sl_pad: skipped (padframe mux removed)");
+  endtask
+
+  task automatic configure_spi_pad(ref bit jtag_check_write);
+    $display("[TB] configure_spi_pad: skipped (padframe mux removed)");
+  endtask
+
+  task automatic configure_i2c_pad(ref bit jtag_check_write);
+    $display("[TB] configure_i2c_pad: skipped (padframe mux removed)");
+  endtask
+  */
 
 endmodule: astral_fixture

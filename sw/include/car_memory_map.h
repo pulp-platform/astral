@@ -77,11 +77,10 @@ extern void *__base_l2;
 // #define CAR_FP_CLUSTER_PERIPHS_END_ADDR  unknown
 
 // HyperRAM
+//#define CAR_HYPERRAM_BASE_ADDR 0x80400000
+//#define CAR_HYPERRAM_END_ADDR  0x80BFFFFF
 #define CAR_HYPERRAM_BASE_ADDR 0x80400000
-//#define CAR_HYPERRAM_END_ADDR  0x813FF00F
-//#define CAR_HYPERRAM_END_ADDR  0x80C00000
-#define CAR_HYPERRAM_END_ADDR  0x80BFFFFF
-
+#define CAR_HYPERRAM_END_ADDR  0x82000000
 
 // Peripheral devices
 // from cheshire

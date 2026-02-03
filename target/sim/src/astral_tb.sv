@@ -18,8 +18,8 @@ module tb_astral;
   import carfield_pkg::*;
   import cheshire_pkg::*;
   import carfield_configuration::*;
-  import astral_padframe_periph_config_reg_pkg::*;
-  import pkg_internal_astral_padframe_periph::*;
+  import astral_padframe_botl_config_reg_pkg::*;
+  import pkg_internal_astral_padframe_botl::*;
 
   astral_fixture fix();
   bit jtag_check_write = 1'b0;
@@ -130,7 +130,7 @@ module tb_astral;
       // prevent the Verification IPs from triggering timing checks.
       if (preload_mode == 1) begin: gen_slink_hyperbus_cfg
         // Configure Serial link padframe
-        fix.configure_sl_pad(jtag_check_write);
+        //fix.configure_sl_pad(jtag_check_write);
 
         -> pad_configured;
         $display("[TB] INFO: Configuring Hyperbus through serial link.");
@@ -183,13 +183,13 @@ module tb_astral;
         $fatal(1, "Unsupported boot mode %d (SD Card)!", boot_mode);
       end else if (boot_mode == 2) begin
         // Configure SPI padframe
-        fix.configure_spi_pad(jtag_check_write);
+        //fix.configure_spi_pad(jtag_check_write);
         // Autonomous boot: Only poll return code
         $display("[TB] %t - Entering autonomous boot mode", $realtime);
         fix.chs_vip.jtag_wait_for_eoc(exit_code);
       end else begin
         // Configure I2C padframe
-        fix.configure_i2c_pad(jtag_check_write);
+        //fix.configure_i2c_pad(jtag_check_write);
         // Autonomous boot: Only poll return code
         $display("[TB] %t - Entering autonomous boot mode", $realtime);
         fix.chs_vip.jtag_wait_for_eoc(exit_code);
@@ -383,7 +383,7 @@ module tb_astral;
         // on the selected preload-mode
         if (pulpd_boot_mode == 1) begin: gen_pulpd_slink_cfg
           // Configure Serial link padframe
-          fix.configure_sl_pad(jtag_check_write);
+          //fix.configure_sl_pad(jtag_check_write);
 
           -> pad_configured;
           $display("[TB] %t - Enabling PULP cluster clock for stand-alone tests ", $realtime);

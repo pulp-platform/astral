@@ -14,3 +14,4 @@ synth_targs += -t cluster_standalone
 
 # bender defines
 synth_defs += -D SYNTHESIS
+synth_defs += -D GF22_FLL

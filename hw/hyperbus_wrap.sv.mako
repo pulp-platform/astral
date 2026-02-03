@@ -1,3 +1,31 @@
+<%
+  int_sig = range(4)
+  phys = ["phy0", "phy1"]
+  pins = ["cs_no", "ck_o", "ck_no", "rwds_o", "rwds_i", "rwds_oe_o", "dq_i", "dq_o", "dq_oe_o", "reset_no", "pad_cfg_o"]
+  pads = ["cs_n", "ck", "ck_n", "rwds", "dq", "reset_n"]  
+  chips = {n: [""] for n in pins + pads}
+  bits = {n: [""] for n in pins + pads}
+  chips["cs_no"] = chips["cs_n"] = range(2)
+  bits["dq_o"] = bits["dq_i"] = bits["dq"] = range(8)
+  bits["pad_cfg_o"] = range(8)
+  def loop_over(p):
+    items = []
+    for phy in phys:
+      for pin in p:
+        for chip in chips[pin]:
+          for bit in bits[pin]:
+            items.append((phy, pin, chip, bit))
+    return items
+%>\
+<%def name="pad_name(phy, pin, chip, bit)">\
+hyper_${phy}_${pin}${f"_{chip}" if chip!="" else ""}${f"_b{bit}" if bit!="" else ""}\
+</%def>\
+<%def name="hyp_name(phy, pin, chip, bit)">\
+hyper_${pin}[${phy.removeprefix("phy")}]${[chip] if chip!="" else ""}${[bit] if bit!="" else ""}\
+</%def>\
+<%def name="pad_conn(phy, pin, chip, bit)">\
+pad_hyper_${phy}_${pin}${f"_{chip}" if chip!="" else ""}${f"_b{bit}" if bit!="" else ""}_pad\
+</%def>\
 // Copyright 2023 ETH Zurich and University of Bologna.
 // Solderpad Hardware License, Version 0.51, see LICENSE for details.
 // SPDX-License-Identifier: SHL-0.51
@@ -79,38 +107,12 @@ module hyperbus_wrap
   output logic                        rbus_rsp_ready_o,
   output logic                        rbus_rsp_error_o,
   // Physical interace: HyperBus PADs
-  inout wire logic pad_config_tc_pad_internal_signals_0,
-  inout wire logic pad_config_tc_pad_internal_signals_1,
-  inout wire logic pad_config_tc_pad_internal_signals_2,
-  inout wire logic pad_config_tc_pad_internal_signals_3,
-  inout wire logic pad_hyper_phy0_cs_n_0_pad,
-  inout wire logic pad_hyper_phy0_cs_n_1_pad,
-  inout wire logic pad_hyper_phy0_ck_pad,
-  inout wire logic pad_hyper_phy0_ck_n_pad,
-  inout wire logic pad_hyper_phy0_rwds_pad,
-  inout wire logic pad_hyper_phy0_dq_b0_pad,
-  inout wire logic pad_hyper_phy0_dq_b1_pad,
-  inout wire logic pad_hyper_phy0_dq_b2_pad,
-  inout wire logic pad_hyper_phy0_dq_b3_pad,
-  inout wire logic pad_hyper_phy0_dq_b4_pad,
-  inout wire logic pad_hyper_phy0_dq_b5_pad,
-  inout wire logic pad_hyper_phy0_dq_b6_pad,
-  inout wire logic pad_hyper_phy0_dq_b7_pad,
-  inout wire logic pad_hyper_phy0_reset_n_pad,
-  inout wire logic pad_hyper_phy1_cs_n_0_pad,
-  inout wire logic pad_hyper_phy1_cs_n_1_pad,
-  inout wire logic pad_hyper_phy1_ck_pad,
-  inout wire logic pad_hyper_phy1_ck_n_pad,
-  inout wire logic pad_hyper_phy1_rwds_pad,
-  inout wire logic pad_hyper_phy1_dq_b0_pad,
-  inout wire logic pad_hyper_phy1_dq_b1_pad,
-  inout wire logic pad_hyper_phy1_dq_b2_pad,
-  inout wire logic pad_hyper_phy1_dq_b3_pad,
-  inout wire logic pad_hyper_phy1_dq_b4_pad,
-  inout wire logic pad_hyper_phy1_dq_b5_pad,
-  inout wire logic pad_hyper_phy1_dq_b6_pad,
-  inout wire logic pad_hyper_phy1_dq_b7_pad,
-  inout wire logic pad_hyper_phy1_reset_n_pad
+% for i in int_sig:
+  inout wire logic pad_config_tc_pad_internal_signals_${i},
+% endfor
+% for phy, pin, chip, bit in loop_over(pads):
+  inout wire logic ${pad_conn(phy, pin, chip, bit)}${"," if not loop.last else ""}
+% endfor  
 );
 
 reg_req_t   reg_req;
@@ -168,17 +170,9 @@ assign rbus_rsp_rdata_o     = reg_rsp.rdata;
 assign rbus_rsp_ready_o     = reg_rsp.ready;
 assign rbus_rsp_error_o     = reg_rsp.error;
 
-logic [NumPhys-1:0][NumChips-1:0] hyper_cs_no;
-logic [NumPhys-1:0] hyper_ck_o;
-logic [NumPhys-1:0] hyper_ck_no;
-logic [NumPhys-1:0] hyper_rwds_o;
-logic [NumPhys-1:0] hyper_rwds_i;
-logic [NumPhys-1:0] hyper_rwds_oe_o;
-logic [NumPhys-1:0][7:0] hyper_dq_i;
-logic [NumPhys-1:0][7:0] hyper_dq_o;
-logic [NumPhys-1:0] hyper_dq_oe_o;
-logic [NumPhys-1:0] hyper_reset_no;
-logic [NumPhys-1:0][7:0] hyper_pad_cfg_o;
+% for pin in pins:
+logic [NumPhys-1:0]${"[NumChips-1:0]" if len(chips[pin])>1 else ""}${f"[{len(bits[pin])-1}:0]" if len(bits[pin])>1 else ""} hyper_${pin};
+% endfor
 
 hyperbus           #(
   .NumChips         ( NumChips         ),
@@ -212,17 +206,9 @@ hyperbus           #(
   .axi_rsp_o        ( hyper_rsp          ),
   .reg_req_i        ( reg_req            ),
   .reg_rsp_o        ( reg_rsp            ),
-  .hyper_cs_no,
-  .hyper_ck_o,
-  .hyper_ck_no,
-  .hyper_rwds_o,
-  .hyper_rwds_i,
-  .hyper_rwds_oe_o,
-  .hyper_dq_i,
-  .hyper_dq_o,
-  .hyper_dq_oe_o,
-  .hyper_reset_no,
-  .hyper_pad_cfg_o
+% for pin in pins:
+  .hyper_${pin}${"," if not loop.last else ""}
+% endfor
 );
 
 pad_domain_topr_static_connection_signals_pad2soc_t pad2soc; //output
@@ -231,96 +217,27 @@ pad_domain_topr_static_connection_signals_soc2pad_t soc2pad; //input
 hyperbus_padframe_topr_pads i_hyperbus_padframe_topr_pads(
   .static_connection_signals_pad2soc(pad2soc),
   .static_connection_signals_soc2pad(soc2pad),
-  .pad_config_tc_pad_internal_signals_0,
-  .pad_config_tc_pad_internal_signals_1,
-  .pad_config_tc_pad_internal_signals_2,
-  .pad_config_tc_pad_internal_signals_3,
-  .pad_hyper_phy0_cs_n_0_pad,
-  .pad_hyper_phy0_cs_n_1_pad,
-  .pad_hyper_phy0_ck_pad,
-  .pad_hyper_phy0_ck_n_pad,
-  .pad_hyper_phy0_rwds_pad,
-  .pad_hyper_phy0_dq_b0_pad,
-  .pad_hyper_phy0_dq_b1_pad,
-  .pad_hyper_phy0_dq_b2_pad,
-  .pad_hyper_phy0_dq_b3_pad,
-  .pad_hyper_phy0_dq_b4_pad,
-  .pad_hyper_phy0_dq_b5_pad,
-  .pad_hyper_phy0_dq_b6_pad,
-  .pad_hyper_phy0_dq_b7_pad,
-  .pad_hyper_phy0_reset_n_pad,
-  .pad_hyper_phy1_cs_n_0_pad,
-  .pad_hyper_phy1_cs_n_1_pad,
-  .pad_hyper_phy1_ck_pad,
-  .pad_hyper_phy1_ck_n_pad,
-  .pad_hyper_phy1_rwds_pad,
-  .pad_hyper_phy1_dq_b0_pad,
-  .pad_hyper_phy1_dq_b1_pad,
-  .pad_hyper_phy1_dq_b2_pad,
-  .pad_hyper_phy1_dq_b3_pad,
-  .pad_hyper_phy1_dq_b4_pad,
-  .pad_hyper_phy1_dq_b5_pad,
-  .pad_hyper_phy1_dq_b6_pad,
-  .pad_hyper_phy1_dq_b7_pad,
-  .pad_hyper_phy1_reset_n_pad
+% for i in int_sig:
+  .pad_config_tc_pad_internal_signals_${i},
+% endfor
+% for phy, pin, chip, bit in loop_over(pads):
+  .${pad_conn(phy, pin, chip, bit)}${"," if not loop.last else ""}
+% endfor
 );
 
 // PAD input and output signals assignment
+<% pins_to_slip = [p for p in pins if p != "pad_cfg_o"] %>
+% for phy, pin, chip, bit in loop_over(pins_to_slip):
+  % if pin[-1] == "o":
+assign soc2pad.${pad_name(phy, pin, chip, bit)} = ${hyp_name(phy, pin, chip, bit)};
+  % else:
+assign ${hyp_name(phy, pin, chip, bit)} = pad2soc.${pad_name(phy, pin, chip, bit)};
+  % endif
+% endfor
 
-assign soc2pad.hyper_phy0_cs_no_0 = hyper_cs_no[0][0];
-assign soc2pad.hyper_phy0_cs_no_1 = hyper_cs_no[0][1];
-assign soc2pad.hyper_phy0_ck_o = hyper_ck_o[0];
-assign soc2pad.hyper_phy0_ck_no = hyper_ck_no[0];
-assign soc2pad.hyper_phy0_rwds_o = hyper_rwds_o[0];
-assign hyper_rwds_i[0] = pad2soc.hyper_phy0_rwds_i;
-assign soc2pad.hyper_phy0_rwds_oe_o = hyper_rwds_oe_o[0];
-assign hyper_dq_i[0][0] = pad2soc.hyper_phy0_dq_i_b0;
-assign hyper_dq_i[0][1] = pad2soc.hyper_phy0_dq_i_b1;
-assign hyper_dq_i[0][2] = pad2soc.hyper_phy0_dq_i_b2;
-assign hyper_dq_i[0][3] = pad2soc.hyper_phy0_dq_i_b3;
-assign hyper_dq_i[0][4] = pad2soc.hyper_phy0_dq_i_b4;
-assign hyper_dq_i[0][5] = pad2soc.hyper_phy0_dq_i_b5;
-assign hyper_dq_i[0][6] = pad2soc.hyper_phy0_dq_i_b6;
-assign hyper_dq_i[0][7] = pad2soc.hyper_phy0_dq_i_b7;
-assign soc2pad.hyper_phy0_dq_o_b0 = hyper_dq_o[0][0];
-assign soc2pad.hyper_phy0_dq_o_b1 = hyper_dq_o[0][1];
-assign soc2pad.hyper_phy0_dq_o_b2 = hyper_dq_o[0][2];
-assign soc2pad.hyper_phy0_dq_o_b3 = hyper_dq_o[0][3];
-assign soc2pad.hyper_phy0_dq_o_b4 = hyper_dq_o[0][4];
-assign soc2pad.hyper_phy0_dq_o_b5 = hyper_dq_o[0][5];
-assign soc2pad.hyper_phy0_dq_o_b6 = hyper_dq_o[0][6];
-assign soc2pad.hyper_phy0_dq_o_b7 = hyper_dq_o[0][7];
-assign soc2pad.hyper_phy0_dq_oe_o = hyper_dq_oe_o[0];
-assign soc2pad.hyper_phy0_reset_no = hyper_reset_no[0];
-assign soc2pad.hyper_phy1_cs_no_0 = hyper_cs_no[1][0];
-assign soc2pad.hyper_phy1_cs_no_1 = hyper_cs_no[1][1];
-assign soc2pad.hyper_phy1_ck_o = hyper_ck_o[1];
-assign soc2pad.hyper_phy1_ck_no = hyper_ck_no[1];
-assign soc2pad.hyper_phy1_rwds_o = hyper_rwds_o[1];
-assign hyper_rwds_i[1] = pad2soc.hyper_phy1_rwds_i;
-assign soc2pad.hyper_phy1_rwds_oe_o = hyper_rwds_oe_o[1];
-assign hyper_dq_i[1][0] = pad2soc.hyper_phy1_dq_i_b0;
-assign hyper_dq_i[1][1] = pad2soc.hyper_phy1_dq_i_b1;
-assign hyper_dq_i[1][2] = pad2soc.hyper_phy1_dq_i_b2;
-assign hyper_dq_i[1][3] = pad2soc.hyper_phy1_dq_i_b3;
-assign hyper_dq_i[1][4] = pad2soc.hyper_phy1_dq_i_b4;
-assign hyper_dq_i[1][5] = pad2soc.hyper_phy1_dq_i_b5;
-assign hyper_dq_i[1][6] = pad2soc.hyper_phy1_dq_i_b6;
-assign hyper_dq_i[1][7] = pad2soc.hyper_phy1_dq_i_b7;
-assign soc2pad.hyper_phy1_dq_o_b0 = hyper_dq_o[1][0];
-assign soc2pad.hyper_phy1_dq_o_b1 = hyper_dq_o[1][1];
-assign soc2pad.hyper_phy1_dq_o_b2 = hyper_dq_o[1][2];
-assign soc2pad.hyper_phy1_dq_o_b3 = hyper_dq_o[1][3];
-assign soc2pad.hyper_phy1_dq_o_b4 = hyper_dq_o[1][4];
-assign soc2pad.hyper_phy1_dq_o_b5 = hyper_dq_o[1][5];
-assign soc2pad.hyper_phy1_dq_o_b6 = hyper_dq_o[1][6];
-assign soc2pad.hyper_phy1_dq_o_b7 = hyper_dq_o[1][7];
-assign soc2pad.hyper_phy1_dq_oe_o = hyper_dq_oe_o[1];
-assign soc2pad.hyper_phy1_reset_no = hyper_reset_no[1];
-
-assign soc2pad.hyper_phy0_slew_en_o = hyper_pad_cfg_o[0][3];
-assign soc2pad.hyper_phy0_drive_strength_o = hyper_pad_cfg_o[0][1:0];
-assign soc2pad.hyper_phy1_slew_en_o = hyper_pad_cfg_o[1][3];
-assign soc2pad.hyper_phy1_drive_strength_o = hyper_pad_cfg_o[1][1:0];
+% for phy in phys:
+assign soc2pad.hyper_${phy}_slew_en_o = hyper_pad_cfg_o[${phy.removeprefix("phy")}][3];
+assign soc2pad.hyper_${phy}_drive_strength_o = hyper_pad_cfg_o[${phy.removeprefix("phy")}][1:0];
+% endfor
 
 endmodule: hyperbus_wrap

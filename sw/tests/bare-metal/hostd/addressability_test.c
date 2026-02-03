@@ -16,14 +16,18 @@
 #include "printf.h"
 
 #define N_SAMPLES 64
-#define INCREASE_ADDR 0x10000
+#define INCREASE_ADDR 0x100000
 //#define INCREASE_ADDR 0x2000
 //#define INCREASE_ADDR 0x1000
 //#define INCREASE_ADDR 0x400
 //#define INCREASE_ADDR 0x100 // 4 ore e 32 minuti
 #define DEFAULT_SEED 0xcaca5a5adeadbeef
 #define FEEDBACK 0x6c0000397f000032
-
+#define HYPERBUS_REG_BASE      ((uintptr_t)0x20008000U)
+#define HYPERBUS_CS0_BASE_OFFSET    0x30  // CS0 BASE
+#define HYPERBUS_CS0_END_OFFSET     0x34  // CS0 END
+#define HYPERBUS_CS1_BASE_OFFSET    0x38  // CS1 BASE 
+#define HYPERBUS_CS1_END_OFFSET     0x3C  // CS1 END
 
 uint64_t get_runtime_seed(void){
     #ifdef FORCE_SEED
@@ -150,11 +154,11 @@ int probe_range_lfsr_wwrr(volatile uintptr_t from, volatile uintptr_t to, int sa
     while (addr < to)
     {
         lfsr = lfsr_64bits(lfsr);
-        /*
+        
         if (i == 0) {
             printf("[WWRR] FIRST WRITE: addr=0x%lx lfsr=0x%lx\n", addr, lfsr);
         }
-        */
+        
         
         /*
         if (addr >= 0x80C00000) {
@@ -180,11 +184,11 @@ int probe_range_lfsr_wwrr(volatile uintptr_t from, volatile uintptr_t to, int sa
     while (addr < to)
     {
         lfsr = lfsr_64bits(lfsr);
-        /*
+        
         if (j == 0) {
             printf("[WWRR] FIRST READ:  addr=0x%lx lfsr_exp=0x%lx\n", addr, lfsr);
         }        
-        */
+        
 
         // read
         lfsr_read = readd(addr);
@@ -233,34 +237,137 @@ int probe_range_lfsr_wwrr(volatile uintptr_t from, volatile uintptr_t to, int sa
     return 0;
 }
 
+//int test_address_granularity(volatile uintptr_t base)
+//{
+//    uint64_t v0 = 0xAAAAAAAAAAAAAAAA;
+//    uint64_t v1 = 0xBBBBBBBBBBBBBBBB;
+//
+//    /* scrittura di riferimento */
+//    writed(v0, base);
+//    fence();
+//
+//    /* scrittura volutamente sovrapposta (+4) */
+//    writed(v1, base + 4);
+//    fence();
+//
+//    uint64_t r = readd(base);
+//
+//    printf("wrote @0x%lx and @0x%lx  base_read=0x%lx\n",
+//           base, base + 4, r);
+//
+//    if (r != v0) {
+//        printf("EXPECTED OVERLAP at +4 detected\n");
+//        return 1;   
+//    }
+//
+//    printf("WARNING: no overlap at +4 (unexpected)\n");
+//    return 0;      
+//}
+
 int test_address_granularity(volatile uintptr_t base)
 {
-    uint64_t v0 = 0xAAAAAAAAAAAAAAAA;
-    uint64_t v1 = 0xBBBBBBBBBBBBBBBB;
+    /* 4 valori distinti da usare nei test */
+    uint64_t values[4] = {
+        0xAAAAAAAAAAAAAAAAULL,
+        0xBBBBBBBBBBBBBBBBULL,
+        0xCCCCCCCCCCCCCCCCULL,
+        0xDDDDDDDDDDDDDDDDULL
+    };
 
-    /* scrittura di riferimento */
-    writed(v0, base);
+    /* scrittura e verifica del primo valore alla base */
+    writed(values[0], base);
     fence();
 
-    /* scrittura volutamente sovrapposta (+4) */
-    writed(v1, base + 4);
-    fence();
+    printf("BASE WRITE @0x%lx = 0x%lx\n", base, values[0]);
 
-    uint64_t r = readd(base);
+    /* loop di test su offset multipli di 8 byte */
+    for (int i = 1; i < 4; i++) {
+        uintptr_t addr = base + (i * 8);
 
-    printf("wrote @0x%lx and @0x%lx  base_read=0x%lx\n",
-           base, base + 4, r);
+        /* scrivi il valore i-esimo */
+        writed(values[i], addr);
+        fence();
 
-    if (r != v0) {
-        printf("EXPECTED OVERLAP at +4 detected\n");
-        return 1;   
+        /* leggi il valore alla base */
+        uint64_t r = readd(base);
+
+        /* stampa risultato */
+        printf("WRITE @+%2d (0x%lx) = 0x%lx  BASE_READ = 0x%lx\n",
+               i * 8, addr, values[i], r);
+
+        /* verifica overlap */
+        if (r != values[0]) {
+            printf("OVERLAP DETECTED starting at +%d\n", i * 8);
+            return 1;
+        }
     }
 
-    printf("WARNING: no overlap at +4 (unexpected)\n");
-    return 0;      
+    printf("NO OVERLAP detected for 8B increments\n");
+    return 0;
 }
 
+/* --- Hyperbus CS configuration using 32-bit writes (writew/readw) --- */
+/* Base e offset:
+   Hyperbus base: 0x20008000
+   offset 0x28 cs[0][0]: 80000000  writew
+   offset 0x30 cs[0][1]: 80800000  writew
+   offset 0x38 cs[1][0]: 81000000  writew
+   offset 0x40 cs[1][1]: 81800000  writew
+*/
 
+int configure_hyperbus_cs(void)
+{   
+    printf("START cs configuration\n");
+    uintptr_t base = HYPERBUS_REG_BASE;
+
+    /* Valori BASE/END consecutivi: ogni END è la BASE del CS successivo */
+    uint32_t cs0_base = 0x80000000U;
+    uint32_t cs0_end  = 0x81000000U;
+
+    uint32_t cs1_base = cs0_end;
+    uint32_t cs1_end  = 0x82000000U;
+
+    /* Scrivi i valori nei registri Hyperbus (32-bit writes) */
+    printf("START cs writing\n");
+    /* CS0 */
+    writew(cs0_base, base + HYPERBUS_CS0_BASE_OFFSET);
+
+    writew(cs0_end, base + HYPERBUS_CS0_END_OFFSET);
+
+    /* CS1 */
+    writew(cs1_base, base + HYPERBUS_CS1_BASE_OFFSET);
+
+    writew(cs1_end, base + HYPERBUS_CS1_END_OFFSET);
+
+    /* Barriera per assicurare che le scritture siano effettive prima delle letture */
+    fence();
+
+    /* Leggiamo indietro per verificare */
+    uint32_t r0 = readw(base + HYPERBUS_CS0_BASE_OFFSET);
+    uint32_t r1 = readw(base + HYPERBUS_CS0_END_OFFSET );
+    uint32_t r2 = readw(base + HYPERBUS_CS1_BASE_OFFSET);
+    uint32_t r3 = readw(base + HYPERBUS_CS1_END_OFFSET );
+
+    printf("HYPERBUS CS regs written/verified:\n");
+    printf(" CS0 BASE @0x%lx wrote=0x%08x read=0x%08x\n",
+           (unsigned long)(base + HYPERBUS_CS0_BASE_OFFSET), cs0_base, r0);
+    printf(" CS0 END  @0x%lx wrote=0x%08x read=0x%08x\n",
+           (unsigned long)(base + HYPERBUS_CS0_END_OFFSET), cs0_end, r1);
+
+    printf(" CS1 BASE @0x%lx wrote=0x%08x read=0x%08x\n",
+           (unsigned long)(base + HYPERBUS_CS1_BASE_OFFSET), cs1_base, r2);
+    printf(" CS1 END  @0x%lx wrote=0x%08x read=0x%08x\n",
+           (unsigned long)(base + HYPERBUS_CS1_END_OFFSET), cs1_end, r3);
+
+    /* Ritorna 0 se tutto ok, 1 se mismatch */
+    if (r0 != cs0_base || r1 != cs0_end ||
+        r2 != cs1_base || r3 != cs1_end) {
+        printf("ERROR: mismatch writing Hyperbus CS registers\n");
+        return 1;
+    }
+
+    return 0;
+}
 
 
 
@@ -276,13 +383,19 @@ int main(void) {
     // PULP Island
     car_enable_domain(CAR_PULP_RST);
 
+       /* --- configurazione Hyperbus CS registers --- */
+    if (configure_hyperbus_cs()) {
+        printf("configure_hyperbus_cs failed\n");
+        /* decidere se abortare o continuare */
+    }
+
     // Spatz Island
     // car_enable_domain(CAR_SPATZ_RST);
 
     uint32_t error = 0;
     uint32_t errors = 0;
-
-
+    
+    //printf("START");
     //errors = test_address_granularity(CAR_HYPERRAM_BASE_ADDR);
 
 
@@ -290,24 +403,26 @@ int main(void) {
     // (wrwr)
 
     // HyperRAM
-    
     error += probe_range_lfsr_wrwr((uint64_t *)CAR_HYPERRAM_BASE_ADDR, (uint64_t *)CAR_HYPERRAM_END_ADDR, N_SAMPLES);
 
     if (error) {
         printf("L3: WRWR failed.");
         errors += error;
         error = 0;
-    } 
+    }     
+    
+
 
     // HyperRAM
-    
     error += probe_range_lfsr_wwrr((uint64_t *)CAR_HYPERRAM_BASE_ADDR, (uint64_t *)CAR_HYPERRAM_END_ADDR, N_SAMPLES);
 
     if (error) {
         printf("L3: WWRR failed.");
         errors += error;
         error = 0;
-    } 
+    }     
+    
+
     
     return errors;
 }

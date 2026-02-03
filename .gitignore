@@ -200,3 +200,14 @@ pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python
 /nonfree/
+
+# Hyperbus PADFrame: auto-generated files not used in the flow
+hw/hyperbus_padframe/Bender.yml
+hw/hyperbus_padframe/include/hyperbus_padframe/assign.svh
+hw/hyperbus_padframe/ips_list.yml
+hw/hyperbus_padframe/src_files.yml
+hw/hyperbus_padframe/src/*
+!hw/hyperbus_padframe/src/*_pads.sv
+!hw/hyperbus_padframe/src/pkg_*.sv
+target/sim/vsim/*.bin
+target/sim/vsim/*.db

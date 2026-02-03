@@ -1,0 +1,128 @@
+########################################
+# POWER MANAGEMENT PADS
+########################################
+
+- name: config_tc_pad
+  description: "Config and internal signals instantation"
+  pad_type: CONFIG_TC_PAD_DEF
+  is_static: true
+
+- name: pad_pwr_mng
+  description: "Power management vertical pad cell"
+  pad_type: PAD_PWR_MNG_V
+  is_static: true
+
+########################################
+# I/O POWER
+########################################
+
+- name: pad_vdd_io_{2+i}_h
+  multiple: 3
+  description: "I/O power domain horizontal VDD pad"
+  pad_type: PAD_VDD_IO_H
+  is_static: true
+
+- name: pad_vdd_io_{2+i}_v
+  multiple: 3
+  description: "I/O power domain vertical VDD pad"
+  pad_type: PAD_VDD_IO_V
+  is_static: true
+
+- name: pad_vss_io_{2+i}_h
+  multiple: 3
+  description: "I/O power domain horizontal VSS pad"
+  pad_type: PAD_VSS_IO_H
+  is_static: true
+
+- name: pad_vss_io_{2+i}_v
+  multiple: 3
+  description: "I/O power domain vertical VSS pad"
+  pad_type: PAD_VSS_IO_V
+  is_static: true
+
+########################################
+# CORE POWER
+########################################
+
+- name: pad_vdd_core_{2+i}_h
+  multiple: 3
+  description: "Core power domain horizontal VDD pad"
+  pad_type: PAD_VDD_CORE_H
+  is_static: true
+
+- name: pad_vdd_core_{3+i}_v
+  multiple: 3
+  description: "Core power domain vertical VDD pad"
+  pad_type: PAD_VDD_CORE_V
+  is_static: true
+
+- name: pad_vss_core_{2+i}_h
+  multiple: 2
+  description: "Core power domain horizontal VSS pad"
+  pad_type: PAD_VSS_CORE_H
+  is_static: true
+
+- name: pad_vss_core_{2+i}_v
+  multiple: 2
+  description: "Core power domain vertical VSS pad"
+  pad_type: PAD_VSS_CORE_V
+  is_static: true
+
+
+########################################
+# HYPERBUS - EAST
+########################################
+
+- name: hyper_0_cs_{i}_n
+  multiple: 2
+  description: "Hyperbus cs out, active-low"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: hyper_cs_no_0_{i}
+    output_en: 1'b1
+
+- name: hyper_0_ck
+  description: "Hyperbus ck out"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: hyper_ck_o_0
+    output_en: 1'b1
+
+- name: hyper_0_ck_n
+  description: "Hyperbus ck out, active-low"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: hyper_ck_no_0
+    output_en: 1'b1
+
+- name: hyper_0_rwds
+  description: "Hyperbus rwds in/out"
+  pad_type: PAD_BIDIR_H
+  is_static: true
+  connections:
+    chip2pad: hyper_rwds_o_0
+    pad2chip: hyper_rwds_i_0
+    input_en: ~hyper_rwds_oen_i_0
+    output_en: hyper_rwds_oen_i_0
+
+- name: hyper_0_reset_n
+  description: "Hyperbus reset out, active-low"
+  pad_type: PAD_OUTPUT_H
+  is_static: true
+  connections:
+    chip2pad: hyper_reset_no_0
+    output_en: 1'b1
+
+- name: hyper_0_dq_{i}
+  multiple: 8
+  description: "Hyperbus dq in/out"
+  pad_type: PAD_BIDIR_H
+  is_static: true
+  connections:
+    chip2pad: hyper_dq_o_0_{i}
+    pad2chip: hyper_dq_i_0_{i}
+    input_en: ~hyper_dq_oen_i_0
+    output_en: hyper_dq_oen_i_0

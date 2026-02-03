@@ -100,15 +100,18 @@ sources:
   - hw/carfield_chip_pkg.sv
   - hw/regs/carfield_reg_pkg.sv
   - hw/regs/carfield_reg_top.sv
+  - hw/padframe/tc_pad_pkg.sv
   - hw/padframe/astral_padframe/src/pkg_astral_padframe.sv
-  - hw/padframe/astral_padframe/src/pkg_internal_astral_padframe_periph.sv
-  - hw/padframe/astral_padframe/src/astral_padframe_periph_config_reg_pkg.sv
-  - hw/padframe/astral_padframe/src/astral_padframe_periph_config_reg_top.sv
-  - hw/padframe/astral_padframe/src/astral_padframe_periph_pads.sv
-  - hw/padframe/astral_padframe/src/astral_padframe_periph_muxer.sv
-  - hw/padframe/astral_padframe/src/astral_padframe_periph.sv
+  - hw/hyperbus_padframe/src/pkg_hyperbus_padframe.sv
+  - hw/hyperbus_padframe/src/pkg_internal_hyperbus_padframe_topr.sv
+  - hw/hyperbus_padframe/src/hyperbus_padframe_topr_pads.sv
+  - hw/padframe/astral_padframe/src/pkg_internal_astral_padframe_botl.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_botl_config_reg_pkg.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_botl_config_reg_top.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_botl_pads.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_botl_muxer.sv
+  - hw/padframe/astral_padframe/src/astral_padframe_botl.sv
   - hw/padframe/astral_padframe/src/astral_padframe.sv
-  - hw/padframe/pad_behav.sv
   # Level 1
   - hw/cheshire_wrap.sv
   - hw/hyperbus_wrap.sv
@@ -118,6 +121,10 @@ sources:
   # Level 2
   - hw/carfield.sv
   - hw/astral_wrap.sv
+
+  - target: all(not(synthesis), not(tech_sim))
+    files:
+      - hw/padframe/tc_pad.sv
 
   - target: spatz
     files:
@@ -140,6 +147,7 @@ sources:
       - target/gf22/sourcecode/tc_sram.sv
       - target/gf22/sourcecode/fll_wrap.sv
       - target/gf22/sourcecode/configurable_delay.sv
+      - target/gf22/sourcecode/tc_pad.sv
 
   - target: tech_sim
     files:
@@ -160,26 +168,28 @@ sources:
       # - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_4096x76m4b4w0.v
       # - tech/sourcecode/macros/sram_sp_hse_rvt_mvt_16384x39m8b8w0.v
       # - tech/sourcecode/tc_sram.sv
+      - target/gf22/sourcecode/verilog/IN22FDX_GPIO18_10M3S40PI.v
+      - target/gf22/sourcecode/tc_pad.sv
       # FLL Model
-      - target/gf22/fll/FLL_digital/FLLPkg.vhd
-      - target/gf22/fll/FLL_digital/FLL_clk_divider.vhd
-      - target/gf22/fll/FLL_digital/FLL_clk_period_quantizer.vhd
-#      - target/gf22/fll/FLL_digital/FLL_clock_gated.gf22.vhd
-      - target/gf22/fll/FLL_digital/FLL_clock_gated.rtl.vhd
-      - target/gf22/fll/FLL_digital/FLL_dither_pattern_gen.vhd
-      - target/gf22/fll/FLL_digital/FLL_glitchfree_clkdiv.vhd
-      - target/gf22/fll/FLL_digital/FLL_glitchfree_clkmux.vhd
-      - target/gf22/fll/FLL_digital/FLL_loop_filter.vhd
-#      - target/gf22/fll/FLL_digital/FLL_mux.gf22.vhd
-      - target/gf22/fll/FLL_digital/FLL_mux.rtl.vhd
-      - target/gf22/fll/FLL_digital/FLL_reg.vhd
-      - target/gf22/fll/FLL_digital/FLL_settling_monitor.vhd
-      - target/gf22/fll/FLL_digital/FLL_synchroedge.vhd
-      - target/gf22/fll/FLL_digital/FLL_zerodelta.vhd
-      - target/gf22/fll/FLL_digital/FLL_digital.vhd
-      - target/gf22/fll/behavioral/gf22_DCO_model.tc.vhd
-      - target/gf22/fll/behavioral/gf22_FLL_model.vhd
-      - target/gf22/fll_wrap.sv
+      - target/gf22/sourcecode/fll/FLL_digital/FLLPkg.vhd
+      - target/gf22/sourcecode/fll/FLL_digital/FLL_clk_divider.vhd
+      - target/gf22/sourcecode/fll/FLL_digital/FLL_clk_period_quantizer.vhd
+#      - target/gf22/sourcecode/fll/FLL_digital/FLL_clock_gated.gf22.vhd
+      - target/gf22/sourcecode/fll/FLL_digital/FLL_clock_gated.rtl.vhd
+      - target/gf22/sourcecode/fll/FLL_digital/FLL_dither_pattern_gen.vhd
+      - target/gf22/sourcecode/fll/FLL_digital/FLL_glitchfree_clkdiv.vhd
+      - target/gf22/sourcecode/fll/FLL_digital/FLL_glitchfree_clkmux.vhd
+      - target/gf22/sourcecode/fll/FLL_digital/FLL_loop_filter.vhd
+#      - target/gf22/sourcecode/fll/FLL_digital/FLL_mux.gf22.vhd
+      - target/gf22/sourcecode/fll/FLL_digital/FLL_mux.rtl.vhd
+      - target/gf22/sourcecode/fll/FLL_digital/FLL_reg.vhd
+      - target/gf22/sourcecode/fll/FLL_digital/FLL_settling_monitor.vhd
+      - target/gf22/sourcecode/fll/FLL_digital/FLL_synchroedge.vhd
+      - target/gf22/sourcecode/fll/FLL_digital/FLL_zerodelta.vhd
+      - target/gf22/sourcecode/fll/FLL_digital/FLL_digital.vhd
+      - target/gf22/sourcecode/fll/behavioral/gf22_DCO_model.tc.vhd
+      - target/gf22/sourcecode/fll/behavioral/gf22_FLL_model.vhd
+      - target/gf22/sourcecode/fll_wrap.sv
       # PAD Model
       # - tech/sourcecode/pad/io_gppr_12lpplus_t18_mv08_mv18_fs18_rvt_dr.v
       # - tech/sourcecode/ptme_ram.sv

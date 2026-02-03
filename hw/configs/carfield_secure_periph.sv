@@ -86,7 +86,7 @@ localparam doub_bt PllCfgSize = 'h00001000;
 /**************************
  * HyperBus Configuration *
  **************************/
-localparam doub_bt NumHypPhys = 1;
+localparam doub_bt NumHypPhys = 2;
 localparam doub_bt NumHypChips = 2;
 
 endpackage

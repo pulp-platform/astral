@@ -1,0 +1,492 @@
+    1  vncserver
+    2  vncserver -list
+    3  quit
+    4  exdit
+    5  exit
+    6  ip a
+    7  ls
+    8  cd Desktop/
+    9  cd
+   10  cd Desktop/
+   11  cd existing_repo
+   12  mkdir gitlab_repo
+   13  cd gitlab_repo/
+   14  git remote add origin https://gitlab.chips.it/digitalresearchline/scar-v/nonfree.git
+   15  git
+   16  git clone 
+   17  git clone https://gitlab.chips.it/digitalresearchline/scar-v/gf22.git
+   18  nautilus .
+   19  nautilus . &
+   20  nautilus -q
+   21  jobs
+   22  kill %1
+   23  nautilus . &
+   24  jobs
+   25  kill %1
+   26  nautilus . &
+   27  ls ~/.ssh/authorized_keys
+   28  ll
+   29  cd /
+   30  ll
+   31  cd home
+   32  ls
+   33  cd lorenzo.crupi/
+   34  ls
+   35  ls ~/.ssh/authorized_keys
+   36  touch ~/.ssh/authorized_keys
+   37  ll
+   38  chmod 700 ~/.ssh
+   39  cd /
+   40  ll
+   41  cd home
+   42  cd lorenzo.crupi/
+   43  ls
+   44  cd Desktop/
+   45  cd ..
+   46  ls
+   47  module list
+   48  cd
+   49  ls
+   50  module
+   51  module list
+   52  module avail
+   53  cd Desktop/
+   54  module load questa/2025.3
+   55  nautilus . &
+   56  module list
+   57  jobs
+   58  module list
+   59  questa
+   60  questa/2025.3
+   61  vsim
+   62  sudo apt install -y   build-essential git python3 python3-pip cmake   flex bison libncurses5-dev libssl-dev   device-tree-compiler cargo rustc   gcc-riscv64-unknown-elf g++-riscv64-unknown-elf
+   63  git clone https://github.com/FondazioneChipsIT/astral.git
+   64  cd astral/
+   65  git checkout scarv
+   66  git submodule update --init --recursive
+   67  python3 -m venv venv
+   68  source venv/bin/activate
+   69  pip install --upgrade pip
+   70  pip install -r requirements.txt
+   71  cargo install bender
+   72  rustc --version
+   73  rustup update stable
+   74  source $HOME/.cargo/env
+   75  # installa rustup se non ce l'hai
+   76  curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+   77  rustc --version
+   78  source $HOME/.cargo/env
+   79  rustup update stable
+   80  rustup default stable
+   81  rustc --version
+   82  cargo install bender
+   83  which bender
+   84  bender --version
+   85  export RISCV=/path/to/riscv64-unknown-elf
+   86  export PATH=$RISCV/bin:$PATH
+   87  export BENDER=/home/you/.cargo/bin/bender
+   88  bender update
+   89  ssh-keygen -t ed25519 -C "Git key"
+   90  ssh-copy-id lorenzo.crupi@10.20.12.100
+   91  bender update
+   92  make car-all PYTHON=python3
+   93  make all PYTHON=python3
+   94  which bender
+   95  export BENDER=$HOME/.cargo/bin/bender
+   96  export PATH=$HOME/.cargo/bin:$PATH
+   97  bender update   # scarica IP / genera file necessari
+   98  make all PYTHON=python3
+   99  riscv64-unknown-elf-gcc --version
+  100  sudo apt install gcc-riscv64-unknown-elf g++-riscv64-unknown-elf
+  101  # spostati nella home o dove vuoi
+  102  cd ~/tools  # crea cartella se non esiste
+  103  mkdir -p ~/tools
+  104  cd ~/tools
+  105  # scarica toolchain prebuilt (esempio: GCC 12.2.0)
+  106  wget https://github.com/riscv/riscv-gnu-toolchain/releases/download/12.2.0-1/riscv64-unknown-elf-gcc-12.2.0-x86_64-linux.tar.gz
+  107  # estrai
+  108  tar -xvf riscv64-unknown-elf-gcc-12.2.0-x86_64-linux.tar.gz
+  109  nautilus . &
+  110  git clone https://github.com/riscv-collab/riscv-gnu-toolchain.git
+  111  cd riscv-gnu-toolchain
+  112  ./configure --prefix=$HOME/tools/riscv --enable-multilib
+  113  cd ..
+  114  nautilus . &
+  115  cd Desktop/
+  116  cd astral/
+  117  ls
+  118  module load gcc/15.1.0
+  119  which riscv64-unknown-elf-gcc
+  120  riscv64-unknown-elf-gcc --version
+  121  bender update
+  122  make all PYTHON=python3
+  123  module load gcc/15.1.0
+  124  which riscv64-unknown-elf-gcc
+  125  riscv64-unknown-elf-gcc --version
+  126  bender update
+  127  make all PYTHON=python3
+  128  make car-all PYTHON=python3
+  129  source env/env-iis.sh
+  130  bender update
+  131  cd ~/Desktop/astral/.bender/git/checkouts/opentitan-468b57a0efe6549a
+  132  git submodule update --init --recursive
+  133  cd ..
+  134  source env/env-iis.sh
+  135  bender update
+  136  make car-all PYTHON=python3
+  137  cd ~/Desktop/astral/.bender/git/checkouts/opentitan-468b57a0efe6549a
+  138  git submodule update --init --recursive
+  139  cd ~/Desktop/astral/.bender/git/checkouts/opentitan-468b57a0efe6549a
+  140  git config submodule.sw/tests/pulp-runtime.url https://github.com/FondazioneChipsIT/pulp-runtime.git
+  141  git config submodule.sw/tests/regression_tests.url https://github.com/FondazioneChipsIT/regression_tests.git
+  142  git submodule update --init --recursive
+  143  make car-all PYTHON=python3
+  144  cd ~/Desktop/astral
+  145  bender update
+  146  make car-all PYTHON=python3
+  147  history > ~/Desktop/history_terminal.txt
+  148  car-hw-init
+  149  make car-init-all
+  150  cd ..
+  151  cd /data
+  152  ls
+  153  mkdir lorenzo.crupi
+  154  ls
+  155  cd lorenzo.
+  156  cd lorenzo.crupi/
+  157  git clone https://github.com/FondazioneChipsIT/astral.git
+  158  cd astral
+  159  git checkout scarv
+  160  deactivate venv
+  161  source env/env-chips.sh 
+  162  make car-all 
+  163  module load bender
+  164  module list
+  165  module unload bender
+  166  module list
+  167  module load bender/0.28.2
+  168  make car-all 
+  169  make car-init
+  170  make car-init-all
+  171  make car-all 
+  172  make tech-init
+  173  history > ~/Desktop/history_terminal.txt
+  174  exit
+  175  cd astral/
+  176  nautilus . &
+  177  make car-all
+  178  module list
+  179  module load bender/0.28.2 
+  180  module load gcc/15.1.0 
+  181  make car-init-all
+  182  make car-all
+  183  make tech-init
+  184  make car-vsim-sim-build DEBUG=1 TECH_SIM=1
+  185  ls
+  186  cd /data
+  187  ls
+  188  cd lorenzo.crupi/
+  189  ls
+  190  cd astral/
+  191  source env/env-chips.sh 
+  192  make car-init-all
+  193  module list
+  194  make car-all
+  195  make tech-init
+  196  make car-vsim-sim-build DEBUG=1 TECH_SIM=1
+  197  module load questa/2025.3 
+  198  make car-vsim-sim-build DEBUG=1 TECH_SIM=1
+  199  source env/env-chips.sh
+  200  sw/tests/pulp-runtime/
+  201  make car-all PYTHON=python3
+  202  make car-vsim-sim-build DEBUG=1 TECH_SIM=1
+  203  nautilus . &
+  204  make car-vsim-sim-build DEBUG=1
+  205  make car-vsim-sim-build DEBUG=1 CHS_PRELMODE=0
+  206  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/helloworld.car.l2.elf DEBUG=1 CHS_PRELMODE=0
+  207  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/helloworld.car.l3.elf DEBUG=1 CHS_PRELMODE=0
+  208  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/helloworld.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  209  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/helloworld.car.spm.elf DEBUG=1 CHS_PRELMODE=0
+  210  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/helloworld.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  211  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/helloworld.car.l2.elf DEBUG=1 CHS_PRELMODE=0
+  212  make help
+  213  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  214  make all
+  215  make help
+  216  make sw
+  217  make sw-tests
+  218  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  219  make sw
+  220  make help
+  221  make car-all
+  222  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  223  pwd
+  224  ls
+  225  make car-all
+  226  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  227  make sw
+  228  make car-all
+  229  make car-init-all
+  230  make car-all
+  231  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  232  make car-all
+  233  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  234  make car-checkout-deps 
+  235  make car-all
+  236  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  237  make car-vsim-sim-clean
+  238  make car-init-all
+  239  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  240  make car-all
+  241  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  242  make car-vsim-sim-build
+  243  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  244  make car-vsim-sim-build DEBUG=1
+  245  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  246  make car-vsim-sim-clean
+  247  make car-init-all
+  248  make car-all
+  249  make car-vsim-sim-build DEBUG=1
+  250  history > /home/lorenzo.crupi/Desktop/history.txt
+  251  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  252  make car-vsim-sim-clean
+  253  make car-all
+  254  make car-vsim-sim-build DEBUG=1
+  255  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  256  make car-vsim-sim-clean
+  257  make car-all
+  258  make car-vsim-sim-build DEBUG=1
+  259  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  260  make car-vsim-sim-clean
+  261  make car-all
+  262  make car-vsim-sim-build DEBUG=1
+  263  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  264  make car-vsim-sim-clean
+  265  make car-all
+  266  make car-vsim-sim-build DEBUG=1
+  267  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  268  make car-vsim-sim-clean
+  269  make car-all
+  270  make car-vsim-sim-build DEBUG=1
+  271  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  272  make car-vsim-sim-clean
+  273  make car-all
+  274  make car-vsim-sim-build DEBUG=1
+  275  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  276  make car-vsim-sim-clean
+  277  make car-all
+  278  make car-vsim-sim-build DEBUG=1
+  279  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  280  make car-vsim-sim-clean
+  281  make car-all
+  282  make car-vsim-sim-build DEBUG=1
+  283  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  284  make car-vsim-sim-clean
+  285  make car-all
+  286  make car-vsim-sim-build DEBUG=1
+  287  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  288  make car-vsim-sim-clean
+  289  make car-all
+  290  make car-vsim-sim-build DEBUG=1
+  291  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  292  make car-vsim-sim-clean
+  293  make car-all
+  294  make car-vsim-sim-build DEBUG=1
+  295  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  296  jobs
+  297  make car-vsim-sim-clean
+  298  make car-all
+  299  make car-vsim-sim-build DEBUG=1
+  300  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  301  make car-vsim-sim-clean
+  302  make car-all
+  303  make car-vsim-sim-build DEBUG=1
+  304  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  305  make car-vsim-sim-clean
+  306  make car-all
+  307  make car-vsim-sim-build DEBUG=1
+  308  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  309  make car-vsim-sim-clean
+  310  make car-all
+  311  make car-vsim-sim-build DEBUG=1
+  312  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  313  make car-vsim-sim-clean
+  314  make car-all
+  315  make car-vsim-sim-build DEBUG=1
+  316  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  317  make car-vsim-sim-clean
+  318  make car-all
+  319  make car-vsim-sim-build DEBUG=1
+  320  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  321  make car-vsim-sim-clean
+  322  make car-all
+  323  make car-vsim-sim-build DEBUG=1
+  324  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  325  make car-vsim-sim-clean
+  326  make car-all
+  327  make car-vsim-sim-build DEBUG=1
+  328  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  329  make car-vsim-sim-clean
+  330  make car-all
+  331  make car-vsim-sim-build DEBUG=1
+  332  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  333  make car-vsim-sim-clean
+  334  make car-all
+  335  make car-vsim-sim-build DEBUG=1
+  336  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  337  make car-vsim-sim-clean
+  338  make car-all
+  339  make car-vsim-sim-build DEBUG=1
+  340  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  341  make car-vsim-sim-clean
+  342  make car-all
+  343  make car-vsim-sim-build DEBUG=1
+  344  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  345  make car-vsim-sim-clean
+  346  make car-all
+  347  make car-vsim-sim-build DEBUG=1
+  348  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  349  make car-vsim-sim-clean
+  350  make car-all
+  351  make car-vsim-sim-build DEBUG=1
+  352  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  353  make car-vsim-sim-clean
+  354  make car-all
+  355  make car-vsim-sim-build DEBUG=1
+  356  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  357  make car-vsim-sim-clean
+  358  make car-all
+  359  make car-vsim-sim-build DEBUG=1
+  360  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  361  make car-vsim-sim-clean
+  362  make car-all
+  363  make car-vsim-sim-build DEBUG=1
+  364  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  365  make car-vsim-sim-clean
+  366  make car-all
+  367  make car-vsim-sim-build DEBUG=1
+  368  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  369  make car-vsim-sim-clean
+  370  make car-all
+  371  make car-vsim-sim-build DEBUG=1
+  372  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  373  make car-vsim-sim-clean
+  374  make car-all
+  375  make car-vsim-sim-build DEBUG=1
+  376  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  377  make car-vsim-sim-clean
+  378  make car-all
+  379  make car-vsim-sim-build DEBUG=1
+  380  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  381  ./run_car_sim.sh 
+  382  git branch
+  383  git config
+  384  git config --global --list
+  385  git config --global user.email "lorenzo.crupi@chips.it"
+  386  git config --global --list
+  387  ./run_car_sim.sh 
+  388  jobs
+  389  kill 1
+  390  jobs
+  391  kill %1
+  392  ./run_car_sim.sh 
+  393  pwd
+  394  ls
+  395  nano run_car_sim.sh 
+  396  1
+  397  python 
+  398  py
+  399  py3
+  400  python3
+  401  nano run_car_sim.sh 
+  402   TBENCH=astral_wrap
+  403   source env/env-chips.sh
+  404  make car-vsim-sim-clean
+  405  make car-all
+  406  #make car-vsim-sim-build DEBUG=1
+  407  make car-vsim-sim-build DEBUG=1 TBENCH=astral_wrap
+  408  git branch
+  409  make car-vsim-sim-build DEBUG=1 TBENCH=astral_wrap
+  410* 
+  411   source env/env-chips.sh
+  412  source env/env-chips.sh
+  413  git status
+  414  ls
+  415  cd target/
+  416  ls
+  417  nautilus . &
+  418  cd ..
+  419  source env/env-chips.sh
+  420  make car-vsim-sim-clean
+  421  make car-all
+  422  make car-vsim-sim-build DEBUG=1 TBENCH=astral_wrap
+  423  bender update
+  424  source env/env-chips.sh
+  425  make car-vsim-sim-clean
+  426  make car-all
+  427  make car-vsim-sim-build DEBUG=1 TBENCH=astral_wrap
+  428  make car-vsim-sim-build DEBUG=1
+  429  source env/env-chips.sh
+  430  make car-vsim-sim-clean
+  431  make car-all
+  432  make car-vsim-sim-build DEBUG=1
+  433  source env/env-chips.sh
+  434  make car-vsim-sim-clean
+  435  make car-all
+  436  make car-vsim-sim-build DEBUG=1
+  437  source env/env-chips.sh
+  438  make car-vsim-sim-clean
+  439  make car-all
+  440  make car-vsim-sim-build DEBUG=1
+  441  grep -R "ASTRAL_PADFRAME_PERIPH_CONFIG_MUXED_V_04_MUX_SEL_OFFSET" -n .
+  442  ource env/env-chips.sh
+  443  make car-vsim-sim-clean
+  444  make car-all
+  445  make car-vsim-sim-build DEBUG=1
+  446  source env/env-chips.sh
+  447  make car-vsim-sim-clean
+  448  make car-all
+  449  make car-vsim-sim-build DEBUG=1
+  450  source env/env-chips.sh
+  451  make car-vsim-sim-clean
+  452  make car-all
+  453  make car-vsim-sim-build DEBUG=1
+  454  source env/env-chips.sh
+  455  make car-vsim-sim-clean
+  456  make car-all
+  457  make car-vsim-sim-build DEBUG=1
+  458  source env/env-chips.sh
+  459  make car-vsim-sim-clean
+  460  make car-all
+  461  make car-vsim-sim-build DEBUG=1
+  462  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf DEBUG=1 CHS_PRELMODE=0
+  463  make car-vsim-sim-run   CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf   DEBUG=live   CHS_PRELMODE=0
+  464  ./run_car_sim.sh 
+  465  jobs
+  466  kill -9 %1
+  467  ls
+  468  make sw/tests/bare-metal/hostd/addressability_test.car.spm.elf 
+  469  make -B sw/tests/bare-metal/hostd/addressability_test.car.spm.elf 
+  470  make car-vsim-sim-run   CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.spm.elf   DEBUG=live   CHS_PRELMODE=0
+  471  make -B sw/tests/bare-metal/hostd/addressability_test.car.dram.elf 
+  472  make car-vsim-sim-run   CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf   DEBUG=live   CHS_PRELMODE=0
+  473  make -B sw/tests/bare-metal/hostd/addressability_test.car.dram.elf 
+  474  make car-vsim-sim-run   CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf   DEBUG=live   CHS_PRELMODE=0
+  475  make -B sw/tests/bare-metal/hostd/addressability_test.car.dram.elf 
+  476  make car-vsim-sim-run   CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf   DEBUG=live   CHS_PRELMODE=0
+  477  make -B sw/tests/bare-metal/hostd/addressability_test.car.dram.elf 
+  478  make car-vsim-sim-run   CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf   DEBUG=live   CHS_PRELMODE=0
+  479  make -B sw/tests/bare-metal/hostd/addressability_test.car.dram.elf 
+  480  make car-vsim-sim-run   CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf   DEBUG=live   CHS_PRELMODE=0
+  481* ls sw/tests/bare-metal/hostd/addressability_test.car.spm.elf 
+  482  make car-vsim-sim-run   CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf   DEBUG=live   CHS_PRELMODE=0
+  483  make -B sw/tests/bare-metal/hostd/addressability_test.car.spm.elf 
+  484  make car-vsim-sim-run   CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.spm.elf   DEBUG=live   CHS_PRELMODE=0
+  485  source env/env-chips.sh
+  486  make car-vsim-sim-clean
+  487  make car-all
+  488  make car-vsim-sim-build DEBUG=1
+  489  make car-vsim-sim-run CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.spm.elf DEBUG=live CHS_PRELMODE=0
+  490  make -B sw/tests/bare-metal/hostd/addressability_test.car.dram.elf 
+  491  make car-vsim-sim-run   CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf   DEBUG=live   CHS_PRELMODE=0
+  492  history > history.txt

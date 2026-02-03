@@ -1,0 +1,89 @@
+# Copyright 2026 Fondazione Chips-IT.
+# Licensed under the Apache License, Version 2.0, see LICENSE for details.
+# SPDX-License-Identifier: Apache-2.0
+
+manifest_version: 3
+rtl_templates:
+  toplevel_sv_package:
+    name: SV package
+    target_file_name: pkg_{padframe.name}.sv
+    template: templates/rtl_templates/pkg_padframe.sv.mako
+    skip_generation: false
+  pad_domain_top:
+    name: Paddomain module {pad_domain.name}
+    target_file_name: '{padframe.name}_{pad_domain.name}.sv'
+    template: templates/rtl_templates/pad_domain.sv.mako
+    skip_generation: false
+  pad_inst_module:
+    name: Pad instantiation module {pad_domain.name}
+    target_file_name: '{padframe.name}_{pad_domain.name}_pads.sv'
+    template: templates/rtl_templates/pads.sv.mako
+    skip_generation: false
+  internal_pkg:
+    name: Internal package for {pad_domain.name}
+    target_file_name: pkg_internal_{padframe.name}_{pad_domain.name}.sv
+    template: templates/rtl_templates/pkg_pad_domain_internals.sv.mako
+    skip_generation: false
+  pad_mux_module:
+    name: Pad Multiplexer for {pad_domain.name}
+    target_file_name: '{padframe.name}_{pad_domain.name}_muxer.sv'
+    template: templates/rtl_templates/pad_multiplexer.sv.mako
+    skip_generation: false
+  regfile_hjson:
+    name: Register File Specification for {pad_domain.name}
+    target_file_name: '{padframe.name}_{pad_domain.name}_regs.hjson'
+    template: templates/rtl_templates/regfile.hjson.mako
+    skip_generation: false
+  toplevel_module:
+    name: Padframe Top Module
+    target_file_name: '{padframe.name}.sv'
+    template: templates/rtl_templates/padframe.sv.mako
+    skip_generation: false
+  assign_header_file:
+    name: Padframe assignment header file
+    target_file_name: assign.svh
+    template: templates/rtl_templates/assign.svh.mako
+    skip_generation: false
+  bender_project_file:
+    name: Bender.yml Project file
+    target_file_name: Bender.yml
+    template: templates/rtl_templates/Bender.yml.mako
+    skip_generation: false
+  ipapprox_src_files_yml:
+    name: IPApprox src_files.yml
+    target_file_name: src_files.yml
+    template: templates/rtl_templates/src_files.yml.mako
+    skip_generation: false
+  ipapprox_ips_list_yml:
+    name: IPApprox ips_list.yml
+    target_file_name: ips_list.yml
+    template: templates/rtl_templates/ips_list.yml.mako
+    skip_generation: false
+  fusesoc_core_file:
+    name: FuseSoC core file
+    target_file_name: '{padframe.name}.core'
+    template: templates/rtl_templates/FuseSoC.core.mako
+    skip_generation: false
+driver_templates:
+  regfile_hjson:
+    name: Register File Specification for {pad_domain.name}
+    target_file_name: '{padframe.name}_{pad_domain.name}_regs.hjson'
+    template: templates/driver_templates/regfile.hjson.mako
+    skip_generation: false
+  driver_header:
+    name: Driver header file
+    target_file_name: '{padframe.name}.h'
+    template: templates/driver_templates/driver.h.mako
+    skip_generation: false
+  driver_source:
+    name: Driver implementation file
+    target_file_name: '{padframe.name}.c'
+    template: templates/driver_templates/driver.c.mako
+    skip_generation: false
+doc_templates: {}
+constraints_templates:
+  case_analysis:
+    name: Set Case Analysis statements for padmultiplexer
+    target_file_name: '{padframe.name}_mode_{constraints_mode.name}.sdc'
+    template: templates/constraints_templates/set_case_analysis.sdc.mako
+    skip_generation: false
