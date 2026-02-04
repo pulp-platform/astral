@@ -44,6 +44,20 @@ module carfield_top_xilinx
 `endif
 `endif // USE_JTAG
 
+`ifdef USE_AUX_JTAG
+  input logic         jtag_aux_tck_i,
+  input logic         jtag_aux_tms_i,
+  input logic         jtag_aux_tdi_i,
+  output logic        jtag_aux_tdo_o,
+`ifdef USE_JTAG_TRSTN
+  input logic         jtag_aux_trst_ni,
+`endif
+`ifdef USE_JTAG_VDDGND
+  output logic        jtag_aux_vdd_o,
+  output logic        jtag_aux_gnd_o,
+`endif
+`endif // USE_AUX_JTAG
+
 `ifdef USE_I2C
   inout wire          i2c_scl_io,
   inout wire          i2c_sda_io,
@@ -185,10 +199,18 @@ module carfield_top_xilinx
 `ifdef USE_JTAG_VDDGND
   assign jtag_vdd_o  = '1;
   assign jtag_gnd_o  = '0;
+`ifdef USE_AUX_JTAG
+  assign jtag_aux_vdd_o = '1;
+  assign jtag_aux_gnd_o = '0;
+`endif
 `endif
 `ifndef USE_JTAG_TRSTN
   logic jtag_trst_ni;
   assign jtag_trst_ni = '1;
+`ifdef USE_AUX_JTAG
+  logic jtag_aux_trst_ni;
+  assign jtag_aux_trst_ni = '1;
+`endif
 `endif
 
   //////////////////
@@ -547,12 +569,20 @@ module carfield_top_xilinx
       .jtag_tdo_o                (jtag_tdo_o),
       .jtag_tdo_oe_o             (),
       // Secure Subsystem JTAG Interface
+`ifdef USE_AUX_JTAG
+      .jtag_ot_tck_i             (jtag_aux_tck_i),
+      .jtag_ot_trst_ni           (jtag_aux_trst_ni),
+      .jtag_ot_tms_i             (jtag_aux_tms_i),
+      .jtag_ot_tdi_i             (jtag_aux_tdi_i),
+      .jtag_ot_tdo_o             (jtag_aux_tdo_o),
+      .jtag_ot_tdo_oe_o          (),
+`else
       .jtag_ot_tck_i             (jtag_tck_i),
       .jtag_ot_trst_ni           (jtag_trst_ni),
       .jtag_ot_tms_i             (jtag_tms_i),
       .jtag_ot_tdi_i             (jtag_tdi_i),
-      .jtag_ot_tdo_o             (), // Take in account when they are unactivated; FIXME
-      .jtag_ot_tdo_oe_o          (),
+      .jtag_ot_tdo_o             (),
+`endif
       // Safety Island JTAG Interface
       .jtag_safety_island_tck_i  (jtag_tck_i),
       .jtag_safety_island_trst_ni(jtag_trst_ni),

@@ -34,6 +34,11 @@ if {[info exists ::env(GEN_NO_HYPERBUS)] && ($::env(GEN_NO_HYPERBUS)==1) && ($::
     import_files -fileset constrs_1 -norecurse constraints/$::env(XILINX_BOARD)_ddr4.xdc
 }
 
+# Add the auxiliary JTAG interface pins
+if {[info exists ::env(GEN_AUX_JTAG)] && ($::env(GEN_AUX_JTAG)==1) && ($::env(XILINX_BOARD)=="vcu118")} {
+    import_files -fileset constrs_1 -norecurse constraints/$::env(XILINX_BOARD)_aux_jtag.xdc
+}
+
 # Ips selection
 set ips $::env(XILINX_IP_PATHS)
 read_ip $ips

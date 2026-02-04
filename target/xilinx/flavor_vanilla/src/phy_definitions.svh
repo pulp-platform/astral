@@ -7,6 +7,9 @@
 `ifdef TARGET_VCU118
   `define USE_RESET
   `define USE_JTAG
+  `ifdef GEN_AUX_JTAG
+    `define USE_AUX_JTAG
+  `endif
   // Hardwired VDD GND on the PMOD
   `define USE_QSPI
   `define USE_STARTUPE3

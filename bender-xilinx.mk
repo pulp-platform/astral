@@ -20,6 +20,7 @@ endef
 
 $(eval $(call check_enable_island,GEN_NO_HYPERBUS))
 $(eval $(call check_enable_island,GEN_EXT_JTAG))
+$(eval $(call check_enable_island,GEN_AUX_JTAG))
 
 ifeq ($(GEN_EXT_JTAG),0)
 xilinx_targs_common += -t bscane
