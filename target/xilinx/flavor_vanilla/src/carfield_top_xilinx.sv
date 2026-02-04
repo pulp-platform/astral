@@ -189,10 +189,14 @@ module carfield_top_xilinx
   // Tie off signals if no switches on the board
 `ifndef USE_SWITCHES
   logic         testmode_i;
-  logic [1:0]   boot_mode_i, boot_mode_safety_i;
+  logic         secure_boot_i;
+  logic [1:0]   boot_mode_i;
+  logic         boot_mode_secure_i, boot_mode_safety_i;
   assign testmode_i  = '0;
+  assign secure_boot_i  = '0;
   assign boot_mode_i = 2'b00;
-  assign boot_mode_safety_i = 2'b00;
+  assign boot_mode_secure_i = 1'b0;
+  assign boot_mode_safety_i = 1'b0;
 `endif
 
   // Give VDD and GND to JTAG
@@ -265,25 +269,33 @@ module carfield_top_xilinx
   // VIOs          //
   ///////////////////
 
-  logic [1:0] boot_mode, boot_mode_safety;
+  logic [1:0] boot_mode;
+  logic       boot_mode_secure, boot_mode_safety;
 
 `ifdef USE_VIO
   logic       vio_reset;
-  logic [1:0] vio_boot_mode, vio_boot_mode_safety;
+  logic       vio_secure_boot;
+  logic [1:0] vio_boot_mode;
+  logic       vio_boot_mode_secure, vio_boot_mode_safety;
 
   xlnx_vio i_xlnx_vio (
     .clk(soc_clk),
     .probe_out0(vio_reset),
-    .probe_out1(vio_boot_mode),
-    .probe_out2(vio_boot_mode_safety)
+    .probe_out1(vio_secure_boot),
+    .probe_out2(vio_boot_mode),
+    .probe_out3(vio_boot_mode_secure),
+    .probe_out4(vio_boot_mode_safety)
   );
 
   assign sys_rst = cpu_reset | vio_reset;
+  assign secure_boot = secure_boot_i | vio_secure_boot;
   assign boot_mode = boot_mode_i | vio_boot_mode;
+  assign boot_mode_secure = boot_mode_secure_i | vio_boot_mode_secure;
   assign boot_mode_safety = boot_mode_safety_i | vio_boot_mode_safety;
 `else
   assign sys_rst = cpu_reset;
   assign boot_mode = boot_mode_i;
+  assign boot_mode_secure = boot_mode_secure_i;
   assign boot_mode_safety = boot_mode_safety_i;
 `endif
 
@@ -589,7 +601,12 @@ module carfield_top_xilinx
       .jtag_safety_island_tms_i  (jtag_tms_i),
       .jtag_safety_island_tdi_i  (jtag_tdi_i),
       .jtag_safety_island_tdo_o  (jtag_safety_to_ot),
-      .bootmode_safe_isln_i      (boot_mode_safety),
+      // Secure Subsystem BOOT pins
+      .bootmode_ot_i(boot_mode_secure),
+      // Secure Boot Chain mode pin
+      .secure_boot_i(secure_boot),
+      // Safety Island BOOT pins
+      .bootmode_safe_isln_i(boot_mode_safety),
       // UART Interface
       .uart_tx_o,
       .uart_rx_i,
