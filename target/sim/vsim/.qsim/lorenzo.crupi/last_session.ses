@@ -1,6 +1,6 @@
 <!-- THIS IS TOOL GENERATED SESSION FILE. PLEASE DO NOT MODIFY THIS -->
 <!DOCTYPE visualizer_session>
-<session skip_do_file="0" version="3">
+<session version="3" skip_do_file="0">
  <app argc="27">
   <argv pos="0" value="qsim"/>
   <argv pos="1" value="+HYP_USER_PRELOAD=0"/>
@@ -8,7 +8,7 @@
   <argv pos="3" value="+SECURE_BOOT=0"/>
   <argv pos="4" value="+CHS_BOOTMODE=0"/>
   <argv pos="5" value="+CHS_PRELMODE=0"/>
-  <argv pos="6" value="+CHS_BINARY=/data/lorenzo.crupi/astral/sw/tests/bare-metal/hostd/addressability_test.car.dram.elf"/>
+  <argv pos="6" value="+CHS_BINARY=/data/lorenzo.crupi/astral/sw/tests/bare-metal/hostd/addressability_test.car.spm.elf"/>
   <argv pos="7" value="+CHS_IMAGE="/>
   <argv pos="8" value="+SECD_BINARY="/>
   <argv pos="9" value="+SECD_BOOTMODE=0"/>
@@ -28,317 +28,54 @@
   <argv pos="23" value="run -all"/>
   <argv pos="24" value="-qone"/>
   <argv pos="25" value="+designfile+design.bin"/>
-  <argv pos="26" value="+_sv_debug_+vsim+HYP_USER_PRELOAD=0+BYPASS_PLL=0+SECURE_BOOT=0+CHS_BOOTMODE=0+CHS_PRELMODE=0+CHS_BINARY=/data/lorenzo.crupi/astral/sw/tests/bare-metal/hostd/addressability_test.car.dram.elf+CHS_IMAGE=+SECD_BINARY=+SECD_BOOTMODE=0+SECD_IMAGE=+SAFED_BINARY=+SAFED_BOOTMODE=0+PULPD_BINARY=+PULPD_BOOTMODE=0+SPATZD_BINARY=+SPATZD_BOOTMODE=0+designfile+permissive-qwavedb=+signal+memory-suppress3999-suppress12088+UVM_NO_RELNOTES+notimingchecks+nospecify-t1pstb_astral_opt-qone-ngflow"/>
+  <argv pos="26" value="+_sv_debug_+vsim+HYP_USER_PRELOAD=0+BYPASS_PLL=0+SECURE_BOOT=0+CHS_BOOTMODE=0+CHS_PRELMODE=0+CHS_BINARY=/data/lorenzo.crupi/astral/sw/tests/bare-metal/hostd/addressability_test.car.spm.elf+CHS_IMAGE=+SECD_BINARY=+SECD_BOOTMODE=0+SECD_IMAGE=+SAFED_BINARY=+SAFED_BOOTMODE=0+PULPD_BINARY=+PULPD_BOOTMODE=0+SPATZD_BINARY=+SPATZD_BOOTMODE=0+designfile+permissive-qwavedb=+signal+memory-suppress3999-suppress12088+UVM_NO_RELNOTES+notimingchecks+nospecify-t1pstb_astral_opt-qone-ngflow"/>
  </app>
  <window_config>
   <expanded_mode enabled="false"/>
-  <dockareas top="0" bottom="235" right="583" left="476"/>
-  <taborder bottom="transcript+search+" right="signalclipboard+" left="structure+testbench+"/>
-  <activetab activewindow="transcript" bottom="transcript" right="signalclipboard" left="structure"/>
-  <window windowstate="" geometry="AdnQywADAAAAAAAAAAAAUQAAAdsAAAHUAAAAAAAAAFEAAAHbAAAB1AAAAAAAAAAAB4AAAAAAAAAAUQAAAdsAAAHU" dock_location="left" undocked="0" type="structure" visible="1"/>
-  <window windowstate="" geometry="AdnQywADAAD///ww///8iP///gv///4L///8MP///Ij///4L///+C/////8AAAAAB4D///ww///8iP///gv///4L" dock_location="left" undocked="0" type="testbench" visible="1"/>
-  <window windowstate="AAAA/wAAAAD9AAAAAAAAAkcAAAGMAAAABAAAAAQAAAAIAAAACPwAAAAA" geometry="AdnQywADAAAAAAJpAAAAUQAABK8AAAHzAAACaQAAAFEAAASvAAAB8wAAAAAAAAAAB4AAAAJpAAAAUQAABK8AAAHz" dock_location="right" undocked="0" type="signalclipboard" visible="1"/>
-  <window windowstate="" geometry="AdnQywADAAAAAAAAAAAB+gAABK8AAALkAAAAAAAAAfoAAASvAAAC5AAAAAAAAAAAB4AAAAAAAAAB+gAABK8AAALk" dock_location="bottom" undocked="0" type="transcript" visible="1"/>
-  <window windowstate="AAAA/wAAAAD9AAAAAAAABLAAAACQAAAABAAAAAQAAAAIAAAACPwAAAACAAAAAgAAAAEAAAAcAHQAYQByAGcAZQB0AF8AdABvAG8AbABiAGEAcgEAAAAA/////wAAAAAAAAAAAAAAAgAAAAEAAAAcAGYAaQBsAHQAZQByAF8AdABvAG8AbABiAGEAcgEAAAAA/////wAAAAAAAAAA" geometry="AdnQywADAAD///lc///9If///gv///4L///5XP///SH///4L///+C/////8AAAAAB4D///lc///9If///gv///4L" dock_location="bottom" undocked="0" type="search" visible="1"/>
-  <window windowstate="AAAA/wAAAAD9AAAAAwAAAAAAAAHcAAABo/wCAAAAAfwAAABRAAABowAAAQoBAAAe+gAAAAACAAAAAvsAAAASAHMAdAByAHUAYwB0AHUAcgBlAQAAAAD/////AAAAoAD////7AAAAJAB0AGUAcwB0AGIAZQBuAGMAaABVAHYAbQBXAGkAbgBDAGwAcwEAAAAA/////wAAAOsA////AAAAAQAAAkcAAAGj/AIAAAAB+wAAAB4AcwBpAGcAbgBhAGwAYwBsAGkAcABiAG8AYQByAGQBAAAAUQAAAaMAAADUAP///wAAAAMAAASwAAABCvwBAAAAAfwAAAAAAAAEsAAAAVMA////+gAAAAABAAAACfsAAAAUAHQAcgBhAG4AcwBjAHIAaQBwAHQBAAAAAP////8AAABiAP////sAAAAoAFcAYQB2AGUAMwBfAHcAYQB2AGUARgBvAHIAbQBXAGkAbgBDAGwAcwAAAAAA/////wAAAAAAAAAA+wAAACgAVwBhAHYAZQA0AF8AdwBhAHYAZQBGAG8AcgBtAFcAaQBuAEMAbABzAAAAAAD/////AAAAAAAAAAD7AAAAKABXAGEAdgBlADUAXwB3AGEAdgBlAEYAbwByAG0AVwBpAG4AQwBsAHMAAAAAAP////8AAAAAAAAAAPsAAAAMAHMAZQBhAHIAYwBoAQAAAAD/////AAABUwD////7AAAAKABXAGEAdgBlADYAXwB3AGEAdgBlAEYAbwByAG0AVwBpAG4AQwBsAHMDAAADJAAAAIUAAAQ0AAACaPsAAAAoAFcAYQB2AGUAMABfAHcAYQB2AGUARgBvAHIAbQBXAGkAbgBDAGwAcwMAAAMgAAABUwAABDQAAAJo+wAAACgAVwBhAHYAZQAxAF8AdwBhAHYAZQBGAG8AcgBtAFcAaQBuAEMAbABzAwAAADIAAABfAAAENAAAAmj7AAAAKABXAGEAdgBlADIAXwB3AGEAdgBlAEYAbwByAG0AVwBpAG4AQwBsAHMDAAABOQAAAYwAAAQ0AAACaAAAAIEAAAGjAAAABAAAAAQAAAAIAAAACPwAAAABAAAAAgAAAAYAAAAoAE0AYQBpAG4AXwBIAGkAcwB0AG8AcgB5AF8AVABvAG8AbABCAGEAcgEAAAAA/////wAAAAAAAAAAAAAAJABSAFQATABfAFcAaQBuAGQAbwB3AF8AVABvAG8AbABCAGEAcgEAAAB7/////wAAAAAAAAAAAAAAIgBkAHIAdgBSAGUAYwBWAGkAZQB3AFQAbwBvAGwAQgBhAHIBAAABEP////8AAAAAAAAAAAAAADYARwBJAEQAXwBTAHIAYwBWAGkAZQB3AF8ATwBwAHQAaQBvAG4AcwBfAFQAbwBvAGwAQgBhAHIBAAABqv////8AAAAAAAAAAAAAAEYARwBJAEQAXwBNAGEAaQBuAFMAcgBjAFcAaQBuAGQAbwB3AF8AVABpAG0AZQBTAGMAYQBsAGUAXwBUAG8AbwBsAEIAYQByAQAAAfP/////AAAAAAAAAAAAAAAiAEQAZQBiAHUAZwBnAGkAbgBnACAAVABvAG8AbABiAGEAcgEAAARL/////wAAAAAAAAAA" geometry="AdnQywADAAAAAAHZAAAAGwAABogAAANfAAAB2QAAAEAAAAaIAAADXwAAAAAAAAAAB4AAAAHZAAAAQAAABogAAANf" dock_location="right" undocked="0" type="rtl" visible="1"/>
-  <window windowstate="" geometry="" dock_location="left" undocked="0" type="files" visible="0"/>
-  <window windowstate="" geometry="" dock_location="right" undocked="0" type="variables" visible="0"/>
-  <window windowstate="" geometry="AdnQywADAAAAAAMgAAABLgAAB1MAAAO6AAADIAAAAVMAAAdTAAADugAAAAAAAAAAB4AAAAMgAAABUwAAB1MAAAO6" undocked="1" type="wave" visible="1"/>
-  <window windowstate="" geometry="AdnQywADAAAAAAAyAAAAOgAABGUAAALGAAAAMgAAAF8AAARlAAACxgAAAAAAAAAAB4AAAAAyAAAAXwAABGUAAALG" undocked="1" id="1" type="wave" visible="1"/>
-  <window windowstate="" geometry="AdnQywADAAAAAAE5AAABZwAABWwAAAPzAAABOQAAAYwAAAVsAAAD8wAAAAAAAAAAB4AAAAE5AAABjAAABWwAAAPz" undocked="1" id="2" type="wave" visible="1"/>
-  <window windowstate="" geometry="" dock_location="bottom" undocked="0" id="3" type="wave" visible="0"/>
-  <window windowstate="" geometry="" dock_location="bottom" undocked="0" id="4" type="wave" visible="0"/>
-  <window windowstate="" geometry="" dock_location="bottom" undocked="0" id="5" type="wave" visible="0"/>
-  <window windowstate="" geometry="AdnQywADAAAAAAMkAAAAYAAAB1cAAALsAAADJAAAAIUAAAdXAAAC7AAAAAAAAAAAB4AAAAMkAAAAhQAAB1cAAALs" undocked="1" id="6" type="wave" visible="1"/>
-  <window windowstate="" geometry="AdnQywADAAAAAAAAAAAAAAAAAHwAAAGBAAAAAAAAAAAAAAB8AAABgQAAAAAAAAAAB4AAAAAAAAAAAAAAAHwAAAGB" dock_location="center" undocked="0" firstVisibleLine="198" path="/data/lorenzo.crupi/astral/target/sim/src/astral_tb.sv" type="source" visible="1"/>
-  <window windowstate="" geometry="AdnQywADAAAAAAAAAAAAAAAAAHwAAAGBAAAAAAAAAAAAAAB8AAABgQAAAAAAAAAAB4AAAAAAAAAAAAAAAHwAAAGB" dock_location="center" undocked="0" id="1" firstVisibleLine="25" path="/tools/siemens/questa_2025.3/questasim/verilog_src/uvm-1.1d/src/uvm_pkg.sv" type="source" visible="0"/>
-  <window windowstate="" geometry="" dock_location="right" undocked="0" type="generallist" visible="0"/>
+  <dockareas bottom="235" left="411" right="648" top="0"/>
+  <taborder bottom="transcript+search+" left="structure+testbench+" right="signalclipboard+"/>
+  <activetab bottom="transcript" left="structure" right="signalclipboard" activewindow="transcript"/>
+  <window visible="1" dock_location="left" geometry="AdnQywADAAAAAAAAAAAAUQAAAZoAAAHzAAAAAAAAAFEAAAGaAAAB8wAAAAAAAAAAB4AAAAAAAAAAUQAAAZoAAAHz" undocked="0" type="structure" windowstate=""/>
+  <window visible="1" dock_location="left" geometry="AdnQywADAAD///xx///8af///gv///4L///8cf///Gn///4L///+C/////8AAAAAB4D///xx///8af///gv///4L" undocked="0" type="testbench" windowstate=""/>
+  <window visible="1" dock_location="right" geometry="AdnQywADAAAAAAIoAAAAUQAABK8AAAISAAACKAAAAFEAAASvAAACEgAAAAAAAAAAB4AAAAIoAAAAUQAABK8AAAIS" undocked="0" type="signalclipboard" windowstate="AAAA/wAAAAD9AAAAAAAAAogAAAGrAAAABAAAAAQAAAAIAAAACPwAAAAA"/>
+  <window visible="1" dock_location="bottom" geometry="AdnQywADAAAAAAAAAAACGQAABK8AAALkAAAAAAAAAhkAAASvAAAC5AAAAAAAAAAAB4AAAAAAAAACGQAABK8AAALk" undocked="0" type="transcript" windowstate=""/>
+  <window visible="1" dock_location="bottom" geometry="AdnQywADAAD///lc///9QP///gv///4L///5XP///UD///4L///+C/////8AAAAAB4D///lc///9QP///gv///4L" undocked="0" type="search" windowstate="AAAA/wAAAAD9AAAAAAAABLAAAABxAAAABAAAAAQAAAAIAAAACPwAAAACAAAAAgAAAAEAAAAcAHQAYQByAGcAZQB0AF8AdABvAG8AbABiAGEAcgEAAAAA/////wAAAAAAAAAAAAAAAgAAAAEAAAAcAGYAaQBsAHQAZQByAF8AdABvAG8AbABiAGEAcgEAAAAA/////wAAAAAAAAAA"/>
+  <window visible="1" dock_location="right" geometry="AdnQywADAAAAAAAyAAAAGwAABOEAAANfAAAAMgAAAEAAAAThAAADXwAAAAAAAAAAB4AAAAAyAAAAQAAABOEAAANf" undocked="0" type="rtl" windowstate="AAAA/wAAAAD9AAAAAwAAAAAAAAGbAAABwvwCAAAAAfwAAABRAAABwgAAAQoBAAAe+gAAAAACAAAAAvsAAAASAHMAdAByAHUAYwB0AHUAcgBlAQAAAAD/////AAAAoAD////7AAAAJAB0AGUAcwB0AGIAZQBuAGMAaABVAHYAbQBXAGkAbgBDAGwAcwEAAAAA/////wAAAOsA////AAAAAQAAAogAAAHC/AIAAAAB+wAAAB4AcwBpAGcAbgBhAGwAYwBsAGkAcABiAG8AYQByAGQBAAAAUQAAAcIAAADUAP///wAAAAMAAASwAAAA6/wBAAAAAfwAAAAAAAAEsAAAAVMA////+gAAAAABAAAABPsAAAAUAHQAcgBhAG4AcwBjAHIAaQBwAHQBAAAAAP////8AAABiAP////sAAAAMAHMAZQBhAHIAYwBoAQAAAAD/////AAABUwD////7AAAAKABXAGEAdgBlADAAXwB3AGEAdgBlAEYAbwByAG0AVwBpAG4AQwBsAHMCAAADLgAAAPgAAAQ0AAACaPsAAAAoAFcAYQB2AGUAMQBfAHcAYQB2AGUARgBvAHIAbQBXAGkAbgBDAGwAcwIAAABJAAAB0AAABDMAAAJoAAAAgQAAAcIAAAAEAAAABAAAAAgAAAAI/AAAAAEAAAACAAAABgAAACgATQBhAGkAbgBfAEgAaQBzAHQAbwByAHkAXwBUAG8AbwBsAEIAYQByAQAAAAD/////AAAAAAAAAAAAAAAkAFIAVABMAF8AVwBpAG4AZABvAHcAXwBUAG8AbwBsAEIAYQByAQAAAHv/////AAAAAAAAAAAAAAAiAGQAcgB2AFIAZQBjAFYAaQBlAHcAVABvAG8AbABCAGEAcgEAAAEQ/////wAAAAAAAAAAAAAANgBHAEkARABfAFMAcgBjAFYAaQBlAHcAXwBPAHAAdABpAG8AbgBzAF8AVABvAG8AbABCAGEAcgEAAAGq/////wAAAAAAAAAAAAAARgBHAEkARABfAE0AYQBpAG4AUwByAGMAVwBpAG4AZABvAHcAXwBUAGkAbQBlAFMAYwBhAGwAZQBfAFQAbwBvAGwAQgBhAHIBAAAB8/////8AAAAAAAAAAAAAACIARABlAGIAdQBnAGcAaQBuAGcAIABUAG8AbwBsAGIAYQByAQAABEv/////AAAAAAAAAAA="/>
+  <window visible="0" dock_location="left" geometry="" undocked="0" type="files" windowstate=""/>
+  <window visible="0" dock_location="right" geometry="" undocked="0" type="variables" windowstate=""/>
+  <window visible="0" geometry="" undocked="1" type="wave" windowstate=""/>
+  <window visible="0" id="1" geometry="" undocked="1" type="wave" windowstate=""/>
+  <window visible="0" dock_location="bottom" id="2" geometry="" undocked="0" type="wave" windowstate=""/>
+  <window visible="0" dock_location="bottom" id="3" geometry="" undocked="0" type="wave" windowstate=""/>
+  <window visible="0" dock_location="bottom" id="4" geometry="" undocked="0" type="wave" windowstate=""/>
+  <window visible="0" dock_location="bottom" id="5" geometry="" undocked="0" type="wave" windowstate=""/>
+  <window visible="0" dock_location="bottom" id="6" geometry="" undocked="0" type="wave" windowstate=""/>
+  <window visible="1" dock_location="center" geometry="AdnQywADAAAAAAAAAAAAAAAAAHwAAAG9AAAAAAAAAAAAAAB8AAABvQAAAAAAAAAAB4AAAAAAAAAAAAAAAHwAAAG9" undocked="0" firstVisibleLine="197" type="source" windowstate="" path="/data/lorenzo.crupi/astral/target/sim/src/astral_tb.sv"/>
+  <window visible="0" dock_location="right" geometry="" undocked="0" type="generallist" windowstate=""/>
  </window_config>
  <wave_file_mgr>
-  <waveFile waveType="0" fileName="/data/lorenzo.crupi/astral/target/sim/vsim/qwave.db" tagName="sim"/>
+  <waveFile tagName="sim" fileName="/data/lorenzo.crupi/astral/target/sim/vsim/qwave.db" waveType="0"/>
  </wave_file_mgr>
  <gui>
   <main_window visible="1">
-   <srcbrowser primary="true" filepath="/data/lorenzo.crupi/astral/target/sim/src/astral_tb.sv" instancename="tb_astral"/>
+   <srcbrowser filepath="/data/lorenzo.crupi/astral/target/sim/src/astral_tb.sv" instancename="tb_astral" primary="true"/>
    <sourcetclcommands>
     <tcl command="src activate source"/>
-    <tcl command="src top 199"/>
-   </sourcetclcommands>
-   <srcbrowser filepath="/tools/siemens/questa_2025.3/questasim/verilog_src/uvm-1.1d/src/uvm_pkg.sv" instancename="uvm_pkg" testbench="1"/>
-   <sourcetclcommands>
-    <tcl command="src activate source1"/>
-    <tcl command="src top 26"/>
+    <tcl command="src top 198"/>
    </sourcetclcommands>
    <edge_gui cur_selection="AnyEdge"/>
   </main_window>
-  <watchTower_cur_setting curDisplayTimeUnit="-12" customDisplayTimeUnitListStr="" curRadix="2" curActiveWaveFile="sim" curDisplayTimeUnitStr="1ps">
-   <curTime lowtime="3875141192" hightime="23"/>
+  <watchTower_cur_setting customDisplayTimeUnitListStr="" curDisplayTimeUnitStr="1ps" curRadix="2" curActiveWaveFile="sim" curDisplayTimeUnit="-12">
+   <curTime lowtime="1681064080" hightime="20"/>
   </watchTower_cur_setting>
-  <structure selection="tb_astral"/>
+  <structure selection="tb_astral.fix.car_vip.hyperrams[1].chips[1].dut"/>
   <testbench/>
   <signalclipboard/>
   <transcript/>
   <search/>
-  <wave name="Wave0">
-   <timeunit value="14"/>
-   <frequnit value="2"/>
-   <showdiff value="0"/>
-  </wave>
-  <wave name="Wave1">
-   <timeunit value="14"/>
-   <frequnit value="2"/>
-   <showdiff value="0"/>
-  </wave>
-  <wave name="Wave2">
-   <timeunit value="14"/>
-   <frequnit value="2"/>
-   <showdiff value="0"/>
-  </wave>
-  <wave name="Wave6">
-   <timeunit value="14"/>
-   <frequnit value="2"/>
-   <showdiff value="0"/>
-  </wave>
  </gui>
- <wave_mgr sync_time_range="0">
-  <waveWindow displayGlobalView="1" displayLeadingZeros="0" alignBaseName="0" swapRepresentationOfX="0" nameWidth="345" primNudge="1" value_tooltip="0" displayRadixWithValue="1" trackViewToTime="1" showSecCursor="1" wintype="4" justifySignalPath="Right" displayTimeUnitStr="1ps" waveWidth="504" valueWidth="182" displayTimeUnit="-12" secNudge="1" displayScopeName="1" displayGrid="0" showMarkers="1" signalHeight="18" displayFileTag="1" snapToEdge="1">
-   <window name="Wave6">
-    <timeunit value="14"/>
-    <frequnit value="2"/>
-    <showdiff value="0"/>
-   </window>
-   <viewPort>
-    <beginTime lowtime="0" hightime="0"/>
-    <endTime lowtime="3875141192" hightime="23"/>
-    <beginViewTime lowtime="0" hightime="0"/>
-    <endViewTime lowtime="3875141192" hightime="23"/>
-    <beginLastViewTime lowtime="0" hightime="0"/>
-    <endLastViewTime lowtime="3875141192" hightime="23"/>
-   </viewPort>
-   <primCursor lowtime="3875141192" hightime="23"/>
-   <secCursor lowtime="0" hightime="0"/>
-   <wavetclcommands>
-    <tcl command="wave update off"/>
-    <tcl command="wave clearselection"/>
-    <tcl commandblock="custom radix definitions"></tcl>
-    <tcl command="wave update off"/>
-    <tcl command="wave zoom range 0 102659389000"/>
-    <tcl command="wave group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} -backgroundcolor #004466"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.DQ7} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.DQ6} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.DQ5} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.DQ4} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.DQ3} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.DQ2} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.DQ1} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.DQ0} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.RWDS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.CSNeg} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.CK} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.CKNeg} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.RESETNeg} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.UserPreload} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.mem_file_name} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.TimingModel[135:0]} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.PartID[71:0]} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.MaxData} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.MemSize} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.HiAddrBit} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.AddrRANGE} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.POWER_ON} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.ACT} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.RESET_STATE} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.DPD_STATE} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.STAND_BY} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.CA_BITS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.DATA_BITS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.LINEAR} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[0].dut.CONTINUOUS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave insertion [expr [wave index insertpoint] + 1]"/>
-    <tcl command="wave update on"/>
-    <tcl command="wave top 0"/>
-    <tcl command=""/>
-   </wavetclcommands>
-  </waveWindow>
-  <waveWindow displayGlobalView="1" displayLeadingZeros="0" alignBaseName="0" swapRepresentationOfX="0" nameWidth="345" primNudge="1" value_tooltip="0" displayRadixWithValue="1" trackViewToTime="1" showSecCursor="1" wintype="4" justifySignalPath="Right" displayTimeUnitStr="1ps" waveWidth="504" valueWidth="182" displayTimeUnit="-12" secNudge="1" displayScopeName="1" displayGrid="0" showMarkers="1" signalHeight="18" displayFileTag="1" snapToEdge="1">
-   <window name="Wave0">
-    <timeunit value="14"/>
-    <frequnit value="2"/>
-    <showdiff value="0"/>
-   </window>
-   <viewPort>
-    <beginTime lowtime="0" hightime="0"/>
-    <endTime lowtime="3875141192" hightime="23"/>
-    <beginViewTime lowtime="0" hightime="0"/>
-    <endViewTime lowtime="3875141192" hightime="23"/>
-    <beginLastViewTime lowtime="0" hightime="0"/>
-    <endLastViewTime lowtime="3875141192" hightime="23"/>
-   </viewPort>
-   <primCursor lowtime="3875141192" hightime="23"/>
-   <secCursor lowtime="0" hightime="0"/>
-   <wavetclcommands>
-    <tcl command="wave update off"/>
-    <tcl command="wave clearselection"/>
-    <tcl commandblock="custom radix definitions"></tcl>
-    <tcl command="wave update off"/>
-    <tcl command="wave zoom range 0 102659389000"/>
-    <tcl command="wave group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} -backgroundcolor #004466"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.DQ7} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.DQ6} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.DQ5} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.DQ4} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.DQ3} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.DQ2} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.DQ1} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.DQ0} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.RWDS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.CSNeg} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.CK} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.CKNeg} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.RESETNeg} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.UserPreload} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.mem_file_name} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.TimingModel[135:0]} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.PartID[71:0]} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.MaxData} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.MemSize} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.HiAddrBit} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.AddrRANGE} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.POWER_ON} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.ACT} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.RESET_STATE} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.DPD_STATE} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.STAND_BY} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.CA_BITS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.DATA_BITS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.LINEAR} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[0].chips[1].dut.CONTINUOUS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave insertion [expr [wave index insertpoint] + 1]"/>
-    <tcl command="wave update on"/>
-    <tcl command="wave top 0"/>
-    <tcl command=""/>
-   </wavetclcommands>
-  </waveWindow>
-  <waveWindow displayGlobalView="1" displayLeadingZeros="0" alignBaseName="0" swapRepresentationOfX="0" nameWidth="345" primNudge="1" value_tooltip="0" displayRadixWithValue="1" trackViewToTime="1" showSecCursor="1" wintype="4" justifySignalPath="Right" displayTimeUnitStr="1ps" waveWidth="504" valueWidth="182" displayTimeUnit="-12" secNudge="1" displayScopeName="1" displayGrid="0" showMarkers="1" signalHeight="18" displayFileTag="1" snapToEdge="1">
-   <window name="Wave1">
-    <timeunit value="14"/>
-    <frequnit value="2"/>
-    <showdiff value="0"/>
-   </window>
-   <viewPort>
-    <beginTime lowtime="0" hightime="0"/>
-    <endTime lowtime="3875141192" hightime="23"/>
-    <beginViewTime lowtime="0" hightime="0"/>
-    <endViewTime lowtime="3875141192" hightime="23"/>
-    <beginLastViewTime lowtime="0" hightime="0"/>
-    <endLastViewTime lowtime="3875141192" hightime="23"/>
-   </viewPort>
-   <primCursor lowtime="3875141192" hightime="23"/>
-   <secCursor lowtime="0" hightime="0"/>
-   <wavetclcommands>
-    <tcl command="wave update off"/>
-    <tcl command="wave clearselection"/>
-    <tcl commandblock="custom radix definitions"></tcl>
-    <tcl command="wave update off"/>
-    <tcl command="wave zoom range 0 102659389000"/>
-    <tcl command="wave group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} -backgroundcolor #004466"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.DQ7} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.DQ6} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.DQ5} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.DQ4} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.DQ3} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.DQ2} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.DQ1} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.DQ0} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.RWDS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.CSNeg} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.CK} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.CKNeg} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.RESETNeg} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.UserPreload} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.mem_file_name} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.TimingModel[135:0]} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.PartID[71:0]} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.MaxData} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.MemSize} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.HiAddrBit} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.AddrRANGE} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.POWER_ON} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.ACT} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.RESET_STATE} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.DPD_STATE} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.STAND_BY} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.CA_BITS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.DATA_BITS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.LINEAR} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[0].dut.CONTINUOUS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave insertion [expr [wave index insertpoint] + 1]"/>
-    <tcl command="wave update on"/>
-    <tcl command="wave top 0"/>
-    <tcl command=""/>
-   </wavetclcommands>
-  </waveWindow>
-  <waveWindow displayGlobalView="1" displayLeadingZeros="0" alignBaseName="0" swapRepresentationOfX="0" nameWidth="345" primNudge="1" value_tooltip="0" displayRadixWithValue="1" trackViewToTime="1" showSecCursor="1" wintype="4" justifySignalPath="Right" displayTimeUnitStr="1ps" waveWidth="504" valueWidth="182" displayTimeUnit="-12" secNudge="1" displayScopeName="1" displayGrid="0" showMarkers="1" signalHeight="18" displayFileTag="1" snapToEdge="1">
-   <window name="Wave2">
-    <timeunit value="14"/>
-    <frequnit value="2"/>
-    <showdiff value="0"/>
-   </window>
-   <viewPort>
-    <beginTime lowtime="0" hightime="0"/>
-    <endTime lowtime="3875141192" hightime="23"/>
-    <beginViewTime lowtime="0" hightime="0"/>
-    <endViewTime lowtime="3875141192" hightime="23"/>
-    <beginLastViewTime lowtime="0" hightime="0"/>
-    <endLastViewTime lowtime="3875141192" hightime="23"/>
-   </viewPort>
-   <primCursor lowtime="3875141192" hightime="23"/>
-   <secCursor lowtime="0" hightime="0"/>
-   <wavetclcommands>
-    <tcl command="wave update off"/>
-    <tcl command="wave clearselection"/>
-    <tcl commandblock="custom radix definitions"></tcl>
-    <tcl command="wave update off"/>
-    <tcl command="wave zoom range 0 102659389000"/>
-    <tcl command="wave group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} -backgroundcolor #004466"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.DQ7} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.DQ6} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.DQ5} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.DQ4} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.DQ3} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.DQ2} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.DQ1} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.DQ0} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.RWDS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.CSNeg} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.CK} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.CKNeg} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.RESETNeg} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.UserPreload} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.mem_file_name} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.TimingModel[135:0]} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.PartID[71:0]} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.MaxData} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.MemSize} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.HiAddrBit} -tag sim -radix hexadecimal -enumsymbolic  -select"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.AddrRANGE} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.POWER_ON} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.ACT} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.RESET_STATE} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.DPD_STATE} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.STAND_BY} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.CA_BITS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.DATA_BITS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.LINEAR} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave add -group {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut} {tb_astral.fix.car_vip.hyperrams[1].chips[1].dut.CONTINUOUS} -tag sim -radix hexadecimal -enumsymbolic"/>
-    <tcl command="wave insertion [expr [wave index insertpoint] + 1]"/>
-    <tcl command="wave update on"/>
-    <tcl command="wave top 0"/>
-    <tcl command=""/>
-   </wavetclcommands>
-  </waveWindow>
- </wave_mgr>
+ <wave_mgr sync_time_range="0"/>
  <mem_mgr/>
  <windows/>
- <dut selection="tb_astral"/>
+ <dut selection="tb_astral.fix.car_vip.hyperrams[1].chips[1].dut"/>
 </session>
