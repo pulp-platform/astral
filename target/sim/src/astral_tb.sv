@@ -635,4 +635,76 @@ module tb_astral;
     end
   end
 
+/*
+initial begin
+
+  force fix.car_vip.hyperrams[1].chips[0].dut.DQ7 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[0].dut.DQ6 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[0].dut.DQ5 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[0].dut.DQ4 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[0].dut.DQ3 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[0].dut.DQ2 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[0].dut.DQ1 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[0].dut.DQ0 = 1'bz;
+
+  force fix.car_vip.hyperrams[1].chips[0].dut.RWDS = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[0].dut.CK    = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[0].dut.CKNeg = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[0].dut.RESETNeg = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[0].dut.CSNeg = 1'bz;
+
+  force fix.car_vip.hyperrams[1].chips[1].dut.DQ7 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[1].dut.DQ6 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[1].dut.DQ5 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[1].dut.DQ4 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[1].dut.DQ3 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[1].dut.DQ2 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[1].dut.DQ1 = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[1].dut.DQ0 = 1'bz;
+
+  force fix.car_vip.hyperrams[1].chips[1].dut.RWDS = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[1].dut.CK    = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[1].dut.CKNeg = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[1].dut.RESETNeg = 1'bz;
+  force fix.car_vip.hyperrams[1].chips[1].dut.CSNeg = 1'bz;
+
+end
+*/
+/*
+initial begin
+
+  force fix.car_vip.hyperrams[0].chips[0].dut.DQ7 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[0].dut.DQ6 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[0].dut.DQ5 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[0].dut.DQ4 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[0].dut.DQ3 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[0].dut.DQ2 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[0].dut.DQ1 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[0].dut.DQ0 = 1'bz;
+
+  force fix.car_vip.hyperrams[0].chips[0].dut.RWDS = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[0].dut.CK    = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[0].dut.CKNeg = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[0].dut.RESETNeg = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[0].dut.CSNeg = 1'bz;
+
+  force fix.car_vip.hyperrams[0].chips[1].dut.DQ7 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[1].dut.DQ6 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[1].dut.DQ5 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[1].dut.DQ4 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[1].dut.DQ3 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[1].dut.DQ2 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[1].dut.DQ1 = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[1].dut.DQ0 = 1'bz;
+
+  force fix.car_vip.hyperrams[0].chips[1].dut.RWDS = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[1].dut.CK    = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[1].dut.CKNeg = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[1].dut.RESETNeg = 1'bz;
+  force fix.car_vip.hyperrams[0].chips[1].dut.CSNeg = 1'bz;
+
+end
+*/
+
+
 endmodule: tb_astral

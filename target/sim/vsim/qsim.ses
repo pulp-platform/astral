@@ -1,0 +1,80 @@
+<!-- THIS IS TOOL GENERATED SESSION FILE. PLEASE DO NOT MODIFY THIS -->
+<!DOCTYPE visualizer_session>
+<session skip_do_file="0" version="3">
+ <app argc="27">
+  <argv value="qsim" pos="0"/>
+  <argv value="+HYP_USER_PRELOAD=0" pos="1"/>
+  <argv value="+BYPASS_PLL=0" pos="2"/>
+  <argv value="+SECURE_BOOT=0" pos="3"/>
+  <argv value="+CHS_BOOTMODE=0" pos="4"/>
+  <argv value="+CHS_PRELMODE=0" pos="5"/>
+  <argv value="+CHS_BINARY=/data/lorenzo.crupi/astral/sw/tests/bare-metal/hostd/snooper_test.car.spm.elf" pos="6"/>
+  <argv value="+CHS_IMAGE=" pos="7"/>
+  <argv value="+SECD_BINARY=" pos="8"/>
+  <argv value="+SECD_BOOTMODE=0" pos="9"/>
+  <argv value="+SECD_IMAGE=" pos="10"/>
+  <argv value="+SAFED_BINARY=" pos="11"/>
+  <argv value="+SAFED_BOOTMODE=0" pos="12"/>
+  <argv value="+PULPD_BINARY=" pos="13"/>
+  <argv value="+PULPD_BOOTMODE=0" pos="14"/>
+  <argv value="+SPATZD_BINARY=" pos="15"/>
+  <argv value="+SPATZD_BOOTMODE=0" pos="16"/>
+  <argv value="+designfile" pos="17"/>
+  <argv value="+permissive" pos="18"/>
+  <argv value="+UVM_NO_RELNOTES" pos="19"/>
+  <argv value="+notimingchecks" pos="20"/>
+  <argv value="+nospecify" pos="21"/>
+  <argv value="-do" pos="22"/>
+  <argv value="run -all" pos="23"/>
+  <argv value="-qone" pos="24"/>
+  <argv value="+designfile+design.bin" pos="25"/>
+  <argv value="+_sv_debug_+vsim+HYP_USER_PRELOAD=0+BYPASS_PLL=0+SECURE_BOOT=0+CHS_BOOTMODE=0+CHS_PRELMODE=0+CHS_BINARY=/data/lorenzo.crupi/astral/sw/tests/bare-metal/hostd/snooper_test.car.spm.elf+CHS_IMAGE=+SECD_BINARY=+SECD_BOOTMODE=0+SECD_IMAGE=+SAFED_BINARY=+SAFED_BOOTMODE=0+PULPD_BINARY=+PULPD_BOOTMODE=0+SPATZD_BINARY=+SPATZD_BOOTMODE=0+designfile+permissive-qwavedb=+signal+memory-suppress3999-suppress12088+UVM_NO_RELNOTES+notimingchecks+nospecify-t1pstb_astral_opt-qone-ngflow" pos="26"/>
+ </app>
+ <window_config>
+  <expanded_mode enabled="false"/>
+  <dockareas left="346" right="713" bottom="235" top="0"/>
+  <taborder left="structure+testbench+" right="signalclipboard+" bottom="transcript+search+"/>
+  <activetab left="structure" right="signalclipboard" bottom="transcript" activewindow="transcript"/>
+  <window visible="1" undocked="0" dock_location="left" type="structure" windowstate="" geometry="AdnQywADAAAAAAAAAAAAUQAAAVkAAAHzAAAAAAAAAFEAAAFZAAAB8wAAAAAAAAAAB4AAAAAAAAAAUQAAAVkAAAHz"/>
+  <window visible="1" undocked="0" dock_location="left" type="testbench" windowstate="" geometry="AdnQywADAAD///yy///8af///gv///4L///8sv///Gn///4L///+C/////8AAAAAB4D///yy///8af///gv///4L"/>
+  <window visible="1" undocked="0" dock_location="right" type="signalclipboard" windowstate="AAAA/wAAAAD9AAAAAAAAAskAAAGrAAAABAAAAAQAAAAIAAAACPwAAAAA" geometry="AdnQywADAAAAAAHnAAAAUQAABK8AAAISAAAB5wAAAFEAAASvAAACEgAAAAAAAAAAB4AAAAHnAAAAUQAABK8AAAIS"/>
+  <window visible="1" undocked="0" dock_location="bottom" type="transcript" windowstate="" geometry="AdnQywADAAAAAAAAAAACGQAABK8AAALkAAAAAAAAAhkAAASvAAAC5AAAAAAAAAAAB4AAAAAAAAACGQAABK8AAALk"/>
+  <window visible="1" undocked="0" dock_location="bottom" type="search" windowstate="AAAA/wAAAAD9AAAAAAAABLAAAABxAAAABAAAAAQAAAAIAAAACPwAAAACAAAAAgAAAAEAAAAcAHQAYQByAGcAZQB0AF8AdABvAG8AbABiAGEAcgEAAAAA/////wAAAAAAAAAAAAAAAgAAAAEAAAAcAGYAaQBsAHQAZQByAF8AdABvAG8AbABiAGEAcgEAAAAA/////wAAAAAAAAAA" geometry="AdnQywADAAD///lc///9QP///gv///4L///5XP///UD///4L///+C/////8AAAAAB4D///lc///9QP///gv///4L"/>
+  <window visible="1" undocked="0" dock_location="right" type="rtl" windowstate="AAAA/wAAAAD9AAAAAwAAAAAAAAFaAAABwvwCAAAAAfwAAABRAAABwgAAAQoBAAAe+gAAAAACAAAAAvsAAAASAHMAdAByAHUAYwB0AHUAcgBlAQAAAAD/////AAAAoAD////7AAAAJAB0AGUAcwB0AGIAZQBuAGMAaABVAHYAbQBXAGkAbgBDAGwAcwEAAAAA/////wAAAOsA////AAAAAQAAAskAAAHC/AIAAAAB+wAAAB4AcwBpAGcAbgBhAGwAYwBsAGkAcABiAG8AYQByAGQBAAAAUQAAAcIAAADUAP///wAAAAMAAASwAAAA6/wBAAAAAfwAAAAAAAAEsAAAAVMA////+gAAAAABAAAAAvsAAAAUAHQAcgBhAG4AcwBjAHIAaQBwAHQBAAAAAP////8AAABiAP////sAAAAMAHMAZQBhAHIAYwBoAQAAAAD/////AAABUwD///8AAACBAAABwgAAAAQAAAAEAAAACAAAAAj8AAAAAQAAAAIAAAAGAAAAKABNAGEAaQBuAF8ASABpAHMAdABvAHIAeQBfAFQAbwBvAGwAQgBhAHIBAAAAAP////8AAAAAAAAAAAAAACQAUgBUAEwAXwBXAGkAbgBkAG8AdwBfAFQAbwBvAGwAQgBhAHIBAAAAe/////8AAAAAAAAAAAAAACIAZAByAHYAUgBlAGMAVgBpAGUAdwBUAG8AbwBsAEIAYQByAQAAARD/////AAAAAAAAAAAAAAA2AEcASQBEAF8AUwByAGMAVgBpAGUAdwBfAE8AcAB0AGkAbwBuAHMAXwBUAG8AbwBsAEIAYQByAQAAAar/////AAAAAAAAAAAAAABGAEcASQBEAF8ATQBhAGkAbgBTAHIAYwBXAGkAbgBkAG8AdwBfAFQAaQBtAGUAUwBjAGEAbABlAF8AVABvAG8AbABCAGEAcgEAAAHz/////wAAAAAAAAAAAAAAIgBEAGUAYgB1AGcAZwBpAG4AZwAgAFQAbwBvAGwAYgBhAHIBAAAES/////8AAAAAAAAAAA==" geometry="AdnQywADAAAAAAAyAAAAGwAABOEAAANfAAAAMgAAAEAAAAThAAADXwAAAAAAAAAAB4AAAAAyAAAAQAAABOEAAANf"/>
+  <window visible="0" undocked="0" dock_location="left" type="classes" windowstate="" geometry=""/>
+  <window visible="0" undocked="0" dock_location="left" type="files" windowstate="" geometry=""/>
+  <window visible="0" undocked="0" dock_location="right" type="variables" windowstate="" geometry=""/>
+  <window visible="0" undocked="1" dock_location="bottom" type="wave" windowstate="" geometry=""/>
+  <window visible="0" undocked="1" dock_location="bottom" type="wave" windowstate="" geometry="" id="1"/>
+  <window visible="0" undocked="0" dock_location="bottom" type="wave" windowstate="" geometry="" id="2"/>
+  <window visible="0" undocked="0" dock_location="bottom" type="wave" windowstate="" geometry="" id="3"/>
+  <window visible="0" undocked="0" dock_location="bottom" type="wave" windowstate="" geometry="" id="4"/>
+  <window visible="0" undocked="0" dock_location="bottom" type="wave" windowstate="" geometry="" id="5"/>
+  <window visible="0" undocked="0" dock_location="bottom" type="wave" windowstate="" geometry="" id="6"/>
+  <window firstVisibleLine="14" visible="1" undocked="0" dock_location="center" type="source" windowstate="" geometry="AdnQywADAAAAAAAAAAAAAAAAAHwAAAG9AAAAAAAAAAAAAAB8AAABvQAAAAAAAAAAB4AAAAAAAAAAAAAAAHwAAAG9" path="/data/lorenzo.crupi/astral/target/sim/src/astral_tb.sv"/>
+  <window visible="0" undocked="0" dock_location="right" type="generallist" windowstate="" geometry=""/>
+ </window_config>
+ <wave_file_mgr/>
+ <gui>
+  <main_window visible="1">
+   <srcbrowser instancename="tb_astral" primary="true" filepath="/data/lorenzo.crupi/astral/target/sim/src/astral_tb.sv"/>
+   <sourcetclcommands>
+    <tcl command="src activate source"/>
+    <tcl command="src top 15"/>
+   </sourcetclcommands>
+   <edge_gui cur_selection="AnyEdge"/>
+  </main_window>
+  <watchTower_cur_setting curRadix="2" curDisplayTimeUnitStr="1ps" customDisplayTimeUnitListStr="" curDisplayTimeUnit="-12">
+   <curTime lowtime="0" hightime="0"/>
+  </watchTower_cur_setting>
+  <structure selection="tb_astral"/>
+  <testbench/>
+  <signalclipboard/>
+  <transcript/>
+  <search/>
+ </gui>
+ <wave_mgr sync_time_range="0"/>
+ <mem_mgr/>
+ <windows/>
+ <dut selection="tb_astral"/>
+</session>

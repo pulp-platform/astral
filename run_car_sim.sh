@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+# Copyright 2026 Chips-IT.
+# Licensed under the Apache License, Version 2.0, see LICENSE for details.
+# SPDX-License-Identifier: Apache-2.0
+#
+# Lorenzo Crupi <lorenzo.crupi@chips.it>
+
 
 # Interrompe lo script se un comando fallisce
 set -e
@@ -25,13 +31,13 @@ make car-vsim-sim-build DEBUG=1
 
 # versione **vecchia** (originariamente usciva da vsim):
 # make car-vsim-sim-run \
-#   CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf \
+#   CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.spm.elf \
 #   DEBUG=1 \
 #   CHS_PRELMODE=0
 
 # versione **nuova** — usa DEBUG=live così non esce da vsim
 make car-vsim-sim-run \
-  CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.dram.elf \
+  CHS_BINARY=./sw/tests/bare-metal/hostd/addressability_test.car.spm.elf \
   DEBUG=live \
   CHS_PRELMODE=0
 

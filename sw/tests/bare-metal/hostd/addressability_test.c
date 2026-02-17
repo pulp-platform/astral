@@ -64,8 +64,8 @@
  * PHY configuration
  * ============================================================ */
 
-#define PHY_MODE              0   /* 1 = dual PHY, 0 = single PHY */
-#define WHICH_PHY             1   /* valid only if PHY_MODE == 0 */
+#define PHY_MODE              1   /* 1 = dual PHY, 0 = single PHY */
+#define WHICH_PHY             0   /* valid only if PHY_MODE == 0 */
 
 uint64_t get_runtime_seed(void)
 {
@@ -317,54 +317,50 @@ int configure_hyperbus_cs(void)
     uint32_t cs1_base;
     uint32_t cs1_end;
 
-    /* Se PHY_MODE == 1 => uso entrambi i PHY con map completa */
-    if (PHY_MODE == 1) {
+    #if PHY_MODE == 1
+        /* Se PHY_MODE == 1 => uso entrambi i PHY con map completa */
         cs0_base = 0x80000000;
         cs0_end  = 0x81000000;
         cs1_base = cs0_end;
         cs1_end  = 0x82000000;
-    }
-    /* PHY_MODE == 0: uso singolo PHY; WHICH_PHY sceglie quale metà */
-    else if (PHY_MODE == 0 && WHICH_PHY == 0) {
-        /* PHY 0 mappa la prima metà (CS0: 0x8000_0000 - 0x807F_FFFF)
-         * e CS1 occupa la seconda metà fino a 0x8100_0000 */
-        cs0_base = 0x80000000;
-        cs0_end  = 0x80800000;
-        cs1_base = cs0_end;
-        cs1_end  = 0x81000000;
-    }
-    else if (PHY_MODE == 0 && WHICH_PHY == 1) {
-        /* PHY 1 mappa la seconda metà */
-        cs0_base = 0x81000000;
-        cs0_end  = 0x81800000;
-        cs1_base = cs0_end;
-        cs1_end  = 0x82000000;
-    }
-    else {
-        /* Configurazione non valida */
-        printf("[ERROR] configurazione SINGLE_PHY/WHICH_PHY non valida\n");
-        return 1;
-    }
+
+    #elif PHY_MODE == 0
+
+        #if WHICH_PHY == 0
+            /* PHY 0 mappa la prima metà (CS0: 0x8000_0000 - 0x807F_FFFF)
+             * e CS1 occupa la seconda metà fino a 0x8100_0000 */
+            cs0_base = 0x80000000;
+            cs0_end  = 0x80800000;
+            cs1_base = cs0_end;
+            cs1_end  = 0x81000000;
+        #elif WHICH_PHY == 1
+            /* PHY 1 mappa la seconda metà */
+            cs0_base = 0x81000000;
+            cs0_end  = 0x81800000;
+            cs1_base = cs0_end;
+            cs1_end  = 0x82000000;
+        #else
+            #error "Invalid WHICH_PHY: must be 0 or 1 when PHY_MODE == 0"
+        #endif
+
+    #else
+        #error "Invalid PHY_MODE: must be 0 or 1"
+    #endif
 
     /* Scrivo i registri PHY in uso / quale PHY (se richiesto dall'hw) */
-    if (PHY_MODE == 1) {
+    #if PHY_MODE == 1
         /* Entrambi i PHY attivi (valore hw = 1) */
         writew(0x1, base + HYPERBUS_PHY_IN_USE_OFFSET);
-    }
-    else if (PHY_MODE == 0 && WHICH_PHY == 0) {
+    #elif PHY_MODE == 0
         /* Uso singolo PHY = 0 */
         writew(0x0, base + HYPERBUS_PHY_IN_USE_OFFSET);
-        writew(0x0, base + HYPERBUS_WHICH_PHY_OFFSET);
-    }
-    else if (PHY_MODE == 0 && WHICH_PHY == 1) {
-        /* Uso singolo PHY = 1 */
-        writew(0x0, base + HYPERBUS_PHY_IN_USE_OFFSET);
-        writew(0x1, base + HYPERBUS_WHICH_PHY_OFFSET);
-    }
-    else {
-        printf("[ERROR] configurazione PHY non valida prima delle scritture\n");
-        return 1;
-    }
+
+        #if WHICH_PHY == 0
+            writew(0x0, base + HYPERBUS_WHICH_PHY_OFFSET);
+        #elif WHICH_PHY == 1
+            writew(0x1, base + HYPERBUS_WHICH_PHY_OFFSET);
+        #endif
+    #endif
 
     /* Assicura che le scritture siano effettive prima di leggere */
     fence();
@@ -431,23 +427,25 @@ int main(void) {
     uint64_t *test_base = NULL;
     uint64_t *test_end  = NULL;
 
-    if (PHY_MODE == 1) {
+    #if PHY_MODE == 1
         test_base = (uint64_t *)CAR_HYPERRAM_BASE_ADDR;
         test_end  = (uint64_t *)CAR_HYPERRAM_END_ADDR;
-    }
-    else if (PHY_MODE == 0 && WHICH_PHY == 0) {
-        test_base = (uint64_t *)CAR_HYPERRAM_0_BASE_ADDR;
-        test_end  = (uint64_t *)CAR_HYPERRAM_0_END_ADDR;
-    }
-    else if (PHY_MODE == 0 && WHICH_PHY == 1) {
-        test_base = (uint64_t *)CAR_HYPERRAM_1_BASE_ADDR;
-        test_end  = (uint64_t *)CAR_HYPERRAM_1_END_ADDR;
-    }
-    else {
-        /* Configurazione non valida */
-        printf("[ERROR] configurazione SINGLE_PHY/WHICH_PHY non valida\n");
-        return 1;
-    }
+
+    #elif PHY_MODE == 0
+
+        #if WHICH_PHY == 0
+            test_base = (uint64_t *)CAR_HYPERRAM_0_BASE_ADDR;
+            test_end  = (uint64_t *)CAR_HYPERRAM_0_END_ADDR;
+        #elif WHICH_PHY == 1
+            test_base = (uint64_t *)CAR_HYPERRAM_1_BASE_ADDR;
+            test_end  = (uint64_t *)CAR_HYPERRAM_1_END_ADDR;
+        #else
+            #error "Invalid WHICH_PHY: must be 0 or 1 when PHY_MODE == 0"
+        #endif
+
+    #else
+        #error "Invalid PHY_MODE: must be 0 or 1"
+    #endif
 
     /* Eseguo il primo test: WRWR (write/read write/read pattern) */
     error = probe_range_lfsr_wrwr(test_base, test_end);
