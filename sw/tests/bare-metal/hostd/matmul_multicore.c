@@ -69,6 +69,7 @@
 
 // Synch flags
 #define L2SynchAddr 0x78000000
+#define L2DoneCount (volatile int *)0x78000004
 static volatile uint32_t init_done = 0;   // Hart 0 notifies input matrices are initialized
 static volatile uint32_t done_count = 0;  // Incremented by each hart at the end of the job
 
@@ -373,10 +374,10 @@ int main(void) {
     matmul_range(&A, &B, &C, row_begin, row_end);
 
     fencei();
-    __sync_fetch_and_add(&done_count, 1); // Communicate completion
+    __sync_fetch_and_add(L2DoneCount, 1); // Communicate completion
 
     // Wait for other cores to complete
-    while (done_count < NUM_HARTS) { /* spin */ }
+    while ((*(volatile uint32_t *)L2SynchAddr) < NUM_HARTS) { /* spin */ }
     if (hid == 0) stop = read_mcycle_low();
     stop = read_mcycle_low();
     iter++;
