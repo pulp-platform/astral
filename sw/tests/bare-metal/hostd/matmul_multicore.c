@@ -377,7 +377,7 @@ int main(void) {
     __sync_fetch_and_add(L2DoneCount, 1); // Communicate completion
 
     // Wait for other cores to complete
-    while ((*(volatile uint32_t *)L2SynchAddr) < NUM_HARTS) { /* spin */ }
+    while ((*(volatile uint32_t *)L2DoneCount) < NUM_HARTS) { /* spin */ }
     if (hid == 0) stop = read_mcycle_low();
     stop = read_mcycle_low();
     iter++;
