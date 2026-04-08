@@ -27,7 +27,7 @@
 #define F64 4
 
 #ifndef MATMUL_TYPE
-#define MATMUL_TYPE F32
+#define MATMUL_TYPE I32
 #endif
 
 #if   (MATMUL_TYPE == I32)
@@ -70,8 +70,6 @@
 // Synch flags
 #define L2SynchAddr 0x78000000
 #define L2DoneCount (volatile int *)0x78000004
-static volatile uint32_t init_done = 0;   // Hart 0 notifies input matrices are initialized
-static volatile uint32_t done_count = 0;  // Incremented by each hart at the end of the job
 
 static inline void membar(void) {
   __asm__ volatile ("fence iorw, iorw" ::: "memory");
@@ -358,8 +356,7 @@ int main(void) {
     fill_matrix_test(&A, 1.0);
     fill_matrix_test(&B, 100.0);
     perf_counter_enable(McycleId);
-    init_done = 1;
-    *(volatile uint32_t *)L2SynchAddr = init_done;
+    *(volatile uint32_t *)L2SynchAddr = 1;
     fencei();
     smp_resume();
   }
@@ -368,9 +365,11 @@ int main(void) {
   fencei();
 
   int iter = 0;
-  // do {
-    if (hid == 0) start = read_mcycle_low();
-    start = read_mcycle_low();
+  do {
+    if (hid == 0) {
+      *(volatile uint32_t *)L2DoneCount = 0;
+      start = read_mcycle_low();
+    }
     matmul_range(&A, &B, &C, row_begin, row_end);
 
     fencei();
@@ -378,14 +377,14 @@ int main(void) {
 
     // Wait for other cores to complete
     while ((*(volatile uint32_t *)L2DoneCount) < NUM_HARTS) { /* spin */ }
-    if (hid == 0) stop = read_mcycle_low();
-    stop = read_mcycle_low();
-    iter++;
-  // } while (1);
+    if (hid == 0) {
+      stop = read_mcycle_low();
+      iter++;
+    }
+  } while (iter < 2);
 
   if (hid == 0) {
-    const uint32_t ret_value = stop - start;
-    return (int)ret_value;
+    return stop - start;
   } else wfi();
 
 }
