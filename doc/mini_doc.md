@@ -80,6 +80,14 @@ This bash script set some env variables and check for the presence of RISCV{32,6
 To check if the IPs initialization went good, it's better to compile the whole architecture with QuestaSim (this is the only tool supported at the moment). To do so:
 
 -   Ensure that QuestaSim is in the `$PATH`. By default, the `QUESTA` variable is left empty. If the QuestaSim binaries directory is included in your `$PATH`, no further configuration is required. Otherwise, adjust it according to your setup.
+-   Fix buggy download of hyperbus models.
+```
+cd /srv/home/francesco.conti9/Devel/astral/.bender/git/checkouts/hyperbus-358c17d6f73a3e33
+git clone git@iis-git.ee.ethz.ch:astral/hyp_vip.git s27ks0641
+cd  -
+# manually fix stuff
+sed -i 's|hw/ip/prim/rtl/prim_flop_macros\.svh|hw/ip/prim/rtl/prim_flop_macros.sv|; s|hw/ip/sysrst_ctrl/rtl/sysrst_ctrl_detect\.vs|hw/ip/sysrst_ctrl/rtl/sysrst_ctrl_detect.sv|'
+```
 -   `make isolde-vsim-sim-init`: initialize the simulation environment by fetching verification IP for HyperRam from Infineon website. Next, using Bender, it generates a TCL script that includes a list of all source files for each IP present in the design.
 -   `make isolde-vsim-sim-build`: launch QuestaSim sourcing the sourcefiles TCL script to build the design.
 
@@ -176,6 +184,7 @@ sw
 The global command to build software is:
 
 ```bash
+sed -i 's/-Wall -Wextra -static/-Wall -Wextra -Wno-int-conversion -Wno-implicit-function-declaration -Wno-incompatible-pointer-types -static/' cheshire/sw/sw.mk # for GCC CVA6
 make isolde-sw-build
 ```
 
@@ -220,6 +229,11 @@ According to the memory location where the baremetal test will be executed.
 ## RTL Simulation (QuestaSim)
 
 This section describes how to simulate Astral to execute baremetal programs.
+
+```
+. env/pulpd-env.sh
+make pulpd-sw-clean pulpd-sw-all
+```
 
 ### Testbench
 

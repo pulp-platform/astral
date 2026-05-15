@@ -431,7 +431,7 @@ packages:
     - idma
     - register_interface
   pulp_cluster:
-    revision: 5c66d5525005309e228bff162f775a5dd93ec808
+    revision: a85af003454c2a2314241e2b55638bbc4e0fdf8e
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp_cluster.git
@@ -461,7 +461,7 @@ packages:
     - tech_cells_generic
     - timer_unit
   redmule:
-    revision: 5842580906c3ad3748df43673cf2a23dabaa2473
+    revision: fa70f313dfe6420136cdbc01c7e0eb19532b0719
     version: null
     source:
       Git: https://github.com/pulp-platform/redmule.git
