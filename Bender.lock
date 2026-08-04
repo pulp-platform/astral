@@ -165,7 +165,7 @@ packages:
     dependencies:
     - common_cells
   cluster_peripherals:
-    revision: 0b8e8ab9e6be3a5030a18256bb7e75cf6b6f6cac
+    revision: 56b5c9212c71c515b9f68f8abdf5dedb3d0f57bf
     version: null
     source:
       Git: https://github.com/pulp-platform/cluster_peripherals.git
@@ -261,7 +261,7 @@ packages:
     dependencies:
     - common_cells
   hci:
-    revision: 2a5a5081a2b32f1a04e7e28c00d3762d92602b84
+    revision: d6a4872b6327a4da7749cd0c4ac8bd24e1b0d73b
     version: null
     source:
       Git: https://github.com/pulp-platform/hci.git
@@ -285,16 +285,16 @@ packages:
     - scm
     - tech_cells_generic
   hwpe-ctrl:
-    revision: ce04de5fc48df0d536cae32301ccd83d93c05430
-    version: 3.0.0
+    revision: dfcf1cb746709de206377388bbcb4a3571e24f7b
+    version: null
     source:
       Git: https://github.com/pulp-platform/hwpe-ctrl.git
     dependencies:
     - common_cells
     - tech_cells_generic
   hwpe-stream:
-    revision: 35f6bb74b28acc5922262cf0244e7a7c7fe6a589
-    version: 1.9.2
+    revision: 24ce836892e244ac00ce607d26a3b3df8650dbff
+    version: null
     source:
       Git: https://github.com/pulp-platform/hwpe-stream.git
     dependencies:
@@ -431,7 +431,7 @@ packages:
     - idma
     - register_interface
   pulp_cluster:
-    revision: a85af003454c2a2314241e2b55638bbc4e0fdf8e
+    revision: dbdbff4bda1461ff128bd908a91a5208773a9ab5
     version: null
     source:
       Git: https://github.com/pulp-platform/pulp_cluster.git
@@ -461,7 +461,7 @@ packages:
     - tech_cells_generic
     - timer_unit
   redmule:
-    revision: fa70f313dfe6420136cdbc01c7e0eb19532b0719
+    revision: 7fa9fbe8a29e8572810ae12b92c19749045ac860
     version: null
     source:
       Git: https://github.com/pulp-platform/redmule.git
