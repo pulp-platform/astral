@@ -44,11 +44,16 @@ int main(void)
   volatile uint32_t pulp_ret_val = 0;
 
   pulp_cluster_set_bootaddress(pulp_boot_default);
+  fence();
+  /* Readback di verifica: forza completamento scrittura boot address via AXI */
+  volatile uint32_t *boot_reg = (volatile uint32_t*)CAR_INT_CLUSTER_BOOT_ADDR_REG(car_integer_cluster);
+  while (*boot_reg != pulp_boot_default) { /* spin until boot addr visible */ }
 
   uart_init(&__base_uart, reset_freq, 115200);
   uart_write_str(&__base_uart, str, sizeof(str));
   uart_write_flush(&__base_uart);
 
+  fencei();
   pulp_cluster_start();
 
   pulp_cluster_wait_eoc();

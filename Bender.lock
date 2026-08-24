@@ -191,8 +191,8 @@ packages:
     dependencies:
     - hci
   common_cells:
-    revision: 9afda9abb565971649c2aa0985639c096f351171
-    version: 1.38.0
+    revision: 9ca8a7655f741e7dd5736669a20a301325194c28
+    version: 1.39.0
     source:
       Git: https://github.com/pulp-platform/common_cells.git
     dependencies:
@@ -501,8 +501,8 @@ packages:
     - register_interface
     - tech_cells_generic
   register_interface:
-    revision: 8e8c209ea559d3b54f45cf30fcce95ce70ff5e49
-    version: 0.4.6
+    revision: d6e1d4cdaab7870f4faf3f88a1c788eaf5ac129d
+    version: 0.4.7
     source:
       Git: https://github.com/pulp-platform/register_interface.git
     dependencies:

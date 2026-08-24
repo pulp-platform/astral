@@ -200,3 +200,14 @@ pyrightconfig.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python
 /nonfree/
+
+# OBPMark / offload host build artifacts
+sw/tests/bare-metal/**/*.car.dram.elf
+sw/tests/bare-metal/**/*.car.dram.dump
+sw/tests/bare-metal/**/*.car.l2.elf
+sw/tests/bare-metal/**/*.car.l2.dump
+
+# QuestaSim simulation runtime artifacts
+target/sim/vsim/uart
+target/sim/vsim/wlft*
+target/sim/vsim/vsim_stacktrace.vstf
