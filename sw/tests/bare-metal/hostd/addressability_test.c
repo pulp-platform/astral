@@ -193,7 +193,7 @@ int main(void) {
     }
     // HyperRAM
 
-    error += probe_range_lfsr_wrwr((uint64_t *)CAR_HYPERRAM_BASE_ADDR, (uint64_t *)CAR_HYPERRAM_END_ADDR, N_SAMPLES);
+    error += probe_range_lfsr_wrwr(CAR_HYPERRAM_BASE_ADDR, CAR_HYPERRAM_END_ADDR, N_SAMPLES);
 
     if (error) {
         printf("L3: WRWR failed.");
@@ -248,7 +248,7 @@ int main(void) {
     }
 
     // HyperRAM
-    error += probe_range_lfsr_wwrr((uint64_t *)CAR_HYPERRAM_BASE_ADDR, (uint64_t *)CAR_HYPERRAM_END_ADDR, N_SAMPLES);
+    error += probe_range_lfsr_wwrr(CAR_HYPERRAM_BASE_ADDR, CAR_HYPERRAM_END_ADDR, N_SAMPLES);
 
     if (error) {
         printf("L3: WWRR failed.");
