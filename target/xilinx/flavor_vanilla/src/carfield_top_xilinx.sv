@@ -249,7 +249,7 @@ module carfield_top_xilinx
   localparam rtc_clk_divider = 4;
   assign soc_clk = clk_50;
   assign host_clk = soc_clk;
-  assign alt_clk = clk_20;
+  assign alt_clk = clk_50;
   assign secd_clk = clk_20;
   assign periph_clk = clk_10;
 

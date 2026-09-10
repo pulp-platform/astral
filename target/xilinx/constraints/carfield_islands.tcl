@@ -33,7 +33,7 @@ proc handle_domain_clock_mux { clk_sel_path clk_sel_val clk_name } {
 handle_domain_clock_mux [get_cells -hier u_periph_clk_sel] 2 periph_domain_clk
 handle_domain_clock_mux [get_cells -hier u_safety_island_clk_sel] 1 safety_domain_clk
 handle_domain_clock_mux [get_cells -hier u_security_island_clk_sel] 1 security_domain_clk
-handle_domain_clock_mux [get_cells -hier u_pulp_cluster_clk_sel] 1 pulp_domain_clk
+handle_domain_clock_mux [get_cells -hier u_pulp_cluster_clk_sel] 0 pulp_domain_clk
 handle_domain_clock_mux [get_cells -hier u_spatz_cluster_clk_sel] 1 spatz_domain_clk
 handle_domain_clock_mux [get_cells -hier u_l2_clk_sel] 0 l2_domain_clk
 
